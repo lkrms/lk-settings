@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actions>
+<action>
+	<icon>insert-text-frame</icon>
+	<name>Edit in nomacs</name>
+	<unique-id>1586299476189427-1</unique-id>
+	<command>nomacs %f</command>
+	<description>Open this image in nomacs</description>
+	<patterns>*</patterns>
+	<image-files/>
+</action>
+<action>
+	<icon>folder-new</icon>
+	<name>New folder with selection</name>
+	<unique-id>1576288731185254-6</unique-id>
+	<command>NEW_FOLDER=&quot;untitled folder&quot;;i=1;while [ -e &quot;$NEW_FOLDER&quot; ]||[ -L &quot;$NEW_FOLDER&quot; ];do ((++i));NEW_FOLDER=&quot;untitled folder $i&quot;;done;NEW_FOLDER=&quot;$(zenity --entry --text=&quot;New folder with selection&quot; --entry-text=&quot;$NEW_FOLDER&quot;)&quot;&amp;&amp;{ OUTPUT=&quot;$(mkdir &quot;$NEW_FOLDER&quot; 2&gt;&amp;1&amp;&amp;mv -n %F &quot;$NEW_FOLDER/&quot; 2&gt;&amp;1)&quot;||zenity --error --no-wrap --text=$&apos;Error creating new folder with selection:\n\n&apos;&quot;$OUTPUT&quot;;}</command>
+	<description>Send one or more items to a new folder</description>
+	<patterns>*</patterns>
+	<directories/>
+	<audio-files/>
+	<image-files/>
+	<other-files/>
+	<text-files/>
+	<video-files/>
+</action>
+<action>
+	<icon>application-pdf</icon>
+	<name>Combine selected PDF files</name>
+	<unique-id>1580612606085046-1</unique-id>
+	<command>combine(){ [ &quot;$#&quot; -ge &quot;2&quot; ]||return 1;zenity --question --no-wrap --title=&quot;Combine selected PDF files&quot; --text=&quot;Merge the $# PDFs you&apos;ve selected into a new one called\n&lt;b&gt;$(basename &quot;$1&quot;|sed -E &apos;s/\.[^.]+$//&apos;)&lt;/b&gt;?\n\n&lt;span foreground=\&quot;red\&quot;&gt;If there are no errors, originals will be moved to trash.&lt;/span&gt;&quot;&amp;&amp;{ OUTPUT=&quot;$(pdf-combine.sh &quot;$@&quot; 2&gt;&amp;1)&quot;||zenity --error --no-wrap --text=&quot;Error combining the selected PDF files:\n\n$OUTPUT&quot;;} };combine %F</command>
+	<description>Merge two or more PDFs into one</description>
+	<patterns>*.pdf</patterns>
+	<audio-files/>
+	<image-files/>
+	<other-files/>
+	<text-files/>
+	<video-files/>
+</action>
+<action>
+	<icon>utilities-terminal</icon>
+	<name>Open in terminal</name>
+	<unique-id>1574113675147262-1</unique-id>
+	<command>exo-open --working-directory %f --launch TerminalEmulator</command>
+	<description>Open a terminal in this directory</description>
+	<patterns>*</patterns>
+	<directories/>
+</action>
+<action>
+	<icon>utilities-terminal</icon>
+	<name>Open in terminal</name>
+	<unique-id>1574113675147285-2</unique-id>
+	<command>exo-open --working-directory %d --launch TerminalEmulator</command>
+	<description>Open a terminal in the containing directory</description>
+	<patterns>*</patterns>
+	<audio-files/>
+	<image-files/>
+	<other-files/>
+	<text-files/>
+	<video-files/>
+</action>
+<action>
+	<icon>sublime-merge</icon>
+	<name>Open in Sublime Merge</name>
+	<unique-id>1584495832566667-1</unique-id>
+	<command>smerge %f</command>
+	<description>Open Sublime Merge in this directory</description>
+	<patterns>*</patterns>
+	<directories/>
+</action>
+<action>
+	<icon>sublime-merge</icon>
+	<name>Open in Sublime Merge</name>
+	<unique-id>1584496009132002-2</unique-id>
+	<command>smerge %d</command>
+	<description>Open Sublime Merge in the containing directory</description>
+	<patterns>*</patterns>
+	<audio-files/>
+	<image-files/>
+	<other-files/>
+	<text-files/>
+	<video-files/>
+</action>
+<action>
+	<icon>filefind</icon>
+	<name>Find in this folder</name>
+	<unique-id>1574113675147322-3</unique-id>
+	<command>catfish --path=%f</command>
+	<description>Search for files within this folder</description>
+	<patterns>*</patterns>
+	<directories/>
+</action>
+</actions>

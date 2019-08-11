@@ -1,0 +1,34 @@
+screen_width, screen_height = get_screen_geometry()
+
+default_rows = 2
+default_columns = 6
+padding = 2
+panel_height = 36
+
+-- Values:
+--  rows (for vertical placement)
+--  first_row
+--  last_row
+--  columns (for horizontal placement)
+--  first_column
+--  last_column
+--  display (numbered left to right, starting from 1)
+--  workspace
+--  pin (bool)
+--  undecorate (bool)
+--  decorate (bool)
+--  always_on_top (bool)
+--  apply_on_focus (bool)
+--  strut ("left", "right", "top", "bottom")
+windows = {}
+
+displays = {
+    {0, 0, screen_width, screen_height}
+}
+
+skip_pinned = true
+
+is_blur = false
+is_close = false
+is_focus = false
+is_open = false

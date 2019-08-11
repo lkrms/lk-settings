@@ -1,0 +1,197 @@
+require "pl"
+
+-- expects globals: displays, screen_width, screen_height, panel_height, default_columns, default_rows, padding
+function do_actions(window)
+    local origin_x, origin_y, column_width, row_height, x, y, w, h, _xywh, margin, adjust_x, adjust_y
+
+    if
+        (get_window_type() == "WINDOW_TYPE_NORMAL" and
+            (not window.window_name_matches or string.find(get_window_name(), window.window_name_matches) ~= nil) and
+            (not window.window_role_matches or string.find(get_window_role(), window.window_role_matches) ~= nil) and
+            (get_window_name() ~= "Developer Tools"))
+     then
+        if window.undecorate then
+            undecorate_window()
+        end
+
+        if window.decorate then
+            decorate_window()
+        end
+
+        if window.opacity ~= nil then
+            set_window_opacity(window.opacity)
+        end
+
+        if (window.first_column and window.first_row) or (window.width and window.height) then
+            origin_x, origin_y = unpack(displays[window.display or 1])
+
+            padding_top =
+                window.padding_top ~= nil and window.padding_top or (window.padding ~= nil and window.padding or 0)
+            padding_right =
+                window.padding_right ~= nil and window.padding_right or
+                (window.padding ~= nil and window.padding or padding)
+            padding_bottom =
+                window.padding_bottom ~= nil and window.padding_bottom or
+                (window.padding ~= nil and window.padding or padding)
+            padding_left =
+                window.padding_left ~= nil and window.padding_left or
+                (window.padding ~= nil and window.padding or 2 * padding - padding_top)
+
+            column_width = screen_width / (window.columns or default_columns)
+            x = window.first_column and (column_width * (window.first_column - 1) + padding_left) or nil
+            w =
+                window.width and
+                (window.width > (window.columns or default_columns) and window.width or
+                    column_width * window.width - (padding_left + padding_right)) or
+                (column_width * ((window.last_column or window.first_column) - window.first_column + 1) -
+                    (padding_left + padding_right))
+
+            row_height = (screen_height - panel_height) / (window.rows or default_rows)
+            y = window.first_row and (panel_height + row_height * (window.first_row - 1) + padding_top) or nil
+            h =
+                window.height and
+                (window.height > (window.rows or default_rows) and window.height or
+                    row_height * window.height - (padding_top + padding_bottom)) or
+                (row_height * ((window.last_row or window.first_row) - window.first_row + 1) -
+                    (padding_top + padding_bottom))
+
+            if get_application_name() == "Qt Client Leader Window" then
+                local _x1, _y1 = get_window_geometry()
+                local _x2, _y2 = get_window_client_geometry()
+                adjust_x, adjust_y = _x2 - _x1, _y2 - _y1
+            else
+                adjust_x, adjust_y = 0, 0
+            end
+
+            if x == nil then
+                _wh = {w, h}
+                debug_print("Calling set_window_size(" .. table.concat(_wh, ", ") .. ")")
+                set_window_size(unpack(_wh))
+            else
+                if ((window.last_row or window.first_row) == (window.rows or default_rows)) then
+                    h = h - 1
+                end
+                _wh = {w, h}
+                debug_print("Calling set_window_size(" .. table.concat(_wh, ", ") .. ")")
+                set_window_size(unpack(_wh))
+                _xy = {x + origin_x + adjust_x, y + origin_y + adjust_y}
+                debug_print("Calling set_window_position2(" .. table.concat(_xy, ", ") .. ")")
+                set_window_position2(unpack(_xy))
+            end
+        end
+
+        local pin = window.pin
+
+        if type(pin) == "number" then
+            if on_display(pin) then
+                pin = true
+            else
+                pin = false
+            end
+        end
+
+        if not pin and window.workspace then
+            set_window_workspace(window.workspace)
+        end
+
+        if pin then
+            pin_window()
+            if skip_pinned then
+                if not window.never_skip then
+                    window.skip_pager = true
+                    window.skip_tasklist = true
+                else
+                    window.skip_pager = false
+                    window.skip_tasklist = false
+                end
+            end
+        end
+
+        if window.always_on_top then
+            make_always_on_top()
+        end
+
+        if window.skip_pager ~= nil then
+            set_skip_pager(window.skip_pager)
+        end
+
+        if window.skip_tasklist ~= nil then
+            set_skip_tasklist(window.skip_tasklist)
+        end
+    end
+end
+
+function log_window_full(trigger)
+    debug_print("On " .. trigger .. ":")
+    debug_print(" get_window_name:              " .. get_window_name())
+    debug_print(" get_window_has_name:          " .. (get_window_has_name() and "true" or "false"))
+    debug_print(" get_application_name:         " .. (get_application_name() or ""))
+    debug_print(" get_window_geometry:          " .. table.concat({get_window_geometry()}, ","))
+    debug_print(" get_window_client_geometry:   " .. table.concat({get_window_client_geometry()}, ","))
+    debug_print(" get_window_is_maximized:      " .. (get_window_is_maximized() and "true" or "false"))
+    debug_print(" get_window_type:              " .. get_window_type())
+    debug_print(" get_class_instance_name:      " .. (get_class_instance_name() or ""))
+
+    -- see http://standards.freedesktop.org/wm-spec/wm-spec-latest.html
+    -- debug_print(" get_window_property:          " .. get_window_property())
+
+    debug_print(" get_window_role:              " .. get_window_role())
+    debug_print(" get_window_xid:               " .. get_window_xid())
+    debug_print(" get_window_class:             " .. (get_window_class() or ""))
+    debug_print(" get_workspace_count:          " .. get_workspace_count())
+    debug_print(" get_screen_geometry:          " .. table.concat({get_screen_geometry()}, "x"))
+    debug_print(" get_window_fullscreen:        " .. (get_window_fullscreen() and "true" or "false"))
+    debug_print(" xywh:                         " .. table.concat({xywh()}, ","))
+
+    debug_print()
+end
+
+function log_window(trigger)
+    debug_print(
+        "(" ..
+            table.concat({get_screen_geometry()}, "x") ..
+                ") " ..
+                    (get_class_instance_name() or "") ..
+                        "." ..
+                            (get_window_class() or "") ..
+                                " geometry on " ..
+                                    trigger ..
+                                        ": " ..
+                                            table.concat({get_window_geometry()}, ",") ..
+                                                " [" .. get_window_type() .. "]"
+    )
+end
+
+function extend_copy(to_copy, to_add)
+    local c = tablex.copy(to_copy)
+    return tablex.update(c, to_add)
+end
+
+function apply_on_blur(window)
+    return extend_copy(window, {apply_on_blur = true})
+end
+
+function undecorated(window)
+    return extend_copy(window, {undecorate = true})
+end
+
+function never_skip(window)
+    return extend_copy(window, {never_skip = true})
+end
+
+function always_log(window)
+    return extend_copy(window, {log = true})
+end
+
+function on_display(display_number)
+    local display = displays[display_number]
+    if display then
+        local x, y = get_window_geometry()
+        if x >= display[1] and y >= display[2] and x < display[1] + display[3] and y < display[2] + display[4] then
+            -- debug_print("on_display " .. display_number)
+            return true
+        end
+    end
+    -- debug_print("not on_display " .. display_number)
+    return false
+end

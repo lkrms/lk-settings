@@ -1,0 +1,43 @@
+# Nextcloud defaults
+*~
+~$*
+.~lock.*
+~*.tmp
+]*.~*
+]Icon\r*
+].DS_Store
+].ds_store
+._*
+]Thumbs.db
+]photothumb.db
+System Volume Information
+.*.sw?
+.*.*sw?
+].TemporaryItems
+].Trashes
+].DocumentRevisions-V100
+].Trash-*
+.fseventd
+.apdisk
+.directory
+*.part
+*.filepart
+*.crdownload
+*.kate-swp
+*.gnucash.tmp-*
+.synkron.*
+.sync.ffs_db
+.symform
+.symform-store
+.fuse_hidden*
+*.unison
+.nfs*
+My Saved Places.
+\#*#
+
+# extras
+ar[0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f]
+fp[0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f]
+unison.log
+unison.*.log
+*_backup.*

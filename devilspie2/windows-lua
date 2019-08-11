@@ -1,0 +1,282 @@
+-- Defaults:
+--  default_rows = 2
+--  default_columns = 6
+--  padding = 2
+--  panel_height = 36
+--  windows = {}
+--  displays = {
+--      {0, 0, screen_width, screen_height}
+--  }
+--  skip_pinned = true
+
+padding = 0
+skip_pinned = false
+
+-- one or more 4K (3840x2160) displays
+if ((screen_width % 3840 == 0) and screen_height == 2160) then
+    default_columns = 15
+
+    local main_display,
+        sticky_display,
+        sticky_window,
+        scratch_window1,
+        scratch_window2,
+        floating_scratch_window,
+        messaging_window1,
+        messaging_window2,
+        messaging_window3,
+        music_window,
+        list_window
+
+    if (screen_width > 3840) then
+        screen_width = 3840
+        displays = {
+            {0, 0, screen_width, screen_height},
+            {screen_width, 0, screen_width, screen_height}
+        }
+
+        if on_display(1) then
+            -- panel_height = 0
+            padding = 1
+        end
+
+        main_display = 2
+        sticky_display = 1
+
+        sticky_window = {
+            display = sticky_display,
+            pin = true,
+            apply_on_focus = sticky_display
+        }
+
+        scratch_window1 =
+            extend_copy(
+            sticky_window,
+            {
+                columns = 30,
+                first_row = 1,
+                first_column = 16,
+                last_column = 20
+            }
+        )
+
+        scratch_window2 =
+            extend_copy(
+            sticky_window,
+            {
+                columns = 30,
+                first_row = 2,
+                first_column = 16,
+                last_column = 20
+            }
+        )
+
+        floating_scratch_window = scratch_window1
+
+        messaging_window1 =
+            extend_copy(
+            sticky_window,
+            {
+                first_row = 2,
+                first_column = 11,
+                last_column = 15
+            }
+        )
+
+        messaging_window2 = messaging_window1
+
+        messaging_window3 = messaging_window1
+
+        music_window =
+            extend_copy(
+            sticky_window,
+            {
+                first_row = 1,
+                first_column = 11,
+                last_column = 15
+            }
+        )
+
+        list_window = music_window
+    else
+        main_display = nil
+        sticky_display = nil
+
+        sticky_window = {
+            pin = true,
+            apply_on_focus = true
+        }
+
+        scratch_window1 =
+            extend_copy(
+            sticky_window,
+            {
+                columns = 30,
+                first_row = 2,
+                first_column = 21,
+                last_column = 25
+            }
+        )
+
+        scratch_window2 =
+            extend_copy(
+            sticky_window,
+            {
+                columns = 30,
+                first_row = 2,
+                first_column = 26,
+                last_column = 30
+            }
+        )
+
+        floating_scratch_window =
+            extend_copy(
+            sticky_window,
+            {
+                width = 2,
+                height = 1,
+                always_on_top = true,
+                opacity = 1,
+                blurred_opacity = 0.3
+            }
+        )
+
+        messaging_window1 =
+            extend_copy(
+            sticky_window,
+            {
+                first_row = 1,
+                first_column = 11,
+                last_column = 15
+            }
+        )
+
+        messaging_window2 =
+            extend_copy(
+            sticky_window,
+            {
+                first_row = 2,
+                first_column = 11,
+                last_column = 15
+            }
+        )
+
+        messaging_window3 = messaging_window1
+        music_window = messaging_window2
+        list_window = messaging_window1
+    end
+
+    windows = {
+        ["microsoft teams"] = messaging_window1,
+        ["teams.microsoft.com"] = undecorated(messaging_window3),
+        ["harvestapp"] = undecorated(scratch_window2),
+        ["Mail"] = {
+            window_role_matches = "3pane",
+            columns = 2,
+            first_row = 1,
+            last_row = 2,
+            first_column = 1,
+            display = sticky_display,
+            pin = true,
+            never_skip = true,
+            apply_on_focus = sticky_display or true
+        },
+        ["todoist"] = undecorated(list_window),
+        ["typora"] = {
+            pin = sticky_display or true,
+            never_skip = true
+        },
+        ["speedcrunch"] = floating_scratch_window,
+        ["keepassxc"] = never_skip(list_window),
+        ["caprine"] = undecorated(messaging_window2),
+        ["skype"] = messaging_window3,
+        ["spotify"] = undecorated(music_window),
+        ["clementine"] = music_window
+    }
+else
+    if screen_height == 1080 then
+        screen_width = 1920
+        displays = {
+            {0, 0, screen_width, screen_height}
+        }
+    end
+    default_columns = 5
+    panel_height = 30
+
+    local scratch_window1 = {
+        first_row = 1,
+        first_column = 4,
+        last_column = 5,
+        pin = true,
+        apply_on_focus = true
+    }
+
+    local floating_scratch_window = {
+        first_row = 1,
+        first_column = 5,
+        pin = true,
+        always_on_top = true,
+        apply_on_focus = true,
+        blurred_opacity = 0.15
+    }
+
+    local messaging_window1 = {
+        first_row = 1,
+        last_row = 2,
+        first_column = 1,
+        last_column = 3,
+        pin = true,
+        apply_on_focus = true
+    }
+
+    windows = {
+        ["speedcrunch"] = floating_scratch_window,
+        ["keepassxc"] = {
+            pin = true,
+            never_skip = true
+        },
+        ["microsoft teams"] = messaging_window1,
+        ["teams.microsoft.com"] = undecorated(messaging_window1),
+        ["caprine"] = undecorated(messaging_window1),
+        ["skype"] = messaging_window1,
+        ["spotify"] = undecorated(scratch_window1),
+        ["clementine"] = scratch_window1,
+        ["harvestapp"] = {
+            first_row = 2,
+            first_column = 5,
+            pin = true,
+            undecorate = true,
+            apply_on_focus = true
+        },
+        ["todoist"] = {
+            first_row = 1,
+            last_row = 2,
+            first_column = 1,
+            last_column = 3,
+            pin = true,
+            never_skip = true,
+            apply_on_focus = true
+        },
+        ["Mail"] = {
+            window_role_matches = "3pane",
+            first_row = 1,
+            last_row = 2,
+            first_column = 1,
+            last_column = 3,
+            pin = true,
+            never_skip = true,
+            apply_on_focus = true
+        },
+        ["typora"] = {
+            pin = true,
+            never_skip = true
+        }
+    }
+end
+
+windows["linacreative.harvestapp.com__time_m"] = windows["harvestapp"]
+windows["microsoft teams - preview"] = windows["microsoft teams"]
+windows["rambox"] = windows["caprine"]
+
+-- windows["skype"] = always_log(windows["skype"])
+-- windows["speedcrunch"] = always_log(windows["speedcrunch"])

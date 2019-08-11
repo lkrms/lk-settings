@@ -1,0 +1,190 @@
+#!/bin/bash
+# shellcheck disable=SC1007,SC1090,SC2015,SC2034,SC2207
+
+set -euo pipefail
+lk_die() { echo "${BASH_SOURCE[0]}: $1" >&2 && exit 1; }
+. "/etc/default/lk-platform" || true
+[ -d "${LK_BASE:-}" ] || lk_die "LK_BASE not set"
+
+include=iptables . "$LK_BASE/lib/bash/common.sh"
+
+lk_elevate
+
+exec > >(tee -a "/tmp/libvirt-qemu-hook.out") 2>&1
+
+COMMANDLINE=("$0" "$@")
+echo "[$(lk_date_log)] ${COMMANDLINE[*]}"
+echo "Environment:"
+printenv
+echo
+
+case "$1" in
+*ubuntu1204*)
+    GUEST_IP=192.168.122.124
+    SSH_PORT=9124
+    HTTP_PORT=80
+    HTTPS_PORT=443
+    ;;&
+*ubuntu1404*)
+    GUEST_IP=192.168.122.144
+    SSH_PORT=9144
+    HTTP_PORT=80
+    HTTPS_PORT=443
+    ;;&
+*ubuntu1604*)
+    GUEST_IP=192.168.122.164
+    SSH_PORT=9164
+    HTTP_PORT=80
+    HTTPS_PORT=443
+    ;;&
+*ubuntu1804*)
+    GUEST_IP=192.168.122.184
+    SSH_PORT=9184
+    HTTP_PORT=80
+    HTTPS_PORT=443
+    ;;&
+*ubuntu2004*)
+    GUEST_IP=192.168.122.204
+    SSH_PORT=9204
+    HTTP_PORT=80
+    HTTPS_PORT=443
+    ;;&
+*pymblelc*)
+    GUEST_IP=192.168.122.206
+    SSH_PORT=9206
+    HTTP_PORT=80
+    HTTPS_PORT=443
+    ISOLATE=Y
+    ISOLATE_ALLOW_HOST=Y
+    ISOLATE_ALLOW_HOST_NET=Y
+    FORWARD_HTTP=Y
+    ;;&
+*isolated*)
+    ISOLATE=Y
+    ISOLATE_ALLOW_HOST=Y
+    ISOLATE_ALLOW_HOST_NET=Y
+    ;;&
+*ubuntu*)
+    FORWARD_HTTP=Y
+    ;;
+esac
+
+ISOLATE_ALLOW_HOSTS=(
+    #
+    entropy.ubuntu.com
+    keyserver.ubuntu.com
+    launchpad.net
+    ppa.launchpad.net
+
+    #
+    pypi.org
+    bootstrap.pypa.io
+    files.pythonhosted.org
+
+    #
+    api.github.com
+    raw.githubusercontent.com
+
+    #
+    api.wordpress.org
+    downloads.wordpress.org
+    plugins.svn.wordpress.org
+    wordpress.org
+)
+
+if [ -z "${GUEST_IP:-}" ]; then
+    exit
+fi
+
+GUEST_BRIDGE="$(ip -4 route get "$GUEST_IP" |
+    grep -Po "^${GUEST_IP//./\\.}.* dev \K[^ ]+(?= |\$)")"
+GUEST_BRIDGE_IP="$(ip -4 address show dev "$GUEST_BRIDGE" primary |
+    grep -Po "^\s*inet \K[0-9.]+(?=/)")"
+HOST_INTERFACE="$(ip -4 route show to default |
+    grep -Po " dev \K[^ ]+(?= )")"
+HOST_NET="$(ip -4 route show dev "$HOST_INTERFACE" scope link |
+    grep -Po "^[0-9.]+/[0-9]+")"
+HOST_IP="$(ip -4 address show dev "$HOST_INTERFACE" primary |
+    grep -Po "^\s*inet \K[0-9.]+(?=/)")"
+
+case "$2" in
+
+start | release)
+    GUEST_PORTS=(22 80 443)
+    HOST_PORTS=("${SSH_PORT:-}" "${HTTP_PORT:-80}" "${HTTPS_PORT:-443}")
+    REJECT_CHAIN=lk_reject
+    lk_iptables_has_chain lk_reject || REJECT_CHAIN=REJECT
+    ;;&
+
+start)
+    if [ "${ISOLATE:-N}" != "N" ]; then
+        lk_is_false "${ISOLATE_ALLOW_HOST:-Y}" ||
+            ISOLATE_ALLOW_HOSTS+=("$GUEST_BRIDGE_IP")
+        lk_is_false "${ISOLATE_ALLOW_HOST_NET:-N}" ||
+            ISOLATE_ALLOW_HOSTS+=("$HOST_NET")
+        if lk_in_array "api.github.com" ISOLATE_ALLOW_HOSTS; then
+            GITHUB_IPS=($(
+                curl "https://api.github.com/meta" 2>/dev/null |
+                    jq -r ".web[],.api[]" | sort | uniq
+            )) && ISOLATE_ALLOW_HOSTS+=("${GITHUB_IPS[@]}") ||
+                lk_console_warning "GitHub IP ranges could not be retrieved"
+        fi
+        if [ "${#ISOLATE_ALLOW_HOSTS[@]}" -gt "0" ]; then
+            ISOLATE_ALLOW_IP="$(lk_resolve_hosts "${ISOLATE_ALLOW_HOSTS[@]}")" ||
+                lk_die "unable to resolve domain names"
+            ISOLATE_ALLOW_IPV4=($(echo "$ISOLATE_ALLOW_IP" | lk_grep_ipv4 || :))
+        fi
+        lk_iptables_flush_chain semi-isolated
+        for IP in "${ISOLATE_ALLOW_IPV4[@]}"; do
+            iptables -v -A semi-isolated -d "$IP" -j ACCEPT
+        done
+        iptables -v -A semi-isolated -p udp -m udp --dport 123 -j ACCEPT
+        iptables -v -A semi-isolated -j LOG --log-prefix "blocked: "
+        iptables -v -A semi-isolated -j "$REJECT_CHAIN"
+        iptables -v -I FORWARD \
+            -i "$GUEST_BRIDGE" -s "$GUEST_IP" -j semi-isolated
+    fi
+    lk_iptables_has_chain forward-incoming ||
+        lk_iptables_flush_chain forward-incoming
+    for i in "${!GUEST_PORTS[@]}"; do
+        [ -n "${HOST_PORTS[$i]}" ] || continue
+        if [[ "${HOST_PORTS[$i]}" =~ ^(80|443)$ ]] &&
+            [ "${FORWARD_HTTP:-N}" = "N" ]; then
+            continue
+        fi
+        if ! iptables -C forward-incoming \
+            -p tcp -m tcp --dport "${GUEST_PORTS[$i]}" -j ACCEPT 2>/dev/null; then
+            iptables -v -A forward-incoming \
+                -p tcp -m tcp --dport "${GUEST_PORTS[$i]}" -j ACCEPT
+        fi
+        iptables -v -t nat -I PREROUTING -i "$HOST_INTERFACE" \
+            -p tcp -m tcp --dport "${HOST_PORTS[$i]}" \
+            -j DNAT --to-destination "$GUEST_IP:${GUEST_PORTS[$i]}"
+        iptables -v -t nat -I OUTPUT -d "$HOST_IP" \
+            -p tcp -m tcp --dport "${HOST_PORTS[$i]}" \
+            -j DNAT --to-destination "$GUEST_IP:${GUEST_PORTS[$i]}"
+    done
+    iptables -v -I FORWARD \
+        -o "$GUEST_BRIDGE" -d "$GUEST_IP" -j forward-incoming
+    ;;
+
+release)
+    set +e
+    trap - ERR
+    if [ "${ISOLATE:-N}" != "N" ]; then
+        iptables -v -D FORWARD \
+            -i "$GUEST_BRIDGE" -s "$GUEST_IP" -j semi-isolated
+    fi
+    iptables -v -D FORWARD \
+        -o "$GUEST_BRIDGE" -d "$GUEST_IP" -j forward-incoming
+    for i in "${!GUEST_PORTS[@]}"; do
+        iptables -v -t nat -D PREROUTING -i "$HOST_INTERFACE" \
+            -p tcp -m tcp --dport "${HOST_PORTS[$i]}" \
+            -j DNAT --to-destination "$GUEST_IP:${GUEST_PORTS[$i]}"
+        iptables -v -t nat -D OUTPUT -d "$HOST_IP" \
+            -p tcp -m tcp --dport "${HOST_PORTS[$i]}" \
+            -j DNAT --to-destination "$GUEST_IP:${GUEST_PORTS[$i]}"
+    done
+    ;;
+
+esac

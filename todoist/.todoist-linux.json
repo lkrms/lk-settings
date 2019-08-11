@@ -1,0 +1,7 @@
+{
+    "quick-add": "Ctrl+Super+Q",
+    "show-hide": "Ctrl+Super+O",
+    "refresh": "F23",
+    "quit": "F24",
+    "tray-icon": "icon.png"
+}

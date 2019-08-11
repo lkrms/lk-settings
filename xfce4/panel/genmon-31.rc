@@ -1,0 +1,6 @@
+Command=sh -c "uptime | sed -Ee 's/^.* (up .+),\\\\s+[0-9]+ user.*\\$/\\\\1/' -e 's/\\\\s+/ /g'"
+UseLabel=0
+Text=
+UpdatePeriod=60000
+Font=Cantarell 9
+

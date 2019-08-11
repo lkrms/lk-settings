@@ -1,0 +1,243 @@
+# available types: bool, int, uint, int64, uint64, double, string
+
+reset:xfwm4,/,reset
+
+# this triggers other changes, so do it first
+reset:xfwm4,/general/easy_click,string,Mod3
+
+xfwm4,/general/activate_action,string,switch
+xfwm4,/general/borderless_maximize,bool,true
+xfwm4,/general/button_layout,string,OT|HSMC
+xfwm4,/general/cycle_hidden,bool,true
+xfwm4,/general/cycle_minimum,bool,false
+xfwm4,/general/cycle_preview,bool,true
+xfwm4,/general/cycle_workspaces,bool,false
+xfwm4,/general/mousewheel_rollup,bool,true
+xfwm4,/general/placement_mode,string,mouse
+xfwm4,/general/raise_with_any_button,bool,false
+xfwm4,/general/scroll_workspaces,bool,false
+xfwm4,/general/show_dock_shadow,bool,false
+xfwm4,/general/snap_to_windows,bool,true
+xfwm4,/general/titleless_maximize,bool,true
+xfwm4,/general/toggle_workspaces,bool,true
+xfwm4,/general/use_compositing,bool,true
+reset:xfwm4,/general/workspace_count,int,${WORKSPACE_COUNT:-3}
+reset:xfwm4,/general/workspace_names,array,$(xfce4_string_array ${WORKSPACE_NAMES:-1 2 3})
+xfwm4,/general/wrap_cycle,bool,true
+xfwm4,/general/wrap_layout,bool,true
+xfwm4,/general/wrap_windows,bool,false
+
+displays,/,reset
+displays,/Notify,bool,false
+
+reset:thunar,/,reset
+reset:thunar-volman,/,reset
+thunar,/misc-date-style,string,THUNAR_DATE_STYLE_SHORT
+thunar,/misc-file-size-binary,bool,false
+thunar,/misc-folders-first,bool,true
+thunar,/misc-recursive-permissions,string,THUNAR_RECURSIVE_PERMISSIONS_ASK
+thunar,/misc-single-click,bool,false
+thunar,/misc-text-beside-icons,bool,false
+thunar,/misc-thumbnail-mode,string,THUNAR_THUMBNAIL_MODE_ONLY_LOCAL
+thunar,/misc-volume-management,bool,true
+thunar,/shortcuts-icon-emblems,bool,true
+thunar,/tree-icon-emblems,bool,true
+thunar-volman,/autobrowse/enabled,bool,false
+# thunar-volman,/autokeyboard/command,string,lk-xkb-load.sh
+# thunar-volman,/autokeyboard/enabled,bool,true
+thunar-volman,/automount-drives/enabled,bool,false
+thunar-volman,/automount-drives/enabled,bool,false
+thunar-volman,/automount-media/enabled,bool,false
+thunar-volman,/autoopen/enabled,bool,false
+thunar-volman,/autorun/enabled,bool,false
+thunar-volman,/autotablet/enabled,bool,false
+
+reset:xfce4-desktop,/,reset
+xfce4-desktop,/desktop-icons/file-icons/show-device-removable,bool,false
+xfce4-desktop,/desktop-icons/file-icons/show-filesystem,bool,false
+xfce4-desktop,/desktop-icons/file-icons/show-home,bool,false
+xfce4-desktop,/desktop-icons/file-icons/show-network-removable,bool,false
+xfce4-desktop,/desktop-icons/file-icons/show-removable,bool,false
+xfce4-desktop,/desktop-icons/file-icons/show-trash,bool,false
+xfce4-desktop,/desktop-icons/file-icons/show-unknown-removable,bool,false
+xfce4-desktop,/desktop-icons/primary,bool,true
+xfce4-desktop,/desktop-icons/style,int,2
+xfce4-desktop,/windowlist-menu/show-add-remove-workspaces,bool,false
+xfce4-desktop,/windowlist-menu/show-sticky-once,bool,true
+
+# xfce4-panel,/plugins/clock/digital-format,string,%a %-d %b
+# xfce4-panel,/plugins/clock/tooltip-format,string,week %V
+# xfce4-panel,/plugins/pager/miniature-view,bool,true
+xfce4-panel,/plugins/pager/workspace-scrolling,bool,true
+xfce4-panel,/plugins/systray/show-frame,bool,false
+xfce4-panel,/plugins/tasklist/flat-buttons,reset
+xfce4-panel,/plugins/tasklist/grouping,uint,0
+xfce4-panel,/plugins/tasklist/middle-click,uint,0
+xfce4-panel,/plugins/tasklist/show-handle,bool,false
+xfce4-panel,/plugins/tasklist/show-wireframes,bool,true
+xfce4-panel,/plugins/tasklist/sort-order,uint,1
+xfce4-panel,/plugins/tasklist/window-scrolling,bool,false
+
+# the order of these 4 entries matters
+xfce4-keyboard-shortcuts,/,reset
+xfce4-keyboard-shortcuts,/providers,array,-t string -s commands -t string -s xfwm4
+xfce4-keyboard-shortcuts,/commands/custom/override,bool,true
+xfce4-keyboard-shortcuts,/xfwm4/custom/override,bool,true
+
+# check for conflicts with sxhkdrc before using these shortcuts:
+#
+# <Super>
+# <Shift><Super>
+# <Alt><Super>
+
+# xfce4-keyboard-shortcuts,/commands/custom/<Alt><Super>Escape,string,xkill
+xfce4-keyboard-shortcuts,/commands/custom/<Alt>F2,string,xfce4-popup-applicationsmenu
+xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>l,string,xflock4
+xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>r,string,xfrun4
+xfce4-keyboard-shortcuts,/commands/custom/<Super>space,string,xfce4-popup-whiskermenu
+
+xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>e,string,exo-open --launch FileManager
+xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>m,string,exo-open --launch MailReader
+xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>t,string,exo-open --launch TerminalEmulator
+xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>w,string,exo-open --launch WebBrowser
+xfce4-keyboard-shortcuts,/commands/custom/XF86Explorer,string,exo-open --launch FileManager
+xfce4-keyboard-shortcuts,/commands/custom/XF86HomePage,string,exo-open --launch WebBrowser
+xfce4-keyboard-shortcuts,/commands/custom/XF86Mail,string,exo-open --launch MailReader
+xfce4-keyboard-shortcuts,/commands/custom/XF86WWW,string,exo-open --launch WebBrowser
+
+# [Control-]Shift-Super-3 (whole screen)
+# [Control-]Shift-Super-4 (selection)
+# [Control-]Shift-Super-5 (top window)
+# [Control-]Shift-Super-9 (selection)
+xfce4-keyboard-shortcuts,/commands/custom/<Shift><Super>numbersign,string,flameshot screen
+xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>numbersign,string,flameshot screen -p \"${LK_SCREENSHOT_DIR:-$HOME/Desktop}\"
+xfce4-keyboard-shortcuts,/commands/custom/<Shift><Super>dollar,string,flameshot gui
+xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>dollar,string,flameshot gui -p \"${LK_SCREENSHOT_DIR:-$HOME/Desktop}\"
+xfce4-keyboard-shortcuts,/commands/custom/<Shift><Super>percent,string,xfce4-screenshooter -w -c
+xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>percent,string,xfce4-screenshooter -w -s \"${LK_SCREENSHOT_DIR:-$HOME/Desktop}\"
+xfce4-keyboard-shortcuts,/commands/custom/<Shift><Super>parenleft,string,flameshot gui
+xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>parenleft,string,flameshot gui -p \"${LK_SCREENSHOT_DIR:-$HOME/Desktop}\"
+
+xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>apostrophe,string,libreoffice --writer
+xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>b,string,galculator
+xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>c,string,code
+xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>c,string,code \"$HOME/Code/lk-platform/lk-platform.code-workspace\"
+xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>d,string,dbeaver
+xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>g,string,smerge
+xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>g,string,git-cola
+xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>i,string,nomacs
+xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>k,string,keepassxc
+xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>n,string,md-open-today-note.sh
+xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>n,string,code \"${LK_NOTES_DIR:-$HOME/Desktop}\"
+xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>s,string,exo-open --launch TerminalEmulator bash -ic 'unison-all.sh --run -batch'
+xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>semicolon,string,libreoffice --calc
+xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>v,string,virt-manager
+xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>x,string,autorandr -c --force
+xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>y,string,spotify
+xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>y,string,clementine
+xfce4-keyboard-shortcuts,/commands/custom/<Shift><Super>space,string,recoll
+
+xfce4-keyboard-shortcuts,/xfwm4/custom/<Alt>F1,string,stick_window_key
+xfce4-keyboard-shortcuts,/xfwm4/custom/<Alt>F7,string,move_window_key
+xfce4-keyboard-shortcuts,/xfwm4/custom/<Alt>F8,string,resize_window_key
+xfce4-keyboard-shortcuts,/xfwm4/custom/<Primary><Alt><Super>1,string,move_window_workspace_1_key
+xfce4-keyboard-shortcuts,/xfwm4/custom/<Primary><Alt><Super>2,string,move_window_workspace_2_key
+xfce4-keyboard-shortcuts,/xfwm4/custom/<Primary><Alt><Super>3,string,move_window_workspace_3_key
+xfce4-keyboard-shortcuts,/xfwm4/custom/<Primary><Alt><Super>4,string,move_window_workspace_4_key
+xfce4-keyboard-shortcuts,/xfwm4/custom/<Primary><Alt><Super>5,string,move_window_workspace_5_key
+xfce4-keyboard-shortcuts,/xfwm4/custom/<Primary><Alt><Super>6,string,move_window_workspace_6_key
+xfce4-keyboard-shortcuts,/xfwm4/custom/<Primary><Alt><Super>7,string,move_window_workspace_7_key
+xfce4-keyboard-shortcuts,/xfwm4/custom/<Primary><Alt><Super>8,string,move_window_workspace_8_key
+xfce4-keyboard-shortcuts,/xfwm4/custom/<Primary><Alt><Super>9,string,move_window_workspace_9_key
+xfce4-keyboard-shortcuts,/xfwm4/custom/<Primary><Alt>Return,string,maximize_window_key
+xfce4-keyboard-shortcuts,/xfwm4/custom/<Primary><Super>1,string,workspace_1_key
+xfce4-keyboard-shortcuts,/xfwm4/custom/<Primary><Super>2,string,workspace_2_key
+xfce4-keyboard-shortcuts,/xfwm4/custom/<Primary><Super>3,string,workspace_3_key
+xfce4-keyboard-shortcuts,/xfwm4/custom/<Primary><Super>4,string,workspace_4_key
+xfce4-keyboard-shortcuts,/xfwm4/custom/<Primary><Super>5,string,workspace_5_key
+xfce4-keyboard-shortcuts,/xfwm4/custom/<Primary><Super>6,string,workspace_6_key
+xfce4-keyboard-shortcuts,/xfwm4/custom/<Primary><Super>7,string,workspace_7_key
+xfce4-keyboard-shortcuts,/xfwm4/custom/<Primary><Super>8,string,workspace_8_key
+xfce4-keyboard-shortcuts,/xfwm4/custom/<Primary><Super>9,string,workspace_9_key
+xfce4-keyboard-shortcuts,/xfwm4/custom/<Primary><Super>f,string,fullscreen_key
+xfce4-keyboard-shortcuts,/xfwm4/custom/<Primary><Super>h,string,show_desktop_key
+xfce4-keyboard-shortcuts,/xfwm4/custom/<Primary><Super>Insert,string,add_workspace_key
+xfce4-keyboard-shortcuts,/xfwm4/custom/<Primary><Super>Left,string,prev_workspace_key
+xfce4-keyboard-shortcuts,/xfwm4/custom/<Primary><Super>Right,string,next_workspace_key
+xfce4-keyboard-shortcuts,/xfwm4/custom/<Shift><Super>ISO_Left_Tab,string,cycle_reverse_windows_key
+xfce4-keyboard-shortcuts,/xfwm4/custom/<Super>grave,string,switch_window_key
+xfce4-keyboard-shortcuts,/xfwm4/custom/<Super>m,string,hide_window_key
+xfce4-keyboard-shortcuts,/xfwm4/custom/<Super>Tab,string,cycle_windows_key
+
+reset:xfce4-notifyd,/,reset
+xfce4-notifyd,/do-fadeout,bool,true
+xfce4-notifyd,/do-slideout,bool,false
+xfce4-notifyd,/expire-timeout,int,10
+xfce4-notifyd,/initial-opacity,double,0.90
+xfce4-notifyd,/log-level-apps,uint,0
+xfce4-notifyd,/log-level,uint,1
+xfce4-notifyd,/notification-log,bool,true
+xfce4-notifyd,/notify-location,uint,2
+xfce4-notifyd,/primary-monitor,uint,1
+
+reset:xfce4-power-manager,/,reset
+
+# suspend at 4% battery
+laptop:xfce4-power-manager,/xfce4-power-manager/critical-power-action,uint,1
+laptop:xfce4-power-manager,/xfce4-power-manager/critical-power-level,uint,4
+
+xfce4-power-manager,/xfce4-power-manager/dpms-enabled,bool,true
+xfce4-power-manager,/xfce4-power-manager/blank-on-ac,int,4
+xfce4-power-manager,/xfce4-power-manager/blank-on-battery,int,4
+desktop:xfce4-power-manager,/xfce4-power-manager/dpms-on-ac-off,uint,60
+desktop:xfce4-power-manager,/xfce4-power-manager/dpms-on-ac-sleep,uint,40
+laptop:xfce4-power-manager,/xfce4-power-manager/dpms-on-ac-off,uint,15
+laptop:xfce4-power-manager,/xfce4-power-manager/dpms-on-ac-sleep,uint,10
+laptop:xfce4-power-manager,/xfce4-power-manager/dpms-on-battery-off,uint,6
+laptop:xfce4-power-manager,/xfce4-power-manager/dpms-on-battery-sleep,uint,5
+
+laptop:xfce4-power-manager,/xfce4-power-manager/brightness-on-ac,uint,9
+laptop:xfce4-power-manager,/xfce4-power-manager/brightness-on-battery,uint,9
+
+# fun fact: 14 is the same as never
+xfce4-power-manager,/xfce4-power-manager/inactivity-on-ac,reset
+laptop:xfce4-power-manager,/xfce4-power-manager/inactivity-on-battery,uint,4
+
+# another fun fact: if not explicitly set to suspend, Xfce 4.12 will attempt to hibernate
+xfce4-power-manager,/xfce4-power-manager/inactivity-sleep-mode-on-ac,uint,1
+laptop:xfce4-power-manager,/xfce4-power-manager/inactivity-sleep-mode-on-battery,uint,1
+
+# suspend when laptop lid is closed
+laptop:xfce4-power-manager,/xfce4-power-manager/lid-action-on-ac,uint,1
+laptop:xfce4-power-manager,/xfce4-power-manager/lid-action-on-battery,uint,1
+
+# without this, locking will fail
+laptop:xfce4-power-manager,/xfce4-power-manager/logind-handle-lid-switch,bool,false
+
+xfce4-power-manager,/xfce4-power-manager/lock-screen-suspend-hibernate,bool,true
+
+# do nothing when power buttons are pressed
+xfce4-power-manager,/xfce4-power-manager/battery-button-action,uint,0
+xfce4-power-manager,/xfce4-power-manager/hibernate-button-action,uint,0
+xfce4-power-manager,/xfce4-power-manager/power-button-action,uint,0
+xfce4-power-manager,/xfce4-power-manager/sleep-button-action,uint,0
+
+xfce4-power-manager,/xfce4-power-manager/show-panel-label,int,0
+
+reset:xfce4-session,/,reset
+xfce4-session,/compat/LaunchGNOME,bool,true
+xfce4-session,/general/AutoSave,bool,false
+xfce4-session,/general/LockCommand,string,xset s activate
+xfce4-session,/general/SaveOnExit,bool,false
+xfce4-session,/shutdown/LockScreen,bool,true
+
+xfce4-screensaver,/,reset
+# xfce4-screensaver,/lock/enabled,bool,true
+# xfce4-screensaver,/lock/saver-activation/delay,int,1
+# xfce4-screensaver,/lock/saver-activation/enabled,bool,true
+# xfce4-screensaver,/lock/user-switching/enabled,bool,false
+# xfce4-screensaver,/saver/fullscreen-inhibit,bool,true
+# xfce4-screensaver,/saver/idle-activation/delay,int,2
+# xfce4-screensaver,/saver/mode,int,0
+
+xsettings,/Net/EnableEventSounds,bool,true

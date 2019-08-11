@@ -1,0 +1,8 @@
+/byobu/.ssh-agent
+/geeqie/history
+/subl/User/*.*-ca-bundle
+/subl/User/*.cache
+/subl/User/*.last-run
+/typora/conf/*.default.*
+/typora/themes/old-themes/
+/xfce4/thunar/accels.scm

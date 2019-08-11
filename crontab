@@ -1,0 +1,16 @@
+SHELL=/bin/bash
+PATH=~/.local/bin:/usr/bin:/bin
+DISPLAY=:0
+MAILTO=
+
+# reset stretchly at the beginning of each work hour
+0 9,10 * * 1,2,3,4,5 stretchly reset-breaks
+15 11,12 * * 1,2,3,4,5 stretchly reset-breaks
+55 13 * * 1,2,3,4,5 stretchly reset-breaks
+10 15,16 * * 1,2,3,4,5 stretchly reset-breaks
+
+# reminders
+20 9,11,15 * * 1,2,3,4,5 stretchly set-next-idea "Step away NOW." "You need 5 minutes away from screens."
+20 10,14 * * 1,2,3,4,5 stretchly reset-breaks "Take a 20-minute break, starting now." "Even if you don't think you've earned it."
+20 12 * * 1,2,3,4,5 stretchly set-next-idea "Lunchtime starts NOW." "Step away from your desk until 1.55pm."
+15 16 * * 1,2,3,4,5 stretchly reset-breaks "Stop work. NOW." "There are many other things worthy of your attention."

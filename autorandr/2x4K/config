@@ -1,0 +1,23 @@
+output HDMI-1
+off
+output DP-2
+crtc 1
+mode 3840x2160
+pos 0x0
+prop-audio off
+prop-broadcast_rgb Limited 16:235
+prop-colorspace Default
+prop-max_bpc 12
+prop-non_desktop 0
+rate 60.00
+output DP-1
+crtc 0
+mode 3840x2160
+pos 3840x0
+primary
+prop-audio off
+prop-broadcast_rgb Full
+prop-colorspace Default
+prop-max_bpc 12
+prop-non_desktop 0
+rate 60.00
