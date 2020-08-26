@@ -9,15 +9,13 @@ BS="${BASH_SOURCE[0]}" && [ ! -L "$BS" ] &&
 
 [ -d "${LK_BASE:-}" ] || lk_die "LK_BASE not set"
 
-include=deploy . "$LK_BASE/lib/bash/common.sh"
+include=macos . "$LK_BASE/lib/bash/common.sh"
 
 lk_assert_not_root
 lk_assert_is_macos
 
 set +e
 shopt -s nullglob
-
-lk_sudo_offer_nopasswd
 
 CLOUD_SETTINGS="$HOME/.cloud-settings"
 
@@ -156,6 +154,16 @@ pgrep -fq "^/Applications/VSCodium.app/Contents/MacOS/Electron" &&
         lk_safe_symlink "$SCRIPT_DIR/vscode/snippets" \
             "$HOME/Library/Application Support/VSCodium/User/snippets"
 }
+
+lk_macos_maybe_install_pkg_url \
+    "com.Brother.Brotherdriver.Brother_PrinterDrivers_MonochromeLaser" \
+    "https://download.brother.com/welcome/dlf104416/Brother_PrinterDrivers_MonochromeLaser_1_3_0.dmg" \
+    "Brother Printer Drivers (Monochrome Laser)"
+
+lk_macos_maybe_install_pkg_url \
+    "com.brother.brotherdriver.BrotherCL17" \
+    "https://download.brother.com/welcome/dlf104984/Brother_PrinterDrivers_CL17_2_1_6_0.dmg" \
+    "Brother Printer Drivers (Color Laser)"
 
 # use `lpinfo -m` for driver names
 lk_console_message "Checking printers"
