@@ -15,7 +15,7 @@ lk_assert_not_root
 lk_assert_is_linux
 
 set +e
-shopt -s nullglob globstar
+shopt -s nullglob
 
 ! lk_command_exists yay ||
     yay --save --nocleanmenu --nodiffmenu --noremovemake
@@ -134,7 +134,7 @@ MIMEAPPS_FILE="$HOME/.config/mimeapps.list"
 }
 
 [ -d "/opt/db2_db2driver_for_jdbc_sqlj" ] || {
-    DB2_DRIVER=("$HOME/Downloads"/**/Db2/db2_db2driver_for_jdbc_sqlj.zip)
+    DB2_DRIVER=("$HOME/Downloads"/*/Db2/db2_db2driver_for_jdbc_sqlj.zip)
     [ "${#DB2_DRIVER[@]}" -ne "1" ] || {
         pushd /tmp >/dev/null && {
             rm -Rf "/tmp/db2_db2driver_for_jdbc_sqlj" &&
