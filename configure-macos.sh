@@ -218,6 +218,13 @@ defaults write com.apple.finder ShowStatusBar -bool true
 defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
 defaults write com.apple.desktopservices DSDontWriteUSBStores -bool true
 
+if lk_has_arg "--reset"; then
+    lk_macos_kb_reset_shortcuts com.apple.mail
+fi
+
+lk_macos_kb_add_shortcut com.apple.mail "Mark All Messages as Read" "@\$c"
+lk_macos_kb_add_shortcut com.apple.mail "Send" "@\U21a9"
+
 ! lk_command_exists code || {
     lk_console_message "Checking Visual Studio Code extensions"
     . "$SCRIPT_DIR/vscode/extensions.sh" || exit
@@ -239,7 +246,8 @@ defaults write com.apple.desktopservices DSDontWriteUSBStores -bool true
         echo
         lk_echo_array "${VSCODE_EXTRA_EXTENSIONS[@]}" |
             lk_console_detail_list \
-                "Remove or add to $(basename "$0"):" "extension" "extensions"
+                "Remove or add to $SCRIPT_DIR/vscode/extensions.sh:" \
+                extension extensions
         lk_console_detail "To remove, run" "code --uninstall-extension <ext-id>"
     }
 }

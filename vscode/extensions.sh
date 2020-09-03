@@ -32,6 +32,7 @@ VSCODE_EXTENSIONS=(
     mitchdenny.ecdc
     mrmlnc.vscode-apache
     ms-python.python
+    ms-vscode-remote.remote-ssh-edit
     ms-vscode.azure-account
     ms-vscode.cpptools
     ms-vscode.powershell

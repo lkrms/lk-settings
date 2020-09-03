@@ -997,3 +997,9 @@ footer.ty-footer {
 #md-searchpanel input {
     color: white;
 }
+
+.export-detail,
+.export-item.active,
+.export-items-list-control {
+    background: #d6d6d4
+}

@@ -474,7 +474,8 @@ lk_console_message "Checking Xfce4"
         echo
         lk_echo_array "${VSCODE_EXTRA_EXTENSIONS[@]}" |
             lk_console_detail_list \
-                "Remove or add to $(basename "$0"):" "extension" "extensions"
+                "Remove or add to $SCRIPT_DIR/vscode/extensions.sh:" \
+                extension extensions
         lk_console_detail "To remove, run" "code --uninstall-extension <ext-id>"
     }
 }

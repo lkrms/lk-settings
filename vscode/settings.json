@@ -18,11 +18,13 @@
     "editor.autoClosingBrackets": "never",
     "editor.autoClosingQuotes": "never",
     "editor.autoIndent": "advanced",
+    "editor.comments.ignoreEmptyLines": false,
+    "editor.comments.insertSpace": false,
     "editor.copyWithSyntaxHighlighting": false,
     "editor.cursorBlinking": "solid",
     "editor.dragAndDrop": false,
-    "editor.fontFamily": "'Source Code Pro', Menlo, Monaco, 'Courier New', monospace",
-    "editor.lineHeight": 18,
+    "editor.fontFamily": "'JetBrains Mono', 'Source Code Pro', Menlo, Monaco, 'Courier New', monospace",
+    "editor.lineHeight": 19,
     "editor.renderControlCharacters": false,
     "editor.renderWhitespace": "selection",
     "editor.rulers": [
@@ -47,9 +49,9 @@
     "files.watcherExclude": {
         "**/wp-content/uploads/**": true
     },
-    "git.autorefresh": false,
     "git.confirmSync": true,
     "git.countBadge": "off",
+    "git.enableStatusBarSync": false,
     "git.ignoreLimitWarning": true,
     "gitlens.blame.format": "${message|40?} ${date|14-}",
     "gitlens.codeLens.enabled": false,
@@ -58,6 +60,7 @@
     "gitlens.statusBar.format": "${author}, ${date} • ${message}",
     "gitlens.statusBar.reduceFlicker": true,
     "html.autoClosingTags": false,
+    "intelephense.format.enable": false,
     "intelephense.stubs": [
         "apache",
         "bcmath",

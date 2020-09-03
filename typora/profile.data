@@ -18,6 +18,7 @@
     "ignoreLineBreak": true,
     "image_save_location": "custom",
     "indentSize": 4,
+    "isDarkMode": false,
     "line_ending_crlf": false,
     "match_pari_markdown": true,
     "noWarnigForDeleteFile": true,
