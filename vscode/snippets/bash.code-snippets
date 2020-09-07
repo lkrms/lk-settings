@@ -40,7 +40,7 @@
 		"scope": "shellscript",
 		"prefix": "lk_console_list",
 		"body": [
-			"lk_echo_array \\${${1:array_var}[@]+\"\\${${1:array_var}[@]}\"} | lk_console_list \"${2:message}\" \"${3:colour_sequence}\""
+			"lk_echo_array ${1:array_var} | lk_console_list \"${2:message}\" \"${3:colour_sequence}\""
 		]
 	},
 	"shellcheck disable": {

@@ -459,7 +459,7 @@ lk_console_message "Checking Xfce4"
     VSCODE_MISSING_EXTENSIONS=($(
         comm -13 \
             <(code --list-extensions | sort | uniq) \
-            <(lk_echo_array "${VSCODE_EXTENSIONS[@]}" | sort | uniq)
+            <(lk_echo_array VSCODE_EXTENSIONS | sort | uniq)
     ))
     [ "${#VSCODE_MISSING_EXTENSIONS[@]}" -eq "0" ] ||
         for EXT in "${VSCODE_MISSING_EXTENSIONS[@]}"; do
@@ -468,11 +468,11 @@ lk_console_message "Checking Xfce4"
     VSCODE_EXTRA_EXTENSIONS=($(
         comm -23 \
             <(code --list-extensions | sort | uniq) \
-            <(lk_echo_array "${VSCODE_EXTENSIONS[@]}" | sort | uniq)
+            <(lk_echo_array VSCODE_EXTENSIONS | sort | uniq)
     ))
     [ "${#VSCODE_EXTRA_EXTENSIONS[@]}" -eq "0" ] || {
         echo
-        lk_echo_array "${VSCODE_EXTRA_EXTENSIONS[@]}" |
+        lk_echo_array VSCODE_EXTRA_EXTENSIONS |
             lk_console_detail_list \
                 "Remove or add to $SCRIPT_DIR/vscode/extensions.sh:" \
                 extension extensions

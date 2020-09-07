@@ -9,7 +9,7 @@ BS="${BASH_SOURCE[0]}" && [ ! -L "$BS" ] &&
 
 [ -d "${LK_BASE:-}" ] || lk_die "LK_BASE not set"
 
-include=linux . "$LK_BASE/lib/bash/common.sh"
+include=linux,provision . "$LK_BASE/lib/bash/common.sh"
 
 lk_assert_command_exists xfconf-query
 
