@@ -163,7 +163,8 @@ fi
 
 mkdir -pv "$HOME/.config/xfce4/panel"
 cp -nv "$SCRIPT_DIR/xfce4/panel"/*.rc "$HOME/.config/xfce4/panel/"
-lk_safe_symlink "$SCRIPT_DIR/xfce4/terminal/" "$HOME/.config/xfce4/terminal"
+lk_safe_symlink "$SCRIPT_DIR/xfce4/terminal/config" "$HOME/.config/xfce4/terminal"
+lk_safe_symlink "$SCRIPT_DIR/xfce4/terminal/data" "$HOME/.local/share/xfce4/terminal"
 lk_safe_symlink "$SCRIPT_DIR/xfce4/thunar/" "$HOME/.config/Thunar"
 lk_safe_symlink "$SCRIPT_DIR/xfce4/xfce4-panel-profiles/" "$HOME/.local/share/xfce4-panel-profiles"
 
