@@ -64,7 +64,7 @@ CLOUD_SETTINGS="$HOME/.cloud-settings"
 
 }
 
-SUDO_OR_NOT=1
+LK_SUDO=1
 lk_safe_symlink "$SCRIPT_DIR/.vimrc" "/root/.vimrc"
 lk_safe_symlink "$SCRIPT_DIR/iptables/iptables.rules" \
     "/etc/iptables/iptables.rules"
@@ -80,7 +80,7 @@ lk_safe_symlink "$SCRIPT_DIR/fonts/ms-no-bitmaps.conf" \
     }
 }
 
-unset SUDO_OR_NOT
+unset LK_SUDO
 
 diff -q <(crontab -l) "$SCRIPT_DIR/crontab" >/dev/null ||
     crontab "$SCRIPT_DIR/crontab"

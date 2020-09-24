@@ -139,23 +139,27 @@ fi
 if [ -n "$DPI" ] && [ -f "/etc/default/grub" ]; then
     _MULTIPLIER="$(bc <<<"scale = 10; $DPI / 96")"
     _16="$(bc <<<"v = 16 * $_MULTIPLIER / 1; v - v % 2")"
-    GRUB_FONT="${GRUB_FONT-$(
+    GRUB_FONT_FILE="${GRUB_FONT_FILE-$(
         fc-list --format="%{file}" \
             ":family=xos4 Terminus:style=Regular:pixelsize=$_16"
     )}"
-    if [ -f "$GRUB_FONT" ]; then
-        _GRUB_FONT="${GRUB_FONT##*/}"
-        _GRUB_FONT="/boot/grub/fonts/${_GRUB_FONT%%.*}-$_16.pf2"
-        _GRUB_FONT_QUOTED="\"$(lk_escape_double_quotes "$_GRUB_FONT")\""
-        if ! grep -Fxq "GRUB_FONT=$_GRUB_FONT_QUOTED" "/etc/default/grub" ||
-            [ ! -f "$_GRUB_FONT" ]; then
+    if [ -f "$GRUB_FONT_FILE" ]; then
+        GRUB_FONT="${GRUB_FONT_FILE##*/}"
+        GRUB_FONT="/boot/grub/fonts/${GRUB_FONT%%.*}-$_16.pf2"
+        GRUB_FONT_VAR=$(lk_get_shell_var GRUB_FONT)
+        if ! grep -Fxq "$GRUB_FONT_VAR" "/etc/default/grub" ||
+            [ ! -f "$GRUB_FONT" ]; then
             _PF2="$(mktemp)"
-            grub-mkfont -s "$_16" -o "$_PF2" "$GRUB_FONT"
-            [ -d "${_GRUB_FONT_DIR:=${_GRUB_FONT%/*}}" ] ||
+            grub-mkfont -s "$_16" -o "$_PF2" "$GRUB_FONT_FILE"
+            [ -d "${_GRUB_FONT_DIR:=${GRUB_FONT%/*}}" ] ||
                 sudo install -v -d -m 0755 "$_GRUB_FONT_DIR"
-            sudo install -v -m 0755 "$_PF2" "$_GRUB_FONT"
-            SUDO_OR_NOT=1 lk_apply_setting "/etc/default/grub" "GRUB_FONT" \
-                "$_GRUB_FONT_QUOTED" "=" "#"
+            sudo install -v -m 0755 "$_PF2" "$GRUB_FONT"
+            LK_SUDO=1 lk_maybe_add_newline "/etc/default/grub"
+            LK_SUDO=1 lk_maybe_replace "/etc/default/grub" \
+                "$(
+                    sed -E '/^GRUB_FONT=/d' "/etc/default/grub"
+                    echo "$GRUB_FONT_VAR"
+                )"
             ! lk_command_exists update-grub || sudo update-grub
         fi
     fi
@@ -177,7 +181,7 @@ rm -Rfv "$HOME/.cache/sessions"
 
 # otherwise xfce4-sensors-plugin will not work
 [ ! -f "/etc/hddtemp.db" ] ||
-    SUDO_OR_NOT=1 lk_enable_entry "/etc/hddtemp.db" \
+    LK_SUDO=1 lk_enable_entry "/etc/hddtemp.db" \
         '"Samsung SSD 860 EVO" 190 C "Samsung SSD 860 EVO"' "# " ""
 [ ! -x "/usr/sbin/hddtemp" ] ||
     sudo chmod -c u+s "/usr/sbin/hddtemp" || true
