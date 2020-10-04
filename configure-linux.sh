@@ -24,7 +24,10 @@ CLOUD_SETTINGS="$HOME/.cloud-settings"
 
 [ ! -d "$CLOUD_SETTINGS" ] || {
 
+    [ ! -e "$CLOUD_SETTINGS/.face" ] || chmod -c a+x "$HOME"
+
     lk_safe_symlink "$CLOUD_SETTINGS/.bashrc" "$HOME/.bashrc"
+    lk_safe_symlink "$CLOUD_SETTINGS/.face" "$HOME/.face"
     lk_safe_symlink "$CLOUD_SETTINGS/.gitconfig" "$HOME/.gitconfig"
     lk_safe_symlink "$CLOUD_SETTINGS/.gitignore" "$HOME/.gitignore"
     lk_safe_symlink "$CLOUD_SETTINGS/acme.sh/" "$HOME/.acme.sh"
