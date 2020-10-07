@@ -12,7 +12,7 @@
 	smudge = cat
 
 [filter "flameshot"]
-	clean = gnu_sed -Ee '/^(drawThickness|savePath)=/d'
+	clean = gnu_sed -Ee '/^(drawThickness|save(AfterCopy)?Path)=/d'
 	smudge = cat
 
 [filter "geeqie"]

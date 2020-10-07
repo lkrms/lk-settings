@@ -226,7 +226,7 @@ lk_console_message "Checking Flameshot"
 pgrep -x "flameshot" >/dev/null &&
     lk_warn "cannot apply settings while Flameshot is running" ||
     lk_safe_symlink "$SCRIPT_DIR/flameshot/flameshot.ini" \
-        "$HOME/.config/Dharkael/flameshot.ini"
+        "$HOME/.config/flameshot/flameshot.ini"
 
 lk_console_message "Checking Geeqie"
 pgrep -x "geeqie" >/dev/null &&
