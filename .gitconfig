@@ -19,6 +19,10 @@
 	clean = gnu_sed -Ee '/^\\s+((file_ops\\.safe_delete|home|last)_path|(main|folder|float|properties|log)_window\\.(x|y|w|h|maximized|[a-z]+_pos)) ?=/d'
 	smudge = cat
 
+[filter "keepassxc"]
+	clean = "awk '/^\\[PasswordGenerator\\]/ { skip=1; next } /^\\[/ { skip=0 } !skip { print }'"
+	smudge = cat
+
 [filter "nomacs"]
 	clean = gnu_sed -Ee '/^(geometry(Nomacs)?|windowState|[a-zA-Z]+-answer)=/d'
 	smudge = cat
@@ -36,7 +40,7 @@
 	smudge = cat
 
 [filter "typora"]
-	clean = xxd -r -p | jsonlint -Sf | jq -S --indent 4 'del(.\"sidebar-width\", .initialize_ver, .lastClosedBounds, .lastSavePath, .pinFolder, .sidebar_tab, .uuid)'
+	clean = xxd -r -p | jsonlint -Sf | jq -S --indent 4 'del(.\"sidebar-width\", .customZoom, .initialize_ver, .lastClosedBounds, .lastSavePath, .pinFolder, .sidebar_tab, .uuid, .zoomFactor, .zoomLevel)'
 	smudge = sh -c 'echo \"$(cat)\" | tac | gnu_sed -E \"2s/,\\$//\" | tac | jq -c | xxd -p | tr -d \"\\\\n\"'
 
 [filter "vscodesettings"]

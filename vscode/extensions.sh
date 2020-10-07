@@ -12,6 +12,7 @@ VSCODE_EXTENSIONS=(
     arcticicestudio.nord-visual-studio-code
     bmewburn.vscode-intelephense-client
     chenxsan.vscode-standardjs
+    chrmarti.regex
     dbaeumer.vscode-eslint
     DotJoshJohnson.xml
     dracula-theme.theme-dracula
@@ -26,6 +27,7 @@ VSCODE_EXTENSIONS=(
     jprestidge.theme-material-theme
     jrebocho.vscode-random
     liviuschera.noctis
+    luggage66.AWK
     mads-hartmann.bash-ide-vscode
     mgmcdermott.vscode-language-babel
     Mikael.Angular-BeastCode
