@@ -24,7 +24,14 @@ CLOUD_SETTINGS="$HOME/.cloud-settings"
 
 [ ! -d "$CLOUD_SETTINGS" ] || {
 
-    [ ! -e "$CLOUD_SETTINGS/.face" ] || chmod -c a+x "$HOME"
+    [ ! -e "$CLOUD_SETTINGS/.face" ] || {
+        FACE_DIR=$(dirname "$(realpath "$CLOUD_SETTINGS/.face")")
+        HOME_DIR=$(realpath ~)
+        while [ "${FACE_DIR:0:${#HOME_DIR}}" = "$HOME_DIR" ]; do
+            gnu_chmod -c a+x "$FACE_DIR"
+            FACE_DIR="$(dirname "$FACE_DIR")"
+        done
+    }
 
     lk_safe_symlink "$CLOUD_SETTINGS/.bashrc" "$HOME/.bashrc"
     lk_safe_symlink "$CLOUD_SETTINGS/.face" "$HOME/.face"
@@ -33,6 +40,8 @@ CLOUD_SETTINGS="$HOME/.cloud-settings"
     lk_safe_symlink "$CLOUD_SETTINGS/acme.sh/" "$HOME/.acme.sh"
     lk_safe_symlink "$CLOUD_SETTINGS/aws/" "$HOME/.aws"
     lk_safe_symlink "$CLOUD_SETTINGS/espanso/" "$HOME/.config/espanso"
+    lk_safe_symlink "$CLOUD_SETTINGS/linode-cli/linode-cli" \
+        "$HOME/.config/linode-cli"
     lk_safe_symlink "$CLOUD_SETTINGS/remmina/data/" "$HOME/.local/share/remmina"
     lk_safe_symlink "$CLOUD_SETTINGS/ssh/" "$HOME/.ssh"
     lk_safe_symlink "$CLOUD_SETTINGS/unison/" "$HOME/.unison"

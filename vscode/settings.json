@@ -206,6 +206,9 @@
     "python.formatting.autopep8Args": [
         "--aggressive"
     ],
+    "search.exclude": {
+        "**/*.log": true
+    },
     "search.followSymlinks": false,
     "search.usePCRE2": true,
     "shellcheck.customArgs": [

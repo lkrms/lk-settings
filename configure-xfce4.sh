@@ -61,7 +61,7 @@ while read -r PLUGIN_ID PLUGIN_NAME; do
 
 done < <(xfconf-query -c xfce4-panel -p /plugins -lv | grep -Po '(?<=^/plugins/plugin-)[0-9]+\s+[^\s]+$' | sort -n)
 
-lk_mapfile "$SCRIPT_DIR/xfce4/xfconf-settings" XFCONF_SETTING '^([[:space:]]*$|#)'
+lk_mapfile "$SCRIPT_DIR/xfce4/xfconf-settings" XFCONF_SETTING '^([[:blank:]]*$|#)'
 
 for i in "${!XFCONF_SETTING[@]}"; do
 
@@ -120,7 +120,7 @@ done
     autorandr -c --force
 
 function lightdm_gtk_greeter_conf() {
-    cat <(grep -Ev '^(xft-dpi[[:space:]]*=|$)' \
+    cat <(grep -Ev '^(xft-dpi[[:blank:]]*=|$)' \
         "$SCRIPT_DIR/xfce4/lightdm/lightdm-gtk-greeter.conf")
     [ -z "$DPI" ] || echo "xft-dpi = $DPI"
 }
