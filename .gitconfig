@@ -20,7 +20,7 @@
 	smudge = cat
 
 [filter "keepassxc"]
-	clean = "awk '/^\\[PasswordGenerator\\]/ { skip=1; next } /^\\[/ { skip=0 } !skip { print }'"
+	clean = "awk '/^\\[PasswordGenerator\\]/ { skip=1; next } /^\\[/ { skip=0 } /^UseTouchID=/ { next } !skip { print }'"
 	smudge = cat
 
 [filter "nomacs"]

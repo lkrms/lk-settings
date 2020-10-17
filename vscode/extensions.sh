@@ -25,6 +25,7 @@ VSCODE_EXTENSIONS=(
     humao.rest-client
     jflbr.jwt-decoder
     jprestidge.theme-material-theme
+    jq-syntax-highlighting.jq-syntax-highlighting
     jrebocho.vscode-random
     liviuschera.noctis
     luggage66.AWK

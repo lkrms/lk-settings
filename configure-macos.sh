@@ -1,5 +1,5 @@
 #!/bin/bash
-# shellcheck disable=SC1007,SC1090,SC2015,SC2034,SC2207
+# shellcheck disable=SC1090,SC2015,SC2034,SC2207
 
 set -euo pipefail
 lk_die() { echo "${BS:+$BS: }$1" >&2 && exit 1; }
@@ -27,6 +27,8 @@ CLOUD_SETTINGS="$HOME/.cloud-settings"
     lk_safe_symlink "$CLOUD_SETTINGS/acme.sh/" "$HOME/.acme.sh"
     lk_safe_symlink "$CLOUD_SETTINGS/aws/" "$HOME/.aws"
     lk_safe_symlink "$CLOUD_SETTINGS/espanso/" "$HOME/Library/Preferences/espanso"
+    lk_safe_symlink "$CLOUD_SETTINGS/linode-cli/linode-cli" \
+        "$HOME/.config/linode-cli"
     lk_safe_symlink "$CLOUD_SETTINGS/ssh/" "$HOME/.ssh"
     lk_safe_symlink "$CLOUD_SETTINGS/unison/" "$HOME/Library/Application Support/unison"
 
