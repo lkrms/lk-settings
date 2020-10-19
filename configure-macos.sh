@@ -17,6 +17,45 @@ lk_assert_is_macos
 set +e
 shopt -s nullglob
 
+function PlistBuddy() {
+    /usr/libexec/PlistBuddy "$@"
+}
+
+function plist_quote() {
+    echo "\"${1//\"/\\\"}\""
+}
+
+function plist_delete() {
+    PlistBuddy -c \
+        "Delete $(plist_quote "$1")" "$PLIST" 2>/dev/null
+}
+
+function plist_add() {
+    PlistBuddy -c \
+        "Add $(plist_quote "$1") $2${3+ $(plist_quote "$3")}" "$PLIST"
+}
+
+function plist_replace() {
+    plist_delete "$1"
+    plist_add "$@"
+}
+
+function plist_replace_from_file() {
+    plist_replace "${@:1:2}"
+    PlistBuddy -c \
+        "Merge $(plist_quote "$3") $(plist_quote "$1")" "$PLIST"
+}
+
+function plist_exists() {
+    PlistBuddy -c \
+        "Print $(plist_quote "$1")" "$PLIST" >/dev/null 2>&1
+}
+
+function plist_maybe_add() {
+    plist_exists "$1" ||
+        plist_add "$@"
+}
+
 CLOUD_SETTINGS="$HOME/.cloud-settings"
 
 [ ! -d "$CLOUD_SETTINGS" ] || {
@@ -112,6 +151,63 @@ $HOME/Library/Containers/fr.handbrake.HandBrake/Data\
     }
 }
 
+lk_console_message "Checking iTerm2"
+pgrep -xq iTerm2 &&
+    lk_warn "cannot apply settings while iTerm2 is running" || {
+    defaults write com.googlecode.iterm2 AddNewTabAtEndOfTabs -bool false
+    defaults write com.googlecode.iterm2 AlternateMouseScroll -bool true
+    defaults write com.googlecode.iterm2 CopyWithStylesByDefault -bool true
+    defaults write com.googlecode.iterm2 DisallowCopyEmptyString -bool true
+    defaults write com.googlecode.iterm2 DoubleClickPerformsSmartSelection -bool true
+    defaults write com.googlecode.iterm2 OptionClickMovesCursor -bool false
+    defaults write com.googlecode.iterm2 QuitWhenAllWindowsClosed -bool false
+    defaults write com.googlecode.iterm2 SensitiveScrollWheel -bool true
+    defaults write com.googlecode.iterm2 SmartPlacement -bool true
+    defaults write com.googlecode.iterm2 SoundForEsc -bool false
+    defaults write com.googlecode.iterm2 SpacelessApplicationSupport -string ""
+    defaults write com.googlecode.iterm2 StatusBarPosition -int 1
+    defaults write com.googlecode.iterm2 StretchTabsToFillBar -bool false
+    defaults write com.googlecode.iterm2 SUEnableAutomaticChecks -bool true
+    defaults write com.googlecode.iterm2 SwitchTabModifier -int 5
+    defaults write com.googlecode.iterm2 TypingClearsSelection -bool false
+    defaults write com.googlecode.iterm2 UseBorder -bool true
+    defaults write com.googlecode.iterm2 VisualIndicatorForEsc -bool false
+
+    PLIST=~/Library/Preferences/com.googlecode.iterm2.plist
+    plist_maybe_add ":Window Arrangements" dict
+    plist_replace ":Window Arrangements:No windows" array
+    plist_replace ":Default Arrangement Name" string "No windows"
+    plist_replace ":OpenArrangementAtStartup" bool true
+    plist_replace ":OpenNoWindowsAtStartup" bool false
+
+    plist_replace_from_file ":Custom Color Presets" dict \
+        "$SCRIPT_DIR/iterm2/Custom Color Presets.plist"
+
+    ! plist_exists ":New Bookmarks:0" &&
+        lk_warn "no profile to configure" || {
+        plist_replace ":New Bookmarks:0:AWDS Pane Option" string "Recycle"
+        plist_replace ":New Bookmarks:0:AWDS Tab Option" string "Recycle"
+        plist_replace ":New Bookmarks:0:AWDS Window Option" string "Recycle"
+        plist_replace ":New Bookmarks:0:BM Growl" bool false
+        plist_replace ":New Bookmarks:0:Columns" integer 120
+        plist_replace ":New Bookmarks:0:Custom Directory" string "Advanced"
+        plist_replace ":New Bookmarks:0:Flashing Bell" bool true
+        plist_replace ":New Bookmarks:0:Normal Font" string "Menlo-Regular 12"
+        plist_replace ":New Bookmarks:0:Option Key Sends" integer 2
+        plist_replace ":New Bookmarks:0:Place Prompt at First Column" bool false
+        plist_replace ":New Bookmarks:0:Right Option Key Sends" integer 2
+        plist_replace ":New Bookmarks:0:Rows" integer 35
+        plist_replace ":New Bookmarks:0:Screen" integer -2
+        plist_replace ":New Bookmarks:0:Scrollback Lines" integer 0
+        plist_replace ":New Bookmarks:0:Show Mark Indicators" bool false
+        plist_replace ":New Bookmarks:0:Silence Bell" bool true
+        plist_replace ":New Bookmarks:0:Title Components" integer 512
+        plist_replace ":New Bookmarks:0:Unlimited Scrollback" bool true
+        plist_replace_from_file ":New Bookmarks:0:Keyboard Map" dict \
+            "$SCRIPT_DIR/iterm2/Keyboard Map.plist"
+    }
+}
+
 lk_console_message "Checking KeePassXC"
 pgrep -xq "KeePassXC" &&
     lk_warn "cannot apply settings while KeePassXC is running" ||
@@ -194,7 +290,7 @@ sudo lpadmin -p HLL3230CDW -E \
 
 lk_console_message "Checking macOS"
 
-# trackpad
+# Trackpad
 defaults write com.apple.AppleMultitouchTrackpad Clicking -bool true
 defaults write com.apple.AppleMultitouchTrackpad TrackpadCornerSecondaryClick -int 2
 defaults write com.apple.AppleMultitouchTrackpad TrackpadRightClick -bool false
@@ -204,22 +300,24 @@ defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadRightC
 defaults write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
 defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
 defaults -currentHost write NSGlobalDomain com.apple.trackpad.trackpadCornerClickBehavior -int 1
-defaults -currentHost write NSGlobalDomain com.apple.trackpad.enableSecondaryClick -bool true
+defaults -currentHost write NSGlobalDomain com.apple.trackpad.enableSecondaryClick -bool false
 
-# keyboard
+defaults write com.apple.AppleMultitouchTrackpad ActuateDetents -bool false
+defaults write com.apple.AppleMultitouchTrackpad ForceSuppressed -bool true
+
+# Keyboard
 defaults write NSGlobalDomain AppleKeyboardUIMode -int 3
 defaults write NSGlobalDomain com.apple.keyboard.fnState -bool true
 
-# auto-correction
 defaults write NSGlobalDomain NSAutomaticCapitalizationEnabled -bool false
 defaults write NSGlobalDomain NSAutomaticPeriodSubstitutionEnabled -bool false
 defaults write NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool false
 defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false
 
-# sound
+# Sound
 defaults write NSGlobalDomain com.apple.sound.beep.feedback -bool true
 
-# general
+# General
 defaults write NSGlobalDomain AppleAccentColor -int 0
 defaults write NSGlobalDomain AppleHighlightColor -string "1.000000 0.733333 0.721569 Red"
 defaults write NSGlobalDomain AppleShowScrollBars -string Always
@@ -242,11 +340,11 @@ defaults write com.apple.menuextra.clock DateFormat -string "EEE d MMM  h:mm:ss 
 defaults write com.apple.screencapture location -string "${LK_SCREENSHOT_DIR:-$HOME/Desktop}"
 defaults -currentHost write com.apple.ImageCapture disableHotPlug -bool true
 
-# screen saver
+# Screen Saver
 defaults -currentHost write com.apple.screensaver idleTime -int 300
 defaults -currentHost write com.apple.screensaver showClock -bool true
 
-# 5 = start screen saver
+# Hot Corners (5 = Start Screen Saver)
 defaults write com.apple.dock wvous-tr-corner -int 5
 defaults write com.apple.dock wvous-tr-modifier -int 0
 
@@ -294,10 +392,26 @@ defaults write com.apple.Safari IncludeDevelopMenu -bool true
 defaults write com.apple.Safari WebKitDeveloperExtrasEnabledPreferenceKey -bool true
 defaults write com.apple.Safari WebKitPreferences.developerExtrasEnabled -bool true
 
+# Mail
+defaults write com.apple.mail ConversationViewSpansMailboxes -bool false
+defaults write com.apple.mail DeleteAttachmentsAfterHours -int 0
+defaults write com.apple.mail NewMessagesSoundName -string ""
+defaults write com.apple.mail PlayMailSounds -bool false
+defaults write com.apple.mail ShouldShowUnreadMessagesInBold -bool true
+defaults write com.apple.mail ThreadingDefault -bool false
+
+# "Use classic layout" (<=10.14)
+defaults write com.apple.mail RichMessageList -bool false
+
+# "View" > "Use Column Layout" (>=10.15)
+defaults write com.apple.mail ColumnLayoutMessageList -int 1
+
 if lk_has_arg "--reset"; then
+    lk_macos_kb_reset_shortcuts NSGlobalDomain
     lk_macos_kb_reset_shortcuts com.apple.mail
 fi
 
+lk_macos_kb_add_shortcut NSGlobalDomain "Lock Screen" "@^l"
 lk_macos_kb_add_shortcut com.apple.mail "Mark All Messages as Read" "@\$c"
 lk_macos_kb_add_shortcut com.apple.mail "Send" "@\U21a9"
 

@@ -110,6 +110,11 @@
         "when": "editorTextFocus && !editorReadonly && editorLangId == 'sql'"
     },
     {
+        "key": "f9",
+        "command": "-sortLines.sortLines",
+        "when": "editorTextFocus"
+    },
+    {
         "key": "cmd+k f5",
         "command": "sortLines.sortLinesNatural",
         "when": "editorTextFocus"
@@ -118,11 +123,6 @@
         "key": "f9",
         "command": "sortLines.sortLinesNatural",
         "when": "editorTextFocus && editorHasSelection && !inDebugMode"
-    },
-    {
-        "key": "f9",
-        "command": "-sortLines.sortLines",
-        "when": "editorTextFocus"
     },
     {
         "key": "alt+cmd+c",
@@ -155,28 +155,28 @@
         "when": "editorFocus"
     },
     {
-        "key": "cmd+k cmd+m",
-        "command": "workbench.action.editor.changeLanguageMode"
-    },
-    {
         "key": "alt+down",
-        "command": "workbench.action.editor.nextChange",
-        "when": "editorTextFocus"
+        "command": "workbench.action.compareEditor.nextChange",
+        "when": "textCompareEditorVisible"
     },
     {
         "key": "alt+f5",
-        "command": "-workbench.action.editor.nextChange",
-        "when": "editorTextFocus"
+        "command": "-workbench.action.compareEditor.nextChange",
+        "when": "textCompareEditorVisible"
     },
     {
         "key": "alt+up",
-        "command": "workbench.action.editor.previousChange",
-        "when": "editorTextFocus"
+        "command": "workbench.action.compareEditor.previousChange",
+        "when": "textCompareEditorVisible"
     },
     {
         "key": "shift+alt+f5",
-        "command": "-workbench.action.editor.previousChange",
-        "when": "editorTextFocus"
+        "command": "-workbench.action.compareEditor.previousChange",
+        "when": "textCompareEditorVisible"
+    },
+    {
+        "key": "cmd+k cmd+m",
+        "command": "workbench.action.editor.changeLanguageMode"
     },
     {
         "key": "shift+alt+1",
