@@ -151,6 +151,12 @@ $HOME/Library/Containers/fr.handbrake.HandBrake/Data\
     }
 }
 
+lk_console_message "Checking iCanHazShortcut"
+pgrep -xq "iCanHazShortcut" &&
+    lk_warn "cannot apply settings while iCanHazShortcut is running" ||
+    lk_safe_symlink "$SCRIPT_DIR/icanhazshortcut/" \
+        "$HOME/.config/iCanHazShortcut"
+
 lk_console_message "Checking iTerm2"
 pgrep -xq iTerm2 &&
     lk_warn "cannot apply settings while iTerm2 is running" || {
