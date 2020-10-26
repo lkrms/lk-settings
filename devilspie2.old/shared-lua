@@ -23,7 +23,7 @@ function do_actions(window)
         end
 
         if (window.first_column and window.first_row) or (window.width and window.height) then
-            origin_x, origin_y = unpack(displays[window.display or 1])
+            origin_x, origin_y = table.unpack(displays[window.display or 1])
 
             padding_top =
                 window.padding_top ~= nil and window.padding_top or (window.padding ~= nil and window.padding or 0)
@@ -66,17 +66,17 @@ function do_actions(window)
             if x == nil then
                 _wh = {w, h}
                 debug_print("Calling set_window_size(" .. table.concat(_wh, ", ") .. ")")
-                set_window_size(unpack(_wh))
+                set_window_size(table.unpack(_wh))
             else
                 if ((window.last_row or window.first_row) == (window.rows or default_rows)) then
                     h = h - 1
                 end
                 _wh = {w, h}
                 debug_print("Calling set_window_size(" .. table.concat(_wh, ", ") .. ")")
-                set_window_size(unpack(_wh))
+                set_window_size(table.unpack(_wh))
                 _xy = {x + origin_x + adjust_x, y + origin_y + adjust_y}
                 debug_print("Calling set_window_position2(" .. table.concat(_xy, ", ") .. ")")
-                set_window_position2(unpack(_xy))
+                set_window_position2(table.unpack(_xy))
             end
         end
 
@@ -173,6 +173,14 @@ end
 
 function undecorated(window)
     return extend_copy(window, {undecorate = true})
+end
+
+function skip_pager(window)
+    return extend_copy(window, {skip_pager = true})
+end
+
+function skip_tasklist(window)
+    return extend_copy(window, {skip_tasklist = true})
 end
 
 function never_skip(window)

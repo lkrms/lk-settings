@@ -1,0 +1,19 @@
+--log = nil
+log = log_state
+--log = log_window
+--log = log_window_full
+
+rules = {
+    {
+        criteria = {
+            class_instance_name = {
+                "microsoft teams",
+                "microsoft teams - preview",
+                "caprine"
+            }
+        },
+        actions = {
+            skip_tasklist_on
+        }
+    }
+}

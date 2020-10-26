@@ -1,0 +1,193 @@
+function extend_copy(to_copy, to_add)
+    return tablex.update(tablex.copy(to_copy), to_add)
+end
+
+function get_displays()
+    if displays == nil then
+        local f, output
+        debug_print("Getting screen geometry from xrandr")
+        f =
+            io.popen(
+            [[
+S=$'[ \t]'
+I="[0-9]*"
+echo "return {"
+xrandr | sed -E \
+    -e "/${S}connected$S/!d" \
+    -e "s/.*${S}connected$S+(primary$S+)?($I)x($I)\+($I)\+($I)$S.*/\1{ \4, \5, \2, \3 },/" \
+    -e "/^primary/!s/^/1 /" \
+    -e "/^primary/s/^primary$S+/0 /" | sort -n -k1 -k3 -k4 | cut -d" " -f2-
+echo "}"
+]]
+        )
+        output = f:read("*a")
+        assert(f:close())
+        displays = load(output)()
+    end
+    return displays
+end
+
+function get_state(event)
+    return {
+        event = event,
+        displays = get_displays(),
+        window_name = get_window_name(),
+        application_name = event == "close" and "" or (get_application_name() or ""),
+        window_geometry = {get_window_geometry()},
+        window_client_geometry = {get_window_client_geometry()},
+        window_type = get_window_type(),
+        class_instance_name = get_class_instance_name() or "",
+        window_role = get_window_role(),
+        window_xid = get_window_xid(),
+        screen_geometry = {get_screen_geometry()}
+    }
+end
+
+function skip_tasklist_on()
+    debug_print("skip_tasklist_on()")
+    set_skip_tasklist(true)
+end
+
+function skip_tasklist_off()
+    debug_print("skip_tasklist_off()")
+    set_skip_tasklist(false)
+end
+
+function process_event(event)
+    if log ~= nil then
+        log(event)
+    end
+    if event == "close" then
+        closed_window_xid = get_window_xid()
+    elseif event == "blur" then
+        if closed_window_xid and get_window_xid() == closed_window_xid then
+            closed_window_xid = nil
+            debug_print("Skipping closed window blur")
+            return
+        end
+        closed_window_xid = nil
+    end
+    if rules ~= nil then
+        local state = get_state(event)
+        for i, rule in ipairs(rules) do
+            local criteria_met = true
+            if rule.criteria.event == nil then
+                rule.criteria.event = {"open", "focus"}
+            end
+            for k, v in pairs(rule.criteria) do
+                if tablex.find(v, state[k]) == nil then
+                    criteria_met = false
+                    break
+                end
+            end
+            if criteria_met then
+                for j, action in ipairs(rule.actions) do
+                    local type_action = {
+                        ["function"] = action
+                    }
+                    action = type_action[type(action)]
+                    if action ~= nil then
+                        action(state)
+                    else
+                        print("Rule " .. i .. ", action " .. j .. ": type unknown")
+                    end
+                end
+            end
+        end
+    end
+end
+
+function log_window_full(event)
+    local output = {
+        get_window_name = get_window_name(),
+        get_window_has_name = (get_window_has_name() and "true" or "false"),
+        get_application_name = event == "close" and "" or (get_application_name() or ""),
+        get_window_geometry = table.concat({get_window_geometry()}, ","),
+        get_window_client_geometry = table.concat({get_window_client_geometry()}, ","),
+        get_window_is_maximized = (get_window_is_maximized() and "true" or "false"),
+        get_window_is_maximized_vertically = (get_window_is_maximized_vertically() and "true" or "false"),
+        get_window_is_maximized_horizontally = (get_window_is_maximized_horizontally() and "true" or "false"),
+        get_window_type = get_window_type(),
+        get_class_instance_name = (get_class_instance_name() or ""),
+        get_window_role = get_window_role(),
+        get_window_xid = get_window_xid(),
+        get_window_class = event == "close" and "" or (get_window_class() or ""),
+        get_workspace_count = get_workspace_count(),
+        get_screen_geometry = table.concat({get_screen_geometry()}, "x"),
+        get_window_fullscreen = (get_window_fullscreen() and "true" or "false"),
+        xywh = table.concat({xywh()}, ",")
+    }
+    debug_print("On " .. event .. ":")
+    for fn, result in pairs(output) do
+        if result ~= "" then
+            debug_print(string.format("  %-38s%s", fn .. ":", result))
+        end
+    end
+    -- Source: http://standards.freedesktop.org/wm-spec/wm-spec-latest.html
+    local props = {
+        "_NET_SUPPORTED",
+        "_NET_CLIENT_LIST",
+        "_NET_NUMBER_OF_DESKTOPS",
+        "_NET_DESKTOP_GEOMETRY",
+        "_NET_DESKTOP_VIEWPORT",
+        "_NET_CURRENT_DESKTOP",
+        "_NET_DESKTOP_NAMES",
+        "_NET_ACTIVE_WINDOW",
+        "_NET_WORKAREA",
+        "_NET_SUPPORTING_WM_CHECK",
+        "_NET_VIRTUAL_ROOTS",
+        "_NET_DESKTOP_LAYOUT",
+        "_NET_SHOWING_DESKTOP",
+        "_NET_WM_NAME",
+        "_NET_WM_VISIBLE_NAME",
+        "_NET_WM_ICON_NAME",
+        "_NET_WM_VISIBLE_ICON_NAME",
+        "_NET_WM_DESKTOP",
+        "_NET_WM_WINDOW_TYPE",
+        "_NET_WM_STATE",
+        "_NET_WM_ALLOWED_ACTIONS",
+        "_NET_WM_STRUT",
+        "_NET_WM_STRUT_PARTIAL",
+        "_NET_WM_ICON_GEOMETRY",
+        "_NET_WM_ICON",
+        "_NET_WM_PID",
+        "_NET_WM_HANDLED_ICONS",
+        "_NET_WM_USER_TIME",
+        "_NET_WM_USER_TIME_WINDOW",
+        "_NET_FRAME_EXTENTS",
+        "_NET_WM_OPAQUE_REGION",
+        "_NET_WM_BYPASS_COMPOSITOR"
+    }
+    debug_print("  get_window_property:")
+    for i, prop in ipairs(props) do
+        local val = get_window_property(prop) or ""
+        if val ~= "" and val ~= "NO RESULT" then
+            debug_print(string.format("    %-36s", prop) .. val)
+        end
+    end
+    debug_print()
+end
+
+function log_window(event)
+    local summary = {
+        "(",
+        table.concat({get_screen_geometry()}, "x"),
+        ") ",
+        get_class_instance_name() or "",
+        ".",
+        event == "close" and "" or (get_window_class() or ""),
+        " geometry on ",
+        event,
+        ": ",
+        table.concat({get_window_geometry()}, ","),
+        " [",
+        get_window_type(),
+        "]"
+    }
+    debug_print(table.concat(summary))
+end
+
+function log_state(event)
+    debug_print("state = " .. pretty.write(get_state(event), ""))
+    debug_print()
+end

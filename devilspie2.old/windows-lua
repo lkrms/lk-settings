@@ -167,8 +167,8 @@ if ((screen_width % 3840 == 0) and screen_height == 2160) then
     end
 
     windows = {
-        ["microsoft teams"] = messaging_window1,
-        ["teams.microsoft.com"] = undecorated(messaging_window3),
+        ["microsoft teams"] = skip_tasklist(messaging_window1),
+        ["teams.microsoft.com"] = skip_tasklist(undecorated(messaging_window3)),
         ["harvestapp"] = undecorated(scratch_window2),
         ["Mail"] = {
             window_role_matches = "3pane",
@@ -188,8 +188,8 @@ if ((screen_width % 3840 == 0) and screen_height == 2160) then
         },
         ["speedcrunch"] = floating_scratch_window,
         ["keepassxc"] = never_skip(list_window),
-        ["caprine"] = undecorated(messaging_window2),
-        ["skype"] = messaging_window3,
+        ["caprine"] = skip_tasklist(undecorated(messaging_window2)),
+        ["skype"] = skip_tasklist(messaging_window3),
         ["spotify"] = undecorated(music_window),
         ["clementine"] = music_window
     }
