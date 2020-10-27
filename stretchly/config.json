@@ -21,6 +21,8 @@
     "breakPostponesLimit": 1,
     "breakPostponableDurationPercent": 40,
     "mainColor": "#567890",
+    "transparentMode": true,
+    "opacity": 0.9,
     "audio": "silence",
     "volume": 1,
     "fullscreen": false,
@@ -40,6 +42,11 @@
     "monitorDnd": false,
     "microbreakStartSoundPlaying": false,
     "breakStartSoundPlaying": false,
+    "themeSource": "system",
+    "endBreakShortcut": "CmdOrCtrl+X",
+    "breakWindowWidth": 0.85,
+    "breakWindowHeight": 0.85,
+    "checkNewVersion": false,
     "breakIdeas": [
         {
             "data": [
@@ -152,6 +159,118 @@
                 "Do not email or message office colleagues, walk to their desks to communicate with them."
             ],
             "enabled": true
+        },
+        {
+            "data": [
+                "Learning",
+                "In a study of healthy volunteers, NIH researchers found that taking short breaks, early and often, may help our brains learn new skills."
+            ],
+            "enabled": true
+        },
+        {
+            "data": [
+                "Exercise",
+                "Evidence suggests small amounts of regular exercise can bring dramatic health benefits, including measurably reducing stress."
+            ],
+            "enabled": true
+        },
+        {
+            "data": [
+                "Repeat",
+                "Have you found your stretch-ly-routine? Do not forget to repeat it for more than once to better fight effects of prolonged sitting."
+            ],
+            "enabled": true
+        },
+        {
+            "data": [
+                "Wrist and forearm",
+                "Extend your arms with the palms facing towards you, then slowly rotate the hands four times clockwise, then four times counter-clockwise."
+            ],
+            "enabled": true
+        },
+        {
+            "data": [
+                "Back stretching",
+                "Join your hands behind your head, then lift them together up above your head ending with your palms facing upward."
+            ],
+            "enabled": true
+        },
+        {
+            "data": [
+                "Mobilize",
+                "For every thirty minutes of stagnation, you should have at least one minute of stimulation."
+            ],
+            "enabled": true
+        },
+        {
+            "data": [
+                "7 Minute Workout",
+                "This workout packs in a full-body exercise routine in a fraction of the time. But as with any excercise, be careful. There are numerous apps to get you started."
+            ],
+            "enabled": true
+        },
+        {
+            "data": [
+                "Pulse",
+                " Raise your pulse rate to 120 beats per minute for 20 straight minutes four or five times a week doing anything you enjoy. Regularly raising your heart rate results in improved cardiovascular health."
+            ],
+            "enabled": true
+        },
+        {
+            "data": [
+                "Take the stairs",
+                "Studies have shown that stair climbing, which is considered vigorous-intensity physical activity, burns more calories per minute than jogging."
+            ],
+            "enabled": true
+        },
+        {
+            "data": [
+                "Make art",
+                "Art therapy is known to have great mental health benefits, especially when it comes to stress management. How about writing a quick poem, taking a picture or painting something small?"
+            ],
+            "enabled": true
+        },
+        {
+            "data": [
+                "Declutter",
+                "A clean space helps your focus at work and is often linked to positive emotions like happiness."
+            ],
+            "enabled": true
+        },
+        {
+            "data": [
+                "Lunch outside",
+                "Nature is linked to positive emotions and decreased stress and anxiety. Whenever possible, try to take your daily lunch break outside, surrounded by some greenery."
+            ],
+            "enabled": true
+        },
+        {
+            "data": [
+                "Public Transport",
+                "If you use public transport regularly, you can stand instead of sitting. If it is possible, try to replace as many of your daily trips as possible with walking or cycling."
+            ],
+            "enabled": true
+        },
+        {
+            "data": [
+                "Yawning",
+                "Yawning can be really helpful, as it produces tears to help moisten and lubricate the eyes."
+            ],
+            "enabled": true
+        },
+        {
+            "data": [
+                "Focus change",
+                "Hold one finger close to the eye an focus on it. Slowly move the finger away, focus far into the distance and then back to the finger. Bring the finger back and focus on something far away."
+            ],
+            "enabled": true
+        },
+        {
+            "data": [
+                "Palming",
+                "While seated, brace elbows on the desk and close to the desk edge. Let your weight fall forward and cup hands over eyes. Close your eyes and inhale slowly through nose and hold for few seconds. Continue deep breathing."
+            ],
+            "enabled": true
         }
     ],
     "microbreakIdeas": [
@@ -209,6 +328,70 @@
         },
         {
             "data": "Take a moment to smile at being alive.",
+            "enabled": true
+        },
+        {
+            "data": "A truly ergonomic workstation is one that you regularly push away from.",
+            "enabled": true
+        },
+        {
+            "data": "Close your eyes and count your breaths.",
+            "enabled": true
+        },
+        {
+            "data": "Close your eyes and name the things you hear.",
+            "enabled": true
+        },
+        {
+            "data": "Place your fingertips on your shoulders. Roll your shoulders forward for 10 seconds, then backward.",
+            "enabled": true
+        },
+        {
+            "data": "Raise your right arm, stretch it over your head to the left, and hold for 10 seconds. Repeat on the other side.",
+            "enabled": true
+        },
+        {
+            "data": "With your right hand, grab each finger of your left hand in turn and squeeze. Repeat on the other side.",
+            "enabled": true
+        },
+        {
+            "data": "Stand up and do a lunge. Hold for 10 seconds, then do the other leg.",
+            "enabled": true
+        },
+        {
+            "data": "Close your eyes and simply notice whatever arises in current moment, without judgement.",
+            "enabled": true
+        },
+        {
+            "data": "One should focus every 20 minutes for 20 seconds on an object that is 20 feet distance.",
+            "enabled": true
+        },
+        {
+            "data": "If you need help, ask for it.",
+            "enabled": true
+        },
+        {
+            "data": "Do one thing at a time.",
+            "enabled": true
+        },
+        {
+            "data": "Is your attention spent wisely?",
+            "enabled": true
+        },
+        {
+            "data": "Change your sitting posture.",
+            "enabled": true
+        },
+        {
+            "data": "Expose your eyes to natural light.",
+            "enabled": true
+        },
+        {
+            "data": "With your eyes closed, slowly and gently move eyes up to the ceiling, then slowly down to the floor.",
+            "enabled": true
+        },
+        {
+            "data": "With your eyes closed, slowly and gently move eyes to the left, then slowly to the right.",
             "enabled": true
         }
     ]

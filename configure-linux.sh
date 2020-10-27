@@ -101,12 +101,15 @@ MIMEINFO_FILE="/usr/share/applications/mimeinfo.cache"
 MIMEAPPS_FILE="$HOME/.config/mimeapps.list"
 [ ! -f "$MIMEINFO_FILE" ] || {
     REPLACE=(geany)
-    REPLACE_WITH=(vscodium-bin)
+    REPLACE_WITH=(VSCodium)
     PREFER=(
-        vscodium-bin
+        VSCodium
 
         # prefer Firefox over vscode for text/html
         firefox
+
+        # and Thunar for inode/directory
+        thunar
 
         #
         nomacs
@@ -271,10 +274,10 @@ pgrep -x "recoll(index)?" >/dev/null &&
 }
 
 lk_console_message "Checking Stretchly"
-pgrep -x "stretchly" >/dev/null &&
+pgrep -f "Stretchly" >/dev/null &&
     lk_warn "cannot apply settings while Stretchly is running" || {
     lk_safe_symlink "$SCRIPT_DIR/stretchly/config.json" \
-        "$HOME/.config/stretchly/config.json"
+        "$HOME/.config/Stretchly/config.json"
 }
 
 lk_console_message "Checking Typora"
@@ -390,7 +393,7 @@ palette-name='Elio'
 current-workspace-only=true
 dock-items=['thunderbird.dockitem', 'todoist.dockitem', 'teams.dockitem', 'skypeforlinux.dockitem', 'caprine.dockitem', 'org.keepassxc.KeePassXC.dockitem']
 lock-items=true
-theme='Transparent'
+theme='Adapta'
 
 [org/gnome/desktop/interface]
 document-font-name='Cantarell 9'

@@ -131,7 +131,7 @@ h2 {
     border-bottom: 1px solid #eee;
 }
 
-@media print {
+/*@media print {
     .typora-export h1,
     .typora-export h2 {
         border-bottom: none;
@@ -140,10 +140,13 @@ h2 {
 
     .typora-export h1::after,
     .typora-export h2::after {
+        content: "";
+        display: block;
+        height: 100px;
+        margin-top: -96px;
         border-top: 1px solid #eee;
-        margin-top: .3em;
     }
-}
+}*/
 
 h3 {
     font-size: 1.5em;

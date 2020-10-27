@@ -137,6 +137,8 @@ xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>y,string,spotify
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>y,string,clementine
 xfce4-keyboard-shortcuts,/commands/custom/<Shift><Super>space,string,recoll
 
+xfce4-keyboard-shortcuts,/commands/custom/<Primary><Alt>i,string,xrandr-invert-colors
+
 xfce4-keyboard-shortcuts,/xfwm4/custom/<Alt>F1,string,stick_window_key
 xfce4-keyboard-shortcuts,/xfwm4/custom/<Alt>F7,string,move_window_key
 xfce4-keyboard-shortcuts,/xfwm4/custom/<Alt>F8,string,resize_window_key

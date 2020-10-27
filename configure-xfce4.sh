@@ -172,6 +172,13 @@ lk_safe_symlink "$SCRIPT_DIR/xfce4/terminal/data" "$HOME/.local/share/xfce4/term
 lk_safe_symlink "$SCRIPT_DIR/xfce4/thunar/" "$HOME/.config/Thunar"
 lk_safe_symlink "$SCRIPT_DIR/xfce4/xfce4-panel-profiles/" "$HOME/.local/share/xfce4-panel-profiles"
 
+lk_safe_symlink "$SCRIPT_DIR/xfce4/share/themes/Adapta/plank/" \
+    "$HOME/.local/share/plank/themes/Adapta"
+lk_safe_symlink "/usr/share/themes/Adapta/gtk-3.24/gtk.gresource" \
+    "$SCRIPT_DIR/xfce4/share/themes/Adapta/gtk-3.24/gtk.gresource" &&
+    lk_safe_symlink "$SCRIPT_DIR/xfce4/share/themes/" \
+        "$HOME/.local/share/themes"
+
 rm -Rfv "$HOME/.cache/sessions"
 
 [ -e "$HOME/.config/pulse/default.pa" ] || {
