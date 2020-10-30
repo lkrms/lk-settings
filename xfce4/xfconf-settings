@@ -138,6 +138,7 @@ xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>y,string,clemen
 xfce4-keyboard-shortcuts,/commands/custom/<Shift><Super>space,string,recoll
 
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Alt>i,string,xrandr-invert-colors
+xfce4-keyboard-shortcuts,/commands/custom/<Primary><Alt>q,string,xfconf-query -c xfce4-notifyd -p /do-not-disturb -T
 
 xfce4-keyboard-shortcuts,/xfwm4/custom/<Alt>F1,string,stick_window_key
 xfce4-keyboard-shortcuts,/xfwm4/custom/<Alt>F7,string,move_window_key

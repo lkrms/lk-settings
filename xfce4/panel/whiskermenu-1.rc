@@ -41,35 +41,29 @@ command-menueditor=menulibre
 show-command-menueditor=true
 command-profile=mugshot
 show-command-profile=true
-search-actions=5
+search-actions=4
 
 [action0]
-name=Man Pages
-pattern=#
-command=exo-open --launch TerminalEmulator man %s
-regex=false
+name=Open man page
+pattern=^(# ?|m(an)? )(.*)
+command=exo-open --launch TerminalEmulator man \\3
+regex=true
 
 [action1]
-name=Web Search
-pattern=?
-command=exo-open --launch WebBrowser https://duckduckgo.com/?q=%u
-regex=false
+name=Run in terminal
+pattern=^(! ?|t )(.*)
+command=exo-open --launch TerminalEmulator \\2
+regex=true
 
 [action2]
-name=Wikipedia
-pattern=!w
-command=exo-open --launch WebBrowser https://en.wikipedia.org/wiki/%u
-regex=false
+name=Search
+pattern=^\\?( (.*)|([^? ].*)?)$
+command=recoll -a -q \\2\\3
+regex=true
 
 [action3]
-name=Run in Terminal
-pattern=!
-command=exo-open --launch TerminalEmulator %s
-regex=false
-
-[action4]
-name=Open URI
-pattern=^(file|http|https):\\/\\/(.*)$
-command=exo-open \\0
+name=Search file names
+pattern=^(\\?\\? ?|f )(.*)
+command=recoll -f -q \\2
 regex=true
 
