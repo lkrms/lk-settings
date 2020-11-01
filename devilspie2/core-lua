@@ -43,6 +43,16 @@ function get_state(event)
     }
 end
 
+function pin_on()
+    debug_print("pin_window()")
+    pin_window()
+end
+
+function pin_off()
+    debug_print("unpin_window()")
+    unpin_window()
+end
+
 function skip_tasklist_on()
     debug_print("skip_tasklist_on()")
     set_skip_tasklist(true)

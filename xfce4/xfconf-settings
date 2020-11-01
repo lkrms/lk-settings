@@ -128,8 +128,8 @@ xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>g,string,git-co
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>i,string,nomacs
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>k,string,keepassxc
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>n,string,md-open-today-note.sh
-xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>n,string,code \"${LK_NOTES_DIR:-$HOME/Desktop}\"
-xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>s,string,exo-open --launch TerminalEmulator bash -ic 'unison-all.sh --run -batch'
+xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>n,string,code \"${LK_NOTE_DIR:-$HOME/Desktop}\"
+xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>s,string,exo-open --launch TerminalEmulator bash -ic 'unison-all.sh -batch'
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>semicolon,string,libreoffice --calc
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>v,string,virt-manager
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>x,string,autorandr -c --force
@@ -138,7 +138,9 @@ xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>y,string,clemen
 xfce4-keyboard-shortcuts,/commands/custom/<Shift><Super>space,string,recoll
 
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Alt>i,string,xrandr-invert-colors
-xfce4-keyboard-shortcuts,/commands/custom/<Primary><Alt>q,string,xfconf-query -c xfce4-notifyd -p /do-not-disturb -T
+xfce4-keyboard-shortcuts,/commands/custom/<Primary><Alt>q,string,sh -c 'xfconf-query -c xfce4-notifyd -p /do-not-disturb -T || xfconf-query -c xfce4-notifyd -p /do-not-disturb -n -t bool -s true'
+xfce4-keyboard-shortcuts,/commands/custom/<Primary><Alt>a,string,xfconf-query -c xfce4-power-manager -p /xfce4-power-manager/presentation-mode -n -t bool -s true
+xfce4-keyboard-shortcuts,/commands/custom/<Primary><Alt>s,string,xfconf-query -c xfce4-power-manager -p /xfce4-power-manager/presentation-mode -n -t bool -s false
 
 xfce4-keyboard-shortcuts,/xfwm4/custom/<Alt>F1,string,stick_window_key
 xfce4-keyboard-shortcuts,/xfwm4/custom/<Alt>F7,string,move_window_key

@@ -13,7 +13,7 @@ rules = {
             }
         },
         actions = {
-            skip_tasklist_on
+            pin_on
         }
     }
 }
