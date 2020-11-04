@@ -29,7 +29,6 @@
         "space_before_conditional": true,
         "wrap_line_length": 80
     },
-    "editor.acceptSuggestionOnEnter": "smart",
     "editor.autoClosingBrackets": "never",
     "editor.autoClosingQuotes": "never",
     "editor.autoIndent": "advanced",
@@ -38,7 +37,6 @@
     "editor.cursorBlinking": "solid",
     "editor.cursorSurroundingLines": 2,
     "editor.dragAndDrop": false,
-    "editor.emptySelectionClipboard": false,
     "editor.fontFamily": "'JetBrains Mono', 'Source Code Pro', Menlo, Monaco, 'Courier New', monospace",
     "editor.lineHeight": 19,
     "editor.renderControlCharacters": false,

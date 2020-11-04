@@ -54,6 +54,7 @@ VSCODE_EXTENSIONS=(
     timonwong.shellcheck
     trixnz.vscode-lua
     twxs.cmake
+    Tyriar.lorem-ipsum
     Tyriar.sort-lines
     wmaurer.change-case
     yzhang.markdown-all-in-one

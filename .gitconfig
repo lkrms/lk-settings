@@ -19,6 +19,10 @@
 	clean = gnu_sed -Ee '/^\\s+((file_ops\\.safe_delete|home|last)_path|(main|folder|float|properties|log)_window\\.(x|y|w|h|maximized|[a-z]+_pos)) ?=/d'
 	smudge = cat
 
+[filter "icanhazshortcut"]
+	clean = gnu_sed -Ee '/^(window_(x|y|width|height)|[a-z]+_column_(enabled|width)) ?=/d'
+	smudge = cat
+
 [filter "keepassxc"]
 	clean = "awk '/^\\[PasswordGenerator\\]/ { skip=1; next } /^\\[/ { skip=0 } /^UseTouchID=/ { next } !skip { print }'"
 	smudge = cat

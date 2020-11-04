@@ -4,6 +4,7 @@ accels.scm filter=accels
 Clementine.conf filter=clementine
 flameshot/flameshot.ini filter=flameshot
 geeqie/geeqierc.xml filter=geeqie
+icanhazshortcut/config.ini filter=icanhazshortcut
 keepassxc.ini filter=keepassxc
 nomacs/*.conf filter=nomacs
 remmina/remmina.pref filter=remmina
