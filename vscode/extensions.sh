@@ -3,13 +3,13 @@
 
 VSCODE_EXTENSIONS=(
     # James-Yu.latex-workshop
+    # ms-vscode-remote.remote-ssh-edit
     # ms-vscode-remote.vscode-remote-extensionpack
     # mtxr.sqltools
     # salesforce.salesforcedx-vscode
     # Sophisticode.php-formatter
     # thiagoabreu.vala
     alefragnani.Bookmarks
-    arcticicestudio.nord-visual-studio-code
     bmewburn.vscode-intelephense-client
     chenxsan.vscode-standardjs
     chrmarti.regex
@@ -27,15 +27,14 @@ VSCODE_EXTENSIONS=(
     jprestidge.theme-material-theme
     jq-syntax-highlighting.jq-syntax-highlighting
     jrebocho.vscode-random
-    liviuschera.noctis
     luggage66.AWK
     mads-hartmann.bash-ide-vscode
     mgmcdermott.vscode-language-babel
     Mikael.Angular-BeastCode
     mitchdenny.ecdc
     mrmlnc.vscode-apache
+    ms-azuretools.vscode-azurefunctions
     ms-python.python
-    ms-vscode-remote.remote-ssh-edit
     ms-vscode.azure-account
     ms-vscode.cpptools
     ms-vscode.powershell
@@ -46,7 +45,6 @@ VSCODE_EXTENSIONS=(
     redhat.vscode-yaml
     rogalmic.bash-debug
     ryu1kn.partial-diff
-    sdras.night-owl
     shardulm94.trailing-spaces
     stkb.rewrap
     TaoKlerks.poor-mans-t-sql-formatter-vscode
