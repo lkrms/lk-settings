@@ -184,6 +184,8 @@ lk_safe_symlink "$SCRIPT_DIR/.tidyrc" \
 lk_safe_symlink "$SCRIPT_DIR/autorandr/" \
     "$HOME/.config/autorandr"
 
+lk_safe_symlink "$SCRIPT_DIR/.byoburc" \
+    "$HOME/.byoburc"
 lk_safe_symlink "$SCRIPT_DIR/byobu/" \
     "$HOME/.byobu"
 

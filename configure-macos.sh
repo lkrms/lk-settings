@@ -116,6 +116,8 @@ lk_safe_symlink "$SCRIPT_DIR/.vimrc" \
 lk_safe_symlink "$SCRIPT_DIR/.tidyrc" \
     "$HOME/.tidyrc"
 
+lk_safe_symlink "$SCRIPT_DIR/.byoburc" \
+    "$HOME/.byoburc"
 lk_safe_symlink "$SCRIPT_DIR/byobu/" \
     "$HOME/.byobu"
 
