@@ -73,10 +73,7 @@ CLOUD_SETTINGS="$HOME/.cloud-settings"
 
     pgrep -xq "dbeaver" &&
         lk_warn "cannot apply settings while DBeaver is running" || {
-        lk_safe_symlink "$CLOUD_SETTINGS/DBeaverData/workspace6/General/" \
-            "$HOME/Library/DBeaverData/workspace6/General"
-        lk_safe_symlink "$CLOUD_SETTINGS/DBeaverData/.settings/" \
-            "$HOME/Library/DBeaverData/workspace6/.metadata/.plugins/org.eclipse.core.runtime/.settings"
+        lk_safe_symlink "$CLOUD_SETTINGS/DBeaverData/" "$HOME/Library/DBeaverData"
     }
 
     for FILE in "$CLOUD_SETTINGS"/.*-settings; do
