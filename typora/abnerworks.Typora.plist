@@ -4,12 +4,10 @@
 <dict>
 	<key>SmartyPantsOnRendering</key>
 	<true/>
-	<key>WebAutomaticDashSubstitutionEnabled</key>
-	<false/>
-	<key>WebAutomaticQuoteSubstitutionEnabled</key>
-	<false/>
 	<key>WebKitDeveloperExtras</key>
 	<false/>
+	<key>autoEscapeImageURL</key>
+	<true/>
 	<key>backgroundColor</key>
 	<string>rgba(255, 255, 255, 256)</string>
 	<key>backgroundColor2</key>
@@ -21,8 +19,10 @@
 	</array>
 	<key>copy_markdown_by_default</key>
 	<true/>
-	<key>enable_diagram</key>
+	<key>customWordsPerMinute</key>
 	<true/>
+	<key>darkTheme</key>
+	<string>Night</string>
 	<key>enable_highlight</key>
 	<true/>
 	<key>enable_inline_math</key>
@@ -37,14 +37,22 @@
 	<true/>
 	<key>image_save_location</key>
 	<string>per-file-assert</string>
+	<key>match_pari_markdown</key>
+	<true/>
 	<key>preLinebreakOnExport</key>
 	<false/>
+	<key>quitAfterWindowClose</key>
+	<true/>
 	<key>save_file_on_switch</key>
 	<true/>
+	<key>schemeAwareness</key>
+	<false/>
 	<key>send_usage_info</key>
 	<false/>
 	<key>show_line_numbers_for_fence</key>
 	<true/>
+	<key>sidebar_tab</key>
+	<string>file-tree</string>
 	<key>smartDash</key>
 	<true/>
 	<key>smartQuote</key>
@@ -55,9 +63,13 @@
 	<string>Github</string>
 	<key>useDarkTheme</key>
 	<false/>
+	<key>useSeparateDarkTheme</key>
+	<false/>
 	<key>useTreeStyle</key>
 	<true/>
 	<key>use_seamless_window</key>
 	<true/>
+	<key>wordsPerMinute</key>
+	<real>240</real>
 </dict>
 </plist>

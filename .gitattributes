@@ -10,6 +10,7 @@ nomacs/*.conf filter=nomacs
 remmina/remmina.pref filter=remmina
 speedcrunch/SpeedCrunch.ini filter=speedcrunch
 typora/*.data filter=typora
+typora/*.plist filter=typora-plist
 vscode/keybindings*.json filter=vscodekeybindings
 vscode/settings.json filter=vscodesettings
 whiskermenu*.rc filter=whiskermenu

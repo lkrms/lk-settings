@@ -1,10 +1,11 @@
 {
     "SmartyPantsOnRendering": true,
-    "apply_image_move_for_web": true,
+    "apply_image_move_for_web": false,
     "autoEscapeImageURL": true,
     "auto_expand_block": false,
     "backgroundColor": "#FFFFFF",
     "can_collapse_outline_panel": false,
+    "codeIndentSize": "2",
     "copy_markdown_by_default": true,
     "customFontSize": 14,
     "customWordsPerMinute": true,
@@ -16,8 +17,8 @@
     "enable_subscript": true,
     "enable_superscript": true,
     "ignoreLineBreak": true,
-    "image_save_location": "custom",
-    "indentSize": 4,
+    "image_save_location": "per-file-assert",
+    "indentSize": 2,
     "isDarkMode": false,
     "line_ending_crlf": false,
     "match_pari_markdown": true,
@@ -39,6 +40,6 @@
     "twoHyphensToEm": true,
     "useCustomFontSize": false,
     "useTreeStyle": true,
-    "use_relative_path_for_img": true,
+    "use_relative_path_for_img": false,
     "wordsPerMinute": 240
 }

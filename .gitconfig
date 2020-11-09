@@ -47,6 +47,10 @@
 	clean = xxd -r -p | jsonlint -Sf | jq -S --indent 4 'del(.\"sidebar-width\", .customZoom, .initialize_ver, .lastClosedBounds, .lastSavePath, .pinFolder, .sidebar_tab, .uuid, .zoomFactor, .zoomLevel)'
 	smudge = sh -c 'echo \"$(cat)\" | tac | gnu_sed -E \"2s/,\\$//\" | tac | jq -c | xxd -p | tr -d \"\\\\n\"'
 
+[filter "typora-plist"]
+	clean = test -x /usr/libexec/PlistBuddy && "sh -c 'P=$(mktemp)&&cat >\"$P\"&&for k in ClosedWindowFrame NSNavLastRootDirectory NSNavPanelExpandedSizeForOpenMode \"NSWindow Frame _ClosedWindowFrame\" SUHasLaunchedBefore SULastCheckTime currentThemeFolder initialize_ver recentFolder savedLastOpen uuid;do /usr/libexec/PlistBuddy -c \"Delete \\\":$k\\\"\" \"$P\" >&2||:;done&&cat \"$P\"&&rm \"$P\"'" || cat
+	smudge = cat
+
 [filter "vscodekeybindings"]
 	clean = "jsonlint -Sf | jq --indent 4 'sort_by((.command|sub(\"^-\";\"\"))+\" \"+.key)'"
 	smudge = cat
@@ -61,4 +65,4 @@
 
 [filter "xfpanelswitch"]
 	clean = sh -c 'gnu_tar -jx config.txt -O </dev/stdin'
-	smudge = sh -c 'TEMP_DIR=\"$(mktemp -d)\"&&cat </dev/stdin >\"$TEMP_DIR/config.txt\"&&gnu_tar -jcC \"$TEMP_DIR\" config.txt'
+	smudge = sh -c 'T=$(mktemp -d)&&cat >\"$T/config.txt\"&&gnu_tar -jcC \"$T\" config.txt&&rm -R \"$T\"'
