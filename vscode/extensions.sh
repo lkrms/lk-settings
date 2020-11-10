@@ -1,4 +1,5 @@
 #!/bin/bash
+
 # shellcheck disable=SC2034
 
 VSCODE_EXTENSIONS=(
@@ -35,6 +36,7 @@ VSCODE_EXTENSIONS=(
     mrmlnc.vscode-apache
     ms-azuretools.vscode-azurefunctions
     ms-python.python
+    ms-vscode-remote.remote-ssh-edit
     ms-vscode.azure-account
     ms-vscode.cpptools
     ms-vscode.powershell
