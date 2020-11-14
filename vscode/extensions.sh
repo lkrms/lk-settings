@@ -36,6 +36,7 @@ VSCODE_EXTENSIONS=(
     mrmlnc.vscode-apache
     ms-azuretools.vscode-azurefunctions
     ms-python.python
+    ms-toolsai.jupyter
     ms-vscode-remote.remote-ssh-edit
     ms-vscode.azure-account
     ms-vscode.cpptools

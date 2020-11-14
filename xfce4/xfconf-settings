@@ -206,7 +206,10 @@ laptop:xfce4-power-manager,/xfce4-power-manager/brightness-on-battery,uint,9
 
 # fun fact: 14 is the same as never
 xfce4-power-manager,/xfce4-power-manager/inactivity-on-ac,reset
-laptop:xfce4-power-manager,/xfce4-power-manager/inactivity-on-battery,uint,4
+laptop:xfce4-power-manager,/xfce4-power-manager/inactivity-on-battery,uint,6
+
+# if patched, xfce4-power-manager will run this when AC power is disconnected
+laptop:xfce4-power-manager,/xfce4-power-manager/heartbeat-command,string,xdotool key shift
 
 # another fun fact: if not explicitly set to suspend, Xfce 4.12 will attempt to hibernate
 xfce4-power-manager,/xfce4-power-manager/inactivity-sleep-mode-on-ac,uint,1
