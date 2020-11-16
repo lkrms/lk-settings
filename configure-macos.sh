@@ -17,45 +17,6 @@ lk_assert_is_macos
 set +e
 shopt -s nullglob
 
-function PlistBuddy() {
-    /usr/libexec/PlistBuddy "$@"
-}
-
-function plist_quote() {
-    echo "\"${1//\"/\\\"}\""
-}
-
-function plist_delete() {
-    PlistBuddy -c \
-        "Delete $(plist_quote "$1")" "$PLIST" 2>/dev/null
-}
-
-function plist_add() {
-    PlistBuddy -c \
-        "Add $(plist_quote "$1") $2${3+ $(plist_quote "$3")}" "$PLIST"
-}
-
-function plist_replace() {
-    plist_delete "$1"
-    plist_add "$@"
-}
-
-function plist_replace_from_file() {
-    plist_replace "${@:1:2}"
-    PlistBuddy -c \
-        "Merge $(plist_quote "$3") $(plist_quote "$1")" "$PLIST"
-}
-
-function plist_exists() {
-    PlistBuddy -c \
-        "Print $(plist_quote "$1")" "$PLIST" >/dev/null 2>&1
-}
-
-function plist_maybe_add() {
-    plist_exists "$1" ||
-        plist_add "$@"
-}
-
 CLOUD_SETTINGS="$HOME/.cloud-settings"
 
 [ ! -d "$CLOUD_SETTINGS" ] || {
@@ -179,36 +140,36 @@ pgrep -xq iTerm2 &&
     defaults write com.googlecode.iterm2 VisualIndicatorForEsc -bool false
 
     PLIST=~/Library/Preferences/com.googlecode.iterm2.plist
-    plist_maybe_add ":Window Arrangements" dict
-    plist_replace ":Window Arrangements:No windows" array
-    plist_replace ":Default Arrangement Name" string "No windows"
-    plist_replace ":OpenArrangementAtStartup" bool true
-    plist_replace ":OpenNoWindowsAtStartup" bool false
+    lk_plist_maybe_add ":Window Arrangements" dict
+    lk_plist_replace ":Window Arrangements:No windows" array
+    lk_plist_replace ":Default Arrangement Name" string "No windows"
+    lk_plist_replace ":OpenArrangementAtStartup" bool true
+    lk_plist_replace ":OpenNoWindowsAtStartup" bool false
 
-    plist_replace_from_file ":Custom Color Presets" dict \
+    lk_plist_replace_from_file ":Custom Color Presets" dict \
         "$SCRIPT_DIR/iterm2/Custom Color Presets.plist"
 
-    ! plist_exists ":New Bookmarks:0" &&
+    ! lk_plist_exists ":New Bookmarks:0" &&
         lk_warn "no profile to configure" || {
-        plist_replace ":New Bookmarks:0:AWDS Pane Option" string "Recycle"
-        plist_replace ":New Bookmarks:0:AWDS Tab Option" string "Recycle"
-        plist_replace ":New Bookmarks:0:AWDS Window Option" string "Recycle"
-        plist_replace ":New Bookmarks:0:BM Growl" bool false
-        plist_replace ":New Bookmarks:0:Columns" integer 120
-        plist_replace ":New Bookmarks:0:Custom Directory" string "Advanced"
-        plist_replace ":New Bookmarks:0:Flashing Bell" bool true
-        plist_replace ":New Bookmarks:0:Normal Font" string "Menlo-Regular 12"
-        plist_replace ":New Bookmarks:0:Option Key Sends" integer 2
-        plist_replace ":New Bookmarks:0:Place Prompt at First Column" bool false
-        plist_replace ":New Bookmarks:0:Right Option Key Sends" integer 2
-        plist_replace ":New Bookmarks:0:Rows" integer 35
-        plist_replace ":New Bookmarks:0:Screen" integer -2
-        plist_replace ":New Bookmarks:0:Scrollback Lines" integer 0
-        plist_replace ":New Bookmarks:0:Show Mark Indicators" bool false
-        plist_replace ":New Bookmarks:0:Silence Bell" bool true
-        plist_replace ":New Bookmarks:0:Title Components" integer 512
-        plist_replace ":New Bookmarks:0:Unlimited Scrollback" bool true
-        plist_replace_from_file ":New Bookmarks:0:Keyboard Map" dict \
+        lk_plist_replace ":New Bookmarks:0:AWDS Pane Option" string "Recycle"
+        lk_plist_replace ":New Bookmarks:0:AWDS Tab Option" string "Recycle"
+        lk_plist_replace ":New Bookmarks:0:AWDS Window Option" string "Recycle"
+        lk_plist_replace ":New Bookmarks:0:BM Growl" bool false
+        lk_plist_replace ":New Bookmarks:0:Columns" integer 120
+        lk_plist_replace ":New Bookmarks:0:Custom Directory" string "Advanced"
+        lk_plist_replace ":New Bookmarks:0:Flashing Bell" bool true
+        lk_plist_replace ":New Bookmarks:0:Normal Font" string "Menlo-Regular 12"
+        lk_plist_replace ":New Bookmarks:0:Option Key Sends" integer 2
+        lk_plist_replace ":New Bookmarks:0:Place Prompt at First Column" bool false
+        lk_plist_replace ":New Bookmarks:0:Right Option Key Sends" integer 2
+        lk_plist_replace ":New Bookmarks:0:Rows" integer 35
+        lk_plist_replace ":New Bookmarks:0:Screen" integer -2
+        lk_plist_replace ":New Bookmarks:0:Scrollback Lines" integer 0
+        lk_plist_replace ":New Bookmarks:0:Show Mark Indicators" bool false
+        lk_plist_replace ":New Bookmarks:0:Silence Bell" bool true
+        lk_plist_replace ":New Bookmarks:0:Title Components" integer 512
+        lk_plist_replace ":New Bookmarks:0:Unlimited Scrollback" bool true
+        lk_plist_replace_from_file ":New Bookmarks:0:Keyboard Map" dict \
             "$SCRIPT_DIR/iterm2/Keyboard Map.plist"
     }
 }
