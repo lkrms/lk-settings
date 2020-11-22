@@ -132,7 +132,7 @@ start)
         if [ "${#ISOLATE_ALLOW_HOSTS[@]}" -gt "0" ]; then
             ISOLATE_ALLOW_IP="$(lk_hosts_resolve "${ISOLATE_ALLOW_HOSTS[@]}")" ||
                 lk_die "unable to resolve domain names"
-            ISOLATE_ALLOW_IPV4=($(echo "$ISOLATE_ALLOW_IP" | lk_grep_ipv4 || :))
+            ISOLATE_ALLOW_IPV4=($(echo "$ISOLATE_ALLOW_IP" | lk_filter_ipv4))
         fi
         lk_iptables_flush_chain semi-isolated
         for IP in "${ISOLATE_ALLOW_IPV4[@]}"; do
