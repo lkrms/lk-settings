@@ -139,7 +139,7 @@ pgrep -xq iTerm2 &&
     defaults write com.googlecode.iterm2 UseBorder -bool true
     defaults write com.googlecode.iterm2 VisualIndicatorForEsc -bool false
 
-    PLIST=~/Library/Preferences/com.googlecode.iterm2.plist
+    lk_plist_set_file ~/Library/Preferences/com.googlecode.iterm2.plist
     lk_plist_maybe_add ":Window Arrangements" dict
     lk_plist_replace ":Window Arrangements:No windows" array
     lk_plist_replace ":Default Arrangement Name" string "No windows"
