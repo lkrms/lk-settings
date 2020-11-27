@@ -61,7 +61,7 @@ while read -r PLUGIN_ID PLUGIN_NAME; do
 
 done < <(xfconf-query -c xfce4-panel -p /plugins -lv | grep -Po '(?<=^/plugins/plugin-)[0-9]+\s+[^\s]+$' | sort -n)
 
-lk_mapfile "$SCRIPT_DIR/xfce4/xfconf-settings" XFCONF_SETTING '^([[:blank:]]*$|#)'
+lk_mapfile XFCONF_SETTING <(sed -E '/^([[:blank:]]*$|#)/d' "$SCRIPT_DIR/xfce4/xfconf-settings")
 
 for i in "${!XFCONF_SETTING[@]}"; do
 
@@ -188,8 +188,9 @@ rm -Rfv "$HOME/.cache/sessions"
 
 # otherwise xfce4-sensors-plugin will not work
 [ ! -f "/etc/hddtemp.db" ] ||
-    LK_SUDO=1 lk_enable_entry "/etc/hddtemp.db" \
-        '"Samsung SSD 860 EVO" 190 C "Samsung SSD 860 EVO"' "# " ""
+    LK_SUDO=1 lk_conf_enable_row \
+        '"Samsung SSD 860 EVO" 190 C "Samsung SSD 860 EVO"' \
+        "/etc/hddtemp.db"
 [ ! -x "/usr/sbin/hddtemp" ] ||
     sudo chmod -c u+s "/usr/sbin/hddtemp" || true
 
