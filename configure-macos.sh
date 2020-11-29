@@ -390,8 +390,8 @@ killall Finder
     . "$SCRIPT_DIR/vscode/extensions.sh" || exit
     VSCODE_MISSING_EXTENSIONS=($(
         comm -13 \
-            <(code --list-extensions | sort | uniq) \
-            <(lk_echo_array VSCODE_EXTENSIONS | sort | uniq)
+            <(code --list-extensions | sort -u) \
+            <(lk_echo_array VSCODE_EXTENSIONS | sort -u)
     ))
     [ "${#VSCODE_MISSING_EXTENSIONS[@]}" -eq "0" ] ||
         for EXT in "${VSCODE_MISSING_EXTENSIONS[@]}"; do
@@ -399,8 +399,8 @@ killall Finder
         done
     VSCODE_EXTRA_EXTENSIONS=($(
         comm -23 \
-            <(code --list-extensions | sort | uniq) \
-            <(lk_echo_array VSCODE_EXTENSIONS | sort | uniq)
+            <(code --list-extensions | sort -u) \
+            <(lk_echo_array VSCODE_EXTENSIONS | sort -u)
     ))
     [ "${#VSCODE_EXTRA_EXTENSIONS[@]}" -eq "0" ] || {
         echo

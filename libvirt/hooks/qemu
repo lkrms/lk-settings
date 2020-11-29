@@ -117,15 +117,15 @@ start | release)
     ;;&
 
 start)
-    if [ "${ISOLATE:-N}" != "N" ]; then
-        lk_is_false "${ISOLATE_ALLOW_HOST:-Y}" ||
+    if lk_is_true ISOLATE; then
+        lk_is_false ISOLATE_ALLOW_HOST ||
             ISOLATE_ALLOW_HOSTS+=("$GUEST_BRIDGE_IP")
-        lk_is_false "${ISOLATE_ALLOW_HOST_NET:-N}" ||
+        lk_is_true ISOLATE_ALLOW_HOST_NET ||
             ISOLATE_ALLOW_HOSTS+=("$HOST_NET")
         if lk_in_array "api.github.com" ISOLATE_ALLOW_HOSTS; then
             GITHUB_IPS=($(
                 curl "https://api.github.com/meta" 2>/dev/null |
-                    jq -r ".web[],.api[]" | sort | uniq
+                    jq -r ".web[],.api[]" | sort -u
             )) && ISOLATE_ALLOW_HOSTS+=("${GITHUB_IPS[@]}") ||
                 lk_console_warning "GitHub IP ranges could not be retrieved"
         fi

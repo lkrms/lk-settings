@@ -86,7 +86,7 @@ lk_safe_symlink "$SCRIPT_DIR/libvirt/hooks/qemu" "/etc/libvirt/hooks/qemu"
 # fix weird Calibri rendering in Thunderbird
 lk_safe_symlink "$SCRIPT_DIR/fonts/ms-no-bitmaps.conf" \
     "/etc/fonts/conf.d/90-ms-no-bitmaps.conf" && {
-    lk_is_true "$LK_SAFE_SYMLINK_NO_CHANGE" || {
+    lk_is_true LK_SAFE_SYMLINK_NO_CHANGE || {
         sudo -H fc-cache --force --verbose &&
             fc-cache --force --verbose
     }
@@ -452,7 +452,7 @@ host-cpu-usage=true
 memory-usage=true
 network-traffic=true
 EOF
-lk_is_false "$START_PLANK" || {
+lk_is_false START_PLANK || {
     nohup plank </dev/null >/dev/null 2>&1 &
     disown
     sleep 2
@@ -475,8 +475,8 @@ lk_console_message "Checking Xfce4"
     . "$SCRIPT_DIR/vscode/extensions.sh" || exit
     VSCODE_MISSING_EXTENSIONS=($(
         comm -13 \
-            <(code --list-extensions | sort | uniq) \
-            <(lk_echo_array VSCODE_EXTENSIONS | sort | uniq)
+            <(code --list-extensions | sort -u) \
+            <(lk_echo_array VSCODE_EXTENSIONS | sort -u)
     ))
     [ "${#VSCODE_MISSING_EXTENSIONS[@]}" -eq "0" ] ||
         for EXT in "${VSCODE_MISSING_EXTENSIONS[@]}"; do
@@ -484,8 +484,8 @@ lk_console_message "Checking Xfce4"
         done
     VSCODE_EXTRA_EXTENSIONS=($(
         comm -23 \
-            <(code --list-extensions | sort | uniq) \
-            <(lk_echo_array VSCODE_EXTENSIONS | sort | uniq)
+            <(code --list-extensions | sort -u) \
+            <(lk_echo_array VSCODE_EXTENSIONS | sort -u)
     ))
     [ "${#VSCODE_EXTRA_EXTENSIONS[@]}" -eq "0" ] || {
         echo
