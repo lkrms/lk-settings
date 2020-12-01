@@ -13,6 +13,8 @@ include=linux,provision . "$LK_BASE/lib/bash/common.sh"
 
 lk_assert_command_exists xfconf-query
 
+LK_VERBOSE=2
+
 function xfce4_apply_setting() {
 
     local ARGS
@@ -167,16 +169,16 @@ fi
 
 mkdir -pv "$HOME/.config/xfce4/panel"
 cp -nv "$SCRIPT_DIR/xfce4/panel"/*.rc "$HOME/.config/xfce4/panel/"
-lk_safe_symlink "$SCRIPT_DIR/xfce4/terminal/config" "$HOME/.config/xfce4/terminal"
-lk_safe_symlink "$SCRIPT_DIR/xfce4/terminal/data" "$HOME/.local/share/xfce4/terminal"
-lk_safe_symlink "$SCRIPT_DIR/xfce4/thunar/" "$HOME/.config/Thunar"
-lk_safe_symlink "$SCRIPT_DIR/xfce4/xfce4-panel-profiles/" "$HOME/.local/share/xfce4-panel-profiles"
+lk_symlink "$SCRIPT_DIR/xfce4/terminal/config" "$HOME/.config/xfce4/terminal"
+lk_symlink "$SCRIPT_DIR/xfce4/terminal/data" "$HOME/.local/share/xfce4/terminal"
+lk_symlink "$SCRIPT_DIR/xfce4/thunar/" "$HOME/.config/Thunar"
+lk_symlink "$SCRIPT_DIR/xfce4/xfce4-panel-profiles/" "$HOME/.local/share/xfce4-panel-profiles"
 
-lk_safe_symlink "$SCRIPT_DIR/xfce4/share/themes/Adapta/plank/" \
+lk_symlink "$SCRIPT_DIR/xfce4/share/themes/Adapta/plank/" \
     "$HOME/.local/share/plank/themes/Adapta"
-lk_safe_symlink "/usr/share/themes/Adapta/gtk-3.24/gtk.gresource" \
+lk_symlink "/usr/share/themes/Adapta/gtk-3.24/gtk.gresource" \
     "$SCRIPT_DIR/xfce4/share/themes/Adapta/gtk-3.24/gtk.gresource" &&
-    lk_safe_symlink "$SCRIPT_DIR/xfce4/share/themes/" \
+    lk_symlink "$SCRIPT_DIR/xfce4/share/themes/" \
         "$HOME/.local/share/themes"
 
 rm -Rfv "$HOME/.cache/sessions"

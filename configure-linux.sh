@@ -14,6 +14,8 @@ include=linux . "$LK_BASE/lib/bash/common.sh"
 lk_assert_not_root
 lk_assert_is_linux
 
+LK_VERBOSE=2
+
 set +e
 shopt -s nullglob
 
@@ -33,29 +35,29 @@ CLOUD_SETTINGS="$HOME/.cloud-settings"
         done
     }
 
-    lk_safe_symlink "$CLOUD_SETTINGS/.bashrc" "$HOME/.bashrc"
-    lk_safe_symlink "$CLOUD_SETTINGS/.face" "$HOME/.face"
-    lk_safe_symlink "$CLOUD_SETTINGS/.gitconfig" "$HOME/.gitconfig"
-    lk_safe_symlink "$CLOUD_SETTINGS/.gitignore" "$HOME/.gitignore"
-    lk_safe_symlink "$CLOUD_SETTINGS/acme.sh/" "$HOME/.acme.sh"
-    lk_safe_symlink "$CLOUD_SETTINGS/aws/" "$HOME/.aws"
-    lk_safe_symlink "$CLOUD_SETTINGS/espanso/" "$HOME/.config/espanso"
-    lk_safe_symlink "$CLOUD_SETTINGS/linode-cli/linode-cli" \
+    lk_symlink "$CLOUD_SETTINGS/.bashrc" "$HOME/.bashrc"
+    lk_symlink "$CLOUD_SETTINGS/.face" "$HOME/.face"
+    lk_symlink "$CLOUD_SETTINGS/.gitconfig" "$HOME/.gitconfig"
+    lk_symlink "$CLOUD_SETTINGS/.gitignore" "$HOME/.gitignore"
+    lk_symlink "$CLOUD_SETTINGS/acme.sh/" "$HOME/.acme.sh"
+    lk_symlink "$CLOUD_SETTINGS/aws/" "$HOME/.aws"
+    lk_symlink "$CLOUD_SETTINGS/espanso/" "$HOME/.config/espanso"
+    lk_symlink "$CLOUD_SETTINGS/linode-cli/linode-cli" \
         "$HOME/.config/linode-cli"
-    lk_safe_symlink "$CLOUD_SETTINGS/remmina/data/" "$HOME/.local/share/remmina"
-    lk_safe_symlink "$CLOUD_SETTINGS/robo3t/.3T/" "$HOME/.3T"
-    lk_safe_symlink "$CLOUD_SETTINGS/robo3t/3T/" "$HOME/.config/3T"
-    lk_safe_symlink "$CLOUD_SETTINGS/ssh/" "$HOME/.ssh"
-    lk_safe_symlink "$CLOUD_SETTINGS/unison/" "$HOME/.unison"
+    lk_symlink "$CLOUD_SETTINGS/remmina/data/" "$HOME/.local/share/remmina"
+    lk_symlink "$CLOUD_SETTINGS/robo3t/.3T/" "$HOME/.3T"
+    lk_symlink "$CLOUD_SETTINGS/robo3t/3T/" "$HOME/.config/3T"
+    lk_symlink "$CLOUD_SETTINGS/ssh/" "$HOME/.ssh"
+    lk_symlink "$CLOUD_SETTINGS/unison/" "$HOME/.unison"
 
     pgrep -x "dbeaver" >/dev/null &&
         lk_warn "cannot apply settings while DBeaver is running" || {
-        lk_safe_symlink "$CLOUD_SETTINGS/DBeaverData/" \
+        lk_symlink "$CLOUD_SETTINGS/DBeaverData/" \
             "$HOME/.local/share/DBeaverData"
     }
 
     for FILE in "$CLOUD_SETTINGS"/.*-settings; do
-        lk_safe_symlink "$FILE" "$HOME/$(basename "$FILE")"
+        lk_symlink "$FILE" "$HOME/$(basename "$FILE")"
     done
 
     for ICON_FILE in "$CLOUD_SETTINGS"/applications/*.png; do
@@ -63,30 +65,30 @@ CLOUD_SETTINGS="$HOME/.cloud-settings"
     done
 
     for DESKTOP_FILE in "$CLOUD_SETTINGS"/autostart/*.desktop; do
-        lk_safe_symlink "$DESKTOP_FILE" \
+        lk_symlink "$DESKTOP_FILE" \
             "$HOME/.config/autostart/$(basename "$DESKTOP_FILE")"
     done
 
     for DESKTOP_FILE in "$CLOUD_SETTINGS"/applications/*.desktop; do
         [[ "$(basename "$DESKTOP_FILE")" =~ \
         ^(skypeforlinux|teams|thunderbird)\.desktop$ ]] ||
-            lk_safe_symlink "$DESKTOP_FILE" \
+            lk_symlink "$DESKTOP_FILE" \
                 "$HOME/.local/share/applications/$(basename "$DESKTOP_FILE")"
     done
 
 }
 
 LK_SUDO=1
-lk_safe_symlink "$SCRIPT_DIR/.vimrc" "/root/.vimrc"
-lk_safe_symlink "$SCRIPT_DIR/iptables/iptables.rules" \
+lk_symlink "$SCRIPT_DIR/.vimrc" "/root/.vimrc"
+lk_symlink "$SCRIPT_DIR/iptables/iptables.rules" \
     "/etc/iptables/iptables.rules"
-lk_safe_symlink "$SCRIPT_DIR/iptables/ip6tables.rules" \
+lk_symlink "$SCRIPT_DIR/iptables/ip6tables.rules" \
     "/etc/iptables/ip6tables.rules"
-lk_safe_symlink "$SCRIPT_DIR/libvirt/hooks/qemu" "/etc/libvirt/hooks/qemu"
+lk_symlink "$SCRIPT_DIR/libvirt/hooks/qemu" "/etc/libvirt/hooks/qemu"
 # fix weird Calibri rendering in Thunderbird
-lk_safe_symlink "$SCRIPT_DIR/fonts/ms-no-bitmaps.conf" \
+lk_symlink "$SCRIPT_DIR/fonts/ms-no-bitmaps.conf" \
     "/etc/fonts/conf.d/90-ms-no-bitmaps.conf" && {
-    lk_is_true LK_SAFE_SYMLINK_NO_CHANGE || {
+    lk_is_true LK_SYMLINK_NO_CHANGE || {
         sudo -H fc-cache --force --verbose &&
             fc-cache --force --verbose
     }
@@ -173,36 +175,36 @@ MIMEAPPS_FILE="$HOME/.config/mimeapps.list"
         sudo tee "/usr/lib/firefox/firefox.cfg" >/dev/null
 }
 
-lk_safe_symlink "$SCRIPT_DIR/.vimrc" \
+lk_symlink "$SCRIPT_DIR/.vimrc" \
     "$HOME/.vimrc"
 
-lk_safe_symlink "$SCRIPT_DIR/.tidyrc" \
+lk_symlink "$SCRIPT_DIR/.tidyrc" \
     "$HOME/.tidyrc"
 
-lk_safe_symlink "$SCRIPT_DIR/autorandr/" \
+lk_symlink "$SCRIPT_DIR/autorandr/" \
     "$HOME/.config/autorandr"
 
-lk_safe_symlink "$SCRIPT_DIR/.byoburc" \
+lk_symlink "$SCRIPT_DIR/.byoburc" \
     "$HOME/.byoburc"
-lk_safe_symlink "$SCRIPT_DIR/byobu/" \
+lk_symlink "$SCRIPT_DIR/byobu/" \
     "$HOME/.byobu"
 
-lk_safe_symlink "$SCRIPT_DIR/devilspie2/" \
+lk_symlink "$SCRIPT_DIR/devilspie2/" \
     "$HOME/.config/devilspie2"
 
-lk_safe_symlink "$SCRIPT_DIR/plank/" \
+lk_symlink "$SCRIPT_DIR/plank/" \
     "$HOME/.config/plank"
 
-lk_safe_symlink "$SCRIPT_DIR/quicktile/quicktile.cfg" \
+lk_symlink "$SCRIPT_DIR/quicktile/quicktile.cfg" \
     "$HOME/.config/quicktile.cfg"
 
-lk_safe_symlink "$SCRIPT_DIR/remmina/" \
+lk_symlink "$SCRIPT_DIR/remmina/" \
     "$HOME/.config/remmina"
 
-lk_safe_symlink "$SCRIPT_DIR/todoist/.todoist-linux.json" \
+lk_symlink "$SCRIPT_DIR/todoist/.todoist-linux.json" \
     "$HOME/.config/.todoist-linux.json"
 
-lk_safe_symlink "$SCRIPT_DIR/nextcloud/sync-exclude.lst" \
+lk_symlink "$SCRIPT_DIR/nextcloud/sync-exclude.lst" \
     "$HOME/.config/Nextcloud/sync-exclude.lst" && {
     [ -e "$HOME/.config/Nextcloud/nextcloud.cfg" ] ||
         cp -v "$SCRIPT_DIR/nextcloud/nextcloud.cfg" \
@@ -212,84 +214,84 @@ lk_safe_symlink "$SCRIPT_DIR/nextcloud/sync-exclude.lst" \
 lk_console_message "Checking Sublime Text 3"
 pgrep -x "sublime_text" >/dev/null &&
     lk_warn "cannot apply settings while Sublime Text 3 is running" ||
-    lk_safe_symlink "$SCRIPT_DIR/subl/User/" \
+    lk_symlink "$SCRIPT_DIR/subl/User/" \
         "$HOME/.config/sublime-text-3/Packages/User"
 
 lk_console_message "Checking Sublime Merge"
 pgrep -x "sublime_merge" >/dev/null &&
     lk_warn "cannot apply settings while Sublime Merge is running" ||
-    lk_safe_symlink "$SCRIPT_DIR/smerge/User/" \
+    lk_symlink "$SCRIPT_DIR/smerge/User/" \
         "$HOME/.config/sublime-merge/Packages/User"
 
 lk_console_message "Checking Clementine"
 pgrep -x "clementine" >/dev/null &&
     lk_warn "cannot apply settings while Clementine is running" ||
-    lk_safe_symlink "$SCRIPT_DIR/clementine/Clementine.conf" \
+    lk_symlink "$SCRIPT_DIR/clementine/Clementine.conf" \
         "$HOME/.config/Clementine/Clementine.conf"
 
 lk_console_message "Checking CopyQ"
 pgrep -x "copyq" >/dev/null &&
     lk_warn "cannot apply settings while CopyQ is running" || {
-    lk_safe_symlink "$SCRIPT_DIR/copyq/copyq.conf" \
+    lk_symlink "$SCRIPT_DIR/copyq/copyq.conf" \
         "$HOME/.config/copyq/copyq.conf" &&
-        lk_safe_symlink "$SCRIPT_DIR/copyq/copyq-commands.ini" \
+        lk_symlink "$SCRIPT_DIR/copyq/copyq-commands.ini" \
             "$HOME/.config/copyq/copyq-commands.ini"
 }
 
 lk_console_message "Checking Flameshot"
 pgrep -x "flameshot" >/dev/null &&
     lk_warn "cannot apply settings while Flameshot is running" ||
-    lk_safe_symlink "$SCRIPT_DIR/flameshot/flameshot.ini" \
+    lk_symlink "$SCRIPT_DIR/flameshot/flameshot.ini" \
         "$HOME/.config/flameshot/flameshot.ini"
 
 lk_console_message "Checking Geeqie"
 pgrep -x "geeqie" >/dev/null &&
     lk_warn "cannot apply settings while Geeqie is running" ||
-    lk_safe_symlink "$SCRIPT_DIR/geeqie/" \
+    lk_symlink "$SCRIPT_DIR/geeqie/" \
         "$HOME/.config/geeqie"
 
 lk_console_message "Checking HandBrake"
 pgrep -x "ghb" >/dev/null &&
     lk_warn "cannot apply settings while HandBrake is running" ||
-    lk_safe_symlink "$SCRIPT_DIR/handbrake/presets.json" \
+    lk_symlink "$SCRIPT_DIR/handbrake/presets.json" \
         "$HOME/.config/ghb/presets.json"
 
 lk_console_message "Checking KeePassXC"
 pgrep -x "keepassxc" >/dev/null &&
     lk_warn "cannot apply settings while KeePassXC is running" ||
-    lk_safe_symlink "$SCRIPT_DIR/keepassxc/keepassxc.ini" \
+    lk_symlink "$SCRIPT_DIR/keepassxc/keepassxc.ini" \
         "$HOME/.config/keepassxc/keepassxc.ini"
 
 lk_console_message "Checking nomacs"
 pgrep -x "nomacs" >/dev/null &&
     lk_warn "cannot apply settings while nomacs is running" ||
-    lk_safe_symlink "$SCRIPT_DIR/nomacs/" \
+    lk_symlink "$SCRIPT_DIR/nomacs/" \
         "$HOME/.config/nomacs"
 
 lk_console_message "Checking Recoll"
 pgrep -x "recoll(index)?" >/dev/null &&
     lk_warn "cannot apply settings while Recoll is running" || {
-    lk_safe_symlink "$SCRIPT_DIR/recoll/recoll.conf" \
+    lk_symlink "$SCRIPT_DIR/recoll/recoll.conf" \
         "$HOME/.recoll/recoll.conf" &&
-        lk_safe_symlink "$SCRIPT_DIR/recoll/mimeview" \
+        lk_symlink "$SCRIPT_DIR/recoll/mimeview" \
             "$HOME/.recoll/mimeview"
 }
 
 lk_console_message "Checking Stretchly"
 pgrep -f "Stretchly" >/dev/null &&
     lk_warn "cannot apply settings while Stretchly is running" || {
-    lk_safe_symlink "$SCRIPT_DIR/stretchly/config.json" \
+    lk_symlink "$SCRIPT_DIR/stretchly/config.json" \
         "$HOME/.config/Stretchly/config.json"
 }
 
 lk_console_message "Checking Typora"
 pgrep -x "Typora" >/dev/null &&
     lk_warn "cannot apply settings while Typora is running" || {
-    lk_safe_symlink "$SCRIPT_DIR/typora/profile.data" \
+    lk_symlink "$SCRIPT_DIR/typora/profile.data" \
         "$HOME/.config/Typora/profile.data" &&
-        lk_safe_symlink "$SCRIPT_DIR/typora/conf" \
+        lk_symlink "$SCRIPT_DIR/typora/conf" \
             "$HOME/.config/Typora/conf" &&
-        lk_safe_symlink "$SCRIPT_DIR/typora/themes" \
+        lk_symlink "$SCRIPT_DIR/typora/themes" \
             "$HOME/.config/Typora/themes"
 }
 
@@ -309,11 +311,11 @@ pgrep -x 'codium' >/dev/null &&
             echo -n "$VSCODE_PRODUCT_JSON" | sudo tee "$FILE" >/dev/null
         }
     }
-    lk_safe_symlink "$SCRIPT_DIR/vscode/settings.json" \
+    lk_symlink "$SCRIPT_DIR/vscode/settings.json" \
         "$HOME/.config/VSCodium/User/settings.json" &&
-        lk_safe_symlink "$SCRIPT_DIR/vscode/keybindings.linux.json" \
+        lk_symlink "$SCRIPT_DIR/vscode/keybindings.linux.json" \
             "$HOME/.config/VSCodium/User/keybindings.json" &&
-        lk_safe_symlink "$SCRIPT_DIR/vscode/snippets" \
+        lk_symlink "$SCRIPT_DIR/vscode/snippets" \
             "$HOME/.config/VSCodium/User/snippets"
 }
 
@@ -460,7 +462,7 @@ lk_is_false START_PLANK || {
 
 lk_console_message "Checking Xfce4"
 "$SCRIPT_DIR/configure-xfce4.sh" "$@" &&
-    lk_safe_symlink "$LK_BASE/etc/xfce4/xinitrc" "$HOME/.config/xfce4/xinitrc" && {
+    lk_symlink "$LK_BASE/etc/xfce4/xinitrc" "$HOME/.config/xfce4/xinitrc" && {
     xfconf-query -c xfwm4 -p /general/theme -n -t string -s "Adapta"
     xfconf-query -c xfwm4 -p /general/title_font -n -t string -s "Cantarell 9"
     xfconf-query -c xsettings -p /Gtk/FontName -n -t string -s "Cantarell 9"

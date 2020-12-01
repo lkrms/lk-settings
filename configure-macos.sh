@@ -14,6 +14,8 @@ include=macos . "$LK_BASE/lib/bash/common.sh"
 lk_assert_not_root
 lk_assert_is_macos
 
+LK_VERBOSE=2
+
 set +e
 shopt -s nullglob
 
@@ -21,24 +23,24 @@ CLOUD_SETTINGS="$HOME/.cloud-settings"
 
 [ ! -d "$CLOUD_SETTINGS" ] || {
 
-    lk_safe_symlink "$CLOUD_SETTINGS/.bashrc" "$HOME/.bashrc"
-    lk_safe_symlink "$CLOUD_SETTINGS/.gitconfig" "$HOME/.gitconfig"
-    lk_safe_symlink "$CLOUD_SETTINGS/.gitignore" "$HOME/.gitignore"
-    lk_safe_symlink "$CLOUD_SETTINGS/acme.sh/" "$HOME/.acme.sh"
-    lk_safe_symlink "$CLOUD_SETTINGS/aws/" "$HOME/.aws"
-    lk_safe_symlink "$CLOUD_SETTINGS/espanso/" "$HOME/Library/Preferences/espanso"
-    lk_safe_symlink "$CLOUD_SETTINGS/linode-cli/linode-cli" \
+    lk_symlink "$CLOUD_SETTINGS/.bashrc" "$HOME/.bashrc"
+    lk_symlink "$CLOUD_SETTINGS/.gitconfig" "$HOME/.gitconfig"
+    lk_symlink "$CLOUD_SETTINGS/.gitignore" "$HOME/.gitignore"
+    lk_symlink "$CLOUD_SETTINGS/acme.sh/" "$HOME/.acme.sh"
+    lk_symlink "$CLOUD_SETTINGS/aws/" "$HOME/.aws"
+    lk_symlink "$CLOUD_SETTINGS/espanso/" "$HOME/Library/Preferences/espanso"
+    lk_symlink "$CLOUD_SETTINGS/linode-cli/linode-cli" \
         "$HOME/.config/linode-cli"
-    lk_safe_symlink "$CLOUD_SETTINGS/ssh/" "$HOME/.ssh"
-    lk_safe_symlink "$CLOUD_SETTINGS/unison/" "$HOME/Library/Application Support/unison"
+    lk_symlink "$CLOUD_SETTINGS/ssh/" "$HOME/.ssh"
+    lk_symlink "$CLOUD_SETTINGS/unison/" "$HOME/Library/Application Support/unison"
 
     pgrep -xq "dbeaver" &&
         lk_warn "cannot apply settings while DBeaver is running" || {
-        lk_safe_symlink "$CLOUD_SETTINGS/DBeaverData/" "$HOME/Library/DBeaverData"
+        lk_symlink "$CLOUD_SETTINGS/DBeaverData/" "$HOME/Library/DBeaverData"
     }
 
     for FILE in "$CLOUD_SETTINGS"/.*-settings; do
-        lk_safe_symlink "$FILE" "$HOME/$(basename "$FILE")"
+        lk_symlink "$FILE" "$HOME/$(basename "$FILE")"
     done
 
 }
@@ -68,18 +70,18 @@ CLOUD_SETTINGS="$HOME/.cloud-settings"
         sudo tee "/Applications/Firefox.app/Contents/Resources/firefox.cfg" >/dev/null
 }
 
-lk_safe_symlink "$SCRIPT_DIR/.vimrc" \
+lk_symlink "$SCRIPT_DIR/.vimrc" \
     "$HOME/.vimrc"
 
-lk_safe_symlink "$SCRIPT_DIR/.tidyrc" \
+lk_symlink "$SCRIPT_DIR/.tidyrc" \
     "$HOME/.tidyrc"
 
-lk_safe_symlink "$SCRIPT_DIR/.byoburc" \
+lk_symlink "$SCRIPT_DIR/.byoburc" \
     "$HOME/.byoburc"
-lk_safe_symlink "$SCRIPT_DIR/byobu/" \
+lk_symlink "$SCRIPT_DIR/byobu/" \
     "$HOME/.byobu"
 
-lk_safe_symlink "$SCRIPT_DIR/nextcloud/sync-exclude.lst" \
+lk_symlink "$SCRIPT_DIR/nextcloud/sync-exclude.lst" \
     "$HOME/Library/Preferences/Nextcloud/sync-exclude.lst" && {
     [ -e "$HOME/Library/Preferences/Nextcloud/nextcloud.cfg" ] ||
         cp -v "$SCRIPT_DIR/nextcloud/nextcloud.cfg" \
@@ -89,13 +91,13 @@ lk_safe_symlink "$SCRIPT_DIR/nextcloud/sync-exclude.lst" \
 lk_console_message "Checking Sublime Text 3"
 pgrep -xq "Sublime Text" &&
     lk_warn "cannot apply settings while Sublime Text 3 is running" ||
-    lk_safe_symlink "$SCRIPT_DIR/subl/User/" \
+    lk_symlink "$SCRIPT_DIR/subl/User/" \
         "$HOME/Library/Application Support/Sublime Text 3/Packages/User"
 
 lk_console_message "Checking Sublime Merge"
 pgrep -xq "sublime_merge" &&
     lk_warn "cannot apply settings while Sublime Merge is running" ||
-    lk_safe_symlink "$SCRIPT_DIR/smerge/User/" \
+    lk_symlink "$SCRIPT_DIR/smerge/User/" \
         "$HOME/Library/Application Support/Sublime Merge/Packages/User"
 
 lk_console_message "Checking HandBrake"
@@ -114,7 +116,7 @@ $HOME/Library/Containers/fr.handbrake.HandBrake/Data\
 lk_console_message "Checking iCanHazShortcut"
 pgrep -xq "iCanHazShortcut" &&
     lk_warn "cannot apply settings while iCanHazShortcut is running" ||
-    lk_safe_symlink "$SCRIPT_DIR/icanhazshortcut/" \
+    lk_symlink "$SCRIPT_DIR/icanhazshortcut/" \
         "$HOME/.config/iCanHazShortcut"
 
 lk_console_message "Checking iTerm2"
@@ -177,21 +179,21 @@ pgrep -xq iTerm2 &&
 lk_console_message "Checking KeePassXC"
 pgrep -xq "KeePassXC" &&
     lk_warn "cannot apply settings while KeePassXC is running" ||
-    lk_safe_symlink "$SCRIPT_DIR/keepassxc/keepassxc.ini" \
+    lk_symlink "$SCRIPT_DIR/keepassxc/keepassxc.ini" \
         "$HOME/Library/Application Support/keepassxc/keepassxc.ini"
 
 lk_console_message "Checking Stretchly"
 pgrep -xq "stretchly" &&
     lk_warn "cannot apply settings while Stretchly is running" ||
-    lk_safe_symlink "$SCRIPT_DIR/stretchly/config.json" \
+    lk_symlink "$SCRIPT_DIR/stretchly/config.json" \
         "$HOME/Library/Application Support/stretchly/config.json"
 
 lk_console_message "Checking Typora"
 pgrep -xq "Typora" &&
     lk_warn "cannot apply settings while Typora is running" || {
-    lk_safe_symlink "$SCRIPT_DIR/typora/abnerworks.Typora.plist" \
+    lk_symlink "$SCRIPT_DIR/typora/abnerworks.Typora.plist" \
         "$HOME/Library/Preferences/abnerworks.Typora.plist" &&
-        lk_safe_symlink "$SCRIPT_DIR/typora/themes" \
+        lk_symlink "$SCRIPT_DIR/typora/themes" \
             "$HOME/Library/Application Support/abnerworks.Typora/themes"
 }
 
@@ -211,11 +213,11 @@ pgrep -fq "^/Applications/VSCodium.app/Contents/MacOS/Electron" &&
             echo -n "$VSCODE_PRODUCT_JSON" | sudo tee "$FILE" >/dev/null
         }
     }
-    lk_safe_symlink "$SCRIPT_DIR/vscode/settings.json" \
+    lk_symlink "$SCRIPT_DIR/vscode/settings.json" \
         "$HOME/Library/Application Support/VSCodium/User/settings.json" &&
-        lk_safe_symlink "$SCRIPT_DIR/vscode/keybindings.mac.json" \
+        lk_symlink "$SCRIPT_DIR/vscode/keybindings.mac.json" \
             "$HOME/Library/Application Support/VSCodium/User/keybindings.json" &&
-        lk_safe_symlink "$SCRIPT_DIR/vscode/snippets" \
+        lk_symlink "$SCRIPT_DIR/vscode/snippets" \
             "$HOME/Library/Application Support/VSCodium/User/snippets"
 }
 
