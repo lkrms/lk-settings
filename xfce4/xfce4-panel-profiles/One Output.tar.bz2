@@ -5,7 +5,7 @@
 /panels/panel-1/background-style uint32 0
 /panels/panel-1/disable-struts false
 /panels/panel-1/enter-opacity uint32 100
-/panels/panel-1/icon-size 20
+/panels/panel-1/icon-size 18
 /panels/panel-1/leave-opacity uint32 100
 /panels/panel-1/length uint32 100
 /panels/panel-1/mode uint32 0
@@ -14,7 +14,7 @@
 /panels/panel-1/plugin-ids [<1>, <2>, <3>, <11>, <18>, <20>, <7>, <17>, <4>, <10>, <6>, <8>, <9>, <16>, <15>, <13>, <12>, <5>, <14>]
 /panels/panel-1/position 'p=6;x=0;y=0'
 /panels/panel-1/position-locked true
-/panels/panel-1/size 30
+/panels/panel-1/size 26
 /plugins/plugin-1 'whiskermenu'
 /plugins/plugin-10 'notification-plugin'
 /plugins/plugin-11 'xfce4-sensors-plugin'
@@ -54,16 +54,16 @@
 /plugins/plugin-3/expand true
 /plugins/plugin-3/style uint32 0
 /plugins/plugin-4 'pager'
-/plugins/plugin-4/miniature-view false
+/plugins/plugin-4/miniature-view true
 /plugins/plugin-4/rows uint32 1
-/plugins/plugin-4/workspace-scrolling true
+/plugins/plugin-4/workspace-scrolling false
 /plugins/plugin-5 'separator'
 /plugins/plugin-5/style uint32 0
 /plugins/plugin-6 'systray'
 /plugins/plugin-6/names-hidden [<'blueman-tray'>, <'bluetooth enabled'>, <'flameshot'>, <'guake'>, <'skypeforlinux'>, <'todoist'>]
-/plugins/plugin-6/names-ordered [<'copyq'>, <'flameshot'>, <'keepassxc'>, <'todoist'>, <'teams'>, <'skypeforlinux'>, <'clementine'>, <'guake'>, <'remmina remote desktop client'>, <'nextcloud'>, <'blueman-tray'>, <'bluetooth enabled'>, <'networkmanager applet'>]
+/plugins/plugin-6/names-ordered [<'electron9'>, <'electron'>, <'copyq'>, <'flameshot'>, <'keepassxc'>, <'todoist'>, <'teams'>, <'skypeforlinux'>, <'clementine'>, <'guake'>, <'remmina remote desktop client'>, <'nextcloud'>, <'blueman-tray'>, <'bluetooth enabled'>, <'networkmanager applet'>]
 /plugins/plugin-6/show-frame false
-/plugins/plugin-6/size-max 24
+/plugins/plugin-6/size-max 20
 /plugins/plugin-6/square-icons true
 /plugins/plugin-7 'cpugraph'
 /plugins/plugin-8 'pulseaudio'

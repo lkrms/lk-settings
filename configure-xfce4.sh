@@ -156,8 +156,8 @@ if [ -n "$DPI" ] && [ -f "/etc/default/grub" ]; then
             [ -d "${_GRUB_FONT_DIR:=${GRUB_FONT%/*}}" ] ||
                 sudo install -v -d -m 0755 "$_GRUB_FONT_DIR"
             sudo install -v -m 0755 "$_PF2" "$GRUB_FONT"
-            LK_SUDO=1 lk_maybe_add_newline "/etc/default/grub"
-            LK_SUDO=1 lk_maybe_replace "/etc/default/grub" \
+            LK_SUDO=1 lk_file_add_newline "/etc/default/grub"
+            LK_SUDO=1 lk_file_replace "/etc/default/grub" \
                 "$(
                     sed -E '/^GRUB_FONT=/d' "/etc/default/grub"
                     echo "$GRUB_FONT_VAR"

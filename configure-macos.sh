@@ -107,7 +107,7 @@ pgrep -xq "HandBrake" &&
 $HOME/Library/Containers/fr.handbrake.HandBrake/Data\
 /Library/Application Support/HandBrake/UserPresets.json"
     diff -Nq "$SCRIPT_DIR/handbrake/presets.json" "$FILE" >/dev/null || {
-        LK_BACKUP_SUFFIX="-$(lk_timestamp).bak" lk_keep_original "$FILE" &&
+        lk_file_backup "$FILE" &&
             mkdir -pv "$(dirname "$FILE")" &&
             cp -fv "$SCRIPT_DIR/handbrake/presets.json" "$FILE"
     }
