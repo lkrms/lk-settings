@@ -1,5 +1,6 @@
 #!/bin/bash
-# shellcheck disable=SC1007,SC1090,SC2015,SC2034,SC2207
+
+# shellcheck disable=SC1007,SC1090,SC2001,SC2015,SC2034,SC2207
 
 set -euo pipefail
 lk_die() { echo "${BASH_SOURCE[0]}: $1" >&2 && exit 1; }
@@ -57,6 +58,7 @@ case "$1" in
     ISOLATE=Y
     ISOLATE_ALLOW_HOST=Y
     ISOLATE_ALLOW_HOST_NET=Y
+    ISOLATE_ALLOW_HOSTS=(172.105.182.81 172.105.161.154)
     FORWARD_HTTP=Y
     ;;&
 *isolated*)
@@ -90,6 +92,9 @@ ISOLATE_ALLOW_HOSTS=(
     downloads.wordpress.org
     plugins.svn.wordpress.org
     wordpress.org
+
+    #
+    ${ISOLATE_ALLOW_HOSTS[@]+"${ISOLATE_ALLOW_HOSTS[@]}"}
 )
 
 if [ -z "${GUEST_IP:-}" ]; then
@@ -106,6 +111,7 @@ HOST_NET="$(ip -4 route show dev "$HOST_INTERFACE" scope link |
     grep -Po "^[0-9.]+/[0-9]+")"
 HOST_IP="$(ip -4 address show dev "$HOST_INTERFACE" primary |
     grep -Po "^\s*inet \K[0-9.]+(?=/)")"
+GUEST_NAME=$(sed -E 's/[^-a-zA-Z0-9_]+//g' <<<"$1")
 
 case "$2" in
 
@@ -118,9 +124,9 @@ start | release)
 
 start)
     if lk_is_true ISOLATE; then
-        lk_is_false ISOLATE_ALLOW_HOST ||
+        ! lk_is_true ISOLATE_ALLOW_HOST ||
             ISOLATE_ALLOW_HOSTS+=("$GUEST_BRIDGE_IP")
-        lk_is_true ISOLATE_ALLOW_HOST_NET ||
+        ! lk_is_true ISOLATE_ALLOW_HOST_NET ||
             ISOLATE_ALLOW_HOSTS+=("$HOST_NET")
         if lk_in_array "api.github.com" ISOLATE_ALLOW_HOSTS; then
             GITHUB_IPS=($(
@@ -134,15 +140,16 @@ start)
                 lk_die "unable to resolve domain names"
             ISOLATE_ALLOW_IPV4=($(echo "$ISOLATE_ALLOW_IP" | lk_filter_ipv4))
         fi
-        lk_iptables_flush_chain semi-isolated
+        CHAIN=semi-isolated-$GUEST_NAME
+        lk_iptables_flush_chain "$CHAIN"
         for IP in "${ISOLATE_ALLOW_IPV4[@]}"; do
-            iptables -v -A semi-isolated -d "$IP" -j ACCEPT
+            iptables -v -A "$CHAIN" -d "$IP" -j ACCEPT
         done
-        iptables -v -A semi-isolated -p udp -m udp --dport 123 -j ACCEPT
-        iptables -v -A semi-isolated -j LOG --log-prefix "blocked: "
-        iptables -v -A semi-isolated -j "$REJECT_CHAIN"
+        iptables -v -A "$CHAIN" -p udp -m udp --dport 123 -j ACCEPT
+        iptables -v -A "$CHAIN" -j LOG --log-prefix "blocked: "
+        iptables -v -A "$CHAIN" -j "$REJECT_CHAIN"
         iptables -v -I FORWARD \
-            -i "$GUEST_BRIDGE" -s "$GUEST_IP" -j semi-isolated
+            -i "$GUEST_BRIDGE" -s "$GUEST_IP" -j "$CHAIN"
     fi
     lk_iptables_has_chain forward-incoming ||
         lk_iptables_flush_chain forward-incoming
@@ -172,8 +179,11 @@ release)
     set +e
     trap - ERR
     if [ "${ISOLATE:-N}" != "N" ]; then
+        CHAIN=semi-isolated-$GUEST_NAME
         iptables -v -D FORWARD \
-            -i "$GUEST_BRIDGE" -s "$GUEST_IP" -j semi-isolated
+            -i "$GUEST_BRIDGE" -s "$GUEST_IP" -j "$CHAIN"
+        lk_iptables_flush_chain "$CHAIN"
+        lk_iptables_delete_chain "$CHAIN"
     fi
     iptables -v -D FORWARD \
         -o "$GUEST_BRIDGE" -d "$GUEST_IP" -j forward-incoming
