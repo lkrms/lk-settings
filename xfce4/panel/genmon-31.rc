@@ -1,4 +1,4 @@
-Command=awk 'function p(v,u){v=int(v);if(i){u=substr(u,1,1)}else{if(v!=1)u=u"s";if(u!~/^m/)u=u", ";u=" "u}if(v||u~/^ m/){printf(v u);i++}}{printf("up ");p($1/86400,"day");p(($1%86400)/3600,"hour");p(($1%3600)/60,"minute")}' /proc/uptime
+Command=awk 'function p(v,u){v=int(v);if(i)u=substr(u,1,1);else{if(v!=1)u=u"s";u=" "u}if(v||u~/^ m/){if(i==1)printf", ";printf v u;i++}}{printf "up ";p($1/86400,"day");p(($1%86400)/3600,"hour");p(($1%3600)/60,"minute")}' /proc/uptime
 UseLabel=0
 Text=
 UpdatePeriod=60000
