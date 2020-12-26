@@ -16,11 +16,6 @@ small_toolbutton=false
 view_file_mode=0
 resolutions=640x480,800x600,1024x768,1152x864,1280x960,1280x1024,1400x1050
 keystrokes=Send hello world§hello world\\n
-main_width=864
-main_height=400
-main_maximize=false
-main_sort_column_id=2
-main_sort_order=0
 expanded_group=
 toolbar_pin_down=false
 sshtunnel_port=4732
@@ -71,6 +66,7 @@ ssh_tcp_keepidle=20
 ssh_tcp_keepintvl=10
 ssh_tcp_keepcnt=3
 ssh_tcp_usrtimeout=60000
+screenshot_name=remmina_%p_%h_%Y%m%d-%H%M%S
 
 [ssh_colors]
 background=rgb(213,204,186)

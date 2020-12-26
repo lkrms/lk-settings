@@ -145,6 +145,7 @@ start)
         for IP in "${ISOLATE_ALLOW_IPV4[@]}"; do
             iptables -v -A "$CHAIN" -d "$IP" -j ACCEPT
         done
+        iptables -v -A "$CHAIN" -p udp -m udp --dport 53 -j ACCEPT
         iptables -v -A "$CHAIN" -p udp -m udp --dport 123 -j ACCEPT
         iptables -v -A "$CHAIN" -j LOG --log-prefix "blocked: "
         iptables -v -A "$CHAIN" -j "$REJECT_CHAIN"
@@ -159,11 +160,9 @@ start)
             [ "${FORWARD_HTTP:-N}" = "N" ]; then
             continue
         fi
-        if ! iptables -C forward-incoming \
-            -p tcp -m tcp --dport "${GUEST_PORTS[$i]}" -j ACCEPT 2>/dev/null; then
-            iptables -v -A forward-incoming \
-                -p tcp -m tcp --dport "${GUEST_PORTS[$i]}" -j ACCEPT
-        fi
+        lk_iptables_maybe_append forward-incoming -v \
+            -p tcp -m tcp --dport "${GUEST_PORTS[$i]}" \
+            -j ACCEPT
         iptables -v -t nat -I PREROUTING -i "$HOST_INTERFACE" \
             -p tcp -m tcp --dport "${HOST_PORTS[$i]}" \
             -j DNAT --to-destination "$GUEST_IP:${GUEST_PORTS[$i]}"

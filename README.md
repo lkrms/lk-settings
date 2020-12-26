@@ -18,7 +18,7 @@ tar](https://www.gnu.org/software/tar/) must be available on your `PATH` as
 `gnu_sed` and `gnu_tar`.
 
 Use
-[`lk-platform-configure-system.sh`](https://github.com/lkrms/lk-platform/blob/master/bin/lk-platform-configure-system.sh)
+[`lk-platform-configure.sh`](https://github.com/lkrms/lk-platform/blob/master/bin/lk-platform-configure.sh)
 to create the necessary symlinks automatically, or do it manually like so:
 
 ```bash

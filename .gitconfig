@@ -36,7 +36,7 @@
 	smudge = cat
 
 [filter "remmina"]
-	clean = gnu_sed -Ee '/^(secret|screenshot_path|recent_SFTP|periodic_rmnews_[a-z_]+)=/d'
+	clean = gnu_sed -Ee '/^(secret|screenshot_path|recent_SFTP|periodic_rmnews_[a-z_]+|main_(width|height|maximize|sort_(column_id|order)))=/d'
 	smudge = cat
 
 [filter "speedcrunch"]

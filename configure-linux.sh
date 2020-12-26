@@ -96,8 +96,13 @@ lk_symlink "$SCRIPT_DIR/fonts/ms-no-bitmaps.conf" \
 
 unset LK_SUDO
 
-diff -q <(crontab -l) "$SCRIPT_DIR/crontab" >/dev/null ||
-    crontab "$SCRIPT_DIR/crontab"
+CRONTAB=$(awk \
+    -v STRETCHLY="\"$(lk_escape \
+        "$SCRIPT_DIR/stretchly/stretchly.sh" '$' '`' "\\" '"')\"" \
+    '$6=="stretchly"{$6=STRETCHLY}{print}' \
+    "$SCRIPT_DIR/crontab")
+diff -q <(crontab -l) <(echo "${CRONTAB%$'\n'}") >/dev/null ||
+    crontab <(echo "${CRONTAB%$'\n'}")
 
 MIMEINFO_FILE="/usr/share/applications/mimeinfo.cache"
 MIMEAPPS_FILE="$HOME/.config/mimeapps.list"
