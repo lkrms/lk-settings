@@ -67,6 +67,7 @@ ssh_tcp_keepintvl=10
 ssh_tcp_keepcnt=3
 ssh_tcp_usrtimeout=60000
 screenshot_name=remmina_%p_%h_%Y%m%d-%H%M%S
+trust_all=false
 
 [ssh_colors]
 background=rgb(213,204,186)

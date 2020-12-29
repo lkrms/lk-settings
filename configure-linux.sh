@@ -71,7 +71,7 @@ CLOUD_SETTINGS="$HOME/.cloud-settings"
 
     for DESKTOP_FILE in "$CLOUD_SETTINGS"/applications/*.desktop; do
         [[ "$(basename "$DESKTOP_FILE")" =~ \
-        ^(skypeforlinux|teams|thunderbird)\.desktop$ ]] ||
+        ^(caprine|skypeforlinux|teams|thunderbird)\.desktop$ ]] ||
             lk_symlink "$DESKTOP_FILE" \
                 "$HOME/.local/share/applications/$(basename "$DESKTOP_FILE")"
     done
@@ -97,8 +97,7 @@ lk_symlink "$SCRIPT_DIR/fonts/ms-no-bitmaps.conf" \
 unset LK_SUDO
 
 CRONTAB=$(awk \
-    -v STRETCHLY="\"$(lk_escape \
-        "$SCRIPT_DIR/stretchly/stretchly.sh" '$' '`' "\\" '"')\"" \
+    -v STRETCHLY="$(lk_double_quote "$SCRIPT_DIR/stretchly/stretchly.sh")" \
     '$6=="stretchly"{$6=STRETCHLY}{print}' \
     "$SCRIPT_DIR/crontab")
 diff -q <(crontab -l) <(echo "${CRONTAB%$'\n'}") >/dev/null ||

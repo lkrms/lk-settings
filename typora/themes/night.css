@@ -251,10 +251,6 @@ iframe,
     /* 24px */
 }
 
-li > blockquote {
-	margin-bottom: 0;
-}
-
 audio:not([controls]) {
     display: none;
 }
@@ -744,6 +740,10 @@ footer {
     border-color: transparent;
 }
 
+.btn-primary {
+    color: white;
+}
+
 .btn-default:hover, .btn-default:focus, .btn-default.focus, .btn-default:active, .btn-default.active, .open > .dropdown-toggle.btn-default {
     color: white;
     border: 1px solid #ddd;
@@ -1002,4 +1002,9 @@ footer.ty-footer {
 .export-item.active,
 .export-items-list-control {
     background: #d6d6d4
+}
+
+.modal-backdrop.in {
+    opacity: 1;
+    backdrop-filter: blur(1px);
 }

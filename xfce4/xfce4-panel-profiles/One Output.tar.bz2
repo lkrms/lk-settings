@@ -11,13 +11,12 @@
 /panels/panel-1/mode uint32 0
 /panels/panel-1/nrows uint32 1
 /panels/panel-1/output-name 'Primary'
-/panels/panel-1/plugin-ids [<1>, <2>, <3>, <11>, <18>, <20>, <7>, <17>, <4>, <10>, <6>, <8>, <9>, <16>, <15>, <13>, <12>, <5>, <14>]
+/panels/panel-1/plugin-ids [<1>, <2>, <3>, <7>, <17>, <4>, <6>, <9>, <8>, <10>, <16>, <15>, <13>, <12>, <5>, <14>]
 /panels/panel-1/position 'p=6;x=0;y=0'
 /panels/panel-1/position-locked true
 /panels/panel-1/size 26
 /plugins/plugin-1 'whiskermenu'
 /plugins/plugin-10 'notification-plugin'
-/plugins/plugin-11 'xfce4-sensors-plugin'
 /plugins/plugin-12 'clock'
 /plugins/plugin-12/digital-format '%a %d %b, %R'
 /plugins/plugin-12/mode uint32 4
@@ -38,18 +37,14 @@
 /plugins/plugin-16/style uint32 0
 /plugins/plugin-17 'separator'
 /plugins/plugin-17/style uint32 0
-/plugins/plugin-18 'separator'
-/plugins/plugin-18/style uint32 0
 /plugins/plugin-2 'tasklist'
 /plugins/plugin-2/grouping uint32 1
 /plugins/plugin-2/include-all-monitors true
 /plugins/plugin-2/middle-click uint32 0
 /plugins/plugin-2/show-handle false
 /plugins/plugin-2/show-wireframes true
-/plugins/plugin-2/sort-order uint32 1
+/plugins/plugin-2/sort-order uint32 0
 /plugins/plugin-2/window-scrolling false
-/plugins/plugin-20 'separator'
-/plugins/plugin-20/style uint32 0
 /plugins/plugin-3 'separator'
 /plugins/plugin-3/expand true
 /plugins/plugin-3/style uint32 0
@@ -60,10 +55,10 @@
 /plugins/plugin-5 'separator'
 /plugins/plugin-5/style uint32 0
 /plugins/plugin-6 'systray'
-/plugins/plugin-6/names-hidden [<'blueman-tray'>, <'bluetooth enabled'>, <'flameshot'>, <'guake'>, <'skypeforlinux'>, <'todoist'>]
-/plugins/plugin-6/names-ordered [<'electron9'>, <'electron'>, <'copyq'>, <'flameshot'>, <'keepassxc'>, <'todoist'>, <'teams'>, <'skypeforlinux'>, <'clementine'>, <'guake'>, <'remmina remote desktop client'>, <'nextcloud'>, <'blueman-tray'>, <'bluetooth enabled'>, <'networkmanager applet'>]
-/plugins/plugin-6/show-frame false
-/plugins/plugin-6/size-max 20
+/plugins/plugin-6/hidden-items [<'Skype1'>, <'Microsoft Teams - Preview1'>, <'Todoist1'>, <'blueman'>, <'Caprine1'>, <'copyq'>, <'remmina-icon'>]
+/plugins/plugin-6/icon-size 20
+/plugins/plugin-6/known-items [<'blueman'>, <'copyq'>, <'Nextcloud'>, <'remmina-icon'>, <'Stretchly1'>, <'Skype1'>, <'Caprine1'>, <'Microsoft Teams - Preview1'>, <'Todoist1'>]
+/plugins/plugin-6/known-legacy-items [<'networkmanager applet'>]
 /plugins/plugin-6/square-icons true
 /plugins/plugin-7 'cpugraph'
 /plugins/plugin-8 'pulseaudio'
