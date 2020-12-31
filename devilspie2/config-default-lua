@@ -1,19 +1,130 @@
---log = nil
-log = log_state
---log = log_window
---log = log_window_full
+event_log = log_state
+--event_log = log_window
+--event_log = log_window_full
+
+log_level = log.INFO
+
+default_grid = {6, 2}
+
+_criteria = {}
+_actions = {}
+_places = {}
+
+_criteria.sticky = {
+    operator.AND,
+    function(state)
+        return #state.displays > 1
+    end,
+    {
+        operator.OR,
+        event = "open",
+        {
+            operator.AND,
+            event = {"focus", "blur"},
+            display = 2
+        }
+    }
+}
+
+_actions.sticky = {
+    pin_on
+}
+
+_actions.undecorated_sticky = {
+    decorate_off,
+    pin_on
+}
+
+_places.sticky_utility = {display = 2, xy = {1, 2}, wh = {2, 1}}
 
 rules = {
     {
         criteria = {
-            class_instance_name = {
-                "microsoft teams",
-                "microsoft teams - preview",
-                "caprine"
-            }
+            operator.AND,
+            class_instance_name = "Mail",
+            window_role = "3pane"
         },
         actions = {
-            pin_on
+            {to_workspace, {1}},
+            {to_place, {{display = 1, xy = {1, 1}, wh = {3, 2}}}}
         }
+    },
+    {
+        criteria = {
+            operator.AND,
+            class_instance_name = {
+                "todoist"
+            },
+            _criteria.sticky
+        },
+        actions = append(
+            _actions.undecorated_sticky,
+            {
+                {to_place, {_places.sticky_utility}}
+            }
+        )
+    },
+    {
+        criteria = {
+            operator.AND,
+            class_instance_name = {
+                "keepassxc"
+            },
+            _criteria.sticky
+        },
+        actions = append(
+            _actions.sticky,
+            {
+                {to_place, {_places.sticky_utility}}
+            }
+        ),
+        set_position = set_window_position
+    },
+    {
+        criteria = {
+            operator.AND,
+            class_instance_name = {
+                "caprine"
+            },
+            _criteria.sticky
+        },
+        actions = append(
+            _actions.sticky,
+            {
+                {to_place, {{display = 2, xy = {3, 1}, wh = {2, 1}}}}
+            }
+        )
+    },
+    {
+        criteria = {
+            operator.AND,
+            class_instance_name = {
+                "skype",
+                "teams.microsoft.com"
+            },
+            _criteria.sticky
+        },
+        actions = append(
+            _actions.sticky,
+            {
+                {to_place, {{display = 2, xy = {3, 2}, wh = {2, 1}}}}
+            }
+        )
+    },
+    {
+        criteria = {
+            operator.AND,
+            class_instance_name = {
+                "microsoft teams",
+                "microsoft teams - preview"
+            },
+            _criteria.sticky
+        },
+        actions = append(
+            _actions.sticky,
+            {
+                {to_place, {{display = 2, xy = {1, 1}, wh = {2, 1}}}}
+            }
+        )
     }
 }

@@ -1,12 +1,72 @@
-function extend_copy(to_copy, to_add)
-    return tablex.update(tablex.copy(to_copy), to_add)
+log = {
+    CRITICAL = 2,
+    ERROR = 3,
+    WARNING = 4,
+    INFO = 6,
+    DEBUG = 7,
+    _print = function(level, message)
+        if log_level == nil then
+            log_level = log.INFO
+        end
+        if level <= log_level then
+            debug_print(message or "")
+        end
+    end,
+    critical = function(message)
+        log._print(log.CRITICAL, message)
+    end,
+    error = function(message)
+        log._print(log.ERROR, message)
+    end,
+    warning = function(message)
+        log._print(log.WARNING, message)
+    end,
+    info = function(message)
+        log._print(log.INFO, message)
+    end,
+    debug = function(message)
+        log._print(log.DEBUG, message)
+    end
+}
+
+operator = {
+    AND = 1,
+    OR = 2
+}
+
+function extend(copy_table, update_table)
+    return tablex.update(tablex.copy(copy_table), update_table)
 end
 
+function append(copy_table, insert_table)
+    local copy = tablex.copy(copy_table)
+    tablex.insertvalues(copy, insert_table)
+    return copy
+end
+
+-- Return the geometry of all connected displays.
+--
+-- Display 1 is always the primary display. Secondary display numbering is left
+-- to right, top to bottom.
+--
+-- Geometry values:
+--
+--     1. x
+--     2. y
+--     3. width
+--     4. height
+--     5. left strut
+--     6. right strut
+--     7. top strut
+--     8. bottom strut
+--
+-- Example:
+--
+--     {{0, 0, 3840, 2160, 0, 0, 37, 0}, {3840, 0, 3840, 2160, 0, 0, 37, 0}}
 function get_displays()
     if displays == nil then
-        local f, output
-        debug_print("Getting screen geometry from xrandr")
-        f =
+        log.info("Getting screen geometry from xrandr")
+        local f =
             io.popen(
             [[
 S=$'[ \t]'
@@ -14,23 +74,75 @@ I="[0-9]*"
 echo "return {"
 xrandr | sed -E \
     -e "/${S}connected$S/!d" \
-    -e "s/.*${S}connected$S+(primary$S+)?($I)x($I)\+($I)\+($I)$S.*/\1{ \4, \5, \2, \3 },/" \
+    -e "s/.*${S}connected$S+(primary$S+)?($I)x($I)\+($I)\+($I)$S.*/\1{ \4, \5, \2, \3, 0, 0, 0, 0 },/" \
     -e "/^primary/!s/^/1 /" \
     -e "/^primary/s/^primary$S+/0 /" | sort -n -k1 -k3 -k4 | cut -d" " -f2-
 echo "}"
 ]]
         )
-        output = f:read("*a")
+        local output = f:read("*a")
         assert(f:close())
         displays = load(output)()
+        local struts = get_struts()
+        log.debug("struts = " .. pretty.write(struts, ""))
+        for i, strut in ipairs(struts) do
+            local strut_display = get_display_at(displays, strut[5], strut[6])
+            if strut_display == nil then
+                log.warning("Invalid strut geometry: " .. pretty.write(strut, ""))
+                goto next_strut
+            end
+            local display = displays[strut_display]
+            for j = 1, 4 do
+                display[4 + j] = math.max(display[4 + j], strut[j])
+            end
+            ::next_strut::
+        end
+        log.debug("displays = " .. pretty.write(displays, ""))
     end
     return displays
+end
+
+function get_struts()
+    log.info("Getting strut geometry from xprop")
+    local f =
+        io.popen(
+        [[
+echo "return {"
+xprop -root 32x '\n$0+\n' _NET_CLIENT_LIST |
+    tail -n1 |
+    sed -E 's/[ \t,]+/\n/g' |
+    xargs -I '{}' xprop -id '{}' \
+        32a '\n{} $0\n' _NET_WM_WINDOW_TYPE |
+    sed -En 's/^(0x[0-9a-fA-F]+) _NET_WM_WINDOW_TYPE_DOCK$/\1/p' |
+    xargs -I '{}' xprop -id '{}' \
+        32c '\n\t{$0, $1, $2, $3, $8, $4},\n' _NET_WM_STRUT_PARTIAL |
+    sed -E '/^\t\{/!d'
+echo "}"
+]]
+    )
+    local output = f:read("*a")
+    assert(f:close())
+    return load(output)()
+end
+
+function get_display_at(displays, x, y)
+    for display, display_geometry in ipairs(displays) do
+        local dx, dy, dw, dh = table.unpack(display_geometry)
+        if x >= dx and y >= dy and x < dx + dw and y < dy + dh then
+            return display
+        end
+    end
+end
+
+function get_display()
+    return get_display_at(get_displays(), get_window_geometry())
 end
 
 function get_state(event)
     return {
         event = event,
         displays = get_displays(),
+        display = get_display(),
         window_name = get_window_name(),
         application_name = event == "close" and "" or (get_application_name() or ""),
         window_geometry = {get_window_geometry()},
@@ -43,66 +155,172 @@ function get_state(event)
     }
 end
 
-function pin_on()
-    debug_print("pin_window()")
+function to_workspace(workspace, state)
+    log.info("Calling set_window_workspace(" .. workspace .. ") on " .. state.class_instance_name)
+    set_window_workspace(workspace)
+end
+
+function pin_on(state)
+    log.info("Calling pin_window() on " .. state.class_instance_name)
     pin_window()
 end
 
-function pin_off()
-    debug_print("unpin_window()")
+function pin_off(state)
+    log.info("Calling unpin_window() on " .. state.class_instance_name)
     unpin_window()
 end
 
-function skip_tasklist_on()
-    debug_print("skip_tasklist_on()")
+function skip_tasklist_on(state)
+    log.info("Calling set_skip_tasklist(true) on " .. state.class_instance_name)
     set_skip_tasklist(true)
 end
 
-function skip_tasklist_off()
-    debug_print("skip_tasklist_off()")
+function skip_tasklist_off(state)
+    log.info("Calling set_skip_tasklist(false) on " .. state.class_instance_name)
     set_skip_tasklist(false)
 end
 
-function process_event(event)
-    if log ~= nil then
-        log(event)
+function decorate_on(state)
+    log.info("Calling decorate_window() on " .. state.class_instance_name)
+    decorate_window()
+    state.just_decorated = true
+end
+
+function decorate_off(state)
+    log.info("Calling undecorate_window() on " .. state.class_instance_name)
+    undecorate_window()
+    state.just_undecorated = true
+end
+
+function _to_place(display, grid_columns, grid_rows, column1, row1, columns, rows, state)
+    local d_x, d_y, d_w, d_h, s_l, s_r, s_t, s_b, col_w, row_h, x, y, w, h
+    local display_geometry = get_displays()[display]
+    if display_geometry == nil then
+        log.warning("Invalid display: " .. display)
+        return
     end
-    if event == "close" then
-        closed_window_xid = get_window_xid()
-    elseif event == "blur" then
-        if closed_window_xid and get_window_xid() == closed_window_xid then
-            closed_window_xid = nil
-            debug_print("Skipping closed window blur")
-            return
-        end
-        closed_window_xid = nil
+    d_x, d_y, d_w, d_h, s_l, s_r, s_t, s_b = table.unpack(display_geometry)
+    d_x = d_x + s_l
+    d_y = d_y + s_t
+    d_w = d_w - (s_l + s_r)
+    d_h = d_h - (s_t + s_b)
+    col_w = math.floor(d_w / grid_columns)
+    row_h = math.floor(d_h / grid_rows)
+    x = d_x + (column1 - 1) * col_w
+    w = columns * col_w
+    y = d_y + (row1 - 1) * row_h
+    h = rows * row_h
+    if state.just_undecorated then
+        local f_w = state.window_geometry[3] - state.window_client_geometry[3]
+        local f_h = state.window_geometry[4] - state.window_client_geometry[4]
+        decoration_width = math.max(decoration_width or 0, f_w)
+        decoration_height = math.max(decoration_height or 0, f_h)
+        w = w + f_w
+        h = h + f_h
+    end
+    local set_size, set_position =
+        state.rule.set_size or set_window_size,
+        state.rule.set_position or set_window_position2
+    log.info("Calling set_window_size(" .. table.concat({w, h}, ", ") .. ") on " .. state.class_instance_name)
+    set_size(w, h)
+    log.info("Calling set_window_position2(" .. table.concat({x, y}, ", ") .. ") on " .. state.class_instance_name)
+    set_position(x, y)
+end
+
+function to_place(place, state)
+    local p = {
+        display = place.display or state.display,
+        grid = place.grid or default_grid or {3, 1},
+        xy = place.xy or {place.column1 or 1, place.row1 or 1},
+        wh = place.wh or {place.columns or 1, place.rows or 1}
+    }
+    p.grid[1] = math.max(p.grid[1], p.xy[1] + p.wh[1] - 1)
+    p.grid[2] = math.max(p.grid[2], p.xy[2] + p.wh[2] - 1)
+    _to_place(p.display, p.grid[1], p.grid[2], p.xy[1], p.xy[2], p.wh[1], p.wh[2], state)
+end
+
+function process_event(event)
+    if event_log ~= nil then
+        event_log(event)
     end
     if rules ~= nil then
         local state = get_state(event)
-        for i, rule in ipairs(rules) do
-            local criteria_met = true
-            if rule.criteria.event == nil then
-                rule.criteria.event = {"open", "focus"}
+        if event == "close" then
+            closed_window_xid = state.window_xid
+        elseif event == "blur" then
+            if closed_window_xid and state.window_xid == closed_window_xid then
+                closed_window_xid = nil
+                log.info("Skipping closed window blur")
+                return
             end
-            for k, v in pairs(rule.criteria) do
-                if tablex.find(v, state[k]) == nil then
-                    criteria_met = false
-                    break
+            closed_window_xid = nil
+        end
+        local function process_criteria(criteria)
+            local and_result, or_result, op = true, false
+            for k, v in pairs(criteria) do
+                local result
+                if type(k) == "number" then
+                    if v == "AND" or v == operator.AND then
+                        if and_result == false then
+                            return false
+                        end
+                        op = operator.AND
+                    elseif v == "OR" or v == operator.OR then
+                        if or_result == true then
+                            return true
+                        end
+                        op = operator.OR
+                    elseif type(v) == "function" then
+                        result = v(state)
+                    elseif type(v) == "table" then
+                        result = process_criteria(v)
+                    end
+                elseif type(v) == "table" then
+                    result = tablex.find(v, state[k]) ~= nil
+                else
+                    result = state[k] == v
                 end
-            end
-            if criteria_met then
-                for j, action in ipairs(rule.actions) do
-                    local type_action = {
-                        ["function"] = action
-                    }
-                    action = type_action[type(action)]
-                    if action ~= nil then
-                        action(state)
-                    else
-                        print("Rule " .. i .. ", action " .. j .. ": type unknown")
+                if result ~= nil then
+                    and_result = and_result and result
+                    or_result = or_result or result
+                    if op == operator.AND and and_result == false then
+                        return false
+                    elseif op == operator.OR and or_result == true then
+                        return true
                     end
                 end
             end
+            return and_result
+        end
+        local type_action = {
+            ["function"] = function(fn, state)
+                fn(state)
+            end,
+            ["table"] = function(t, state)
+                local args = tablex.copy(t[2])
+                table.insert(args, state)
+                t[1](table.unpack(args))
+            end
+        }
+        for i, rule in ipairs(rules) do
+            log.debug("rules[" .. i .. "].criteria = " .. pretty.write(rule.criteria, ""))
+            if rule.criteria ~= nil and not process_criteria(rule.criteria) then
+                log.debug("Criteria not met")
+                goto next_rule
+            end
+            log.debug("Criteria met")
+            state.rule = rule
+            for j, action in ipairs(rule.actions) do
+                log.debug("rules[" .. i .. "].actions[" .. j .. "] = " .. pretty.write(action, ""))
+                _action = type_action[type(action)]
+                if _action ~= nil then
+                    state.action = action
+                    _action(action, state)
+                else
+                    log.warning("Invalid type '" .. type(action) .. "': rules[" .. i .. "].actions[" .. j .. "]")
+                end
+            end
+            ::next_rule::
         end
     end
 end
@@ -189,15 +407,16 @@ function log_window(event)
         " geometry on ",
         event,
         ": ",
-        table.concat({get_window_geometry()}, ","),
+        table.concat({get_display() or -1, get_window_geometry()}, ","),
         " [",
         get_window_type(),
         "]"
     }
+    log.debug()
     debug_print(table.concat(summary))
 end
 
 function log_state(event)
-    debug_print("state = " .. pretty.write(get_state(event), ""))
     debug_print()
+    debug_print("state = " .. pretty.write(get_state(event), ""))
 end

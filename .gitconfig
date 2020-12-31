@@ -32,7 +32,7 @@
 	smudge = cat
 
 [filter "plist"]
-	clean = type -P plutil >/dev/null && plutil -convert xml1 -o - - || cat
+	clean = sh -c 'type -P plutil >/dev/null && plutil -convert xml1 -o - - || cat'
 	smudge = cat
 
 [filter "remmina"]
