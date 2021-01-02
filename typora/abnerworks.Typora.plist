@@ -4,6 +4,8 @@
 <dict>
 	<key>SmartyPantsOnRendering</key>
 	<true/>
+	<key>WebAutomaticDashSubstitutionEnabled</key>
+	<false/>
 	<key>WebKitDeveloperExtras</key>
 	<false/>
 	<key>autoEscapeImageURL</key>

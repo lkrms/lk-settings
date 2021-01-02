@@ -1,6 +1,48 @@
 #!/bin/bash
 
-set -uo pipefail
+# shellcheck disable=SC1090,SC2015,SC2034
+
+set -euo pipefail
+lk_die() { echo "${BS:+$BS: }$1" >&2 && exit 1; }
+BS=${BASH_SOURCE[0]} &&
+    [ ! -L "$BS" ] && SCRIPT_DIR=$(cd "${BS%/*}" && pwd -P) ||
+    lk_die "unable to resolve path to script"
+
+[ -d "${LK_BASE:-}" ] || lk_die "LK_BASE not set"
+
+include=macos . "$LK_BASE/lib/bash/common.sh"
+
+lk_assert_not_root
+lk_assert_is_macos
+
+LK_VERBOSE=2
+
+set +e
+shopt -s nullglob
+
+#for KEY in TDQuickAddShortcut TDToggleShortcut; do
+#    defaults export com.todoist.mac.Todoist - |
+#        plutil -extract "$KEY" xml1 -o - - |
+#        xq -x '{data:.plist.data}'
+#done
+
+lk_console_message "Checking Todoist"
+# ^⌘Q
+defaults write com.todoist.mac.Todoist TDQuickAddShortcut "<data>
+YnBsaXN0MDDUAQIDBAUGBwpYJHZlcnNpb25ZJGFyY2hpdmVyVCR0b3BYJG9iamVjdHMSAAGGoF8Q
+D05TS2V5ZWRBcmNoaXZlctEICVRyb290gAGjCwwTVSRudWxs0w0ODxAREldLZXlDb2RlViRjbGFz
+c11Nb2RpZmllckZsYWdzEAyAAhIAFAAA0hQVFhdaJGNsYXNzbmFtZVgkY2xhc3Nlc1tNQVNTaG9y
+dGN1dKIYGVtNQVNTaG9ydGN1dFhOU09iamVjdAgRGiQpMjdJTFFTV11kbHOBg4WKj5qjr7K+AAAA
+AAAAAQEAAAAAAAAAGgAAAAAAAAAAAAAAAAAAAMc=
+</data>"
+# ^⌘O
+defaults write com.todoist.mac.Todoist TDToggleShortcut "<data>
+YnBsaXN0MDDUAQIDBAUGBwpYJHZlcnNpb25ZJGFyY2hpdmVyVCR0b3BYJG9iamVjdHMSAAGGoF8Q
+D05TS2V5ZWRBcmNoaXZlctEICVRyb290gAGjCwwTVSRudWxs0w0ODxAREldLZXlDb2RlViRjbGFz
+c11Nb2RpZmllckZsYWdzEB+AAhIAFAAA0hQVFhdaJGNsYXNzbmFtZVgkY2xhc3Nlc1tNQVNTaG9y
+dGN1dKIYGVtNQVNTaG9ydGN1dFhOU09iamVjdAgRGiQpMjdJTFFTV11kbHOBg4WKj5qjr7K+AAAA
+AAAAAQEAAAAAAAAAGgAAAAAAAAAAAAAAAAAAAMc=
+</data>"
 
 lk_macos_maybe_install_pkg_url \
     "com.Brother.Brotherdriver.Brother_PrinterDrivers_MonochromeLaser" \
@@ -37,7 +79,14 @@ sudo lpadmin -p HLL3230CDW -E \
     -o BRImproveOutput=OFF \
     -o printer-error-policy=abort-job
 
-# trackpad
+lk_console_message "Checking macOS"
+
+if ! nvram StartupMute 2>/dev/null | grep -E "$S%01\$" >/dev/null; then
+    lk_console_detail "Disabling startup sound"
+    sudo nvram StartupMute=%01
+fi
+
+# Trackpad
 defaults write com.apple.AppleMultitouchTrackpad Clicking -bool true
 defaults write com.apple.AppleMultitouchTrackpad TrackpadCornerSecondaryClick -int 2
 defaults write com.apple.AppleMultitouchTrackpad TrackpadRightClick -bool false
@@ -47,22 +96,24 @@ defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadRightC
 defaults write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
 defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
 defaults -currentHost write NSGlobalDomain com.apple.trackpad.trackpadCornerClickBehavior -int 1
-defaults -currentHost write NSGlobalDomain com.apple.trackpad.enableSecondaryClick -bool true
+defaults -currentHost write NSGlobalDomain com.apple.trackpad.enableSecondaryClick -bool false
 
-# keyboard
+defaults write com.apple.AppleMultitouchTrackpad ActuateDetents -bool false
+defaults write com.apple.AppleMultitouchTrackpad ForceSuppressed -bool true
+
+# Keyboard
 defaults write NSGlobalDomain AppleKeyboardUIMode -int 3
 #defaults write NSGlobalDomain com.apple.keyboard.fnState -bool true
 
-# auto-correction
 defaults write NSGlobalDomain NSAutomaticCapitalizationEnabled -bool false
 defaults write NSGlobalDomain NSAutomaticPeriodSubstitutionEnabled -bool false
 #defaults write NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool false
 defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false
 
-# sound
+# Sound
 defaults write NSGlobalDomain com.apple.sound.beep.feedback -bool true
 
-# general
+# General
 defaults write NSGlobalDomain AppleAccentColor -int 0
 defaults write NSGlobalDomain AppleHighlightColor -string "1.000000 0.733333 0.721569 Red"
 defaults write NSGlobalDomain AppleShowScrollBars -string Always
@@ -85,11 +136,11 @@ defaults write com.apple.systempreferences NSQuitAlwaysKeepsWindows -bool false
 #defaults write com.apple.screencapture location -string "${LK_SCREENSHOT_DIR:-$HOME/Desktop}"
 defaults -currentHost write com.apple.ImageCapture disableHotPlug -bool true
 
-# screen saver
+# Screen Saver
 defaults -currentHost write com.apple.screensaver idleTime -int 300
 defaults -currentHost write com.apple.screensaver showClock -bool true
 
-# 5 = start screen saver
+# Hot Corners (5 = Start Screen Saver)
 defaults write com.apple.dock wvous-tr-corner -int 5
 defaults write com.apple.dock wvous-tr-modifier -int 0
 
@@ -137,10 +188,26 @@ defaults write com.apple.Safari ShowIconsInTabs -bool true
 #defaults write com.apple.Safari WebKitDeveloperExtrasEnabledPreferenceKey -bool true
 #defaults write com.apple.Safari WebKitPreferences.developerExtrasEnabled -bool true
 
+# Mail
+defaults write com.apple.mail ConversationViewSpansMailboxes -bool false
+defaults write com.apple.mail DeleteAttachmentsAfterHours -int 0
+defaults write com.apple.mail NewMessagesSoundName -string ""
+defaults write com.apple.mail PlayMailSounds -bool false
+defaults write com.apple.mail ShouldShowUnreadMessagesInBold -bool true
+#defaults write com.apple.mail ThreadingDefault -bool false
+
+# "Use classic layout" (<=10.14)
+defaults write com.apple.mail RichMessageList -bool false
+
+# "View" > "Use Column Layout" (>=10.15)
+defaults write com.apple.mail ColumnLayoutMessageList -int 1
+
 #if lk_has_arg "--reset"; then
+#    lk_macos_kb_reset_shortcuts NSGlobalDomain
 #    lk_macos_kb_reset_shortcuts com.apple.mail
 #fi
 
+#lk_macos_kb_add_shortcut NSGlobalDomain "Lock Screen" "@^l"
 #lk_macos_kb_add_shortcut com.apple.mail "Mark All Messages as Read" "@\$c"
 #lk_macos_kb_add_shortcut com.apple.mail "Send" "@\U21a9"
 

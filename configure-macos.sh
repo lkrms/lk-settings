@@ -1,10 +1,11 @@
 #!/bin/bash
+
 # shellcheck disable=SC1090,SC2015,SC2034,SC2207
 
 set -euo pipefail
 lk_die() { echo "${BS:+$BS: }$1" >&2 && exit 1; }
-BS="${BASH_SOURCE[0]}" && [ ! -L "$BS" ] &&
-    SCRIPT_DIR="$(cd "$(dirname "$BS")" && pwd -P)" ||
+BS=${BASH_SOURCE[0]} &&
+    [ ! -L "$BS" ] && SCRIPT_DIR=$(cd "${BS%/*}" && pwd -P) ||
     lk_die "unable to resolve path to script"
 
 [ -d "${LK_BASE:-}" ] || lk_die "LK_BASE not set"
@@ -19,128 +20,163 @@ LK_VERBOSE=2
 set +e
 shopt -s nullglob
 
-CLOUD_SETTINGS="$HOME/.cloud-settings"
+PRIVATE_DIR=~/.cloud-settings
 
-[ ! -d "$CLOUD_SETTINGS" ] || {
+[ ! -d "$PRIVATE_DIR" ] || {
 
-    lk_symlink "$CLOUD_SETTINGS/.bashrc" "$HOME/.bashrc"
-    lk_symlink "$CLOUD_SETTINGS/.gitconfig" "$HOME/.gitconfig"
-    lk_symlink "$CLOUD_SETTINGS/.gitignore" "$HOME/.gitignore"
-    lk_symlink "$CLOUD_SETTINGS/acme.sh/" "$HOME/.acme.sh"
-    lk_symlink "$CLOUD_SETTINGS/aws/" "$HOME/.aws"
-    lk_symlink "$CLOUD_SETTINGS/espanso/" "$HOME/Library/Preferences/espanso"
-    lk_symlink "$CLOUD_SETTINGS/linode-cli/linode-cli" \
-        "$HOME/.config/linode-cli"
-    lk_symlink "$CLOUD_SETTINGS/ssh/" "$HOME/.ssh"
-    lk_symlink "$CLOUD_SETTINGS/unison/" "$HOME/Library/Application Support/unison"
+    lk_symlink "$PRIVATE_DIR/.bashrc" ~/.bashrc
+    lk_symlink "$PRIVATE_DIR/.gitconfig" ~/.gitconfig
+    lk_symlink "$PRIVATE_DIR/.gitignore" ~/.gitignore
+    lk_symlink "$PRIVATE_DIR/acme.sh/" ~/.acme.sh
+    lk_symlink "$PRIVATE_DIR/aws/" ~/.aws
+    lk_symlink "$PRIVATE_DIR/espanso/" ~/Library/Preferences/espanso
+    lk_symlink "$PRIVATE_DIR/linode-cli/linode-cli" ~/.config/linode-cli
+    lk_symlink "$PRIVATE_DIR/ssh/" ~/.ssh
+    lk_symlink "$PRIVATE_DIR/unison/" ~/"Library/Application Support/unison"
 
     pgrep -xq "dbeaver" &&
-        lk_warn "cannot apply settings while DBeaver is running" || {
-        lk_symlink "$CLOUD_SETTINGS/DBeaverData/" "$HOME/Library/DBeaverData"
-    }
+        lk_warn "cannot apply settings while DBeaver is running" ||
+        lk_symlink "$PRIVATE_DIR/DBeaverData/" ~/Library/DBeaverData
 
-    for FILE in "$CLOUD_SETTINGS"/.*-settings; do
-        lk_symlink "$FILE" "$HOME/$(basename "$FILE")"
+    for FILE in "$PRIVATE_DIR"/.*-settings; do
+        lk_symlink "$FILE" ~/"${FILE##*/}"
     done
 
 }
 
-[ -d "/opt/db2_db2driver_for_jdbc_sqlj" ] || {
-    DB2_DRIVER=("$HOME/Downloads"/*/Db2/db2_db2driver_for_jdbc_sqlj.zip)
-    [ "${#DB2_DRIVER[@]}" -ne "1" ] || {
-        pushd /tmp >/dev/null && {
+[ -d /opt/db2_db2driver_for_jdbc_sqlj ] || {
+    DB2_DRIVER=(~/Downloads/*/Db2/db2_db2driver_for_jdbc_sqlj.zip)
+    [ ${#DB2_DRIVER[@]} -ne 1 ] || {
+        pushd /tmp >/dev/null &&
             rm -Rf "/tmp/db2_db2driver_for_jdbc_sqlj" &&
-                unzip "${DB2_DRIVER[0]}" &&
-                sudo mv "/tmp/db2_db2driver_for_jdbc_sqlj" /opt/
+            unzip "${DB2_DRIVER[0]}" &&
+            sudo mv "/tmp/db2_db2driver_for_jdbc_sqlj" /opt/ &&
             popd >/dev/null
-        }
     }
 }
 
-[ ! -d "/Applications/Firefox.app/Contents/Resources" ] || {
-    sudo mkdir -p "/Applications/Firefox.app/Contents/Resources/defaults/pref"
+[ ! -d /Applications/Firefox.app/Contents/Resources ] || {
+    sudo mkdir -p /Applications/Firefox.app/Contents/Resources/defaults/pref
     printf '%s\n' \
         '// the first line is ignored' \
         'pref("general.config.filename", "firefox.cfg");' \
         'pref("general.config.obscure_value", 0);' |
-        sudo tee "/Applications/Firefox.app/Contents/Resources/defaults/pref/autoconfig.js" >/dev/null
+        sudo tee /Applications/Firefox.app/Contents/Resources/defaults/pref/autoconfig.js >/dev/null
     printf '%s\n' \
         '// the first line is ignored' \
         'defaultPref("services.sync.prefs.dangerously_allow_arbitrary", true);' |
-        sudo tee "/Applications/Firefox.app/Contents/Resources/firefox.cfg" >/dev/null
+        sudo tee /Applications/Firefox.app/Contents/Resources/firefox.cfg >/dev/null
 }
 
-lk_symlink "$SCRIPT_DIR/.vimrc" \
-    "$HOME/.vimrc"
-
-lk_symlink "$SCRIPT_DIR/.tidyrc" \
-    "$HOME/.tidyrc"
-
-lk_symlink "$SCRIPT_DIR/.byoburc" \
-    "$HOME/.byoburc"
-lk_symlink "$SCRIPT_DIR/byobu/" \
-    "$HOME/.byobu"
+lk_symlink "$SCRIPT_DIR/.vimrc" ~/.vimrc
+lk_symlink "$SCRIPT_DIR/.tidyrc" ~/.tidyrc
+lk_symlink "$SCRIPT_DIR/.byoburc" ~/.byoburc
+lk_symlink "$SCRIPT_DIR/byobu/" ~/.byobu
 
 lk_symlink "$SCRIPT_DIR/nextcloud/sync-exclude.lst" \
-    "$HOME/Library/Preferences/Nextcloud/sync-exclude.lst" && {
-    [ -e "$HOME/Library/Preferences/Nextcloud/nextcloud.cfg" ] ||
+    ~/Library/Preferences/Nextcloud/sync-exclude.lst && {
+    [ -e ~/Library/Preferences/Nextcloud/nextcloud.cfg ] ||
         cp -v "$SCRIPT_DIR/nextcloud/nextcloud.cfg" \
-            "$HOME/Library/Preferences/Nextcloud/nextcloud.cfg"
+            ~/Library/Preferences/Nextcloud/nextcloud.cfg
 }
 
 lk_console_message "Checking Sublime Text 3"
 pgrep -xq "Sublime Text" &&
     lk_warn "cannot apply settings while Sublime Text 3 is running" ||
     lk_symlink "$SCRIPT_DIR/subl/User/" \
-        "$HOME/Library/Application Support/Sublime Text 3/Packages/User"
+        ~/"Library/Application Support/Sublime Text 3/Packages/User"
 
 lk_console_message "Checking Sublime Merge"
 pgrep -xq "sublime_merge" &&
     lk_warn "cannot apply settings while Sublime Merge is running" ||
     lk_symlink "$SCRIPT_DIR/smerge/User/" \
-        "$HOME/Library/Application Support/Sublime Merge/Packages/User"
+        ~/"Library/Application Support/Sublime Merge/Packages/User"
 
 lk_console_message "Checking HandBrake"
 pgrep -xq "HandBrake" &&
     lk_warn "cannot apply settings while HandBrake is running" || {
-    FILE="\
-$HOME/Library/Containers/fr.handbrake.HandBrake/Data\
-/Library/Application Support/HandBrake/UserPresets.json"
+    FILE=~/"Library/Containers/fr.handbrake.HandBrake/Data/Library/Application Support/HandBrake/UserPresets.json"
     diff -Nq "$SCRIPT_DIR/handbrake/presets.json" "$FILE" >/dev/null || {
         lk_file_backup "$FILE" &&
-            mkdir -pv "$(dirname "$FILE")" &&
+            mkdir -pv "${FILE%/*}" &&
             cp -fv "$SCRIPT_DIR/handbrake/presets.json" "$FILE"
     }
+}
+
+lk_console_message "Checking espanso"
+! lk_command_exists espanso ||
+    [ -e ~/Library/LaunchAgents/com.federicoterzi.espanso.plist ] ||
+    espanso register
+
+lk_console_message "Checking Flycut"
+pgrep -xq "Flycut" &&
+    lk_warn "cannot apply settings while Flycut is running" || {
+    lk_plist_set_file ~/Library/Preferences/com.generalarcade.flycut.plist
+    lk_plist_replace ":menuSelectionPastes" bool false
+    lk_plist_replace ":savePreference" integer 2
+    lk_plist_replace ":rememberNum" real 99
+    lk_plist_maybe_add ":displayNum" real 20
+    lk_plist_replace ":removeDuplicates" bool true
+    lk_plist_replace ":pasteMovesToTop" bool true
+    lk_plist_replace ":ShortcutRecorder mainHotkey" dict
+    lk_plist_replace ":ShortcutRecorder mainHotkey:keyCode" integer 9
+    lk_plist_replace ":ShortcutRecorder mainHotkey:modifierFlags" integer 1441792
+    lk_plist_replace ":menuIcon" integer 2
 }
 
 lk_console_message "Checking iCanHazShortcut"
 pgrep -xq "iCanHazShortcut" &&
     lk_warn "cannot apply settings while iCanHazShortcut is running" ||
     lk_symlink "$SCRIPT_DIR/icanhazshortcut/" \
-        "$HOME/.config/iCanHazShortcut"
+        ~/.config/iCanHazShortcut
+FILE=~/Library/LaunchAgents/info.deseven.icanhazshortcut.plist
+if [ -d /Applications/iCanHazShortcut.app ] && [ ! -e "$FILE" ]; then
+    mkdir -pv "${FILE%/*}"
+    cat >"$FILE" <<"EOF"
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Label</key>
+	<string>info.deseven.icanhazshortcut</string>
+	<key>ProgramArguments</key>
+	<array>
+		<string>/usr/bin/open</string>
+		<string>/Applications/iCanHazShortcut.app</string>
+	</array>
+	<key>RunAtLoad</key>
+	<true/>
+	<key>KeepAlive</key>
+	<false/>
+	<key>LimitLoadToSessionType</key>
+	<string>Aqua</string></dict>
+</plist>
+EOF
+    launchctl load -w "$FILE"
+fi
 
 lk_console_message "Checking iTerm2"
+defaults write com.googlecode.iterm2 AddNewTabAtEndOfTabs -bool false
+defaults write com.googlecode.iterm2 AlternateMouseScroll -bool true
+defaults write com.googlecode.iterm2 CopyWithStylesByDefault -bool true
+defaults write com.googlecode.iterm2 DisallowCopyEmptyString -bool true
+defaults write com.googlecode.iterm2 DoubleClickPerformsSmartSelection -bool true
+defaults write com.googlecode.iterm2 OptionClickMovesCursor -bool false
+defaults write com.googlecode.iterm2 QuitWhenAllWindowsClosed -bool false
+defaults write com.googlecode.iterm2 SensitiveScrollWheel -bool true
+defaults write com.googlecode.iterm2 SmartPlacement -bool true
+defaults write com.googlecode.iterm2 SoundForEsc -bool false
+defaults write com.googlecode.iterm2 SpacelessApplicationSupport -string ""
+defaults write com.googlecode.iterm2 StatusBarPosition -int 1
+defaults write com.googlecode.iterm2 StretchTabsToFillBar -bool false
+defaults write com.googlecode.iterm2 SUEnableAutomaticChecks -bool true
+defaults write com.googlecode.iterm2 SwitchTabModifier -int 5
+defaults write com.googlecode.iterm2 TypingClearsSelection -bool false
+defaults write com.googlecode.iterm2 UseBorder -bool true
+defaults write com.googlecode.iterm2 VisualIndicatorForEsc -bool false
+
 pgrep -xq iTerm2 &&
     lk_warn "cannot apply settings while iTerm2 is running" || {
-    defaults write com.googlecode.iterm2 AddNewTabAtEndOfTabs -bool false
-    defaults write com.googlecode.iterm2 AlternateMouseScroll -bool true
-    defaults write com.googlecode.iterm2 CopyWithStylesByDefault -bool true
-    defaults write com.googlecode.iterm2 DisallowCopyEmptyString -bool true
-    defaults write com.googlecode.iterm2 DoubleClickPerformsSmartSelection -bool true
-    defaults write com.googlecode.iterm2 OptionClickMovesCursor -bool false
-    defaults write com.googlecode.iterm2 QuitWhenAllWindowsClosed -bool false
-    defaults write com.googlecode.iterm2 SensitiveScrollWheel -bool true
-    defaults write com.googlecode.iterm2 SmartPlacement -bool true
-    defaults write com.googlecode.iterm2 SoundForEsc -bool false
-    defaults write com.googlecode.iterm2 SpacelessApplicationSupport -string ""
-    defaults write com.googlecode.iterm2 StatusBarPosition -int 1
-    defaults write com.googlecode.iterm2 StretchTabsToFillBar -bool false
-    defaults write com.googlecode.iterm2 SUEnableAutomaticChecks -bool true
-    defaults write com.googlecode.iterm2 SwitchTabModifier -int 5
-    defaults write com.googlecode.iterm2 TypingClearsSelection -bool false
-    defaults write com.googlecode.iterm2 UseBorder -bool true
-    defaults write com.googlecode.iterm2 VisualIndicatorForEsc -bool false
-
     lk_plist_set_file ~/Library/Preferences/com.googlecode.iterm2.plist
     lk_plist_maybe_add ":Window Arrangements" dict
     lk_plist_replace ":Window Arrangements:No windows" array
@@ -180,13 +216,54 @@ lk_console_message "Checking KeePassXC"
 pgrep -xq "KeePassXC" &&
     lk_warn "cannot apply settings while KeePassXC is running" ||
     lk_symlink "$SCRIPT_DIR/keepassxc/keepassxc.ini" \
-        "$HOME/Library/Application Support/keepassxc/keepassxc.ini"
+        ~/"Library/Application Support/keepassxc/keepassxc.ini"
+
+lk_console_message "Checking Magnet"
+lk_plist_set_file ~/Library/Preferences/com.crowdcafe.windowmagnet.plist
+lk_plist_replace ":expandWindowNorthWestComboKey" dict
+lk_plist_replace ":expandWindowNorthEastComboKey" dict
+lk_plist_replace ":expandWindowSouthWestComboKey" dict
+lk_plist_replace ":expandWindowSouthEastComboKey" dict
+lk_plist_replace ":expandWindowLeftThirdComboKey" dict
+lk_plist_replace ":expandWindowLeftTwoThirdsComboKey" dict
+lk_plist_replace ":expandWindowCenterThirdComboKey" dict
+lk_plist_replace ":expandWindowRightTwoThirdsComboKey" dict
+lk_plist_replace ":expandWindowRightThirdComboKey" dict
+lk_plist_replace ":moveWindowToNextDisplay" dict
+lk_plist_replace ":moveWindowToPreviousDisplay" dict
+lk_plist_replace ":centerWindowComboKey" dict
+lk_plist_replace ":centerWindowComboKey:keyCode" integer 49
+lk_plist_replace ":centerWindowComboKey:modifierFlags" integer 786432
 
 lk_console_message "Checking Stretchly"
 pgrep -xq "stretchly" &&
     lk_warn "cannot apply settings while Stretchly is running" ||
     lk_symlink "$SCRIPT_DIR/stretchly/config.json" \
-        "$HOME/Library/Application Support/stretchly/config.json"
+        ~/"Library/Application Support/stretchly/config.json"
+
+#for KEY in TDQuickAddShortcut TDToggleShortcut; do
+#    defaults export com.todoist.mac.Todoist - |
+#        plutil -extract "$KEY" xml1 -o - - |
+#        xq -x '{data:.plist.data}'
+#done
+
+lk_console_message "Checking Todoist"
+# ^⌘Q
+defaults write com.todoist.mac.Todoist TDQuickAddShortcut "<data>
+YnBsaXN0MDDUAQIDBAUGBwpYJHZlcnNpb25ZJGFyY2hpdmVyVCR0b3BYJG9iamVjdHMSAAGGoF8Q
+D05TS2V5ZWRBcmNoaXZlctEICVRyb290gAGjCwwTVSRudWxs0w0ODxAREldLZXlDb2RlViRjbGFz
+c11Nb2RpZmllckZsYWdzEAyAAhIAFAAA0hQVFhdaJGNsYXNzbmFtZVgkY2xhc3Nlc1tNQVNTaG9y
+dGN1dKIYGVtNQVNTaG9ydGN1dFhOU09iamVjdAgRGiQpMjdJTFFTV11kbHOBg4WKj5qjr7K+AAAA
+AAAAAQEAAAAAAAAAGgAAAAAAAAAAAAAAAAAAAMc=
+</data>"
+# ^⌘O
+defaults write com.todoist.mac.Todoist TDToggleShortcut "<data>
+YnBsaXN0MDDUAQIDBAUGBwpYJHZlcnNpb25ZJGFyY2hpdmVyVCR0b3BYJG9iamVjdHMSAAGGoF8Q
+D05TS2V5ZWRBcmNoaXZlctEICVRyb290gAGjCwwTVSRudWxs0w0ODxAREldLZXlDb2RlViRjbGFz
+c11Nb2RpZmllckZsYWdzEB+AAhIAFAAA0hQVFhdaJGNsYXNzbmFtZVgkY2xhc3Nlc1tNQVNTaG9y
+dGN1dKIYGVtNQVNTaG9ydGN1dFhOU09iamVjdAgRGiQpMjdJTFFTV11kbHOBg4WKj5qjr7K+AAAA
+AAAAAQEAAAAAAAAAGgAAAAAAAAAAAAAAAAAAAMc=
+</data>"
 
 lk_console_message "Checking Typora"
 pgrep -xq "Typora" &&
@@ -194,13 +271,13 @@ pgrep -xq "Typora" &&
     lk_symlink "$SCRIPT_DIR/typora/abnerworks.Typora.plist" \
         "$HOME/Library/Preferences/abnerworks.Typora.plist" &&
         lk_symlink "$SCRIPT_DIR/typora/themes" \
-            "$HOME/Library/Application Support/abnerworks.Typora/themes"
+            ~/"Library/Application Support/abnerworks.Typora/themes"
 }
 
 lk_console_message "Checking Visual Studio Code"
 pgrep -fq "^/Applications/VSCodium.app/Contents/MacOS/Electron" &&
     lk_warn "cannot apply settings while Visual Studio Code is running" || {
-    FILE="/Applications/VSCodium.app/Contents/Resources/app/product.json"
+    FILE=/Applications/VSCodium.app/Contents/Resources/app/product.json
     [ ! -f "$FILE" ] || {
         VSCODE_PRODUCT_JSON="$(
             jq '.extensionsGallery = {
@@ -214,11 +291,11 @@ pgrep -fq "^/Applications/VSCodium.app/Contents/MacOS/Electron" &&
         }
     }
     lk_symlink "$SCRIPT_DIR/vscode/settings.json" \
-        "$HOME/Library/Application Support/VSCodium/User/settings.json" &&
+        ~/"Library/Application Support/VSCodium/User/settings.json" &&
         lk_symlink "$SCRIPT_DIR/vscode/keybindings.mac.json" \
-            "$HOME/Library/Application Support/VSCodium/User/keybindings.json" &&
+            ~/"Library/Application Support/VSCodium/User/keybindings.json" &&
         lk_symlink "$SCRIPT_DIR/vscode/snippets" \
-            "$HOME/Library/Application Support/VSCodium/User/snippets"
+            ~/"Library/Application Support/VSCodium/User/snippets"
 }
 
 lk_macos_maybe_install_pkg_url \
@@ -257,6 +334,11 @@ sudo lpadmin -p HLL3230CDW -E \
     -o printer-error-policy=abort-job
 
 lk_console_message "Checking macOS"
+
+if ! nvram StartupMute 2>/dev/null | grep -E "$S%01\$" >/dev/null; then
+    lk_console_detail "Disabling startup sound"
+    sudo nvram StartupMute=%01
+fi
 
 # Trackpad
 defaults write com.apple.AppleMultitouchTrackpad Clicking -bool true

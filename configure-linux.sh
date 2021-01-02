@@ -3,8 +3,8 @@
 
 set -euo pipefail
 lk_die() { echo "${BS:+$BS: }$1" >&2 && exit 1; }
-BS="${BASH_SOURCE[0]}" && [ ! -L "$BS" ] &&
-    SCRIPT_DIR="$(cd "$(dirname "$BS")" && pwd -P)" ||
+BS=${BASH_SOURCE[0]} &&
+    [ ! -L "$BS" ] && SCRIPT_DIR=$(cd "${BS%/*}" && pwd -P) ||
     lk_die "unable to resolve path to script"
 
 [ -d "${LK_BASE:-}" ] || lk_die "LK_BASE not set"
@@ -22,72 +22,68 @@ shopt -s nullglob
 ! lk_command_exists yay ||
     yay --save --nocleanmenu --nodiffmenu --noremovemake
 
-CLOUD_SETTINGS="$HOME/.cloud-settings"
+PRIVATE_DIR=~/.cloud-settings
 
-[ ! -d "$CLOUD_SETTINGS" ] || {
+[ ! -d "$PRIVATE_DIR" ] || {
 
-    [ ! -e "$CLOUD_SETTINGS/.face" ] || {
-        FACE_DIR=$(dirname "$(realpath "$CLOUD_SETTINGS/.face")")
+    [ ! -e "$PRIVATE_DIR/.face" ] || {
+        FACE_DIR=$(realpath "$PRIVATE_DIR/.face")
+        FACE_DIR=${FACE_DIR%/*}
         HOME_DIR=$(realpath ~)
         while [ "${FACE_DIR:0:${#HOME_DIR}}" = "$HOME_DIR" ]; do
-            gnu_chmod -c a+x "$FACE_DIR"
-            FACE_DIR="$(dirname "$FACE_DIR")"
+            chmod -c a+x "$FACE_DIR"
+            FACE_DIR=${FACE_DIR%/*}
         done
     }
 
-    lk_symlink "$CLOUD_SETTINGS/.bashrc" "$HOME/.bashrc"
-    lk_symlink "$CLOUD_SETTINGS/.face" "$HOME/.face"
-    lk_symlink "$CLOUD_SETTINGS/.gitconfig" "$HOME/.gitconfig"
-    lk_symlink "$CLOUD_SETTINGS/.gitignore" "$HOME/.gitignore"
-    lk_symlink "$CLOUD_SETTINGS/acme.sh/" "$HOME/.acme.sh"
-    lk_symlink "$CLOUD_SETTINGS/aws/" "$HOME/.aws"
-    lk_symlink "$CLOUD_SETTINGS/espanso/" "$HOME/.config/espanso"
-    lk_symlink "$CLOUD_SETTINGS/linode-cli/linode-cli" \
-        "$HOME/.config/linode-cli"
-    lk_symlink "$CLOUD_SETTINGS/remmina/data/" "$HOME/.local/share/remmina"
-    lk_symlink "$CLOUD_SETTINGS/robo3t/.3T/" "$HOME/.3T"
-    lk_symlink "$CLOUD_SETTINGS/robo3t/3T/" "$HOME/.config/3T"
-    lk_symlink "$CLOUD_SETTINGS/ssh/" "$HOME/.ssh"
-    lk_symlink "$CLOUD_SETTINGS/unison/" "$HOME/.unison"
+    lk_symlink "$PRIVATE_DIR/.bashrc" ~/.bashrc
+    lk_symlink "$PRIVATE_DIR/.face" ~/.face
+    lk_symlink "$PRIVATE_DIR/.gitconfig" ~/.gitconfig
+    lk_symlink "$PRIVATE_DIR/.gitignore" ~/.gitignore
+    lk_symlink "$PRIVATE_DIR/acme.sh/" ~/.acme.sh
+    lk_symlink "$PRIVATE_DIR/aws/" ~/.aws
+    lk_symlink "$PRIVATE_DIR/espanso/" ~/.config/espanso
+    lk_symlink "$PRIVATE_DIR/linode-cli/linode-cli" ~/.config/linode-cli
+    lk_symlink "$PRIVATE_DIR/remmina/data/" ~/.local/share/remmina
+    lk_symlink "$PRIVATE_DIR/robo3t/.3T/" ~/.3T
+    lk_symlink "$PRIVATE_DIR/robo3t/3T/" ~/.config/3T
+    lk_symlink "$PRIVATE_DIR/ssh/" ~/.ssh
+    lk_symlink "$PRIVATE_DIR/unison/" ~/.unison
 
     pgrep -x "dbeaver" >/dev/null &&
-        lk_warn "cannot apply settings while DBeaver is running" || {
-        lk_symlink "$CLOUD_SETTINGS/DBeaverData/" \
-            "$HOME/.local/share/DBeaverData"
-    }
+        lk_warn "cannot apply settings while DBeaver is running" ||
+        lk_symlink "$PRIVATE_DIR/DBeaverData/" ~/.local/share/DBeaverData
 
-    for FILE in "$CLOUD_SETTINGS"/.*-settings; do
-        lk_symlink "$FILE" "$HOME/$(basename "$FILE")"
+    for FILE in "$PRIVATE_DIR"/.*-settings; do
+        lk_symlink "$FILE" ~/"${FILE##*/}"
     done
 
-    for ICON_FILE in "$CLOUD_SETTINGS"/applications/*.png; do
+    for ICON_FILE in "$PRIVATE_DIR"/applications/*.png; do
         lk_icon_install "$ICON_FILE"
     done
 
-    for DESKTOP_FILE in "$CLOUD_SETTINGS"/autostart/*.desktop; do
+    for DESKTOP_FILE in "$PRIVATE_DIR"/autostart/*.desktop; do
         lk_symlink "$DESKTOP_FILE" \
-            "$HOME/.config/autostart/$(basename "$DESKTOP_FILE")"
+            ~/.config/autostart/"${DESKTOP_FILE##*/}"
     done
 
-    for DESKTOP_FILE in "$CLOUD_SETTINGS"/applications/*.desktop; do
-        [[ "$(basename "$DESKTOP_FILE")" =~ \
+    for DESKTOP_FILE in "$PRIVATE_DIR"/applications/*.desktop; do
+        [[ ${DESKTOP_FILE##*/} =~ \
         ^(caprine|skypeforlinux|teams|thunderbird)\.desktop$ ]] ||
             lk_symlink "$DESKTOP_FILE" \
-                "$HOME/.local/share/applications/$(basename "$DESKTOP_FILE")"
+                ~/.local/share/applications/"${DESKTOP_FILE##*/}"
     done
 
 }
 
 LK_SUDO=1
-lk_symlink "$SCRIPT_DIR/.vimrc" "/root/.vimrc"
-lk_symlink "$SCRIPT_DIR/iptables/iptables.rules" \
-    "/etc/iptables/iptables.rules"
-lk_symlink "$SCRIPT_DIR/iptables/ip6tables.rules" \
-    "/etc/iptables/ip6tables.rules"
-lk_symlink "$SCRIPT_DIR/libvirt/hooks/qemu" "/etc/libvirt/hooks/qemu"
-# fix weird Calibri rendering in Thunderbird
+lk_symlink "$SCRIPT_DIR/.vimrc" /root/.vimrc
+lk_symlink "$SCRIPT_DIR/iptables/iptables.rules" /etc/iptables/iptables.rules
+lk_symlink "$SCRIPT_DIR/iptables/ip6tables.rules" /etc/iptables/ip6tables.rules
+lk_symlink "$SCRIPT_DIR/libvirt/hooks/qemu" /etc/libvirt/hooks/qemu
+# Fix weird Calibri rendering in Thunderbird
 lk_symlink "$SCRIPT_DIR/fonts/ms-no-bitmaps.conf" \
-    "/etc/fonts/conf.d/90-ms-no-bitmaps.conf" && {
+    /etc/fonts/conf.d/90-ms-no-bitmaps.conf && {
     lk_is_true LK_SYMLINK_NO_CHANGE || {
         sudo -H fc-cache --force --verbose &&
             fc-cache --force --verbose
@@ -103,18 +99,18 @@ CRONTAB=$(awk \
 diff -q <(crontab -l) <(echo "${CRONTAB%$'\n'}") >/dev/null ||
     crontab <(echo "${CRONTAB%$'\n'}")
 
-MIMEINFO_FILE="/usr/share/applications/mimeinfo.cache"
-MIMEAPPS_FILE="$HOME/.config/mimeapps.list"
+MIMEINFO_FILE=/usr/share/applications/mimeinfo.cache
+MIMEAPPS_FILE=~/.config/mimeapps.list
 [ ! -f "$MIMEINFO_FILE" ] || {
     REPLACE=(geany)
     REPLACE_WITH=(VSCodium)
     PREFER=(
         VSCodium
 
-        # prefer Firefox over vscode for text/html
+        # Prefer Firefox over vscode for text/html
         firefox
 
-        # and Thunar for inode/directory
+        # Prefer Thunar for inode/directory
         thunar
 
         #
@@ -124,7 +120,7 @@ MIMEAPPS_FILE="$HOME/.config/mimeapps.list"
         #
         typora
 
-        # prefer Evince and VLC for everything they can open
+        # Prefer Evince and VLC for everything they can open
         org.gnome.Evince
         vlc
     )
@@ -144,165 +140,145 @@ MIMEAPPS_FILE="$HOME/.config/mimeapps.list"
         [ -f "/usr/share/applications/$APP.desktop" ] || continue
         SED_COMMAND+=(-e "s/=((.+;)*)($APP.desktop;?)((.+;)*)$/=\3\1\4/")
     done
-    [ "${#SED_COMMAND[@]}" -gt "2" ] &&
-        mkdir -pv "$(dirname "$MIMEAPPS_FILE")" &&
-        {
-            echo "[Default Applications]"
-            comm -23 \
-                <(grep -E '.+=.+' "$MIMEINFO_FILE" | "${SED_COMMAND[@]}" | sort) \
-                <(sort "$MIMEINFO_FILE")
-        } >"$MIMEAPPS_FILE"
+    [ ${#SED_COMMAND[@]} -gt 2 ] &&
+        mkdir -pv "${MIMEAPPS_FILE%/*}" && {
+        echo "[Default Applications]"
+        comm -23 \
+            <(grep -E '.+=.+' "$MIMEINFO_FILE" | "${SED_COMMAND[@]}" | sort) \
+            <(sort "$MIMEINFO_FILE")
+    } >"$MIMEAPPS_FILE"
 }
 
-[ -d "/opt/db2_db2driver_for_jdbc_sqlj" ] || {
-    DB2_DRIVER=("$HOME/Downloads"/*/Db2/db2_db2driver_for_jdbc_sqlj.zip)
-    [ "${#DB2_DRIVER[@]}" -ne "1" ] || {
-        pushd /tmp >/dev/null && {
+[ -d /opt/db2_db2driver_for_jdbc_sqlj ] || {
+    DB2_DRIVER=(~/Downloads/*/Db2/db2_db2driver_for_jdbc_sqlj.zip)
+    [ ${#DB2_DRIVER[@]} -ne 1 ] || {
+        pushd /tmp >/dev/null &&
             rm -Rf "/tmp/db2_db2driver_for_jdbc_sqlj" &&
-                unzip "${DB2_DRIVER[0]}" &&
-                sudo mv "/tmp/db2_db2driver_for_jdbc_sqlj" /opt/
+            unzip "${DB2_DRIVER[0]}" &&
+            sudo mv "/tmp/db2_db2driver_for_jdbc_sqlj" /opt/ &&
             popd >/dev/null
-        }
     }
 }
 
-[ ! -d "/usr/lib/firefox" ] || {
-    sudo mkdir -p "/usr/lib/firefox/defaults/pref"
+[ ! -d /usr/lib/firefox ] || {
+    sudo mkdir -p /usr/lib/firefox/defaults/pref
     printf '%s\n' \
         '// the first line is ignored' \
         'pref("general.config.filename", "firefox.cfg");' \
         'pref("general.config.obscure_value", 0);' |
-        sudo tee "/usr/lib/firefox/defaults/pref/autoconfig.js" >/dev/null
+        sudo tee /usr/lib/firefox/defaults/pref/autoconfig.js >/dev/null
     printf '%s\n' \
         '// the first line is ignored' \
         'defaultPref("services.sync.prefs.dangerously_allow_arbitrary", true);' |
-        sudo tee "/usr/lib/firefox/firefox.cfg" >/dev/null
+        sudo tee /usr/lib/firefox/firefox.cfg >/dev/null
 }
 
-lk_symlink "$SCRIPT_DIR/.vimrc" \
-    "$HOME/.vimrc"
-
-lk_symlink "$SCRIPT_DIR/.tidyrc" \
-    "$HOME/.tidyrc"
-
-lk_symlink "$SCRIPT_DIR/autorandr/" \
-    "$HOME/.config/autorandr"
-
-lk_symlink "$SCRIPT_DIR/.byoburc" \
-    "$HOME/.byoburc"
-lk_symlink "$SCRIPT_DIR/byobu/" \
-    "$HOME/.byobu"
-
-lk_symlink "$SCRIPT_DIR/devilspie2/" \
-    "$HOME/.config/devilspie2"
-
-lk_symlink "$SCRIPT_DIR/plank/" \
-    "$HOME/.config/plank"
-
-lk_symlink "$SCRIPT_DIR/quicktile/quicktile.cfg" \
-    "$HOME/.config/quicktile.cfg"
-
-lk_symlink "$SCRIPT_DIR/remmina/" \
-    "$HOME/.config/remmina"
-
-lk_symlink "$SCRIPT_DIR/todoist/.todoist-linux.json" \
-    "$HOME/.config/.todoist-linux.json"
+lk_symlink "$SCRIPT_DIR/.vimrc" ~/.vimrc
+lk_symlink "$SCRIPT_DIR/.tidyrc" ~/.tidyrc
+lk_symlink "$SCRIPT_DIR/autorandr/" ~/.config/autorandr
+lk_symlink "$SCRIPT_DIR/.byoburc" ~/.byoburc
+lk_symlink "$SCRIPT_DIR/byobu/" ~/.byobu
+lk_symlink "$SCRIPT_DIR/devilspie2/" ~/.config/devilspie2
+lk_symlink "$SCRIPT_DIR/plank/" ~/.config/plank
+lk_symlink "$SCRIPT_DIR/quicktile/quicktile.cfg" ~/.config/quicktile.cfg
+lk_symlink "$SCRIPT_DIR/remmina/" ~/.config/remmina
+lk_symlink "$SCRIPT_DIR/todoist/.todoist-linux.json" ~/.config/.todoist-linux.json
 
 lk_symlink "$SCRIPT_DIR/nextcloud/sync-exclude.lst" \
-    "$HOME/.config/Nextcloud/sync-exclude.lst" && {
-    [ -e "$HOME/.config/Nextcloud/nextcloud.cfg" ] ||
+    ~/.config/Nextcloud/sync-exclude.lst && {
+    [ -e ~/.config/Nextcloud/nextcloud.cfg ] ||
         cp -v "$SCRIPT_DIR/nextcloud/nextcloud.cfg" \
-            "$HOME/.config/Nextcloud/nextcloud.cfg"
+            ~/.config/Nextcloud/nextcloud.cfg
 }
 
 lk_console_message "Checking Sublime Text 3"
 pgrep -x "sublime_text" >/dev/null &&
     lk_warn "cannot apply settings while Sublime Text 3 is running" ||
     lk_symlink "$SCRIPT_DIR/subl/User/" \
-        "$HOME/.config/sublime-text-3/Packages/User"
+        ~/.config/sublime-text-3/Packages/User
 
 lk_console_message "Checking Sublime Merge"
 pgrep -x "sublime_merge" >/dev/null &&
     lk_warn "cannot apply settings while Sublime Merge is running" ||
     lk_symlink "$SCRIPT_DIR/smerge/User/" \
-        "$HOME/.config/sublime-merge/Packages/User"
+        ~/.config/sublime-merge/Packages/User
 
 lk_console_message "Checking Clementine"
 pgrep -x "clementine" >/dev/null &&
     lk_warn "cannot apply settings while Clementine is running" ||
     lk_symlink "$SCRIPT_DIR/clementine/Clementine.conf" \
-        "$HOME/.config/Clementine/Clementine.conf"
+        ~/.config/Clementine/Clementine.conf
 
 lk_console_message "Checking CopyQ"
 pgrep -x "copyq" >/dev/null &&
     lk_warn "cannot apply settings while CopyQ is running" || {
     lk_symlink "$SCRIPT_DIR/copyq/copyq.conf" \
-        "$HOME/.config/copyq/copyq.conf" &&
+        ~/.config/copyq/copyq.conf &&
         lk_symlink "$SCRIPT_DIR/copyq/copyq-commands.ini" \
-            "$HOME/.config/copyq/copyq-commands.ini"
+            ~/.config/copyq/copyq-commands.ini
 }
 
 lk_console_message "Checking Flameshot"
 pgrep -x "flameshot" >/dev/null &&
     lk_warn "cannot apply settings while Flameshot is running" ||
     lk_symlink "$SCRIPT_DIR/flameshot/flameshot.ini" \
-        "$HOME/.config/flameshot/flameshot.ini"
+        ~/.config/flameshot/flameshot.ini
 
 lk_console_message "Checking Geeqie"
 pgrep -x "geeqie" >/dev/null &&
     lk_warn "cannot apply settings while Geeqie is running" ||
     lk_symlink "$SCRIPT_DIR/geeqie/" \
-        "$HOME/.config/geeqie"
+        ~/.config/geeqie
 
 lk_console_message "Checking HandBrake"
 pgrep -x "ghb" >/dev/null &&
     lk_warn "cannot apply settings while HandBrake is running" ||
     lk_symlink "$SCRIPT_DIR/handbrake/presets.json" \
-        "$HOME/.config/ghb/presets.json"
+        ~/.config/ghb/presets.json
 
 lk_console_message "Checking KeePassXC"
 pgrep -x "keepassxc" >/dev/null &&
     lk_warn "cannot apply settings while KeePassXC is running" ||
     lk_symlink "$SCRIPT_DIR/keepassxc/keepassxc.ini" \
-        "$HOME/.config/keepassxc/keepassxc.ini"
+        ~/.config/keepassxc/keepassxc.ini
 
 lk_console_message "Checking nomacs"
 pgrep -x "nomacs" >/dev/null &&
     lk_warn "cannot apply settings while nomacs is running" ||
     lk_symlink "$SCRIPT_DIR/nomacs/" \
-        "$HOME/.config/nomacs"
+        ~/.config/nomacs
 
 lk_console_message "Checking Recoll"
 pgrep -x "recoll(index)?" >/dev/null &&
     lk_warn "cannot apply settings while Recoll is running" || {
     lk_symlink "$SCRIPT_DIR/recoll/recoll.conf" \
-        "$HOME/.recoll/recoll.conf" &&
+        ~/.recoll/recoll.conf &&
         lk_symlink "$SCRIPT_DIR/recoll/mimeview" \
-            "$HOME/.recoll/mimeview"
+            ~/.recoll/mimeview
 }
 
 lk_console_message "Checking Stretchly"
 pgrep -f "Stretchly" >/dev/null &&
     lk_warn "cannot apply settings while Stretchly is running" || {
     lk_symlink "$SCRIPT_DIR/stretchly/config.json" \
-        "$HOME/.config/Stretchly/config.json"
+        ~/.config/Stretchly/config.json
 }
 
 lk_console_message "Checking Typora"
 pgrep -x "Typora" >/dev/null &&
     lk_warn "cannot apply settings while Typora is running" || {
     lk_symlink "$SCRIPT_DIR/typora/profile.data" \
-        "$HOME/.config/Typora/profile.data" &&
+        ~/.config/Typora/profile.data &&
         lk_symlink "$SCRIPT_DIR/typora/conf" \
-            "$HOME/.config/Typora/conf" &&
+            ~/.config/Typora/conf &&
         lk_symlink "$SCRIPT_DIR/typora/themes" \
-            "$HOME/.config/Typora/themes"
+            ~/.config/Typora/themes
 }
 
 lk_console_message "Checking Visual Studio Code"
 pgrep -x 'codium' >/dev/null &&
     lk_warn "cannot apply settings while Visual Studio Code is running" || {
-    FILE="/usr/share/vscodium-bin/resources/app/product.json"
+    FILE=/usr/share/vscodium-bin/resources/app/product.json
     [ ! -f "$FILE" ] || {
         VSCODE_PRODUCT_JSON="$(
             jq '.extensionsGallery = {
@@ -316,11 +292,11 @@ pgrep -x 'codium' >/dev/null &&
         }
     }
     lk_symlink "$SCRIPT_DIR/vscode/settings.json" \
-        "$HOME/.config/VSCodium/User/settings.json" &&
+        ~/.config/VSCodium/User/settings.json &&
         lk_symlink "$SCRIPT_DIR/vscode/keybindings.linux.json" \
-            "$HOME/.config/VSCodium/User/keybindings.json" &&
+            ~/.config/VSCodium/User/keybindings.json &&
         lk_symlink "$SCRIPT_DIR/vscode/snippets" \
-            "$HOME/.config/VSCodium/User/snippets"
+            ~/.config/VSCodium/User/snippets
 }
 
 # use `lpinfo -m` for driver names
@@ -345,22 +321,21 @@ sudo lpadmin -p HLL3230CDW -E \
     -o BRGray=ON \
     -o BREnhanceBlkPrt=OFF \
     -o BRImproveOutput=OFF \
-    -o BRBrightness=5 \
-    -o pdftops-renderer-default=gs \
     -o printer-error-policy=abort-job
 
-[ -e "/etc/papersize" ] && grep -q ^a4$ "/etc/papersize" ||
-    echo "a4" | sudo tee "/etc/papersize" >/dev/null
+[ -e /etc/papersize ] && grep -q ^a4$ /etc/papersize ||
+    echo "a4" | sudo tee /etc/papersize >/dev/null
 
 lk_console_message "Setting dconf values"
 START_PLANK=1
 killall plank 2>/dev/null || START_PLANK=0
-if lk_has_arg "--reset"; then
+if lk_has_arg --reset; then
     dconf reset -f /apps/guake/
     dconf reset -f /net/launchpad/plank/
     dconf reset -f /org/gnome/meld/
     dconf reset -f /org/gtk/settings/file-chooser/
 fi
+LK_SCREENSHOT_DIR=${LK_SCREENSHOT_DIR:-~/Desktop}
 dconf load / <<EOF
 [apps/guake/general]
 infinite-history=true
@@ -442,7 +417,7 @@ cpu-default='hv-default'
 graphics-type='system'
 
 [org/virt-manager/virt-manager/paths]
-screenshot-default='${LK_SCREENSHOT_DIR:-$HOME/Desktop}'
+screenshot-default='$LK_SCREENSHOT_DIR'
 
 [org/virt-manager/virt-manager/stats]
 enable-cpu-poll=true
@@ -466,7 +441,7 @@ lk_is_false START_PLANK || {
 
 lk_console_message "Checking Xfce4"
 "$SCRIPT_DIR/configure-xfce4.sh" "$@" &&
-    lk_symlink "$LK_BASE/etc/xfce4/xinitrc" "$HOME/.config/xfce4/xinitrc" && {
+    lk_symlink "$LK_BASE/etc/xfce4/xinitrc" ~/.config/xfce4/xinitrc && {
     xfconf-query -c xfwm4 -p /general/theme -n -t string -s "Adapta"
     xfconf-query -c xfwm4 -p /general/title_font -n -t string -s "Cantarell 9"
     xfconf-query -c xsettings -p /Gtk/FontName -n -t string -s "Cantarell 9"
@@ -484,7 +459,7 @@ lk_console_message "Checking Xfce4"
             <(code --list-extensions | sort -u) \
             <(lk_echo_array VSCODE_EXTENSIONS | sort -u)
     ))
-    [ "${#VSCODE_MISSING_EXTENSIONS[@]}" -eq "0" ] ||
+    [ ${#VSCODE_MISSING_EXTENSIONS[@]} -eq 0 ] ||
         for EXT in "${VSCODE_MISSING_EXTENSIONS[@]}"; do
             code --install-extension "$EXT"
         done
@@ -493,8 +468,8 @@ lk_console_message "Checking Xfce4"
             <(code --list-extensions | sort -u) \
             <(lk_echo_array VSCODE_EXTENSIONS | sort -u)
     ))
-    [ "${#VSCODE_EXTRA_EXTENSIONS[@]}" -eq "0" ] || {
-        echo
+    [ ${#VSCODE_EXTRA_EXTENSIONS[@]} -eq 0 ] || {
+        lk_console_blank
         lk_echo_array VSCODE_EXTRA_EXTENSIONS |
             lk_console_detail_list \
                 "Remove or add to $SCRIPT_DIR/vscode/extensions.sh:" \
