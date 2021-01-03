@@ -14,7 +14,7 @@ include=linux,provision . "$LK_BASE/lib/bash/common.sh"
 
 lk_assert_command_exists xfconf-query
 
-LK_VERBOSE=2
+LK_VERBOSE=1
 
 shopt -s nullglob
 

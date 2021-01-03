@@ -15,7 +15,7 @@ include=macos . "$LK_BASE/lib/bash/common.sh"
 lk_assert_not_root
 lk_assert_is_macos
 
-LK_VERBOSE=2
+LK_VERBOSE=1
 
 set +e
 shopt -s nullglob
