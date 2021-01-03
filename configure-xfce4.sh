@@ -1,10 +1,11 @@
 #!/bin/bash
-# shellcheck disable=SC1090,SC2015
+
+# shellcheck disable=SC1090,SC2034,SC2015
 
 set -euo pipefail
 lk_die() { echo "${BS:+$BS: }$1" >&2 && exit 1; }
-BS="${BASH_SOURCE[0]}" && [ ! -L "$BS" ] &&
-    SCRIPT_DIR="$(cd "$(dirname "$BS")" && pwd -P)" ||
+BS=${BASH_SOURCE[0]} &&
+    [ ! -L "$BS" ] && SCRIPT_DIR=$(cd "${BS%/*}" && pwd -P) ||
     lk_die "unable to resolve path to script"
 
 [ -d "${LK_BASE:-}" ] || lk_die "LK_BASE not set"
@@ -15,185 +16,150 @@ lk_assert_command_exists xfconf-query
 
 LK_VERBOSE=2
 
+shopt -s nullglob
+
 function xfce4_apply_setting() {
-
     local ARGS
-
     case "$VALUE_TYPE" in
-
     bool | int | uint | int64 | uint64 | double | string)
         eval "VALUE=\"$VALUE\""
-        xfconf-query -c "$CHANNEL" -p "$PROPERTY" -n -t "$VALUE_TYPE" -s "$VALUE"
+        xfconf-query -c "$CHANNEL" -p "$PROPERTY" -nt "$VALUE_TYPE" -s "$VALUE"
         ;;
-
     array)
         eval "ARGS=($VALUE)"
         xfconf-query -c "$CHANNEL" -p "$PROPERTY" -na "${ARGS[@]}"
         ;;
-
     reset)
         xfconf-query -c "$CHANNEL" -p "$PROPERTY" -rR
         ;;
-
     *)
-        lk_console_warning "Invalid syntax in $SCRIPT_DIR/xfce4/xfconf-settings at setting #$i: ${XFCONF_SETTING[$i]}"
+        lk_console_warning \
+            "Invalid syntax in $FILE at setting #$i: ${XFCONF_SETTING[$i]}"
         ;;
-
     esac
-
 }
 
 function xfce4_string_array() {
-
     local ELEM
-
     for ELEM in "$@"; do
-
         echo "-t string -s $ELEM"
-
     done
-
 }
 
 PLUGINS=()
-
 while read -r PLUGIN_ID PLUGIN_NAME; do
+    PLUGINS[$PLUGIN_ID]=$PLUGIN_NAME
+done < <(xfconf-query -c xfce4-panel -p /plugins -lv |
+    grep -Po "(?<=^/plugins/plugin-)[0-9]+$S+$NS+\$" | sort -n)
 
-    PLUGINS[$PLUGIN_ID]="$PLUGIN_NAME"
-
-done < <(xfconf-query -c xfce4-panel -p /plugins -lv | grep -Po '(?<=^/plugins/plugin-)[0-9]+\s+[^\s]+$' | sort -n)
-
-lk_mapfile XFCONF_SETTING <(sed -E '/^([[:blank:]]*$|#)/d' "$SCRIPT_DIR/xfce4/xfconf-settings")
+FILE=$SCRIPT_DIR/xfce4/xfconf-settings
+lk_mapfile XFCONF_SETTING <(sed -E "/^($S*\$|#)/d" "$FILE")
 
 for i in "${!XFCONF_SETTING[@]}"; do
+    IFS=',' read -r CHANNEL PROPERTY VALUE_TYPE VALUE \
+        <<<"${XFCONF_SETTING[$i]}"
 
-    IFS=',' read -r CHANNEL PROPERTY VALUE_TYPE VALUE <<<"${XFCONF_SETTING[$i]}"
-
-    if [[ "$CHANNEL" =~ ^.+:.+ ]]; then
-
-        CUSTOM_TYPE="${CHANNEL%%:*}"
-        CHANNEL="${CHANNEL#*:}"
-
+    if [[ $CHANNEL =~ ^.+:.+ ]]; then
+        CUSTOM_TYPE=${CHANNEL%%:*}
+        CHANNEL=${CHANNEL#*:}
         case "$CUSTOM_TYPE" in
-
         *desktop*)
             ! lk_is_portable || continue
             ;;&
-
         *laptop*)
             lk_is_portable || continue
             ;;&
-
         *reset*)
             lk_has_arg "--reset" || continue
-            ;;&
-
+            ;;
         esac
-
     fi
 
-    if [ "$CHANNEL" = "xfce4-panel" ] && [[ "$PROPERTY" == /plugins/* ]]; then
-
-        PLUGIN_NAME="${PROPERTY#/plugins/}"
-        PLUGIN_NAME="${PLUGIN_NAME%%/*}"
-        PLUGIN_PROPERTY="${PROPERTY#/plugins/$PLUGIN_NAME/}"
-
+    if [ "$CHANNEL" = xfce4-panel ] && [[ $PROPERTY == /plugins/* ]]; then
+        PLUGIN_NAME=${PROPERTY#/plugins/}
+        PLUGIN_NAME=${PLUGIN_NAME%%/*}
+        PLUGIN_PROPERTY=${PROPERTY#/plugins/$PLUGIN_NAME/}
         for j in "${!PLUGINS[@]}"; do
-
             if [ "${PLUGINS[$j]}" = "$PLUGIN_NAME" ]; then
-
-                PROPERTY="/plugins/plugin-$j/$PLUGIN_PROPERTY"
-
+                PROPERTY=/plugins/plugin-$j/$PLUGIN_PROPERTY
                 xfce4_apply_setting
-
             fi
-
         done
-
         continue
-
     fi
 
     xfce4_apply_setting
-
 done
 
 ! lk_command_exists autorandr ||
     autorandr -c --force
 
-function lightdm_gtk_greeter_conf() {
-    cat <(grep -Ev '^(xft-dpi[[:blank:]]*=|$)' \
-        "$SCRIPT_DIR/xfce4/lightdm/lightdm-gtk-greeter.conf")
-    [ -z "$DPI" ] || echo "xft-dpi = $DPI"
-}
+DPI=$(lk_x_dpi) || DPI=
 
-DPI="$(lk_x_dpi)" || DPI=
+CONF=$(grep -Ev \
+    "^(xft-dpi$S*=|\$)" \
+    "$SCRIPT_DIR/xfce4/lightdm/lightdm-gtk-greeter.conf" &&
+    [ -z "$DPI" ] || echo "xft-dpi = $DPI")
+LK_SUDO=1 lk_file_replace /etc/lightdm/lightdm-gtk-greeter.conf "$CONF"
 
-if ! diff -Nq \
-    <(lightdm_gtk_greeter_conf) \
-    <(cat "/etc/lightdm/lightdm-gtk-greeter.conf") >/dev/null; then
-    sudo cp -v "$SCRIPT_DIR/xfce4/lightdm/lightdm-gtk-greeter.conf" \
-        "/etc/lightdm/lightdm-gtk-greeter.conf"
-    lightdm_gtk_greeter_conf |
-        sudo tee "/etc/lightdm/lightdm-gtk-greeter.conf" >/dev/null
-fi
-
-if [ -n "$DPI" ] && [ -f "/etc/default/grub" ]; then
-    _MULTIPLIER="$(bc <<<"scale = 10; $DPI / 96")"
-    _16="$(bc <<<"v = 16 * $_MULTIPLIER / 1; v - v % 2")"
-    GRUB_FONT_FILE="${GRUB_FONT_FILE-$(
+if [ -n "$DPI" ] && [ -f /etc/default/grub ]; then
+    _MULTIPLIER=$(bc <<<"scale = 10; $DPI / 96")
+    _16=$(bc <<<"v = 16 * $_MULTIPLIER / 1; v - v % 2")
+    GRUB_FONT_FILE=${GRUB_FONT_FILE-$(
         fc-list --format="%{file}" \
             ":family=xos4 Terminus:style=Regular:pixelsize=$_16"
-    )}"
+    )}
     if [ -f "$GRUB_FONT_FILE" ]; then
-        GRUB_FONT="${GRUB_FONT_FILE##*/}"
-        GRUB_FONT="/boot/grub/fonts/${GRUB_FONT%%.*}-$_16.pf2"
+        GRUB_FONT=${GRUB_FONT_FILE##*/}
+        GRUB_FONT=/boot/grub/fonts/${GRUB_FONT%%.*}-$_16.pf2
         GRUB_FONT_VAR=$(lk_get_shell_var GRUB_FONT)
-        if ! grep -Fxq "$GRUB_FONT_VAR" "/etc/default/grub" ||
+        if ! grep -Fxq "$GRUB_FONT_VAR" /etc/default/grub ||
             [ ! -f "$GRUB_FONT" ]; then
-            _PF2="$(mktemp)"
+            _PF2=$(mktemp)
             grub-mkfont -s "$_16" -o "$_PF2" "$GRUB_FONT_FILE"
             [ -d "${_GRUB_FONT_DIR:=${GRUB_FONT%/*}}" ] ||
                 sudo install -v -d -m 0755 "$_GRUB_FONT_DIR"
             sudo install -v -m 0755 "$_PF2" "$GRUB_FONT"
-            LK_SUDO=1 lk_file_add_newline "/etc/default/grub"
-            LK_SUDO=1 lk_file_replace "/etc/default/grub" \
-                "$(
-                    sed -E '/^GRUB_FONT=/d' "/etc/default/grub"
-                    echo "$GRUB_FONT_VAR"
-                )"
-            ! lk_command_exists update-grub || sudo update-grub
+            LK_SUDO=1
+            lk_file_add_newline /etc/default/grub
+            lk_file_replace /etc/default/grub \
+                "$(sed -E '/^GRUB_FONT=/d' /etc/default/grub &&
+                    echo "$GRUB_FONT_VAR")"
+            unset LK_SUDO
+            ! lk_command_exists update-grub ||
+                sudo update-grub
         fi
     fi
 fi
 
-mkdir -pv "$HOME/.config/xfce4/panel"
-cp -nv "$SCRIPT_DIR/xfce4/panel"/*.rc "$HOME/.config/xfce4/panel/"
-lk_symlink "$SCRIPT_DIR/xfce4/terminal/config" "$HOME/.config/xfce4/terminal"
-lk_symlink "$SCRIPT_DIR/xfce4/terminal/data" "$HOME/.local/share/xfce4/terminal"
-lk_symlink "$SCRIPT_DIR/xfce4/thunar/" "$HOME/.config/Thunar"
-lk_symlink "$SCRIPT_DIR/xfce4/xfce4-panel-profiles/" "$HOME/.local/share/xfce4-panel-profiles"
+mkdir -pv ~/.config/xfce4/panel
+cp -nv "$SCRIPT_DIR/xfce4/panel"/*.rc ~/.config/xfce4/panel/
+lk_symlink "$SCRIPT_DIR/xfce4/terminal/config" ~/.config/xfce4/terminal
+lk_symlink "$SCRIPT_DIR/xfce4/terminal/data" ~/.local/share/xfce4/terminal
+lk_symlink "$SCRIPT_DIR/xfce4/thunar/" ~/.config/Thunar
+lk_symlink "$SCRIPT_DIR/xfce4/xfce4-panel-profiles/" \
+    ~/.local/share/xfce4-panel-profiles
 
 lk_symlink "$SCRIPT_DIR/xfce4/share/themes/Adapta/plank/" \
-    "$HOME/.local/share/plank/themes/Adapta"
-lk_symlink "/usr/share/themes/Adapta/gtk-3.24/gtk.gresource" \
+    ~/.local/share/plank/themes/Adapta
+lk_symlink /usr/share/themes/Adapta/gtk-3.24/gtk.gresource \
     "$SCRIPT_DIR/xfce4/share/themes/Adapta/gtk-3.24/gtk.gresource" &&
     lk_symlink "$SCRIPT_DIR/xfce4/share/themes/" \
-        "$HOME/.local/share/themes"
+        ~/.local/share/themes
 
-rm -Rfv "$HOME/.cache/sessions"
+rm -Rfv ~/.cache/sessions
 
-[ -e "$HOME/.config/pulse/default.pa" ] || {
-    mkdir -p "$HOME/.config/pulse" &&
-        cp -v "$SCRIPT_DIR/xfce4/pulse/default.pa" "$HOME/.config/pulse/default.pa"
+[ -e ~/.config/pulse/default.pa ] || {
+    mkdir -p ~/.config/pulse &&
+        cp -v "$SCRIPT_DIR/xfce4/pulse/default.pa" ~/.config/pulse/default.pa
 }
 
-# otherwise xfce4-sensors-plugin will not work
-[ ! -f "/etc/hddtemp.db" ] ||
+# Make hddtemp work with xfce4-sensors-plugin
+[ ! -f /etc/hddtemp.db ] ||
     LK_SUDO=1 lk_conf_enable_row \
         '"Samsung SSD 860 EVO" 190 C "Samsung SSD 860 EVO"' \
-        "/etc/hddtemp.db"
-[ ! -x "/usr/sbin/hddtemp" ] ||
-    sudo chmod -c u+s "/usr/sbin/hddtemp" || true
+        /etc/hddtemp.db
+[ ! -x /usr/sbin/hddtemp ] ||
+    sudo chmod -c u+s /usr/sbin/hddtemp || true
 
-lk_console_message "Xfce4 settings applied successfully"
+lk_console_success "Xfce4 settings applied successfully"

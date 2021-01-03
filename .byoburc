@@ -1,12 +1,3 @@
 #!/bin/bash
 
-function df() {
-    if type -P gdf >/dev/null; then
-        function df() {
-            gdf "$@"
-        }
-    else
-        unset -f df
-    fi
-    df "$@"
-}
+[[ $OSTYPE != darwin* ]] || ! type -P gdf >/dev/null || df() { gdf "$@"; }

@@ -14,11 +14,9 @@ Exec_Command=false
 Show_Units=true
 Small_Spacings=true
 Command_Name=xfce4-sensors
-Number_Chips=6
+Number_Chips=7
 Suppress_Hddtemp_Message=false
 Suppress_Tooltip=false
-Preferred_Width=485
-Preferred_Height=604
 Tachos_ColorValue=0.80
 Tachos_Alpha=0.80
 
@@ -27,14 +25,18 @@ Name=iwlwifi_1-0
 Number=0
 
 [Chip1]
-Name=acpitz-0
+Name=pch_cannonlake-0
 Number=1
 
 [Chip2]
-Name=coretemp-0
+Name=acpitz-0
 Number=2
 
-[Chip2_Feature0]
+[Chip3]
+Name=coretemp-0
+Number=3
+
+[Chip3_Feature0]
 Address=0
 Name=Package id 0
 Color=#00B000
@@ -42,23 +44,31 @@ Show=true
 Min=0.00
 Max=58.00
 
-[Chip3]
-Name=pch_cannonlake-0
-Number=3
-
 [Chip4]
-Name=Hard disks
+Name=nvme-6d00
 Number=4
 
 [Chip4_Feature0]
+Address=0
+Name=Composite
+Color=#B000B0
+Show=true
+Min=51.85
+Max=51.85
+
+[Chip5]
+Name=Hard disks
+Number=5
+
+[Chip5_Feature0]
 DeviceName=/dev/sda
 Name=Samsung SSD 860 EVO 500G B              €@
-Color=#B000B0
+Color=#00B0B0
 Show=true
 Min=10.00
 Max=50.00
 
-[Chip5]
+[Chip6]
 Name=ACPI
-Number=5
+Number=6
 
