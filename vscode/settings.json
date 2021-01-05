@@ -71,8 +71,11 @@
     "git.countBadge": "off",
     "git.enableStatusBarSync": false,
     "git.ignoreLimitWarning": true,
+    "gitlens.advanced.fileHistoryFollowsRenames": true,
     "gitlens.blame.format": "${message|40?} ${date|14-}",
-    "gitlens.codeLens.enabled": false,
+    "gitlens.codeLens.scopes": [
+        "document"
+    ],
     "gitlens.currentLine.format": "${author}, ${date} • ${message}",
     "gitlens.hovers.avatars": false,
     "gitlens.menus": {
