@@ -84,12 +84,11 @@ lk_symlink "$SCRIPT_DIR/iptables/ip6tables.rules" /etc/iptables/ip6tables.rules
 lk_symlink "$SCRIPT_DIR/libvirt/hooks/qemu" /etc/libvirt/hooks/qemu
 # Fix weird Calibri rendering in Thunderbird
 lk_symlink "$SCRIPT_DIR/fonts/ms-no-bitmaps.conf" \
-    /etc/fonts/conf.d/90-ms-no-bitmaps.conf && {
-    lk_is_true LK_SYMLINK_NO_CHANGE || {
-        sudo -H fc-cache --force --verbose &&
-            fc-cache --force --verbose
-    }
-}
+    /etc/fonts/conf.d/99-ms-no-bitmaps.conf
+lk_symlink "$SCRIPT_DIR/fonts/emoji-fix.conf" \
+    /etc/fonts/conf.d/99-emoji-fix.conf
+sudo -H fc-cache --force --verbose &&
+    fc-cache --force --verbose
 
 unset LK_SUDO
 

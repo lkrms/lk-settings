@@ -249,6 +249,7 @@
     "workbench.iconTheme": "material-icon-theme",
     "workbench.settings.enableNaturalLanguageSearch": false,
     "workbench.startupEditor": "newUntitledFile",
+    "xml.format.emptyElements": "collapse",
     "xml.format.enforceQuoteStyle": "preferred",
     "xml.format.preservedNewlines": 0
 }
