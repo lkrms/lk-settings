@@ -45,6 +45,7 @@ PRIVATE_DIR=~/.cloud-settings
     lk_symlink "$PRIVATE_DIR/aws/" ~/.aws
     lk_symlink "$PRIVATE_DIR/espanso/" ~/.config/espanso
     lk_symlink "$PRIVATE_DIR/linode-cli/linode-cli" ~/.config/linode-cli
+    lk_symlink "$PRIVATE_DIR/offlineimap/.offlineimaprc" ~/.offlineimaprc
     lk_symlink "$PRIVATE_DIR/remmina/data/" ~/.local/share/remmina
     lk_symlink "$PRIVATE_DIR/robo3t/.3T/" ~/.3T
     lk_symlink "$PRIVATE_DIR/robo3t/3T/" ~/.config/3T
@@ -83,12 +84,17 @@ lk_symlink "$SCRIPT_DIR/iptables/iptables.rules" /etc/iptables/iptables.rules
 lk_symlink "$SCRIPT_DIR/iptables/ip6tables.rules" /etc/iptables/ip6tables.rules
 lk_symlink "$SCRIPT_DIR/libvirt/hooks/qemu" /etc/libvirt/hooks/qemu
 # Fix weird Calibri rendering in Thunderbird
+FC_DIRTY=
 lk_symlink "$SCRIPT_DIR/fonts/ms-no-bitmaps.conf" \
-    /etc/fonts/conf.d/99-ms-no-bitmaps.conf
+    /etc/fonts/conf.d/99-ms-no-bitmaps.conf &&
+    { lk_is_true LK_SYMLINK_NO_CHANGE || FC_DIRTY=1; }
+# Remove emoji from all fonts other than Noto Color Emoji
 lk_symlink "$SCRIPT_DIR/fonts/emoji-fix.conf" \
-    /etc/fonts/conf.d/99-emoji-fix.conf
-sudo -H fc-cache --force --verbose &&
-    fc-cache --force --verbose
+    /etc/fonts/conf.d/99-emoji-fix.conf &&
+    { lk_is_true LK_SYMLINK_NO_CHANGE || FC_DIRTY=1; }
+! lk_is_true FC_DIRTY ||
+    { sudo -H fc-cache --force --verbose &&
+        fc-cache --force --verbose; }
 
 unset LK_SUDO
 
@@ -326,17 +332,18 @@ sudo lpadmin -p HLL3230CDW -E \
 [ -e /etc/papersize ] && grep -q ^a4$ /etc/papersize ||
     echo "a4" | sudo tee /etc/papersize >/dev/null
 
-lk_console_message "Setting dconf values"
-START_PLANK=1
-killall plank 2>/dev/null || START_PLANK=0
-if lk_has_arg --reset; then
-    dconf reset -f /apps/guake/
-    dconf reset -f /net/launchpad/plank/
-    dconf reset -f /org/gnome/meld/
-    dconf reset -f /org/gtk/settings/file-chooser/
-fi
-LK_SCREENSHOT_DIR=${LK_SCREENSHOT_DIR:-~/Desktop}
-dconf load / <<EOF
+if [ -n "${DISPLAY:-}" ]; then
+    lk_console_message "Setting dconf values"
+    START_PLANK=1
+    killall plank 2>/dev/null || START_PLANK=0
+    if lk_has_arg --reset; then
+        dconf reset -f /apps/guake/
+        dconf reset -f /net/launchpad/plank/
+        dconf reset -f /org/gnome/meld/
+        dconf reset -f /org/gtk/settings/file-chooser/
+    fi
+    LK_SCREENSHOT_DIR=${LK_SCREENSHOT_DIR:-~/Desktop}
+    dconf load / <<EOF
 [apps/guake/general]
 infinite-history=true
 prompt-on-quit=false
@@ -433,23 +440,24 @@ host-cpu-usage=true
 memory-usage=true
 network-traffic=true
 EOF
-lk_is_false START_PLANK || {
-    nohup plank </dev/null >/dev/null 2>&1 &
-    disown
-    sleep 2
-}
+    lk_is_false START_PLANK || {
+        nohup plank </dev/null >/dev/null 2>&1 &
+        disown
+        sleep 2
+    }
 
-lk_console_message "Checking Xfce4"
-"$SCRIPT_DIR/configure-xfce4.sh" "$@" &&
-    lk_symlink "$LK_BASE/etc/xfce4/xinitrc" ~/.config/xfce4/xinitrc && {
-    xfconf-query -c xfwm4 -p /general/theme -n -t string -s "Adapta"
-    xfconf-query -c xfwm4 -p /general/title_font -n -t string -s "Cantarell 9"
-    xfconf-query -c xsettings -p /Gtk/FontName -n -t string -s "Cantarell 9"
-    xfconf-query -c xsettings -p /Gtk/MonospaceFontName -n -t string -s "Source Code Pro 10"
-    xfconf-query -c xsettings -p /Net/IconThemeName -n -t string -s "Papirus"
-    xfconf-query -c xsettings -p /Net/SoundThemeName -n -t string -s "elementary"
-    xfconf-query -c xsettings -p /Net/ThemeName -n -t string -s "Adapta"
-}
+    lk_console_message "Checking Xfce4"
+    "$SCRIPT_DIR/configure-xfce4.sh" "$@" &&
+        lk_symlink "$LK_BASE/etc/xfce4/xinitrc" ~/.config/xfce4/xinitrc && {
+        xfconf-query -c xfwm4 -p /general/theme -n -t string -s "Adapta"
+        xfconf-query -c xfwm4 -p /general/title_font -n -t string -s "Cantarell 9"
+        xfconf-query -c xsettings -p /Gtk/FontName -n -t string -s "Cantarell 9"
+        xfconf-query -c xsettings -p /Gtk/MonospaceFontName -n -t string -s "Source Code Pro 10"
+        xfconf-query -c xsettings -p /Net/IconThemeName -n -t string -s "Papirus"
+        xfconf-query -c xsettings -p /Net/SoundThemeName -n -t string -s "elementary"
+        xfconf-query -c xsettings -p /Net/ThemeName -n -t string -s "Adapta"
+    }
+fi
 
 ! lk_command_exists code || {
     lk_console_message "Checking Visual Studio Code extensions"
@@ -469,7 +477,7 @@ lk_console_message "Checking Xfce4"
             <(lk_echo_array VSCODE_EXTENSIONS | sort -u)
     ))
     [ ${#VSCODE_EXTRA_EXTENSIONS[@]} -eq 0 ] || {
-        lk_console_blank
+        [ ${#VSCODE_MISSING_EXTENSIONS[@]} -eq 0 ] || lk_console_blank
         lk_echo_array VSCODE_EXTRA_EXTENSIONS |
             lk_console_detail_list \
                 "Remove or add to $SCRIPT_DIR/vscode/extensions.sh:" \

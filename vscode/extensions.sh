@@ -43,6 +43,7 @@ VSCODE_EXTENSIONS=(
     ms-vscode.powershell
     neilbrayfield.php-docblocker
     PKief.material-icon-theme
+    pthorsson.vscode-jsp
     redhat.java
     redhat.vscode-xml
     redhat.vscode-yaml
