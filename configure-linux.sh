@@ -84,15 +84,13 @@ lk_symlink "$SCRIPT_DIR/iptables/iptables.rules" /etc/iptables/iptables.rules
 lk_symlink "$SCRIPT_DIR/iptables/ip6tables.rules" /etc/iptables/ip6tables.rules
 lk_symlink "$SCRIPT_DIR/libvirt/hooks/qemu" /etc/libvirt/hooks/qemu
 # Fix weird Calibri rendering in Thunderbird
-FC_DIRTY=
+unset LK_SYMLINK_NO_CHANGE
 lk_symlink "$SCRIPT_DIR/fonts/ms-no-bitmaps.conf" \
-    /etc/fonts/conf.d/99-ms-no-bitmaps.conf &&
-    { lk_is_true LK_SYMLINK_NO_CHANGE || FC_DIRTY=1; }
+    /etc/fonts/conf.d/99-ms-no-bitmaps.conf
 # Remove emoji from all fonts other than Noto Color Emoji
 lk_symlink "$SCRIPT_DIR/fonts/emoji-fix.conf" \
-    /etc/fonts/conf.d/99-emoji-fix.conf &&
-    { lk_is_true LK_SYMLINK_NO_CHANGE || FC_DIRTY=1; }
-! lk_is_true FC_DIRTY ||
+    /etc/fonts/conf.d/99-emoji-fix.conf
+lk_is_true LK_SYMLINK_NO_CHANGE ||
     { sudo -H fc-cache --force --verbose &&
         fc-cache --force --verbose; }
 
@@ -391,6 +389,7 @@ font-name='Cantarell 9'
 monospace-font-name='Source Code Pro 10'
 
 [org/gnome/meld]
+custom-editor-command='code -g {file}:{line}'
 folder-columns=[('size', true), ('modification time', true), ('permissions', true)]
 highlight-syntax=true
 indent-width=4

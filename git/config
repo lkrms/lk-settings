@@ -7,8 +7,24 @@
 	clean = "sh -c 'h=0 s=\"\" i=\"$(printf \"\\n \")\"&&i=\"${i% }\";while IFS=\"$i\" read -r l;do [ \"$h\" -eq \"0\" ]&&! echo \"$l\"|grep -Eq \"^(; )?\\(gtk_accel_path \"&&printf \"%s\\n\" \"$l\"&&continue;h=1;[ \"${l%\"${l#?}\"}\" = \";\" ]&&continue;s=\"$(printf \"%s\\n%s\\t%s\" \"$s\" \"$(echo \"$l\" | sed \"s/[^a-zA-Z0-9/]//g\")\" \"$l\")\";done;printf \"%s\" \"${s#?}\"|LC_ALL=C sort|cut -f2-'"
 	smudge = cat
 
+[filter "bash"]
+	clean = gnu_sed -E '/^#+ \\/reviewed$/d' | shfmt -i 4
+	smudge = cat
+
 [filter "clementine"]
 	clean = gnu_sed -Ee '/^(username|password|auth_code|login_state|gpodder_device_name|file_path|last_(path|(refreshed|save)[_a-z]*)|download_dir|column_alignments|current_tab|geometry|hidden|maximized|splitter_state|state(_version)?|[\\0-9a-z]*volume|playback_(position|state))=.*$/d'
+	smudge = cat
+
+[filter "dbeaver-credentials"]
+	clean = openssl aes-128-cbc -d -K babb4a9f774ab853c96c2d653dfe544a -iv 00000000000000000000000000000000 | cut -b17- | jq
+	smudge = echo \"0123456789abcdef$(jq -c)\" | openssl aes-128-cbc -K babb4a9f774ab853c96c2d653dfe544a -iv 00000000000000000000000000000000
+
+[filter "dbeaver-sources"]
+	clean = jq -S --indent 4
+	smudge = cat
+
+[filter "dbeaver-prefs"]
+	clean = sed -E '/^(SQLEditor.resultSet.ratio|[a-zA-Z._]+_TAB_(BG_(END|START)|TEXT_COLOR))=/d'
 	smudge = cat
 
 [filter "flameshot"]
@@ -22,6 +38,10 @@
 [filter "icanhazshortcut"]
 	clean = gnu_sed -Ee '/^(window_(x|y|width|height)|[a-z]+_column_(enabled|width)) ?=/d'
 	smudge = cat
+
+[filter "jq"]
+	clean = jq
+	smudge = jq -c
 
 [filter "keepassxc"]
 	clean = "awk '/^\\[PasswordGenerator\\]/ { skip=1; next } /^\\[/ { skip=0 } /^(UseTouchID|HidePasswords)=/ { next } !skip { print }'"
@@ -37,6 +57,10 @@
 
 [filter "remmina"]
 	clean = gnu_sed -Ee '/^(secret|screenshot_path|recent_SFTP|periodic_rmnews_[a-z_]+|main_(width|height|maximize|sort_(column_id|order)))=/d'
+	smudge = cat
+
+[filter "remmina-connection"]
+	clean = "F=$(cat); echo \"$F\" | head -n1; echo \"$F\" | tail -n+2 | sort"
 	smudge = cat
 
 [filter "speedcrunch"]

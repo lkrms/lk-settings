@@ -1,0 +1,17 @@
+.DS_Store
+Thumbs.db
+
+*.code-workspace
+.vscode/
+
+*.sublime-project
+*.sublime-workspace
+
+php_errors.log
+wp-content/plugins/wp-mail-smtp/
+
+# Built AUR packages
+*.tar.bz2*
+*.tar.gz*
+*.tar.xz*
+*.tar.zst*

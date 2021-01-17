@@ -4,7 +4,7 @@ Settings I like, for software I use
 ## Configuration
 
 For files to be formatted correctly, the filters defined in
-[.gitconfig](https://github.com/lkrms/lk-settings/blob/master/.gitconfig) need
+[git/config](https://github.com/lkrms/lk-settings/blob/master/git/config) need
 to be active during checkout and commit. Take the following steps to get them
 working after cloning this repo.
 
@@ -39,7 +39,7 @@ Replace `~/lk-settings` with the path to your working copy of
 [lk-settings](https://github.com/lkrms/lk-settings). Obviously.
 
 ```bash
-git config --global --add include.path ~/lk-settings/.gitconfig
+git config --global --add include.path ~/lk-settings/git/config
 ```
 
 Then you'll need to re-checkout your working copy to "smudge" everything
