@@ -1,46 +1,66 @@
 {
-	"array": {
+	"array: elements": {
 		"scope": "shellscript",
 		"prefix": "array",
-		"body": [
-			"\"\\${${1:array_var}[@]}\""
-		]
-	},
-	"array (safe)": {
-		"scope": "shellscript",
-		"prefix": "arraysafe",
 		"body": [
 			"\\${${1:array_var}[@]+\"\\${${1:array_var}[@]}\"}"
 		]
 	},
-	"array empty": {
+	"array: empty?": {
 		"scope": "shellscript",
 		"prefix": "arrayempty",
 		"body": [
 			"[ \\${#${1:array_var}[@]} -eq 0 ] "
 		]
 	},
-	"array not empty": {
+	"array: not empty?": {
 		"scope": "shellscript",
 		"prefix": "arraynotempty",
 		"body": [
 			"[ \\${#${1:array_var}[@]} -gt 0 ] "
 		]
 	},
-	"for each in array": {
+	"array: for each element": {
 		"scope": "shellscript",
 		"prefix": "foreach",
 		"body": [
-			"for ${2:var} in \\${${1:array_var}[@]+\"\\${${1:array_var}[@]}\"}; do",
+			"for ${1:var} in \\${${2:array_var}[@]+\"\\${${2:array_var}[@]}\"}; do",
 			"    $0",
 			"done"
 		]
 	},
-	"output array": {
+	"array: output": {
 		"scope": "shellscript",
 		"prefix": "lk_console_list",
 		"body": [
-			"lk_echo_array ${1:array_var} | lk_console_list \"${2:message}\" \"${3:single}\" \"${4:plural}\""
+			"lk_echo_array ${1:array_var} | lk_console_list \"${2:message}\" ${3:single} ${4:plural}"
+		]
+	},
+	"getopts": {
+		"scope": "shellscript",
+		"prefix": "getopts",
+		"body": [
+			"function ${1:function_name}() {",
+			"    local OPTIND OPTARG OPT LK_USAGE FLAG VALUE",
+			"    LK_USAGE=\"\\",
+			"Usage: \\$(lk_myself -f) [-f] [-v VALUE]\"",
+			"    while getopts \":fv:\" OPT; do",
+			"        case \"\\$OPT\" in",
+			"        f)",
+			"            FLAG=1",
+			"            ;;",
+			"        v)",
+			"            VALUE=\\$OPTARG",
+			"            ;;",
+			"        \\? | :)",
+			"            lk_usage",
+			"            return 1",
+			"            ;;",
+			"        esac",
+			"    done",
+			"    shift \\$((OPTIND - 1))",
+			"    $0",
+			"}"
 		]
 	},
 	"shellcheck disable": {

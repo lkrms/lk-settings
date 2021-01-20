@@ -40,7 +40,6 @@ PRIVATE_DIR=~/.cloud-settings
     lk_symlink "$PRIVATE_DIR/.bashrc" ~/.bashrc
     lk_symlink "$PRIVATE_DIR/.face" ~/.face
     lk_symlink "$PRIVATE_DIR/.gitconfig" ~/.gitconfig
-    lk_symlink "$PRIVATE_DIR/.gitignore" ~/.gitignore
     lk_symlink "$PRIVATE_DIR/acme.sh/" ~/.acme.sh
     lk_symlink "$PRIVATE_DIR/aws/" ~/.aws
     lk_symlink "$PRIVATE_DIR/espanso/" ~/.config/espanso
@@ -51,6 +50,9 @@ PRIVATE_DIR=~/.cloud-settings
     lk_symlink "$PRIVATE_DIR/robo3t/3T/" ~/.config/3T
     lk_symlink "$PRIVATE_DIR/ssh/" ~/.ssh
     lk_symlink "$PRIVATE_DIR/unison/" ~/.unison
+
+    [ ! -L ~/.gitignore ] || [ -e ~/.gitignore ] ||
+        rm -fv ~/.gitignore
 
     pgrep -x "dbeaver" >/dev/null &&
         lk_warn "cannot apply settings while DBeaver is running" ||
@@ -106,8 +108,8 @@ diff -q <(crontab -l) <(echo "${CRONTAB%$'\n'}") >/dev/null ||
 MIMEINFO_FILE=/usr/share/applications/mimeinfo.cache
 MIMEAPPS_FILE=~/.config/mimeapps.list
 [ ! -f "$MIMEINFO_FILE" ] || {
-    REPLACE=(geany)
-    REPLACE_WITH=(VSCodium)
+    REPLACE=(geany vim)
+    REPLACE_WITH=(VSCodium VSCodium)
     PREFER=(
         VSCodium
 

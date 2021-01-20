@@ -26,13 +26,15 @@ PRIVATE_DIR=~/.cloud-settings
 
     lk_symlink "$PRIVATE_DIR/.bashrc" ~/.bashrc
     lk_symlink "$PRIVATE_DIR/.gitconfig" ~/.gitconfig
-    lk_symlink "$PRIVATE_DIR/.gitignore" ~/.gitignore
     lk_symlink "$PRIVATE_DIR/acme.sh/" ~/.acme.sh
     lk_symlink "$PRIVATE_DIR/aws/" ~/.aws
     lk_symlink "$PRIVATE_DIR/espanso/" ~/Library/Preferences/espanso
     lk_symlink "$PRIVATE_DIR/linode-cli/linode-cli" ~/.config/linode-cli
     lk_symlink "$PRIVATE_DIR/ssh/" ~/.ssh
     lk_symlink "$PRIVATE_DIR/unison/" ~/"Library/Application Support/unison"
+
+    [ ! -L ~/.gitignore ] || [ -e ~/.gitignore ] ||
+        rm -fv ~/.gitignore
 
     pgrep -xq "dbeaver" &&
         lk_warn "cannot apply settings while DBeaver is running" ||

@@ -8,7 +8,7 @@
 	smudge = cat
 
 [filter "bash"]
-	clean = "gnu_sed -E '/^#+ \\/reviewed$/d' | shfmt -i 4"
+	clean = "gnu_sed -E '/^#+ <\\/?reviewed(\\s+on=\"[^\"]*\")*\\s*\\/?>/d' | awk '/^[[:blank:]]*#+ <review>$/{skip=1;next}/^[[:blank:]]*#+ <\\/review>$/{skip=0;next}skip{next}{print}' | shfmt -i 4"
 	smudge = cat
 
 [filter "clementine"]
