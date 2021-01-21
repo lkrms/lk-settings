@@ -1,6 +1,10 @@
+lk-*/**/.bash* filter=bash
+lk-*/**/*.sh filter=bash
+Nextcloud/**/.bash* filter=bash
+Nextcloud/**/*.sh filter=bash
+
 *.plist filter=plist
 *.remmina filter=remmina-connection
-*.sh filter=bash
 accels filter=accels
 accels.scm filter=accels
 Clementine.conf filter=clementine

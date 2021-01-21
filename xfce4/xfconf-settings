@@ -194,6 +194,7 @@ laptop:xfce4-power-manager,/xfce4-power-manager/critical-power-level,uint,4
 xfce4-power-manager,/xfce4-power-manager/dpms-enabled,bool,true
 xfce4-power-manager,/xfce4-power-manager/blank-on-ac,int,4
 xfce4-power-manager,/xfce4-power-manager/blank-on-battery,int,4
+xfce4-power-manager,/xfce4-power-manager/show-presentation-indicator,bool,true
 desktop:xfce4-power-manager,/xfce4-power-manager/dpms-on-ac-off,uint,0
 desktop:xfce4-power-manager,/xfce4-power-manager/dpms-on-ac-sleep,uint,40
 laptop:xfce4-power-manager,/xfce4-power-manager/dpms-on-ac-off,uint,15

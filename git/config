@@ -1,4 +1,38 @@
-# To go from a working commandline to a working filter:
+[user]
+	name = Luke Arms
+	useConfigOnly = true
+
+[push]
+	default = nothing
+	followTags = true
+
+[diff]
+	tool = meld
+
+[merge]
+	tool = meld
+
+[pull]
+	ff = only
+
+[cola]
+	spellcheck = false
+	tabwidth = 4
+	expandtab = true
+	safemode = true
+	statusshowtotals = true
+
+[gui]
+	editor = code
+
+[difftool "sourcetree"]
+	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+
+[mergetool "sourcetree"]
+	cmd = /Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	trustExitCode = true
+
+# To go from a working command line to a working filter:
 # 1. replace all \ with \\
 # 2. replace all " with \"
 # 3. if the filter contains semicolons, double-quote the whole thing
@@ -8,7 +42,7 @@
 	smudge = cat
 
 [filter "bash"]
-	clean = "gnu_sed -E '/^#+ <\\/?reviewed(\\s+on=\"[^\"]*\")*\\s*\\/?>/d' | awk '/^[[:blank:]]*#+ <review>$/{skip=1;next}/^[[:blank:]]*#+ <\\/review>$/{skip=0;next}skip{next}{print}' | shfmt -i 4"
+	clean = shfmt -i 4
 	smudge = cat
 
 [filter "clementine"]

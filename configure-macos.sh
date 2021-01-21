@@ -25,7 +25,6 @@ PRIVATE_DIR=~/.cloud-settings
 [ ! -d "$PRIVATE_DIR" ] || {
 
     lk_symlink "$PRIVATE_DIR/.bashrc" ~/.bashrc
-    lk_symlink "$PRIVATE_DIR/.gitconfig" ~/.gitconfig
     lk_symlink "$PRIVATE_DIR/acme.sh/" ~/.acme.sh
     lk_symlink "$PRIVATE_DIR/aws/" ~/.aws
     lk_symlink "$PRIVATE_DIR/espanso/" ~/Library/Preferences/espanso
@@ -33,8 +32,10 @@ PRIVATE_DIR=~/.cloud-settings
     lk_symlink "$PRIVATE_DIR/ssh/" ~/.ssh
     lk_symlink "$PRIVATE_DIR/unison/" ~/"Library/Application Support/unison"
 
-    [ ! -L ~/.gitignore ] || [ -e ~/.gitignore ] ||
-        rm -fv ~/.gitignore
+    for LINK in ~/.gitconfig ~/.gitignore; do
+        [ ! -L "$LINK" ] || [ -e "$LINK" ] ||
+            rm -fv "$LINK"
+    done
 
     pgrep -xq "dbeaver" &&
         lk_warn "cannot apply settings while DBeaver is running" ||
@@ -74,6 +75,7 @@ lk_symlink "$SCRIPT_DIR/.vimrc" ~/.vimrc
 lk_symlink "$SCRIPT_DIR/.tidyrc" ~/.tidyrc
 lk_symlink "$SCRIPT_DIR/.byoburc" ~/.byoburc
 lk_symlink "$SCRIPT_DIR/byobu/" ~/.byobu
+lk_symlink "$SCRIPT_DIR/git" ~/.config/git
 
 lk_symlink "$SCRIPT_DIR/nextcloud/sync-exclude.lst" \
     ~/Library/Preferences/Nextcloud/sync-exclude.lst && {

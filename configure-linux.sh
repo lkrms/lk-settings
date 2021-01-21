@@ -39,7 +39,6 @@ PRIVATE_DIR=~/.cloud-settings
 
     lk_symlink "$PRIVATE_DIR/.bashrc" ~/.bashrc
     lk_symlink "$PRIVATE_DIR/.face" ~/.face
-    lk_symlink "$PRIVATE_DIR/.gitconfig" ~/.gitconfig
     lk_symlink "$PRIVATE_DIR/acme.sh/" ~/.acme.sh
     lk_symlink "$PRIVATE_DIR/aws/" ~/.aws
     lk_symlink "$PRIVATE_DIR/espanso/" ~/.config/espanso
@@ -51,8 +50,10 @@ PRIVATE_DIR=~/.cloud-settings
     lk_symlink "$PRIVATE_DIR/ssh/" ~/.ssh
     lk_symlink "$PRIVATE_DIR/unison/" ~/.unison
 
-    [ ! -L ~/.gitignore ] || [ -e ~/.gitignore ] ||
-        rm -fv ~/.gitignore
+    for LINK in ~/.gitconfig ~/.gitignore; do
+        [ ! -L "$LINK" ] || [ -e "$LINK" ] ||
+            rm -fv "$LINK"
+    done
 
     pgrep -x "dbeaver" >/dev/null &&
         lk_warn "cannot apply settings while DBeaver is running" ||
@@ -185,6 +186,7 @@ lk_symlink "$SCRIPT_DIR/autorandr/" ~/.config/autorandr
 lk_symlink "$SCRIPT_DIR/.byoburc" ~/.byoburc
 lk_symlink "$SCRIPT_DIR/byobu/" ~/.byobu
 lk_symlink "$SCRIPT_DIR/devilspie2/" ~/.config/devilspie2
+lk_symlink "$SCRIPT_DIR/git" ~/.config/git
 lk_symlink "$SCRIPT_DIR/plank/" ~/.config/plank
 lk_symlink "$SCRIPT_DIR/quicktile/quicktile.cfg" ~/.config/quicktile.cfg
 lk_symlink "$SCRIPT_DIR/remmina/" ~/.config/remmina
