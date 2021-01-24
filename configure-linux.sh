@@ -99,12 +99,14 @@ lk_is_true LK_SYMLINK_NO_CHANGE ||
 
 unset LK_SUDO
 
-CRONTAB=$(awk \
-    -v STRETCHLY="$(lk_double_quote "$SCRIPT_DIR/stretchly/stretchly.sh")" \
-    '$6=="stretchly"{$6=STRETCHLY}{print}' \
-    "$SCRIPT_DIR/crontab")
-diff -q <(crontab -l) <(echo "${CRONTAB%$'\n'}") >/dev/null ||
-    crontab <(echo "${CRONTAB%$'\n'}")
+! lk_command_exists crontab || {
+    CRONTAB=$(awk \
+        -v STRETCHLY="$(lk_double_quote "$SCRIPT_DIR/stretchly/stretchly.sh")" \
+        '$6=="stretchly"{$6=STRETCHLY}{print}' \
+        "$SCRIPT_DIR/cron/crontab")
+    diff -q <(crontab -l) <(echo "${CRONTAB%$'\n'}") >/dev/null ||
+        crontab <(echo "${CRONTAB%$'\n'}")
+}
 
 MIMEINFO_FILE=/usr/share/applications/mimeinfo.cache
 MIMEAPPS_FILE=~/.config/mimeapps.list
@@ -450,8 +452,7 @@ EOF
     }
 
     lk_console_message "Checking Xfce4"
-    "$SCRIPT_DIR/configure-xfce4.sh" "$@" &&
-        lk_symlink "$LK_BASE/etc/xfce4/xinitrc" ~/.config/xfce4/xinitrc && {
+    "$SCRIPT_DIR/configure-xfce4.sh" "$@" && {
         xfconf-query -c xfwm4 -p /general/theme -n -t string -s "Adapta"
         xfconf-query -c xfwm4 -p /general/title_font -n -t string -s "Cantarell 9"
         xfconf-query -c xsettings -p /Gtk/FontName -n -t string -s "Cantarell 9"
