@@ -38,7 +38,7 @@
 # 3. if the filter contains semicolons, double-quote the whole thing
 
 [filter "accels"]
-	clean = "sh -c 'h=0 s=\"\" i=\"$(printf \"\\n \")\"&&i=\"${i% }\";while IFS=\"$i\" read -r l;do [ \"$h\" -eq \"0\" ]&&! echo \"$l\"|grep -Eq \"^(; )?\\(gtk_accel_path \"&&printf \"%s\\n\" \"$l\"&&continue;h=1;[ \"${l%\"${l#?}\"}\" = \";\" ]&&continue;s=\"$(printf \"%s\\n%s\\t%s\" \"$s\" \"$(echo \"$l\" | sed \"s/[^a-zA-Z0-9/]//g\")\" \"$l\")\";done;printf \"%s\" \"${s#?}\"|LC_ALL=C sort|cut -f2-'"
+	clean = "LC_ALL=C awk 'BEGIN{r=\"\\\\(gtk_accel_path \"}$0~\"^; \"r{next}$0~\"^\"r{print$0|\"sort\";next}{print}END{close(\"sort\")}'"
 	smudge = cat
 
 [filter "bash"]
@@ -46,7 +46,7 @@
 	smudge = cat
 
 [filter "clementine"]
-	clean = gnu_sed -Ee '/^(username|password|auth_code|login_state|gpodder_device_name|file_path|last_(path|(refreshed|save)[_a-z]*)|download_dir|column_alignments|current_tab|geometry|hidden|maximized|splitter_state|state(_version)?|[\\0-9a-z]*volume|playback_(position|state))=.*$/d'
+	clean = sed -E '/^(username|password|auth_code|login_state|gpodder_device_name|file_path|last_(path|(refreshed|save)[_a-z]*)|download_dir|column_alignments|current_tab|geometry|hidden|maximized|splitter_state|state(_version)?|[\\0-9a-z]*volume|playback_(position|state))=/d'
 	smudge = cat
 
 [filter "dbeaver-credentials"]
@@ -62,15 +62,15 @@
 	smudge = cat
 
 [filter "flameshot"]
-	clean = gnu_sed -Ee '/^(drawThickness|save(AfterCopy)?Path)=/d'
+	clean = sed -E '/^(drawThickness|save(AfterCopy)?Path)=/d'
 	smudge = cat
 
 [filter "geeqie"]
-	clean = gnu_sed -Ee '/^\\s+((file_ops\\.safe_delete|home|last)_path|(main|folder|float|properties|log)_window\\.(x|y|w|h|maximized|[a-z]+_pos)) ?=/d'
+	clean = sed -E '/^[[:blank:]]+((file_ops\\.safe_delete|home|last)_path|(main|folder|float|properties|log|search|dupe)_window\\.(x|y|w|h|maximized|[a-z]+_pos)) ?=/d'
 	smudge = cat
 
 [filter "icanhazshortcut"]
-	clean = gnu_sed -Ee '/^(window_(x|y|width|height)|[a-z]+_column_(enabled|width)) ?=/d'
+	clean = sed -E '/^(window_(x|y|width|height)|[a-z]+_column_(enabled|width)) ?=/d'
 	smudge = cat
 
 [filter "jq"]
@@ -78,19 +78,19 @@
 	smudge = jq -c
 
 [filter "keepassxc"]
-	clean = "awk '/^\\[PasswordGenerator\\]/ { skip=1; next } /^\\[/ { skip=0 } /^(UseTouchID|HidePasswords)=/ { next } !skip { print }'"
+	clean = "awk '/^\\[PasswordGenerator\\]/{skip=1;next}/^\\[/{skip=0}/^(UseTouchID|HidePasswords)=/{next}!skip{print}'"
 	smudge = cat
 
 [filter "nomacs"]
-	clean = gnu_sed -Ee '/^(geometry(Nomacs)?|windowState|[a-zA-Z]+-answer)=/d'
+	clean = sed -E '/^(geometry(Nomacs)?|windowState|[a-zA-Z]+-answer)=/d'
 	smudge = cat
 
 [filter "plist"]
-	clean = sh -c 'type -P plutil >/dev/null && plutil -convert xml1 -o - - || cat'
+	clean = ! type -P plutil >/dev/null && cat || plutil -convert xml1 -o - -
 	smudge = cat
 
 [filter "remmina"]
-	clean = gnu_sed -Ee '/^(secret|screenshot_path|recent_SFTP|periodic_rmnews_[a-z_]+|main_(width|height|maximize|sort_(column_id|order)))=/d'
+	clean = sed -E '/^(secret|screenshot_path|recent_SFTP|periodic_rmnews_[a-z_]+|main_(width|height|maximize|sort_(column_id|order)))=/d'
 	smudge = cat
 
 [filter "remmina-connection"]
@@ -98,15 +98,15 @@
 	smudge = cat
 
 [filter "speedcrunch"]
-	clean = gnu_sed -Ee '/^([^=]+(State|Geometry)|(Format\\\\Type))=/d'
+	clean = sed -E '/^([^=]+(State|Geometry)|(Format\\\\Type))=/d'
 	smudge = cat
 
 [filter "typora"]
-	clean = xxd -r -p | jsonlint -Sf | jq -S --indent 4 'del(.\"sidebar-width\", .customZoom, .initialize_ver, .lastClosedBounds, .lastSavePath, .pinFolder, .sidebar_tab, .uuid, .zoomFactor, .zoomLevel)'
-	smudge = sh -c 'echo \"$(cat)\" | tac | gnu_sed -E \"2s/,\\$//\" | tac | jq -c | xxd -p | tr -d \"\\\\n\"'
+	clean = xxd -r -p | jsonlint -Sf | jq -S --indent 4 'del(.\"sidebar-width\",.customZoom,.initialize_ver,.lastClosedBounds,.lastSavePath,.pinFolder,.sidebar_tab,.uuid,.zoomFactor,.zoomLevel)'
+	smudge = jsonlint -Sf | jq -c | xxd -p | tr -d '\\n'
 
 [filter "typora-plist"]
-	clean = test -x /usr/libexec/PlistBuddy && "sh -c 'P=$(mktemp)&&cat >\"$P\"&&for k in ClosedWindowFrame NSNavLastRootDirectory NSNavPanelExpandedSizeForOpenMode \"NSWindow Frame _ClosedWindowFrame\" \"NSWindow Frame SUUpdateAlert\" SUHasLaunchedBefore SULastCheckTime SUUpdateRelaunchingMarker currentThemeFolder initialize_ver recentFolder savedLastOpen uuid;do /usr/libexec/PlistBuddy -c \"Delete \\\":$k\\\"\" \"$P\" >&2||:;done&&cat \"$P\"&&rm \"$P\"'" || cat
+	clean = "! test -x /usr/libexec/PlistBuddy&&cat||{ f=$(mktemp)&&cat >\"$f\"&&for k in ClosedWindowFrame NSNavLastRootDirectory NSNavPanelExpandedSizeForOpenMode \"NSWindow Frame _ClosedWindowFrame\" \"NSWindow Frame SUUpdateAlert\" SUHasLaunchedBefore SULastCheckTime SUUpdateRelaunchingMarker currentThemeFolder initialize_ver recentFolder savedLastOpen uuid;do /usr/libexec/PlistBuddy -c \"Delete \\\":$k\\\"\" \"$f\" >&2||:;done&&cat \"$f\"&&rm \"$f\";}"
 	smudge = cat
 
 [filter "vscodekeybindings"]
@@ -114,13 +114,13 @@
 	smudge = cat
 
 [filter "vscodesettings"]
-	clean = jsonlint -Sf | jq -S --indent 4 'del(.\"breadcrumbs.enabled\", .\"editor.fontSize\", .\"editor.minimap.enabled\", .\"salesforcedx-vscode-apex.java.home\", .\"window.zoomLevel\", .\"workbench.colorTheme\")'
+	clean = jsonlint -Sf | jq -S --indent 4 'del(.\"breadcrumbs.enabled\",.\"editor.fontSize\",.\"editor.minimap.enabled\",.\"salesforcedx-vscode-apex.java.home\",.\"window.zoomLevel\",.\"workbench.colorTheme\")'
 	smudge = cat
 
 [filter "whiskermenu"]
-	clean = gnu_sed -Ee '/^(recent|menu-(width|height)|[a-z]+-icon-size)=.*$/d'
+	clean = sed -E '/^(recent|menu-(width|height)|[a-z]+-icon-size)=/d'
 	smudge = cat
 
 [filter "xfpanelswitch"]
-	clean = sh -c 'gnu_tar -jx config.txt -O </dev/stdin'
-	smudge = sh -c 'T=$(mktemp -d)&&cat >\"$T/config.txt\"&&gnu_tar -jcC \"$T\" config.txt&&rm -R \"$T\"'
+	clean = gnu_tar -jx config.txt -O
+	smudge = d=$(mktemp -d) && cat >\"$d/config.txt\" && gnu_tar -jcC \"$d\" config.txt && rm -R \"$d\"
