@@ -118,7 +118,11 @@ rules = {
                 "microsoft teams",
                 "microsoft teams - preview"
             },
-            _criteria.sticky
+            _criteria.sticky,
+            function(state)
+                state.hints = state.hints or get_size_hints()
+                return state.hints and state.hints.min_width > 903
+            end
         },
         actions = append(
             _actions.sticky,

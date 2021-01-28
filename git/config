@@ -42,7 +42,7 @@
 	smudge = cat
 
 [filter "bash"]
-	clean = shfmt -i 4
+	clean = "F=$(cat);_F=$(echo \"$F\"|shfmt -i 4 2>/dev/null)||_F=$F;echo \"$_F\""
 	smudge = cat
 
 [filter "clementine"]

@@ -446,7 +446,7 @@ memory-usage=true
 network-traffic=true
 EOF
     lk_is_false START_PLANK || {
-        nohup plank </dev/null >/dev/null 2>&1 &
+        nohup plank </dev/null &>/dev/null &
         disown
         sleep 2
     }

@@ -1,7 +1,5 @@
-lk-*/**/.bash* filter=bash
-lk-*/**/*.sh filter=bash
-Nextcloud/**/.bash* filter=bash
-Nextcloud/**/*.sh filter=bash
+#*.sh filter=bash
+#.bash* filter=bash
 
 *.plist filter=plist
 *.remmina filter=remmina-connection

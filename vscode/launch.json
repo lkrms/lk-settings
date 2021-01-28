@@ -18,9 +18,9 @@
             "cwd": "${fileDirname}",
             "args": [],
             "env": {
-                "XDEBUG_CONFIG": ""
+                "XDEBUG_SESSION": "vscode"
             },
-            "port": 9000
+            "port": 9003
         }
     ]
 }

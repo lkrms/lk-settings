@@ -55,6 +55,7 @@
     "explorer.incrementalNaming": "smart",
     "extensions.ignoreRecommendations": true,
     "files.associations": {
+        "**/.git/info/attributes": "properties",
         "**/bash/*": "shellscript",
         "**/git/ignore": "ignore",
         "**/git/{config,attributes}": "properties",

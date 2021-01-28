@@ -125,6 +125,52 @@ echo "}"
     return load(output)()
 end
 
+function get_size_hints()
+    local window_xid = get_window_xid()
+    if window_xid == 0 then
+        return
+    end
+    log.info("Getting size hints from xprop")
+    local f =
+        io.popen(
+        [[
+printf "return "
+xprop -id ]] ..
+            window_xid ..
+                [[ \
+    32i "\\n{\$0$(printf ', $%s' {1..17}))}" WM_NORMAL_HINTS |
+    sed -E '/^\{([0-9]+(, )?)*\}$/!d'
+]]
+    )
+    local output = f:read("*a")
+    assert(f:close())
+    local hints = load(output)() or nil
+    if hints then
+        hints = {
+            flags = hints[1],
+            x = hints[2],
+            y = hints[3],
+            width = hints[4],
+            height = hints[5],
+            min_width = hints[6],
+            min_height = hints[7],
+            max_width = hints[8],
+            max_height = hints[9],
+            width_inc = hints[10],
+            height_inc = hints[11],
+            min_aspect_x = hints[12],
+            min_aspect_y = hints[13],
+            max_aspect_x = hints[14],
+            max_aspect_y = hints[15],
+            base_width = hints[16],
+            base_height = hints[17],
+            gravity = hints[18]
+        }
+        log.debug("hints = " .. pretty.write(hints, ""))
+    end
+    return hints
+end
+
 function get_display_at(displays, x, y)
     for display, display_geometry in ipairs(displays) do
         local dx, dy, dw, dh = table.unpack(display_geometry)
@@ -343,7 +389,9 @@ function log_window_full(event)
         get_workspace_count = get_workspace_count(),
         get_screen_geometry = table.concat({get_screen_geometry()}, "x"),
         get_window_fullscreen = (get_window_fullscreen() and "true" or "false"),
-        xywh = table.concat({xywh()}, ",")
+        xywh = table.concat({xywh()}, ","),
+        --
+        get_size_hints = pretty.write(get_size_hints() or {}, "")
     }
     debug_print("On " .. event .. ":")
     for fn, result in pairs(output) do
@@ -386,13 +434,21 @@ function log_window_full(event)
         "_NET_WM_OPAQUE_REGION",
         "_NET_WM_BYPASS_COMPOSITOR"
     }
+    local empty, no_result = {}, {}
     debug_print("  get_window_property:")
     for i, prop in ipairs(props) do
-        local val = get_window_property(prop) or ""
-        if val ~= "" and val ~= "NO RESULT" then
+        local val = get_window_property(prop)
+        if val == nil or val == "" then
+            empty[#empty + 1] = prop
+        elseif val == "NO RESULT" then
+            no_result[#no_result + 1] = prop
+        else
             debug_print(string.format("    %-36s", prop) .. val)
         end
     end
+    debug_print(string.format("    %-36s", "===="))
+    debug_print(string.format("    %-36s", "Empty:") .. table.concat(empty, ","))
+    debug_print(string.format("    %-36s", '"NO RESULT":') .. table.concat(no_result, ","))
     debug_print()
 end
 
