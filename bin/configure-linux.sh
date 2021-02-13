@@ -1,111 +1,93 @@
 #!/bin/bash
 
-# shellcheck disable=SC1090,SC2015,SC2034,SC2207
-
-set -euo pipefail
 lk_die() { echo "${BS:+$BS: }$1" >&2 && exit 1; }
 BS=${BASH_SOURCE[0]} &&
-    [ ! -L "$BS" ] && SCRIPT_DIR=$(cd "${BS%/*}" && pwd -P) ||
+    [ ! -L "$BS" ] && _ROOT=$(cd "${BS%/*}/../desktop" && pwd -P) ||
     lk_die "unable to resolve path to script"
 
-[ -d "${LK_BASE:-}" ] || lk_die "LK_BASE not set"
-
-include=linux . "$LK_BASE/lib/bash/common.sh"
+# shellcheck source=./settings-common.sh
+include=linux . "$_ROOT/../bin/settings-common.sh"
 
 lk_assert_not_root
 lk_assert_is_linux
 
-LK_VERBOSE=1
+cleanup
 
-set +e
-shopt -s nullglob
+_PRIV=${1:-}
 
-! lk_command_exists yay ||
-    yay --save --nocleanmenu --nodiffmenu --noremovemake
+[ ! -d "$_PRIV" ] || {
 
-PRIVATE_DIR=~/.cloud-settings
+    symlink_private_common "$_PRIV"
+    symlink \
+        "$_PRIV/.face" ~/.face \
+        "$_PRIV/espanso/" ~/.config/espanso \
+        "$_PRIV/offlineimap/.offlineimaprc" ~/.offlineimaprc \
+        "$_PRIV/remmina/data/" ~/.local/share/remmina \
+        "$_PRIV/robo3t/.3T/" ~/.3T \
+        "$_PRIV/robo3t/3T/" ~/.config/3T \
+        "$_PRIV/unison/" ~/.unison
 
-[ ! -d "$PRIVATE_DIR" ] || {
+    symlink_if_not_running \
+        "$_PRIV/DBeaverData/" ~/.local/share/DBeaverData \
+        DBeaver "pgrep -x dbeaver"
 
-    [ ! -e "$PRIVATE_DIR/.face" ] || {
-        FACE_DIR=$(realpath "$PRIVATE_DIR/.face")
-        FACE_DIR=${FACE_DIR%/*}
-        HOME_DIR=$(realpath ~)
-        while [ "${FACE_DIR:0:${#HOME_DIR}}" = "$HOME_DIR" ]; do
-            chmod -c a+x "$FACE_DIR"
-            FACE_DIR=${FACE_DIR%/*}
-        done
-    }
+    [ ! -e "$_PRIV/.face" ] ||
+        lk_dir_parents -u ~ "$_PRIV/.face" |
+        xargs -r chmod -c a+x
 
-    lk_symlink "$PRIVATE_DIR/.bashrc" ~/.bashrc
-    lk_symlink "$PRIVATE_DIR/.face" ~/.face
-    lk_symlink "$PRIVATE_DIR/acme.sh/" ~/.acme.sh
-    lk_symlink "$PRIVATE_DIR/aws/" ~/.aws
-    lk_symlink "$PRIVATE_DIR/espanso/" ~/.config/espanso
-    lk_symlink "$PRIVATE_DIR/linode-cli/linode-cli" ~/.config/linode-cli
-    lk_symlink "$PRIVATE_DIR/offlineimap/.offlineimaprc" ~/.offlineimaprc
-    lk_symlink "$PRIVATE_DIR/remmina/data/" ~/.local/share/remmina
-    lk_symlink "$PRIVATE_DIR/robo3t/.3T/" ~/.3T
-    lk_symlink "$PRIVATE_DIR/robo3t/3T/" ~/.config/3T
-    lk_symlink "$PRIVATE_DIR/ssh/" ~/.ssh
-    lk_symlink "$PRIVATE_DIR/unison/" ~/.unison
-
-    for LINK in ~/.gitconfig ~/.gitignore; do
-        [ ! -L "$LINK" ] || [ -e "$LINK" ] ||
-            rm -fv "$LINK"
+    for FILE in "$_PRIV/applications"/*.png; do
+        lk_icon_install "$FILE"
     done
 
-    pgrep -x "dbeaver" >/dev/null &&
-        lk_warn "cannot apply settings while DBeaver is running" ||
-        lk_symlink "$PRIVATE_DIR/DBeaverData/" ~/.local/share/DBeaverData
-
-    for FILE in "$PRIVATE_DIR"/.*-settings; do
-        lk_symlink "$FILE" ~/"${FILE##*/}"
+    for FILE in "$_PRIV/autostart"/*.desktop; do
+        lk_symlink \
+            "$FILE" ~/.config/autostart/"${FILE##*/}"
     done
 
-    for ICON_FILE in "$PRIVATE_DIR"/applications/*.png; do
-        lk_icon_install "$ICON_FILE"
-    done
-
-    for DESKTOP_FILE in "$PRIVATE_DIR"/autostart/*.desktop; do
-        lk_symlink "$DESKTOP_FILE" \
-            ~/.config/autostart/"${DESKTOP_FILE##*/}"
-    done
-
-    for DESKTOP_FILE in "$PRIVATE_DIR"/applications/*.desktop; do
-        [[ ${DESKTOP_FILE##*/} =~ \
-        ^(caprine|skypeforlinux|teams|thunderbird)\.desktop$ ]] ||
-            lk_symlink "$DESKTOP_FILE" \
-                ~/.local/share/applications/"${DESKTOP_FILE##*/}"
+    for FILE in "$_PRIV/applications"/*.desktop; do
+        _FILE=${FILE##*/}
+        case "${_FILE%.desktop}" in
+        caprine | skypeforlinux | teams | thunderbird)
+            continue
+            ;;
+        *)
+            lk_symlink \
+                "$FILE" ~/.local/share/applications/"${FILE##*/}"
+            ;;
+        esac
     done
 
 }
 
 LK_SUDO=1
-lk_symlink "$SCRIPT_DIR/.vimrc" /root/.vimrc
-lk_symlink "$SCRIPT_DIR/iptables/iptables.rules" /etc/iptables/iptables.rules
-lk_symlink "$SCRIPT_DIR/iptables/ip6tables.rules" /etc/iptables/ip6tables.rules
-lk_symlink "$SCRIPT_DIR/libvirt/hooks/qemu" /etc/libvirt/hooks/qemu
-# Fix weird Calibri rendering in Thunderbird
+
+lk_symlink "$_ROOT/.vimrc" /root/.vimrc
+
+lk_symlink "$_ROOT/iptables/iptables.rules" /etc/iptables/iptables.rules
+lk_symlink "$_ROOT/iptables/ip6tables.rules" /etc/iptables/ip6tables.rules
+lk_symlink "$_ROOT/libvirt/hooks/qemu" /etc/libvirt/hooks/qemu
+
 unset LK_SYMLINK_NO_CHANGE
-lk_symlink "$SCRIPT_DIR/fonts/ms-no-bitmaps.conf" \
-    /etc/fonts/conf.d/99-ms-no-bitmaps.conf
+# Fix weird Calibri rendering in Thunderbird
+lk_symlink \
+    "$_ROOT/fonts/ms-no-bitmaps.conf" /etc/fonts/conf.d/99-ms-no-bitmaps.conf
 # Remove emoji from all fonts other than Noto Color Emoji
-lk_symlink "$SCRIPT_DIR/fonts/emoji-fix.conf" \
-    /etc/fonts/conf.d/99-emoji-fix.conf
+lk_symlink \
+    "$_ROOT/fonts/emoji-fix.conf" /etc/fonts/conf.d/99-emoji-fix.conf
 lk_is_true LK_SYMLINK_NO_CHANGE ||
-    { sudo -H fc-cache --force --verbose &&
-        fc-cache --force --verbose; }
+    { sudo -H fc-cache --force --verbose && fc-cache --force --verbose; }
 
 unset LK_SUDO
 
 ! lk_command_exists crontab || {
     CRONTAB=$(awk \
-        -v STRETCHLY="$(lk_double_quote "$SCRIPT_DIR/stretchly/stretchly.sh")" \
+        -v STRETCHLY="$(lk_double_quote "$_ROOT/stretchly/stretchly.sh")" \
         '$6=="stretchly"{$6=STRETCHLY}{print}' \
-        "$SCRIPT_DIR/cron/crontab")
-    diff -q <(crontab -l) <(echo "${CRONTAB%$'\n'}") >/dev/null ||
+        "$_ROOT/cron/crontab")
+    diff -q <(crontab -l) <(echo "${CRONTAB%$'\n'}") >/dev/null || {
+        lk_console_message "Updating crontab"
         crontab <(echo "${CRONTAB%$'\n'}")
+    }
 }
 
 MIMEINFO_FILE=/usr/share/applications/mimeinfo.cache
@@ -182,106 +164,106 @@ MIMEAPPS_FILE=~/.config/mimeapps.list
         sudo tee /usr/lib/firefox/firefox.cfg >/dev/null
 }
 
-lk_symlink "$SCRIPT_DIR/.vimrc" ~/.vimrc
-lk_symlink "$SCRIPT_DIR/.tidyrc" ~/.tidyrc
-lk_symlink "$SCRIPT_DIR/autorandr/" ~/.config/autorandr
-lk_symlink "$SCRIPT_DIR/.byoburc" ~/.byoburc
-lk_symlink "$SCRIPT_DIR/byobu/" ~/.byobu
-lk_symlink "$SCRIPT_DIR/devilspie2/" ~/.config/devilspie2
-lk_symlink "$SCRIPT_DIR/git" ~/.config/git
-lk_symlink "$SCRIPT_DIR/plank/" ~/.config/plank
-lk_symlink "$SCRIPT_DIR/quicktile/quicktile.cfg" ~/.config/quicktile.cfg
-lk_symlink "$SCRIPT_DIR/remmina/" ~/.config/remmina
-lk_symlink "$SCRIPT_DIR/todoist/.todoist-linux.json" ~/.config/.todoist-linux.json
+lk_symlink "$_ROOT/.vimrc" ~/.vimrc
+lk_symlink "$_ROOT/.tidyrc" ~/.tidyrc
+lk_symlink "$_ROOT/autorandr/" ~/.config/autorandr
+lk_symlink "$_ROOT/.byoburc" ~/.byoburc
+lk_symlink "$_ROOT/byobu/" ~/.byobu
+lk_symlink "$_ROOT/devilspie2/" ~/.config/devilspie2
+lk_symlink "$_ROOT/git" ~/.config/git
+lk_symlink "$_ROOT/plank/" ~/.config/plank
+lk_symlink "$_ROOT/quicktile/quicktile.cfg" ~/.config/quicktile.cfg
+lk_symlink "$_ROOT/remmina/" ~/.config/remmina
+lk_symlink "$_ROOT/todoist/.todoist-linux.json" ~/.config/.todoist-linux.json
 
-lk_symlink "$SCRIPT_DIR/nextcloud/sync-exclude.lst" \
+lk_symlink "$_ROOT/nextcloud/sync-exclude.lst" \
     ~/.config/Nextcloud/sync-exclude.lst && {
     [ -e ~/.config/Nextcloud/nextcloud.cfg ] ||
-        cp -v "$SCRIPT_DIR/nextcloud/nextcloud.cfg" \
+        cp -v "$_ROOT/nextcloud/nextcloud.cfg" \
             ~/.config/Nextcloud/nextcloud.cfg
 }
 
 lk_console_message "Checking Sublime Text 3"
 pgrep -x "sublime_text" >/dev/null &&
     lk_warn "cannot apply settings while Sublime Text 3 is running" ||
-    lk_symlink "$SCRIPT_DIR/subl/User/" \
+    lk_symlink "$_ROOT/subl/User/" \
         ~/.config/sublime-text-3/Packages/User
 
 lk_console_message "Checking Sublime Merge"
 pgrep -x "sublime_merge" >/dev/null &&
     lk_warn "cannot apply settings while Sublime Merge is running" ||
-    lk_symlink "$SCRIPT_DIR/smerge/User/" \
+    lk_symlink "$_ROOT/smerge/User/" \
         ~/.config/sublime-merge/Packages/User
 
 lk_console_message "Checking Clementine"
 pgrep -x "clementine" >/dev/null &&
     lk_warn "cannot apply settings while Clementine is running" ||
-    lk_symlink "$SCRIPT_DIR/clementine/Clementine.conf" \
+    lk_symlink "$_ROOT/clementine/Clementine.conf" \
         ~/.config/Clementine/Clementine.conf
 
 lk_console_message "Checking CopyQ"
 pgrep -x "copyq" >/dev/null &&
     lk_warn "cannot apply settings while CopyQ is running" || {
-    lk_symlink "$SCRIPT_DIR/copyq/copyq.conf" \
+    lk_symlink "$_ROOT/copyq/copyq.conf" \
         ~/.config/copyq/copyq.conf &&
-        lk_symlink "$SCRIPT_DIR/copyq/copyq-commands.ini" \
+        lk_symlink "$_ROOT/copyq/copyq-commands.ini" \
             ~/.config/copyq/copyq-commands.ini
 }
 
 lk_console_message "Checking Flameshot"
 pgrep -x "flameshot" >/dev/null &&
     lk_warn "cannot apply settings while Flameshot is running" ||
-    lk_symlink "$SCRIPT_DIR/flameshot/flameshot.ini" \
+    lk_symlink "$_ROOT/flameshot/flameshot.ini" \
         ~/.config/flameshot/flameshot.ini
 
 lk_console_message "Checking Geeqie"
 pgrep -x "geeqie" >/dev/null &&
     lk_warn "cannot apply settings while Geeqie is running" ||
-    lk_symlink "$SCRIPT_DIR/geeqie/" \
+    lk_symlink "$_ROOT/geeqie/" \
         ~/.config/geeqie
 
 lk_console_message "Checking HandBrake"
 pgrep -x "ghb" >/dev/null &&
     lk_warn "cannot apply settings while HandBrake is running" ||
-    lk_symlink "$SCRIPT_DIR/handbrake/presets.json" \
+    lk_symlink "$_ROOT/handbrake/presets.json" \
         ~/.config/ghb/presets.json
 
 lk_console_message "Checking KeePassXC"
 pgrep -x "keepassxc" >/dev/null &&
     lk_warn "cannot apply settings while KeePassXC is running" ||
-    lk_symlink "$SCRIPT_DIR/keepassxc/keepassxc.ini" \
+    lk_symlink "$_ROOT/keepassxc/keepassxc.ini" \
         ~/.config/keepassxc/keepassxc.ini
 
 lk_console_message "Checking nomacs"
 pgrep -x "nomacs" >/dev/null &&
     lk_warn "cannot apply settings while nomacs is running" ||
-    lk_symlink "$SCRIPT_DIR/nomacs/" \
+    lk_symlink "$_ROOT/nomacs/" \
         ~/.config/nomacs
 
 lk_console_message "Checking Recoll"
 pgrep -x "recoll(index)?" >/dev/null &&
     lk_warn "cannot apply settings while Recoll is running" || {
-    lk_symlink "$SCRIPT_DIR/recoll/recoll.conf" \
+    lk_symlink "$_ROOT/recoll/recoll.conf" \
         ~/.recoll/recoll.conf &&
-        lk_symlink "$SCRIPT_DIR/recoll/mimeview" \
+        lk_symlink "$_ROOT/recoll/mimeview" \
             ~/.recoll/mimeview
 }
 
 lk_console_message "Checking Stretchly"
 pgrep -f "Stretchly" >/dev/null &&
     lk_warn "cannot apply settings while Stretchly is running" || {
-    lk_symlink "$SCRIPT_DIR/stretchly/config.json" \
+    lk_symlink "$_ROOT/stretchly/config.json" \
         ~/.config/Stretchly/config.json
 }
 
 lk_console_message "Checking Typora"
 pgrep -x "Typora" >/dev/null &&
     lk_warn "cannot apply settings while Typora is running" || {
-    lk_symlink "$SCRIPT_DIR/typora/profile.data" \
+    lk_symlink "$_ROOT/typora/profile.data" \
         ~/.config/Typora/profile.data &&
-        lk_symlink "$SCRIPT_DIR/typora/conf" \
+        lk_symlink "$_ROOT/typora/conf" \
             ~/.config/Typora/conf &&
-        lk_symlink "$SCRIPT_DIR/typora/themes" \
+        lk_symlink "$_ROOT/typora/themes" \
             ~/.config/Typora/themes
 }
 
@@ -301,11 +283,11 @@ pgrep -x 'codium' >/dev/null &&
             echo -n "$VSCODE_PRODUCT_JSON" | sudo tee "$FILE" >/dev/null
         }
     }
-    lk_symlink "$SCRIPT_DIR/vscode/settings.json" \
+    lk_symlink "$_ROOT/vscode/settings.json" \
         ~/.config/VSCodium/User/settings.json &&
-        lk_symlink "$SCRIPT_DIR/vscode/keybindings.linux.json" \
+        lk_symlink "$_ROOT/vscode/keybindings.linux.json" \
             ~/.config/VSCodium/User/keybindings.json &&
-        lk_symlink "$SCRIPT_DIR/vscode/snippets" \
+        lk_symlink "$_ROOT/vscode/snippets" \
             ~/.config/VSCodium/User/snippets
 }
 
@@ -452,7 +434,7 @@ EOF
     }
 
     lk_console_message "Checking Xfce4"
-    "$SCRIPT_DIR/configure-xfce4.sh" "$@" && {
+    "$_ROOT/../bin/configure-xfce4.sh" "$@" && {
         xfconf-query -c xfwm4 -p /general/theme -n -t string -s "Adapta"
         xfconf-query -c xfwm4 -p /general/title_font -n -t string -s "Cantarell 9"
         xfconf-query -c xsettings -p /Gtk/FontName -n -t string -s "Cantarell 9"
@@ -465,7 +447,7 @@ fi
 
 ! lk_command_exists code || {
     lk_console_message "Checking Visual Studio Code extensions"
-    . "$SCRIPT_DIR/vscode/extensions.sh" || exit
+    . "$_ROOT/vscode/extensions.sh" || exit
     VSCODE_MISSING_EXTENSIONS=($(
         comm -13 \
             <(code --list-extensions | sort -u) \
@@ -484,7 +466,7 @@ fi
         [ ${#VSCODE_MISSING_EXTENSIONS[@]} -eq 0 ] || lk_console_blank
         lk_echo_array VSCODE_EXTRA_EXTENSIONS |
             lk_console_detail_list \
-                "Remove or add to $SCRIPT_DIR/vscode/extensions.sh:" \
+                "Remove or add to $_ROOT/vscode/extensions.sh:" \
                 extension extensions
         lk_console_detail "To remove, run" "code --uninstall-extension <ext-id>"
     }

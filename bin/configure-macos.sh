@@ -1,49 +1,32 @@
 #!/bin/bash
 
-# shellcheck disable=SC1090,SC2015,SC2034,SC2207
-
-set -euo pipefail
 lk_die() { echo "${BS:+$BS: }$1" >&2 && exit 1; }
 BS=${BASH_SOURCE[0]} &&
-    [ ! -L "$BS" ] && SCRIPT_DIR=$(cd "${BS%/*}" && pwd -P) ||
+    [ ! -L "$BS" ] && _ROOT=$(cd "${BS%/*}/../desktop" && pwd -P) ||
     lk_die "unable to resolve path to script"
 
-[ -d "${LK_BASE:-}" ] || lk_die "LK_BASE not set"
-
-include=macos . "$LK_BASE/lib/bash/common.sh"
+# shellcheck source=./settings-common.sh
+include=macos . "$_ROOT/../bin/settings-common.sh"
 
 lk_assert_not_root
 lk_assert_is_macos
 
-LK_VERBOSE=1
+cleanup
 
-set +e
-shopt -s nullglob
+_PRIV=${1:-}
+_PREFS=~/Library/Preferences
+_APP_SUPPORT=~/Library/"Application Support"
 
-PRIVATE_DIR=~/.cloud-settings
+[ ! -d "$_PRIV" ] || {
 
-[ ! -d "$PRIVATE_DIR" ] || {
+    symlink_private_common "$_PRIV"
+    symlink \
+        "$_PRIV/espanso/" "$_PREFS/espanso" \
+        "$_PRIV/unison/" "$_APP_SUPPORT/unison"
 
-    lk_symlink "$PRIVATE_DIR/.bashrc" ~/.bashrc
-    lk_symlink "$PRIVATE_DIR/acme.sh/" ~/.acme.sh
-    lk_symlink "$PRIVATE_DIR/aws/" ~/.aws
-    lk_symlink "$PRIVATE_DIR/espanso/" ~/Library/Preferences/espanso
-    lk_symlink "$PRIVATE_DIR/linode-cli/linode-cli" ~/.config/linode-cli
-    lk_symlink "$PRIVATE_DIR/ssh/" ~/.ssh
-    lk_symlink "$PRIVATE_DIR/unison/" ~/"Library/Application Support/unison"
-
-    for LINK in ~/.gitconfig ~/.gitignore; do
-        [ ! -L "$LINK" ] || [ -e "$LINK" ] ||
-            rm -fv "$LINK"
-    done
-
-    pgrep -xq "dbeaver" &&
-        lk_warn "cannot apply settings while DBeaver is running" ||
-        lk_symlink "$PRIVATE_DIR/DBeaverData/" ~/Library/DBeaverData
-
-    for FILE in "$PRIVATE_DIR"/.*-settings; do
-        lk_symlink "$FILE" ~/"${FILE##*/}"
-    done
+    symlink_if_not_running \
+        "$_PRIV/DBeaverData/" ~/Library/DBeaverData \
+        DBeaver "pgrep -xq dbeaver"
 
 }
 
@@ -71,39 +54,39 @@ PRIVATE_DIR=~/.cloud-settings
         sudo tee /Applications/Firefox.app/Contents/Resources/firefox.cfg >/dev/null
 }
 
-lk_symlink "$SCRIPT_DIR/.vimrc" ~/.vimrc
-lk_symlink "$SCRIPT_DIR/.tidyrc" ~/.tidyrc
-lk_symlink "$SCRIPT_DIR/.byoburc" ~/.byoburc
-lk_symlink "$SCRIPT_DIR/byobu/" ~/.byobu
-lk_symlink "$SCRIPT_DIR/git" ~/.config/git
+lk_symlink "$_ROOT/.vimrc" ~/.vimrc
+lk_symlink "$_ROOT/.tidyrc" ~/.tidyrc
+lk_symlink "$_ROOT/.byoburc" ~/.byoburc
+lk_symlink "$_ROOT/byobu/" ~/.byobu
+lk_symlink "$_ROOT/git" ~/.config/git
 
-lk_symlink "$SCRIPT_DIR/nextcloud/sync-exclude.lst" \
-    ~/Library/Preferences/Nextcloud/sync-exclude.lst && {
-    [ -e ~/Library/Preferences/Nextcloud/nextcloud.cfg ] ||
-        cp -v "$SCRIPT_DIR/nextcloud/nextcloud.cfg" \
-            ~/Library/Preferences/Nextcloud/nextcloud.cfg
+lk_symlink "$_ROOT/nextcloud/sync-exclude.lst" \
+    "$_PREFS"/Nextcloud/sync-exclude.lst && {
+    [ -e "$_PREFS"/Nextcloud/nextcloud.cfg ] ||
+        cp -v "$_ROOT/nextcloud/nextcloud.cfg" \
+            "$_PREFS"/Nextcloud/nextcloud.cfg
 }
 
 lk_console_message "Checking Sublime Text 3"
 pgrep -xq "Sublime Text" &&
     lk_warn "cannot apply settings while Sublime Text 3 is running" ||
-    lk_symlink "$SCRIPT_DIR/subl/User/" \
-        ~/"Library/Application Support/Sublime Text 3/Packages/User"
+    lk_symlink "$_ROOT/subl/User/" \
+        "$_APP_SUPPORT/Sublime Text 3/Packages/User"
 
 lk_console_message "Checking Sublime Merge"
 pgrep -xq "sublime_merge" &&
     lk_warn "cannot apply settings while Sublime Merge is running" ||
-    lk_symlink "$SCRIPT_DIR/smerge/User/" \
-        ~/"Library/Application Support/Sublime Merge/Packages/User"
+    lk_symlink "$_ROOT/smerge/User/" \
+        "$_APP_SUPPORT/Sublime Merge/Packages/User"
 
 lk_console_message "Checking HandBrake"
 pgrep -xq "HandBrake" &&
     lk_warn "cannot apply settings while HandBrake is running" || {
     FILE=~/"Library/Containers/fr.handbrake.HandBrake/Data/Library/Application Support/HandBrake/UserPresets.json"
-    diff -Nq "$SCRIPT_DIR/handbrake/presets.json" "$FILE" >/dev/null || {
+    diff -Nq "$_ROOT/handbrake/presets.json" "$FILE" >/dev/null || {
         lk_file_backup "$FILE" &&
             mkdir -pv "${FILE%/*}" &&
-            cp -fv "$SCRIPT_DIR/handbrake/presets.json" "$FILE"
+            cp -fv "$_ROOT/handbrake/presets.json" "$FILE"
     }
 }
 
@@ -115,7 +98,7 @@ lk_console_message "Checking espanso"
 lk_console_message "Checking Flycut"
 pgrep -xq "Flycut" &&
     lk_warn "cannot apply settings while Flycut is running" || {
-    lk_plist_set_file ~/Library/Preferences/com.generalarcade.flycut.plist
+    lk_plist_set_file "$_PREFS"/com.generalarcade.flycut.plist
     lk_plist_replace ":menuSelectionPastes" bool false
     lk_plist_replace ":savePreference" integer 2
     lk_plist_replace ":rememberNum" real 99
@@ -131,7 +114,7 @@ pgrep -xq "Flycut" &&
 lk_console_message "Checking iCanHazShortcut"
 pgrep -xq "iCanHazShortcut" &&
     lk_warn "cannot apply settings while iCanHazShortcut is running" ||
-    lk_symlink "$SCRIPT_DIR/icanhazshortcut/" \
+    lk_symlink "$_ROOT/icanhazshortcut/" \
         ~/.config/iCanHazShortcut
 FILE=~/Library/LaunchAgents/info.deseven.icanhazshortcut.plist
 if [ -d /Applications/iCanHazShortcut.app ] && [ ! -e "$FILE" ]; then
@@ -181,7 +164,7 @@ defaults write com.googlecode.iterm2 VisualIndicatorForEsc -bool false
 
 pgrep -xq iTerm2 &&
     lk_warn "cannot apply settings while iTerm2 is running" || {
-    lk_plist_set_file ~/Library/Preferences/com.googlecode.iterm2.plist
+    lk_plist_set_file "$_PREFS"/com.googlecode.iterm2.plist
     lk_plist_maybe_add ":Window Arrangements" dict
     lk_plist_replace ":Window Arrangements:No windows" array
     lk_plist_replace ":Default Arrangement Name" string "No windows"
@@ -189,7 +172,7 @@ pgrep -xq iTerm2 &&
     lk_plist_replace ":OpenNoWindowsAtStartup" bool false
 
     lk_plist_replace_from_file ":Custom Color Presets" dict \
-        "$SCRIPT_DIR/iterm2/Custom Color Presets.plist"
+        "$_ROOT/iterm2/Custom Color Presets.plist"
 
     ! lk_plist_exists ":New Bookmarks:0" &&
         lk_warn "no profile to configure" || {
@@ -212,18 +195,18 @@ pgrep -xq iTerm2 &&
         lk_plist_replace ":New Bookmarks:0:Title Components" integer 512
         lk_plist_replace ":New Bookmarks:0:Unlimited Scrollback" bool true
         lk_plist_replace_from_file ":New Bookmarks:0:Keyboard Map" dict \
-            "$SCRIPT_DIR/iterm2/Keyboard Map.plist"
+            "$_ROOT/iterm2/Keyboard Map.plist"
     }
 }
 
 lk_console_message "Checking KeePassXC"
 pgrep -xq "KeePassXC" &&
     lk_warn "cannot apply settings while KeePassXC is running" ||
-    lk_symlink "$SCRIPT_DIR/keepassxc/keepassxc.ini" \
-        ~/"Library/Application Support/keepassxc/keepassxc.ini"
+    lk_symlink "$_ROOT/keepassxc/keepassxc.ini" \
+        "$_APP_SUPPORT/keepassxc/keepassxc.ini"
 
 lk_console_message "Checking Magnet"
-lk_plist_set_file ~/Library/Preferences/com.crowdcafe.windowmagnet.plist
+lk_plist_set_file "$_PREFS"/com.crowdcafe.windowmagnet.plist
 lk_plist_replace ":expandWindowNorthWestComboKey" dict
 lk_plist_replace ":expandWindowNorthEastComboKey" dict
 lk_plist_replace ":expandWindowSouthWestComboKey" dict
@@ -242,8 +225,8 @@ lk_plist_replace ":centerWindowComboKey:modifierFlags" integer 786432
 lk_console_message "Checking Stretchly"
 pgrep -xq "stretchly" &&
     lk_warn "cannot apply settings while Stretchly is running" ||
-    lk_symlink "$SCRIPT_DIR/stretchly/config.json" \
-        ~/"Library/Application Support/stretchly/config.json"
+    lk_symlink "$_ROOT/stretchly/config.json" \
+        "$_APP_SUPPORT/stretchly/config.json"
 
 #for KEY in TDQuickAddShortcut TDToggleShortcut; do
 #    defaults export com.todoist.mac.Todoist - |
@@ -272,10 +255,10 @@ AAAAAQEAAAAAAAAAGgAAAAAAAAAAAAAAAAAAAMc=
 lk_console_message "Checking Typora"
 pgrep -xq "Typora" &&
     lk_warn "cannot apply settings while Typora is running" || {
-    lk_symlink "$SCRIPT_DIR/typora/abnerworks.Typora.plist" \
+    lk_symlink "$_ROOT/typora/abnerworks.Typora.plist" \
         "$HOME/Library/Preferences/abnerworks.Typora.plist" &&
-        lk_symlink "$SCRIPT_DIR/typora/themes" \
-            ~/"Library/Application Support/abnerworks.Typora/themes"
+        lk_symlink "$_ROOT/typora/themes" \
+            "$_APP_SUPPORT/abnerworks.Typora/themes"
 }
 
 lk_console_message "Checking Visual Studio Code"
@@ -294,12 +277,12 @@ pgrep -fq "^/Applications/VSCodium.app/Contents/MacOS/Electron" &&
             echo -n "$VSCODE_PRODUCT_JSON" | sudo tee "$FILE" >/dev/null
         }
     }
-    lk_symlink "$SCRIPT_DIR/vscode/settings.json" \
-        ~/"Library/Application Support/VSCodium/User/settings.json" &&
-        lk_symlink "$SCRIPT_DIR/vscode/keybindings.mac.json" \
-            ~/"Library/Application Support/VSCodium/User/keybindings.json" &&
-        lk_symlink "$SCRIPT_DIR/vscode/snippets" \
-            ~/"Library/Application Support/VSCodium/User/snippets"
+    lk_symlink "$_ROOT/vscode/settings.json" \
+        "$_APP_SUPPORT/VSCodium/User/settings.json" &&
+        lk_symlink "$_ROOT/vscode/keybindings.mac.json" \
+            "$_APP_SUPPORT/VSCodium/User/keybindings.json" &&
+        lk_symlink "$_ROOT/vscode/snippets" \
+            "$_APP_SUPPORT/VSCodium/User/snippets"
 }
 
 lk_macos_maybe_install_pkg_url \
@@ -475,7 +458,7 @@ killall Finder
 
 ! lk_command_exists code || {
     lk_console_message "Checking Visual Studio Code extensions"
-    . "$SCRIPT_DIR/vscode/extensions.sh" || exit
+    . "$_ROOT/vscode/extensions.sh" || exit
     VSCODE_MISSING_EXTENSIONS=($(
         comm -13 \
             <(code --list-extensions | sort -u) \
@@ -494,7 +477,7 @@ killall Finder
         echo
         lk_echo_array VSCODE_EXTRA_EXTENSIONS |
             lk_console_detail_list \
-                "Remove or add to $SCRIPT_DIR/vscode/extensions.sh:" \
+                "Remove or add to $_ROOT/vscode/extensions.sh:" \
                 extension extensions
         lk_console_detail "To remove, run" "code --uninstall-extension <ext-id>"
     }

@@ -68,6 +68,9 @@
         "*crontab*": "properties",
         ".{bash_login,bash_profile,bashrc,profile,xsessionrc}": "shellscript"
     },
+    "files.exclude": {
+        "**/extjs/build/**": true
+    },
     "files.watcherExclude": {
         "**/wp-content/uploads/**": true
     },

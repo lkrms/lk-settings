@@ -1,22 +1,14 @@
 #!/bin/bash
 
-# shellcheck disable=SC1090,SC2034,SC2015
-
-set -euo pipefail
 lk_die() { echo "${BS:+$BS: }$1" >&2 && exit 1; }
 BS=${BASH_SOURCE[0]} &&
-    [ ! -L "$BS" ] && SCRIPT_DIR=$(cd "${BS%/*}" && pwd -P) ||
+    [ ! -L "$BS" ] && _ROOT=$(cd "${BS%/*}/../desktop" && pwd -P) ||
     lk_die "unable to resolve path to script"
 
-[ -d "${LK_BASE:-}" ] || lk_die "LK_BASE not set"
-
-include=linux,provision . "$LK_BASE/lib/bash/common.sh"
+# shellcheck source=./settings-common.sh
+include=linux,provision . "$_ROOT/../bin/settings-common.sh"
 
 lk_assert_command_exists xfconf-query
-
-LK_VERBOSE=1
-
-shopt -s nullglob
 
 function xfce4_apply_setting() {
     local ARGS
@@ -52,7 +44,7 @@ while read -r PLUGIN_ID PLUGIN_NAME; do
 done < <(xfconf-query -c xfce4-panel -p /plugins -lv |
     grep -Po "(?<=^/plugins/plugin-)[0-9]+$S+$NS+\$" | sort -n)
 
-FILE=$SCRIPT_DIR/xfce4/xfconf-settings
+FILE=$_ROOT/xfce4/xfconf-settings
 lk_mapfile XFCONF_SETTING <(sed -E "/^($S*\$|#)/d" "$FILE")
 
 for i in "${!XFCONF_SETTING[@]}"; do
@@ -98,7 +90,7 @@ DPI=$(lk_x_dpi) || DPI=
 
 CONF=$(grep -Ev \
     "^(xft-dpi$S*=|\$)" \
-    "$SCRIPT_DIR/xfce4/lightdm/lightdm-gtk-greeter.conf" &&
+    "$_ROOT/xfce4/lightdm/lightdm-gtk-greeter.conf" &&
     [ -z "$DPI" ] || echo "xft-dpi = $DPI")
 LK_SUDO=1 lk_file_replace /etc/lightdm/lightdm-gtk-greeter.conf "$CONF"
 
@@ -133,25 +125,25 @@ if [ -n "$DPI" ] && [ -f /etc/default/grub ]; then
 fi
 
 mkdir -pv ~/.config/xfce4/panel
-cp -nv "$SCRIPT_DIR/xfce4/panel"/*.rc ~/.config/xfce4/panel/
-lk_symlink "$SCRIPT_DIR/xfce4/terminal/config" ~/.config/xfce4/terminal
-lk_symlink "$SCRIPT_DIR/xfce4/terminal/data" ~/.local/share/xfce4/terminal
-lk_symlink "$SCRIPT_DIR/xfce4/thunar/" ~/.config/Thunar
-lk_symlink "$SCRIPT_DIR/xfce4/xfce4-panel-profiles/" \
+cp -nv "$_ROOT/xfce4/panel"/*.rc ~/.config/xfce4/panel/
+lk_symlink "$_ROOT/xfce4/terminal/config" ~/.config/xfce4/terminal
+lk_symlink "$_ROOT/xfce4/terminal/data" ~/.local/share/xfce4/terminal
+lk_symlink "$_ROOT/xfce4/thunar/" ~/.config/Thunar
+lk_symlink "$_ROOT/xfce4/xfce4-panel-profiles/" \
     ~/.local/share/xfce4-panel-profiles
 
-lk_symlink "$SCRIPT_DIR/xfce4/share/themes/Adapta/plank/" \
+lk_symlink "$_ROOT/xfce4/share/themes/Adapta/plank/" \
     ~/.local/share/plank/themes/Adapta
 lk_symlink /usr/share/themes/Adapta/gtk-3.24/gtk.gresource \
-    "$SCRIPT_DIR/xfce4/share/themes/Adapta/gtk-3.24/gtk.gresource" &&
-    lk_symlink "$SCRIPT_DIR/xfce4/share/themes/" \
+    "$_ROOT/xfce4/share/themes/Adapta/gtk-3.24/gtk.gresource" &&
+    lk_symlink "$_ROOT/xfce4/share/themes/" \
         ~/.local/share/themes
 
 rm -Rfv ~/.cache/sessions
 
 [ -e ~/.config/pulse/default.pa ] || {
     mkdir -p ~/.config/pulse &&
-        cp -v "$SCRIPT_DIR/xfce4/pulse/default.pa" ~/.config/pulse/default.pa
+        cp -v "$_ROOT/xfce4/pulse/default.pa" ~/.config/pulse/default.pa
 }
 
 # Make hddtemp work with xfce4-sensors-plugin

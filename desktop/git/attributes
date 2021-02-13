@@ -1,0 +1,25 @@
+#.bash* filter=bash
+#*.sh filter=bash
+
+accels filter=accels
+accels.scm filter=accels
+Clementine.conf filter=clementine
+**/DBeaverData/workspace6/*/.dbeaver/credentials-config.json filter=dbeaver-credentials
+**/DBeaverData/workspace6/*/.plugins/*/.settings/*.prefs filter=dbeaver-prefs
+**/DBeaverData/workspace6/*/.dbeaver/data-sources.json filter=dbeaver-sources
+flameshot.ini filter=flameshot
+geeqierc.xml filter=geeqie
+**/i[cC]an[hH]az[sS]hortcut/config.ini filter=icanhazshortcut
+**/DBeaverData/workspace6/*/.dbeaver/*.json filter=jq
+keepassxc.ini filter=keepassxc
+**/nomacs/*.conf filter=nomacs
+*.plist filter=plist
+remmina.pref filter=remmina
+*.remmina filter=remmina-connection
+SpeedCrunch.ini filter=speedcrunch
+**/[tT]ypora/*.data filter=typora
+abnerworks.Typora.plist filter=typora-plist
+**/vscode/keybindings*.json filter=vscodekeybindings
+**/vscode/settings.json filter=vscodesettings
+whiskermenu*.rc filter=whiskermenu
+**/xfce4-panel-profiles/*.tar.bz2 filter=xfpanelswitch
