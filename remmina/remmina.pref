@@ -60,7 +60,6 @@ deny_screenshot_clipboard=true
 use_master_password=false
 unlock_timeout=0
 unlock_password=
-last_quickconnect_protocol=
 hide_searchbar=false
 ssh_tcp_keepidle=20
 ssh_tcp_keepintvl=10

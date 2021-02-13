@@ -35,13 +35,13 @@ COMMIT
 -A lk_check -m conntrack --ctstate INVALID -j DROP
 -A lk_check -p tcp -m tcp ! --tcp-flags FIN,SYN,RST,ACK SYN -m conntrack --ctstate NEW -j REJECT --reject-with tcp-reset
 -A lk_check -p icmp -m icmp --icmp-type 8 -m conntrack --ctstate NEW -j ACCEPT
--A lk_input -p tcp -m tcp --dport 9024 -j ACCEPT
+-A lk_input -p tcp -m tcp --dport 22 -j ACCEPT
 -A lk_input -p tcp -m tcp --dport 80 -j ACCEPT
 -A lk_input -p tcp -m tcp --dport 443 -j ACCEPT
 -A lk_input -p tcp -m tcp --dport 139 -j ACCEPT
 -A lk_input -p tcp -m tcp --dport 445 -j ACCEPT
 -A lk_input -p udp -m udp --dport 137:138 -j ACCEPT
--A lk_input -p tcp -m tcp --dport 9000 -j ACCEPT
+-A lk_input -p tcp -m tcp --dport 9003 -j ACCEPT
 -A lk_reject -p udp -m udp -j REJECT --reject-with icmp-port-unreachable
 -A lk_reject -p tcp -m tcp -j REJECT --reject-with tcp-reset
 -A lk_reject -j REJECT --reject-with icmp-proto-unreachable

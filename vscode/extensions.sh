@@ -14,6 +14,7 @@ VSCODE_EXTENSIONS=(
     bmewburn.vscode-intelephense-client
     chenxsan.vscode-standardjs
     chrmarti.regex
+    dakara.transformer
     dbaeumer.vscode-eslint
     DotJoshJohnson.xml
     dracula-theme.theme-dracula
@@ -25,6 +26,7 @@ VSCODE_EXTENSIONS=(
     HookyQR.beautify
     humao.rest-client
     jflbr.jwt-decoder
+    jkjustjoshing.vscode-text-pastry
     jprestidge.theme-material-theme
     jq-syntax-highlighting.jq-syntax-highlighting
     jrebocho.vscode-random
@@ -42,6 +44,7 @@ VSCODE_EXTENSIONS=(
     ms-vscode.cpptools
     ms-vscode.powershell
     neilbrayfield.php-docblocker
+    piotrpalarz.vscode-gitignore-generator
     PKief.material-icon-theme
     pthorsson.vscode-jsp
     redhat.java

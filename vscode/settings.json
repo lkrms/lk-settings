@@ -228,6 +228,14 @@
         "-x"
     ],
     "shellcheck.disableVersionCheck": true,
+    "shellcheck.exclude": [
+        "SC1090",
+        "SC2015",
+        "SC2034",
+        "SC2207"
+    ],
+    "shellcheck.executablePath": "shellcheck",
+    "shellcheck.run": "onSave",
     "standard.enable": false,
     "telemetry.enableTelemetry": false,
     "terminal.external.osxExec": "iTerm.app",

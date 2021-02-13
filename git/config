@@ -42,7 +42,7 @@
 	smudge = cat
 
 [filter "bash"]
-	clean = "F=$(cat);_F=$(echo \"$F\"|shfmt -i 4 2>/dev/null)||_F=$F;echo \"$_F\""
+	clean = "bash -c 'F=$(cat);_F=$(echo \"$F\"|shfmt -i 4 2>/dev/null)||_F=$F;echo \"$_F\"'"
 	smudge = cat
 
 [filter "clementine"]
@@ -90,7 +90,7 @@
 	smudge = cat
 
 [filter "remmina"]
-	clean = sed -E '/^(secret|screenshot_path|recent_SFTP|periodic_rmnews_[a-z_]+|main_(width|height|maximize|sort_(column_id|order)))=/d'
+	clean = sed -E '/^(last_quickconnect_protocol|secret|screenshot_path|recent_[A-Z]+|periodic_rmnews_[a-z_]+|main_(width|height|maximize|sort_(column_id|order)))=/d'
 	smudge = cat
 
 [filter "remmina-connection"]

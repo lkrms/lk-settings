@@ -36,31 +36,44 @@
 			"lk_echo_array ${1:array_var} | lk_console_list \"${2:message}\" ${3:single} ${4:plural}"
 		]
 	},
-	"getopts": {
+	"arg: flag": {
+		"scope": "shellscript",
+		"prefix": "arg",
+		"body": [
+			"local FLAG",
+			"[ \"\\${1:-}\" != ${0:-f} ] || { FLAG=1 && shift; }"
+		]
+	},
+	"arg: value": {
+		"scope": "shellscript",
+		"prefix": "arg2",
+		"body": [
+			"local VALUE",
+			"[ \"\\${1:-}\" != ${0:-v} ] || { VALUE=\\$2 && shift 2; }"
+		]
+	},
+	"arg: getopts": {
 		"scope": "shellscript",
 		"prefix": "getopts",
 		"body": [
-			"function ${1:function_name}() {",
-			"    local OPTIND OPTARG OPT LK_USAGE FLAG VALUE",
-			"    LK_USAGE=\"\\",
-			"Usage: \\$(lk_myself -f) [-f] [-v VALUE]\"",
-			"    while getopts \":fv:\" OPT; do",
-			"        case \"\\$OPT\" in",
-			"        f)",
-			"            FLAG=1",
-			"            ;;",
-			"        v)",
-			"            VALUE=\\$OPTARG",
-			"            ;;",
-			"        \\? | :)",
-			"            lk_usage",
-			"            return 1",
-			"            ;;",
-			"        esac",
-			"    done",
-			"    shift \\$((OPTIND - 1))",
-			"    $0",
-			"}"
+			"local OPTIND OPTARG OPT LK_USAGE FLAG VALUE",
+			"LK_USAGE=\"\\",
+			"Usage: \\$(lk_myself -f) $0\"",
+			"while getopts \":fv:\" OPT; do",
+			"    case \"\\$OPT\" in",
+			"    f)",
+			"        FLAG=1",
+			"        ;;",
+			"    v)",
+			"        VALUE=\\$OPTARG",
+			"        ;;",
+			"    \\? | :)",
+			"        lk_usage",
+			"        return 1",
+			"        ;;",
+			"    esac",
+			"done",
+			"shift \\$((OPTIND - 1))"
 		]
 	},
 	"shellcheck disable": {
