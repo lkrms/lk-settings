@@ -1,3 +1,6 @@
+[include]
+	path = config-filters
+
 [user]
 	name = Luke Arms
 	useConfigOnly = true
@@ -31,96 +34,3 @@
 [mergetool "sourcetree"]
 	cmd = /Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
 	trustExitCode = true
-
-# To go from a working command line to a working filter:
-# 1. replace all \ with \\
-# 2. replace all " with \"
-# 3. if the filter contains semicolons, double-quote the whole thing
-
-[filter "accels"]
-	clean = "LC_ALL=C awk 'BEGIN{r=\"\\\\(gtk_accel_path \"}$0~\"^; \"r{next}$0~\"^\"r{print$0|\"sort\";next}{print}END{close(\"sort\")}'"
-	smudge = cat
-
-[filter "bash"]
-	clean = "bash -c 'F=$(cat);_F=$(echo \"$F\"|shfmt -i 4 2>/dev/null)||_F=$F;echo \"$_F\"'"
-	smudge = cat
-
-[filter "clementine"]
-	clean = sed -E '/^(username|password|auth_code|login_state|gpodder_device_name|file_path|last_(path|(refreshed|save)[_a-z]*)|download_dir|column_alignments|current_tab|geometry|hidden|maximized|splitter_state|state(_version)?|[\\0-9a-z]*volume|playback_(position|state))=/d'
-	smudge = cat
-
-[filter "dbeaver-credentials"]
-	clean = openssl aes-128-cbc -d -K babb4a9f774ab853c96c2d653dfe544a -iv 00000000000000000000000000000000 | cut -b17- | jq
-	smudge = echo \"0123456789abcdef$(jq -c)\" | openssl aes-128-cbc -K babb4a9f774ab853c96c2d653dfe544a -iv 00000000000000000000000000000000
-
-[filter "dbeaver-sources"]
-	clean = jq -S --indent 4
-	smudge = cat
-
-[filter "dbeaver-prefs"]
-	clean = sed -E '/^(SQLEditor.resultSet.ratio|[a-zA-Z._]+_TAB_(BG_(END|START)|TEXT_COLOR))=/d'
-	smudge = cat
-
-[filter "flameshot"]
-	clean = sed -E '/^(drawThickness|save(AfterCopy)?Path)=/d'
-	smudge = cat
-
-[filter "geeqie"]
-	clean = sed -E '/^[[:blank:]]+((file_ops\\.safe_delete|home|last)_path|(main|folder|float|properties|log|search|dupe)_window\\.(x|y|w|h|maximized|[a-z]+_pos)) ?=/d'
-	smudge = cat
-
-[filter "icanhazshortcut"]
-	clean = sed -E '/^(window_(x|y|width|height)|[a-z]+_column_(enabled|width)) ?=/d'
-	smudge = cat
-
-[filter "jq"]
-	clean = jq
-	smudge = jq -c
-
-[filter "keepassxc"]
-	clean = "awk '/^\\[PasswordGenerator\\]/{skip=1;next}/^\\[/{skip=0}/^(UseTouchID|HidePasswords)=/{next}!skip{print}'"
-	smudge = cat
-
-[filter "nomacs"]
-	clean = sed -E '/^(geometry(Nomacs)?|windowState|[a-zA-Z]+-answer)=/d'
-	smudge = cat
-
-[filter "plist"]
-	clean = ! type -P plutil >/dev/null && cat || plutil -convert xml1 -o - -
-	smudge = cat
-
-[filter "remmina"]
-	clean = sed -E '/^(last_quickconnect_protocol|secret|screenshot_path|recent_[A-Z]+|periodic_rmnews_[a-z_]+|main_(width|height|maximize|sort_(column_id|order)))=/d'
-	smudge = cat
-
-[filter "remmina-connection"]
-	clean = "F=$(cat); echo \"$F\" | head -n1; echo \"$F\" | tail -n+2 | sort"
-	smudge = cat
-
-[filter "speedcrunch"]
-	clean = sed -E '/^([^=]+(State|Geometry)|(Format\\\\Type))=/d'
-	smudge = cat
-
-[filter "typora"]
-	clean = xxd -r -p | jsonlint -Sf | jq -S --indent 4 'del(.\"sidebar-width\",.customZoom,.initialize_ver,.lastClosedBounds,.lastSavePath,.pinFolder,.sidebar_tab,.uuid,.zoomFactor,.zoomLevel)'
-	smudge = jsonlint -Sf | jq -c | xxd -p | tr -d '\\n'
-
-[filter "typora-plist"]
-	clean = "! test -x /usr/libexec/PlistBuddy&&cat||{ f=$(mktemp)&&cat >\"$f\"&&for k in ClosedWindowFrame NSNavLastRootDirectory NSNavPanelExpandedSizeForOpenMode \"NSWindow Frame _ClosedWindowFrame\" \"NSWindow Frame SUUpdateAlert\" SUHasLaunchedBefore SULastCheckTime SUUpdateRelaunchingMarker currentThemeFolder initialize_ver recentFolder savedLastOpen uuid;do /usr/libexec/PlistBuddy -c \"Delete \\\":$k\\\"\" \"$f\" >&2||:;done&&cat \"$f\"&&rm \"$f\";}"
-	smudge = cat
-
-[filter "vscodekeybindings"]
-	clean = "jsonlint -Sf | jq --indent 4 'sort_by((.command|sub(\"^-\";\"\"))+\" \"+.key)'"
-	smudge = cat
-
-[filter "vscodesettings"]
-	clean = jsonlint -Sf | jq -S --indent 4 'del(.\"breadcrumbs.enabled\",.\"editor.fontSize\",.\"editor.minimap.enabled\",.\"salesforcedx-vscode-apex.java.home\",.\"window.zoomLevel\",.\"workbench.colorTheme\")'
-	smudge = cat
-
-[filter "whiskermenu"]
-	clean = sed -E '/^(recent|menu-(width|height)|[a-z]+-icon-size)=/d'
-	smudge = cat
-
-[filter "xfpanelswitch"]
-	clean = gnu_tar -jx config.txt -O
-	smudge = d=$(mktemp -d) && cat >\"$d/config.txt\" && gnu_tar -jcC \"$d\" config.txt && rm -R \"$d\"

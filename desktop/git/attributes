@@ -1,19 +1,21 @@
 #.bash* filter=bash
 #*.sh filter=bash
 
-accels filter=accels
-accels.scm filter=accels
-Clementine.conf filter=clementine
+*.plist filter=plist
+
+**/DBeaverData/workspace6/*/.dbeaver/*.json filter=jq
 **/DBeaverData/workspace6/*/.dbeaver/credentials-config.json filter=dbeaver-credentials
 **/DBeaverData/workspace6/*/.plugins/*/.settings/*.prefs filter=dbeaver-prefs
 **/DBeaverData/workspace6/*/.dbeaver/data-sources.json filter=dbeaver-sources
+
+accels filter=accels
+accels.scm filter=accels
+Clementine.conf filter=clementine
 flameshot.ini filter=flameshot
 geeqierc.xml filter=geeqie
 **/i[cC]an[hH]az[sS]hortcut/config.ini filter=icanhazshortcut
-**/DBeaverData/workspace6/*/.dbeaver/*.json filter=jq
 keepassxc.ini filter=keepassxc
 **/nomacs/*.conf filter=nomacs
-*.plist filter=plist
 remmina.pref filter=remmina
 *.remmina filter=remmina-connection
 SpeedCrunch.ini filter=speedcrunch

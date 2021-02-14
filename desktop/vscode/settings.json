@@ -58,7 +58,7 @@
         "**/.git/info/attributes": "properties",
         "**/bash/*": "shellscript",
         "**/git/ignore": "ignore",
-        "**/git/{config,attributes}": "properties",
+        "**/git/{config*,attributes}": "properties",
         "**/polkit-1/rules.d/*.rules": "javascript",
         "**/unison/*": "properties",
         "*-lua": "lua",
