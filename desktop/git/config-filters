@@ -11,6 +11,10 @@
 	clean = "bash -c 'F=$(cat);_F=$(echo \"$F\"|shfmt -i 4 2>/dev/null)||_F=$F;echo \"$_F\"'"
 	smudge = cat
 
+[filter "bash2"]
+	clean = "bash -c 'F=$(cat);_F=$(echo \"$F\"|shfmt -i 2 2>/dev/null)||_F=$F;echo \"$_F\"'"
+	smudge = cat
+
 [filter "clementine"]
 	clean = sed -E '/^(username|password|auth_code|login_state|gpodder_device_name|file_path|last_(path|(refreshed|save)[_a-z]*)|download_dir|column_alignments|current_tab|geometry|hidden|maximized|splitter_state|state(_version)?|[\\0-9a-z]*volume|playback_(position|state))=/d'
 	smudge = cat
@@ -80,7 +84,7 @@
 	smudge = cat
 
 [filter "vscodesettings"]
-	clean = jsonlint -Sf | jq -S --indent 4 'del(.\"breadcrumbs.enabled\",.\"editor.fontSize\",.\"editor.minimap.enabled\",.\"salesforcedx-vscode-apex.java.home\",.\"window.zoomLevel\",.\"workbench.colorTheme\")'
+	clean = jsonlint -Sf | jq -S --indent 4 'del(.\"breadcrumbs.enabled\",.\"editor.fontSize\",.\"editor.minimap.enabled\",.\"salesforcedx-vscode-apex.java.home\",.\"window.zoomLevel\",.\"workbench.colorTheme\")|walk(if type==\"array\" then sort_by(try ascii_upcase catch \"\") else . end)'
 	smudge = cat
 
 [filter "whiskermenu"]

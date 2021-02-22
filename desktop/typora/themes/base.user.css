@@ -1,10 +1,18 @@
 @media print {
-    #write {
-        max-width: 100%;
-    }
-    @page {
-        size: A4;
-        margin-left: 0;
-        margin-right: 0;
-    }
+  #write {
+    max-width: 100%;
+  }
+
+  @page {
+    size: A4;
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  hr {
+    page-break-after: always;
+    break-after: page;
+    height: 0.1mm;
+    visibility: hidden;
+  }
 }
