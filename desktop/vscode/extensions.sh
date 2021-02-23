@@ -1,12 +1,11 @@
 #!/bin/bash
 
-# shellcheck disable=SC2034
-
 VSCODE_EXTENSIONS=(
     # James-Yu.latex-workshop
     # ms-vscode-remote.remote-ssh-edit
     # ms-vscode-remote.vscode-remote-extensionpack
     # mtxr.sqltools
+    # neilbrayfield.php-docblocker
     # salesforce.salesforcedx-vscode
     # Sophisticode.php-formatter
     # thiagoabreu.vala
@@ -43,7 +42,6 @@ VSCODE_EXTENSIONS=(
     ms-vscode.azure-account
     ms-vscode.cpptools
     ms-vscode.powershell
-    neilbrayfield.php-docblocker
     piotrpalarz.vscode-gitignore-generator
     PKief.material-icon-theme
     pthorsson.vscode-jsp

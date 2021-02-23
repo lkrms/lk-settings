@@ -11,6 +11,9 @@
     "[jsonc]": {
         "editor.defaultFormatter": "vscode.json-language-features"
     },
+    "[php]": {
+        "editor.autoClosingBrackets": "languageDefined"
+    },
     "[xml]": {
         "editor.defaultFormatter": "redhat.vscode-xml"
     },
@@ -124,7 +127,6 @@
     "gitlens.statusBar.format": "${author}, ${date} • ${message}",
     "gitlens.statusBar.reduceFlicker": true,
     "html.autoClosingTags": false,
-    "intelephense.format.enable": false,
     "intelephense.stubs": [
         "apache",
         "bcmath",
@@ -150,13 +152,11 @@
         "hash",
         "iconv",
         "imap",
-        "interbase",
         "intl",
         "json",
         "ldap",
         "libxml",
         "mbstring",
-        "mcrypt",
         "memcache",
         "memcached",
         "meta",
@@ -177,9 +177,7 @@
         "posix",
         "pspell",
         "readline",
-        "recode",
         "Reflection",
-        "regex",
         "session",
         "shmop",
         "SimpleXML",
@@ -191,13 +189,11 @@
         "sqlite3",
         "standard",
         "superglobals",
-        "sybase",
         "sysvmsg",
         "sysvsem",
         "sysvshm",
         "tidy",
         "tokenizer",
-        "wddx",
         "xml",
         "xmlreader",
         "xmlrpc",
@@ -216,7 +212,6 @@
     "nightswitch.autoSwitch": false,
     "nightswitch.themeDay": "Ayu Light Bordered",
     "nightswitch.themeNight": "Dracula Soft",
-    "php.suggest.basic": false,
     "poor-mans-t-sql-formatter.std.indent": "    ",
     "poor-mans-t-sql-formatter.std.trailingCommas": false,
     "powershell.startAutomatically": false,

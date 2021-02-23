@@ -6,7 +6,7 @@ BS=${BASH_SOURCE[0]} &&
     lk_die "unable to resolve path to script"
 
 # shellcheck source=./settings-common.sh
-include=linux . "$_ROOT/../bin/settings-common.sh"
+include=linux,misc . "$_ROOT/../bin/settings-common.sh"
 
 lk_assert_not_root
 lk_assert_is_linux
@@ -448,6 +448,9 @@ fi
 ! lk_command_exists code || {
     lk_console_message "Checking Visual Studio Code extensions"
     . "$_ROOT/vscode/extensions.sh" || exit
+    ! lk_in_array bmewburn.vscode-intelephense-client VSCODE_EXTENSIONS ||
+        lk_vscode_extension_disable vscode.php-language-features ||
+        lk_warn "error disabling: vscode.php-language-features" || true
     VSCODE_MISSING_EXTENSIONS=($(
         comm -13 \
             <(code --list-extensions | sort -u) \
