@@ -1,0 +1,29 @@
+#!/bin/bash
+
+export BOOTSTRAP_USERNAME=
+export BOOTSTRAP_PASSWORD=
+export BOOTSTRAP_KEY=
+export BOOTSTRAP_FULL_NAME=
+export LK_IPV4_ADDRESS=${LK_IPV4_ADDRESS:-}
+export LK_IPV4_GATEWAY=${LK_IPV4_GATEWAY:-}
+export LK_IPV4_DNS_SERVER=${LK_IPV4_DNS_SERVER:-}
+export LK_IPV4_DNS_SEARCH=${LK_IPV4_DNS_SEARCH:-}
+export LK_BRIDGE_INTERFACE=br0
+export LK_NODE_TIMEZONE=Australia/Sydney
+export LK_NTP_SERVER=ntp.linacreative.com
+export LK_ARCH_REPOS="lk|http://lk.repo|||Optional TrustAll,aur|http://aur.repo|||Optional TrustAll"
+export LK_ARCH_MIRROR=http://arch.mirror/\$repo/os/\$arch
+export LK_PLATFORM_BRANCH=${LK_PLATFORM_BRANCH:-develop}
+
+FILE=~/bootstrap.sh
+URL=https://raw.githubusercontent.com/lkrms/lk-platform/$LK_PLATFORM_BRANCH/lib/arch/bootstrap.sh
+DEBUG=
+
+[[ $- != *x* ]] || DEBUG=1
+
+[ -e "$FILE" ] ||
+    curl --location --output "$FILE" "$URL" ||
+    rm -f "$FILE"
+
+[ ! -e "$FILE" ] ||
+    bash ${DEBUG:+-x} "$FILE" "$@"
