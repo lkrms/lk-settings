@@ -228,6 +228,7 @@
     "shellcheck.disableVersionCheck": true,
     "shellcheck.exclude": [
         "SC1090",
+        "SC1091",
         "SC2015",
         "SC2016",
         "SC2034",
