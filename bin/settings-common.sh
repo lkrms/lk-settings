@@ -1,13 +1,15 @@
 #!/bin/bash
 
-# shellcheck disable=SC2128
-
 set -euo pipefail
 lk_die() { echo "$BASH_SOURCE: $1" >&2 && exit 1; }
 [ -d "${LK_BASE:-}" ] || lk_die "LK_BASE not set"
-. "$LK_BASE/lib/bash/common.sh"
+include=${include:+"$include,"}misc . "$LK_BASE/lib/bash/common.sh"
 
 shopt -s nullglob
+
+function is_basic() {
+    [ -n "${_BASIC:-}" ]
+}
 
 function cleanup() {
     local LINK
@@ -22,7 +24,7 @@ function symlink() {
         if [ -e "$1" ]; then
             lk_symlink "${@:1:2}" || return
         else
-            lk_console_warning "Not found:" "$1"
+            is_basic || lk_console_warning "Not found:" "$1"
         fi
         shift 2
     done
@@ -45,6 +47,7 @@ function symlink_private_common() {
 # symlink_if_not_running [TARGET LINK]... APP_NAME RUNNING_TEST
 function symlink_if_not_running() {
     local CURRENT PASSED=
+    ! lk_verbose || lk_console_message "Checking ${*: -2:1}"
     while [ $# -ge 4 ]; do
         if [ -e "$1" ]; then
             if [ ! -L "$2" ] || ! CURRENT=$(readlink "$2") ||
@@ -59,6 +62,38 @@ function symlink_if_not_running() {
         fi
         shift 2
     done
+}
+
+function vscode_sync_extensions() {
+    local VSCODE_EXTENSIONS INSTALL REMOVE EXT
+    lk_command_exists code || return 0
+    lk_console_message "Checking VS Code extensions"
+    . "$1" || exit
+    ! lk_in_array bmewburn.vscode-intelephense-client VSCODE_EXTENSIONS ||
+        lk_vscode_extension_disable vscode.php-language-features ||
+        lk_warn "error disabling: vscode.php-language-features" || true
+    INSTALL=($(comm -13 \
+        <(code --list-extensions | sort -u) \
+        <(lk_echo_array VSCODE_EXTENSIONS | sort -u)))
+    [ ${#INSTALL[@]} -eq 0 ] ||
+        ! { lk_echo_array INSTALL |
+            lk_console_detail_list "Installing:" extension extensions &&
+            lk_confirm "Proceed?" Y; } ||
+        for EXT in "${INSTALL[@]}"; do
+            code --install-extension "$EXT"
+        done
+    REMOVE=($(comm -23 \
+        <(code --list-extensions | sort -u) \
+        <(lk_echo_array VSCODE_EXTENSIONS | sort -u)))
+    [ ${#REMOVE[@]} -eq 0 ] || {
+        [ ${#INSTALL[@]} -eq 0 ] || lk_console_blank
+        lk_echo_array REMOVE |
+            lk_console_detail_list "Orphaned:" extension extensions
+        ! lk_confirm "Remove the above?" N ||
+            for EXT in "${REMOVE[@]}"; do
+                code --uninstall-extension "$EXT"
+            done
+    }
 }
 
 LK_VERBOSE=1

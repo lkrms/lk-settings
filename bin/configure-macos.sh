@@ -5,17 +5,22 @@ BS=${BASH_SOURCE[0]} &&
     [ ! -L "$BS" ] && _ROOT=$(cd "${BS%/*}/../desktop" && pwd -P) ||
     lk_die "unable to resolve path to script"
 
-# shellcheck source=./settings-common.sh
-include=macos,misc . "$_ROOT/../bin/settings-common.sh"
+include=macos . "$_ROOT/../bin/settings-common.sh"
 
 lk_assert_not_root
 lk_assert_is_macos
+
+while [ $# -gt 0 ] && [[ $1 == -* ]]; do
+    shift
+done
 
 cleanup
 
 _PRIV=${1:-}
 _PREFS=~/Library/Preferences
 _APP_SUPPORT=~/Library/"Application Support"
+_BASIC=
+! lk_has_arg "--basic" || _BASIC=1
 
 [ ! -d "$_PRIV" ] || {
 
@@ -26,79 +31,78 @@ _APP_SUPPORT=~/Library/"Application Support"
 
     symlink_if_not_running \
         "$_PRIV/DBeaverData/" ~/Library/DBeaverData \
-        DBeaver "pgrep -xq dbeaver"
+        DBeaver "pgrep -x dbeaver"
 
 }
 
-[ -d /opt/db2_db2driver_for_jdbc_sqlj ] || {
+is_basic || [ -d /opt/db2_db2driver_for_jdbc_sqlj ] || {
     DB2_DRIVER=(~/Downloads/*/Db2/db2_db2driver_for_jdbc_sqlj.zip)
-    [ ${#DB2_DRIVER[@]} -ne 1 ] || {
-        pushd /tmp >/dev/null &&
-            rm -Rf "/tmp/db2_db2driver_for_jdbc_sqlj" &&
-            unzip "${DB2_DRIVER[0]}" &&
-            sudo mv "/tmp/db2_db2driver_for_jdbc_sqlj" /opt/ &&
-            popd >/dev/null
-    }
+    [ ${#DB2_DRIVER[@]} -ne 1 ] || (umask 0022 &&
+        cd /tmp &&
+        rm -Rf "/tmp/db2_db2driver_for_jdbc_sqlj" &&
+        unzip "${DB2_DRIVER[0]}" &&
+        sudo mv "/tmp/db2_db2driver_for_jdbc_sqlj" /opt/)
 }
 
-[ ! -d /Applications/Firefox.app/Contents/Resources ] || {
-    sudo mkdir -p /Applications/Firefox.app/Contents/Resources/defaults/pref
-    printf '%s\n' \
-        '// the first line is ignored' \
-        'pref("general.config.filename", "firefox.cfg");' \
-        'pref("general.config.obscure_value", 0);' |
-        sudo tee /Applications/Firefox.app/Contents/Resources/defaults/pref/autoconfig.js >/dev/null
-    printf '%s\n' \
-        '// the first line is ignored' \
-        'defaultPref("services.sync.prefs.dangerously_allow_arbitrary", true);' |
-        sudo tee /Applications/Firefox.app/Contents/Resources/firefox.cfg >/dev/null
+DIR=/Applications/Firefox.app/Contents/Resources
+is_basic || [ ! -d "$DIR" ] || {
+    LK_SUDO=1
+    lk_install -d -m 00755 "$DIR/defaults/pref"
+    FILE=$DIR/defaults/pref/autoconfig.js
+    lk_install -m 00644 "$FILE"
+    lk_file_replace "$FILE" <<"EOF"
+// the first line is ignored
+pref("general.config.filename", "firefox.cfg");
+pref("general.config.obscure_value", 0);
+EOF
+    FILE=$DIR/firefox.cfg
+    lk_file_replace "$FILE" <<"EOF"
+// the first line is ignored
+defaultPref("services.sync.prefs.dangerously_allow_arbitrary", true);
+EOF
+    unset LK_SUDO
 }
 
-lk_symlink "$_ROOT/.vimrc" ~/.vimrc
-lk_symlink "$_ROOT/.tidyrc" ~/.tidyrc
-lk_symlink "$_ROOT/.byoburc" ~/.byoburc
-lk_symlink "$_ROOT/byobu/" ~/.byobu
-lk_symlink "$_ROOT/git" ~/.config/git
+symlink "$_ROOT/.vimrc" ~/.vimrc
+symlink "$_ROOT/.tidyrc" ~/.tidyrc
+symlink "$_ROOT/.byoburc" ~/.byoburc
+symlink "$_ROOT/byobu/" ~/.byobu
+symlink "$_ROOT/git" ~/.config/git
 
-lk_symlink "$_ROOT/nextcloud/sync-exclude.lst" \
-    "$_PREFS"/Nextcloud/sync-exclude.lst && {
-    [ -e "$_PREFS"/Nextcloud/nextcloud.cfg ] ||
-        cp -v "$_ROOT/nextcloud/nextcloud.cfg" \
-            "$_PREFS"/Nextcloud/nextcloud.cfg
+is_basic || symlink_if_not_running \
+    "$_ROOT/nextcloud/sync-exclude.lst" "$_PREFS/Nextcloud/sync-exclude.lst" \
+    Nextcloud "pgrep -x nextcloud"
+[ -e "$_PREFS/Nextcloud/nextcloud.cfg" ] || [ ! -d "$_PREFS/Nextcloud" ] ||
+    cp -v "$_ROOT/nextcloud/nextcloud.cfg" "$_PREFS/Nextcloud/nextcloud.cfg"
+
+is_basic || symlink_if_not_running \
+    "$_ROOT/subl/User/" "$_APP_SUPPORT/Sublime Text 3/Packages/User" \
+    "Sublime Text 3" "pgrep -x 'Sublime Text'"
+
+is_basic || symlink_if_not_running \
+    "$_ROOT/smerge/User/" "$_APP_SUPPORT/Sublime Merge/Packages/User" \
+    "Sublime Merge" "pgrep -x sublime_merge"
+
+FILE=~/Library/Containers/fr.handbrake.HandBrake/Data
+FILE="$FILE/Library/Application Support/HandBrake/UserPresets.json"
+is_basic || [ ! -d "${FILE%/*}" ] || {
+    lk_console_message "Checking HandBrake"
+    pgrep -xq HandBrake &&
+        lk_warn "cannot apply settings: HandBrake is running" ||
+        lk_file_replace -b -f "$_ROOT/handbrake/presets.json" "$FILE"
 }
 
-lk_console_message "Checking Sublime Text 3"
-pgrep -xq "Sublime Text" &&
-    lk_warn "cannot apply settings while Sublime Text 3 is running" ||
-    lk_symlink "$_ROOT/subl/User/" \
-        "$_APP_SUPPORT/Sublime Text 3/Packages/User"
-
-lk_console_message "Checking Sublime Merge"
-pgrep -xq "sublime_merge" &&
-    lk_warn "cannot apply settings while Sublime Merge is running" ||
-    lk_symlink "$_ROOT/smerge/User/" \
-        "$_APP_SUPPORT/Sublime Merge/Packages/User"
-
-lk_console_message "Checking HandBrake"
-pgrep -xq "HandBrake" &&
-    lk_warn "cannot apply settings while HandBrake is running" || {
-    FILE=~/"Library/Containers/fr.handbrake.HandBrake/Data/Library/Application Support/HandBrake/UserPresets.json"
-    diff -Nq "$_ROOT/handbrake/presets.json" "$FILE" >/dev/null || {
-        lk_file_backup "$FILE" &&
-            mkdir -pv "${FILE%/*}" &&
-            cp -fv "$_ROOT/handbrake/presets.json" "$FILE"
-    }
-}
-
-lk_console_message "Checking espanso"
-! lk_command_exists espanso ||
+! lk_command_exists espanso || {
+    lk_console_message "Checking espanso"
     [ -e ~/Library/LaunchAgents/com.federicoterzi.espanso.plist ] ||
-    espanso register
+        espanso register
+}
 
 lk_console_message "Checking Flycut"
-pgrep -xq "Flycut" &&
-    lk_warn "cannot apply settings while Flycut is running" || {
-    lk_plist_set_file "$_PREFS"/com.generalarcade.flycut.plist
+if pgrep -xq Flycut; then
+    lk_warn "cannot apply settings: Flycut is running"
+else
+    lk_plist_set_file "$_PREFS/com.generalarcade.flycut.plist"
     lk_plist_replace ":menuSelectionPastes" bool false
     lk_plist_replace ":savePreference" integer 2
     lk_plist_replace ":rememberNum" real 99
@@ -109,17 +113,18 @@ pgrep -xq "Flycut" &&
     lk_plist_replace ":ShortcutRecorder mainHotkey:keyCode" integer 9
     lk_plist_replace ":ShortcutRecorder mainHotkey:modifierFlags" integer 1441792
     lk_plist_replace ":menuIcon" integer 2
-}
+fi
 
 lk_console_message "Checking iCanHazShortcut"
-pgrep -xq "iCanHazShortcut" &&
-    lk_warn "cannot apply settings while iCanHazShortcut is running" ||
-    lk_symlink "$_ROOT/icanhazshortcut/" \
-        ~/.config/iCanHazShortcut
-FILE=~/Library/LaunchAgents/info.deseven.icanhazshortcut.plist
-if [ -d /Applications/iCanHazShortcut.app ] && [ ! -e "$FILE" ]; then
-    mkdir -pv "${FILE%/*}"
-    cat >"$FILE" <<"EOF"
+if pgrep -xq iCanHazShortcut; then
+    lk_warn "cannot apply settings: iCanHazShortcut is running"
+else
+    symlink "$_ROOT/icanhazshortcut/" ~/.config/iCanHazShortcut
+    FILE=~/Library/LaunchAgents/info.deseven.icanhazshortcut.plist
+    if [ -d /Applications/iCanHazShortcut.app ] && [ ! -e "$FILE" ]; then
+        lk_install -d -m 00755 "${FILE%/*}"
+        lk_install -m 00644 "$FILE"
+        cat >"$FILE" <<"EOF"
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
@@ -139,7 +144,8 @@ if [ -d /Applications/iCanHazShortcut.app ] && [ ! -e "$FILE" ]; then
 	<string>Aqua</string></dict>
 </plist>
 EOF
-    launchctl load -w "$FILE"
+        launchctl load -w "$FILE"
+    fi
 fi
 
 lk_console_message "Checking iTerm2"
@@ -162,9 +168,10 @@ defaults write com.googlecode.iterm2 TypingClearsSelection -bool false
 defaults write com.googlecode.iterm2 UseBorder -bool true
 defaults write com.googlecode.iterm2 VisualIndicatorForEsc -bool false
 
-pgrep -xq iTerm2 &&
-    lk_warn "cannot apply settings while iTerm2 is running" || {
-    lk_plist_set_file "$_PREFS"/com.googlecode.iterm2.plist
+if pgrep -xq iTerm2; then
+    lk_warn "cannot apply settings: iTerm2 is running"
+else
+    lk_plist_set_file "$_PREFS/com.googlecode.iterm2.plist"
     lk_plist_maybe_add ":Window Arrangements" dict
     lk_plist_replace ":Window Arrangements:No windows" array
     lk_plist_replace ":Default Arrangement Name" string "No windows"
@@ -174,8 +181,9 @@ pgrep -xq iTerm2 &&
     lk_plist_replace_from_file ":Custom Color Presets" dict \
         "$_ROOT/iterm2/Custom Color Presets.plist"
 
-    ! lk_plist_exists ":New Bookmarks:0" &&
-        lk_warn "no profile to configure" || {
+    if ! lk_plist_exists ":New Bookmarks:0"; then
+        lk_warn "no profile to configure"
+    else
         lk_plist_replace ":New Bookmarks:0:AWDS Pane Option" string "Recycle"
         lk_plist_replace ":New Bookmarks:0:AWDS Tab Option" string "Recycle"
         lk_plist_replace ":New Bookmarks:0:AWDS Window Option" string "Recycle"
@@ -196,17 +204,15 @@ pgrep -xq iTerm2 &&
         lk_plist_replace ":New Bookmarks:0:Unlimited Scrollback" bool true
         lk_plist_replace_from_file ":New Bookmarks:0:Keyboard Map" dict \
             "$_ROOT/iterm2/Keyboard Map.plist"
-    }
-}
+    fi
+fi
 
-lk_console_message "Checking KeePassXC"
-pgrep -xq "KeePassXC" &&
-    lk_warn "cannot apply settings while KeePassXC is running" ||
-    lk_symlink "$_ROOT/keepassxc/keepassxc.ini" \
-        "$_APP_SUPPORT/keepassxc/keepassxc.ini"
+is_basic || symlink_if_not_running \
+    "$_ROOT/keepassxc/keepassxc.ini" "$_APP_SUPPORT/keepassxc/keepassxc.ini" \
+    KeePassXC "pgrep -x KeePassXC"
 
 lk_console_message "Checking Magnet"
-lk_plist_set_file "$_PREFS"/com.crowdcafe.windowmagnet.plist
+lk_plist_set_file "$_PREFS/com.crowdcafe.windowmagnet.plist"
 lk_plist_replace ":expandWindowNorthWestComboKey" dict
 lk_plist_replace ":expandWindowNorthEastComboKey" dict
 lk_plist_replace ":expandWindowSouthWestComboKey" dict
@@ -222,11 +228,9 @@ lk_plist_replace ":centerWindowComboKey" dict
 lk_plist_replace ":centerWindowComboKey:keyCode" integer 49
 lk_plist_replace ":centerWindowComboKey:modifierFlags" integer 786432
 
-lk_console_message "Checking Stretchly"
-pgrep -xq "stretchly" &&
-    lk_warn "cannot apply settings while Stretchly is running" ||
-    lk_symlink "$_ROOT/stretchly/config.json" \
-        "$_APP_SUPPORT/stretchly/config.json"
+is_basic || symlink_if_not_running \
+    "$_ROOT/stretchly/config.json" "$_APP_SUPPORT/stretchly/config.json" \
+    Stretchly "pgrep -x stretchly"
 
 #for KEY in TDQuickAddShortcut TDToggleShortcut; do
 #    defaults export com.todoist.mac.Todoist - |
@@ -252,38 +256,27 @@ dGN1dKIYGVtNQVNTaG9ydGN1dFhOU09iamVjdAgRGiQpMjdJTFFTV11kbHOBg4WKj5qjr7K+AAAA
 AAAAAQEAAAAAAAAAGgAAAAAAAAAAAAAAAAAAAMc=
 </data>"
 
-lk_console_message "Checking Typora"
-pgrep -xq "Typora" &&
-    lk_warn "cannot apply settings while Typora is running" || {
-    lk_symlink "$_ROOT/typora/abnerworks.Typora.plist" \
-        "$HOME/Library/Preferences/abnerworks.Typora.plist" &&
-        lk_symlink "$_ROOT/typora/themes" \
-            "$_APP_SUPPORT/abnerworks.Typora/themes"
-}
+is_basic || symlink_if_not_running \
+    "$_ROOT/typora/abnerworks.Typora.plist" "$_PREFS/abnerworks.Typora.plist" \
+    "$_ROOT/typora/themes" "$_APP_SUPPORT/abnerworks.Typora/themes" \
+    Typora "pgrep -x Typora"
 
-lk_console_message "Checking Visual Studio Code"
-pgrep -fq "^/Applications/VSCodium.app/Contents/MacOS/Electron" &&
-    lk_warn "cannot apply settings while Visual Studio Code is running" || {
-    FILE=/Applications/VSCodium.app/Contents/Resources/app/product.json
-    [ ! -f "$FILE" ] || {
-        VSCODE_PRODUCT_JSON="$(
-            jq '.extensionsGallery = {
+is_basic || symlink_if_not_running \
+    "$_ROOT/vscode/settings.json" "$_APP_SUPPORT/VSCodium/User/settings.json" \
+    "$_ROOT/vscode/keybindings.mac.json" "$_APP_SUPPORT/VSCodium/User/keybindings.json" \
+    "$_ROOT/vscode/snippets" "$_APP_SUPPORT/VSCodium/User/snippets" \
+    "VS Code" "pgrep -f '^/Applications/VSCodium.app/Contents/MacOS/Electron'"
+
+FILE=/Applications/VSCodium.app/Contents/Resources/app/product.json
+if [ -f "$FILE" ]; then
+    VSCODE_PRODUCT_JSON=$(jq \
+        '.extensionsGallery = {
     "serviceUrl": "https://marketplace.visualstudio.com/_apis/public/gallery",
     "itemUrl": "https://marketplace.visualstudio.com/items"
-}' <"$FILE"
-        )"
-        diff -q <(jq <"$FILE") <(echo "$VSCODE_PRODUCT_JSON") >/dev/null || {
-            lk_console_detail "Configuring VSCodium to use Marketplace"
-            echo -n "$VSCODE_PRODUCT_JSON" | sudo tee "$FILE" >/dev/null
-        }
-    }
-    lk_symlink "$_ROOT/vscode/settings.json" \
-        "$_APP_SUPPORT/VSCodium/User/settings.json" &&
-        lk_symlink "$_ROOT/vscode/keybindings.mac.json" \
-            "$_APP_SUPPORT/VSCodium/User/keybindings.json" &&
-        lk_symlink "$_ROOT/vscode/snippets" \
-            "$_APP_SUPPORT/VSCodium/User/snippets"
-}
+}' <"$FILE")
+    diff -q <(jq <"$FILE") <(echo "$VSCODE_PRODUCT_JSON") >/dev/null ||
+        LK_SUDO=1 lk_file_replace "$FILE" "$VSCODE_PRODUCT_JSON"
+fi
 
 lk_macos_maybe_install_pkg_url \
     "com.Brother.Brotherdriver.Brother_PrinterDrivers_MonochromeLaser" \
@@ -297,28 +290,32 @@ lk_macos_maybe_install_pkg_url \
 
 # use `lpinfo -m` for driver names
 lk_console_message "Checking printers"
-sudo lpadmin -p HL5450DN -E \
-    -D "Brother HL-5450DN" \
-    -L "black and white" \
-    -m "Library/Printers/PPDs/Contents/Resources/Brother HL-5450DN series CUPS.gz" \
-    -v "socket://10.10.10.10" \
-    -o PageSize=A4 \
-    -o Duplex=DuplexNoTumble \
-    -o printer-error-policy=abort-job
+(
+    lk_console_detail "Brother HL-5450DN"
+    sudo lpadmin -p HL5450DN -E \
+        -D "Brother HL-5450DN" \
+        -L "black and white" \
+        -m "Library/Printers/PPDs/Contents/Resources/Brother HL-5450DN series CUPS.gz" \
+        -v "socket://10.10.10.10" \
+        -o PageSize=A4 \
+        -o Duplex=DuplexNoTumble \
+        -o printer-error-policy=abort-job
 
-sudo lpadmin -p HLL3230CDW -E \
-    -D "Brother HL-L3230CDW" \
-    -L "colour" \
-    -m "Library/Printers/PPDs/Contents/Resources/Brother HL-L3230CDW series CUPS.gz" \
-    -v "socket://10.10.10.11" \
-    -o PageSize=A4 \
-    -o Duplex=None \
-    -o BRResolution=600x2400dpi \
-    -o BRColorMatching=Normal \
-    -o BRGray=ON \
-    -o BREnhanceBlkPrt=OFF \
-    -o BRImproveOutput=OFF \
-    -o printer-error-policy=abort-job
+    lk_console_detail "Brother HL-L3230CDW"
+    sudo lpadmin -p HLL3230CDW -E \
+        -D "Brother HL-L3230CDW" \
+        -L "colour" \
+        -m "Library/Printers/PPDs/Contents/Resources/Brother HL-L3230CDW series CUPS.gz" \
+        -v "socket://10.10.10.11" \
+        -o PageSize=A4 \
+        -o Duplex=None \
+        -o BRResolution=600x2400dpi \
+        -o BRColorMatching=Normal \
+        -o BRGray=ON \
+        -o BREnhanceBlkPrt=OFF \
+        -o BRImproveOutput=OFF \
+        -o printer-error-policy=abort-job
+) 2>/dev/null || lk_die "Error configuring printers"
 
 lk_console_message "Checking macOS"
 
@@ -344,11 +341,11 @@ defaults write com.apple.AppleMultitouchTrackpad ForceSuppressed -bool true
 
 # Keyboard
 defaults write NSGlobalDomain AppleKeyboardUIMode -int 3
-defaults write NSGlobalDomain com.apple.keyboard.fnState -bool true
+is_basic || defaults write NSGlobalDomain com.apple.keyboard.fnState -bool true
 
 defaults write NSGlobalDomain NSAutomaticCapitalizationEnabled -bool false
 defaults write NSGlobalDomain NSAutomaticPeriodSubstitutionEnabled -bool false
-defaults write NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool false
+is_basic || defaults write NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool false
 defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false
 
 # Sound
@@ -359,22 +356,22 @@ defaults write NSGlobalDomain AppleAccentColor -int 0
 defaults write NSGlobalDomain AppleHighlightColor -string "1.000000 0.733333 0.721569 Red"
 defaults write NSGlobalDomain AppleShowScrollBars -string Always
 defaults write NSGlobalDomain NSDocumentSaveNewDocumentsToCloud -bool false
-defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode -bool true
-defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode2 -bool true
-defaults write NSGlobalDomain NSTableViewDefaultSizeMode -int 1
-defaults write NSGlobalDomain PMPrintingExpandedStateForPrint -bool true
-defaults write NSGlobalDomain PMPrintingExpandedStateForPrint2 -bool true
+is_basic || defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode -bool true
+is_basic || defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode2 -bool true
+is_basic || defaults write NSGlobalDomain NSTableViewDefaultSizeMode -int 1
+is_basic || defaults write NSGlobalDomain PMPrintingExpandedStateForPrint -bool true
+is_basic || defaults write NSGlobalDomain PMPrintingExpandedStateForPrint2 -bool true
 
 defaults write NSGlobalDomain NSCloseAlwaysConfirmsChanges -bool true
 defaults write NSGlobalDomain NSDisableAutomaticTermination -bool true
 defaults write com.apple.systempreferences NSQuitAlwaysKeepsWindows -bool false
 
-defaults write NSGlobalDomain NSAutomaticWindowAnimationsEnabled -bool false
-defaults write NSGlobalDomain NSWindowResizeTime -float 0.001
-defaults write NSGlobalDomain QLPanelAnimationDuration -float 0
+is_basic || defaults write NSGlobalDomain NSAutomaticWindowAnimationsEnabled -bool false
+is_basic || defaults write NSGlobalDomain NSWindowResizeTime -float 0.001
+is_basic || defaults write NSGlobalDomain QLPanelAnimationDuration -float 0
 
-defaults write com.apple.menuextra.clock DateFormat -string "EEE d MMM  h:mm:ss a"
-defaults write com.apple.screencapture location -string "${LK_SCREENSHOT_DIR:-$HOME/Desktop}"
+is_basic || defaults write com.apple.menuextra.clock DateFormat -string "EEE d MMM  h:mm:ss a"
+is_basic || defaults write com.apple.screencapture location -string "${LK_SCREENSHOT_DIR:-$HOME/Desktop}"
 defaults -currentHost write com.apple.ImageCapture disableHotPlug -bool true
 
 # Screen Saver
@@ -394,27 +391,27 @@ defaults write com.apple.dock mineffect -string scale
 defaults write com.apple.dock minimize-to-application -bool true
 defaults write com.apple.dock show-process-indicators -bool true
 defaults write com.apple.dock show-recents -bool false
-defaults write com.apple.dock size-immutable -bool true
-defaults write com.apple.dock tilesize -int 60
+is_basic || defaults write com.apple.dock size-immutable -bool true
+is_basic || defaults write com.apple.dock tilesize -int 60
 
 # Finder
 defaults write com.apple.finder FXDefaultSearchScope -string SCcf
-defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false
+is_basic || defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false
 defaults write com.apple.finder FXPreferredViewStyle -string clmv
 defaults write com.apple.finder _FXSortFoldersFirst -bool true
 defaults write com.apple.finder NewWindowTarget -string PfHm
 defaults write com.apple.finder NewWindowTargetPath -string "file://$HOME/"
-defaults write com.apple.finder ShowPathbar -bool true
+is_basic || defaults write com.apple.finder ShowPathbar -bool true
 defaults write com.apple.finder ShowRecentTags -bool false
-defaults write com.apple.finder ShowStatusBar -bool true
-defaults write com.apple.finder WarnOnEmptyTrash -bool false
-defaults write com.apple.finder DisableAllAnimations -bool true
+is_basic || defaults write com.apple.finder ShowStatusBar -bool true
+is_basic || defaults write com.apple.finder WarnOnEmptyTrash -bool false
+is_basic || defaults write com.apple.finder DisableAllAnimations -bool true
 
 defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
 defaults write com.apple.desktopservices DSDontWriteUSBStores -bool true
 
 # Safari
-defaults write com.apple.Safari AlwaysRestoreSessionAtLaunch -bool true
+is_basic || defaults write com.apple.Safari AlwaysRestoreSessionAtLaunch -bool true
 defaults write com.apple.Safari AutoOpenSafeDownloads -bool false
 defaults write com.apple.Safari DownloadsClearingPolicy -int 0
 defaults write com.apple.Safari HistoryAgeInDaysLimit -int 365000
@@ -423,11 +420,11 @@ defaults write com.apple.Safari NewWindowBehavior -int 1
 defaults write com.apple.Safari SendDoNotTrackHTTPHeader -bool true
 defaults write com.apple.Safari ShowFullURLInSmartSearchField -bool true
 defaults write com.apple.Safari ShowIconsInTabs -bool true
-defaults write com.apple.Safari SuppressSearchSuggestions -bool true
+is_basic || defaults write com.apple.Safari SuppressSearchSuggestions -bool true
 
-defaults write com.apple.Safari IncludeDevelopMenu -bool true
-defaults write com.apple.Safari WebKitDeveloperExtrasEnabledPreferenceKey -bool true
-defaults write com.apple.Safari WebKitPreferences.developerExtrasEnabled -bool true
+is_basic || defaults write com.apple.Safari IncludeDevelopMenu -bool true
+is_basic || defaults write com.apple.Safari WebKitDeveloperExtrasEnabledPreferenceKey -bool true
+is_basic || defaults write com.apple.Safari WebKitPreferences.developerExtrasEnabled -bool true
 
 # Mail
 defaults write com.apple.mail ConversationViewSpansMailboxes -bool false
@@ -435,7 +432,7 @@ defaults write com.apple.mail DeleteAttachmentsAfterHours -int 0
 defaults write com.apple.mail NewMessagesSoundName -string ""
 defaults write com.apple.mail PlayMailSounds -bool false
 defaults write com.apple.mail ShouldShowUnreadMessagesInBold -bool true
-defaults write com.apple.mail ThreadingDefault -bool false
+is_basic || defaults write com.apple.mail ThreadingDefault -bool false
 
 # "Use classic layout" (<=10.14)
 defaults write com.apple.mail RichMessageList -bool false
@@ -449,39 +446,11 @@ if lk_has_arg "--reset"; then
 fi
 
 lk_macos_kb_add_shortcut NSGlobalDomain "Lock Screen" "@^l"
-lk_macos_kb_add_shortcut com.apple.mail "Mark All Messages as Read" "@\$c"
-lk_macos_kb_add_shortcut com.apple.mail "Send" "@\U21a9"
+is_basic || lk_macos_kb_add_shortcut com.apple.mail "Mark All Messages as Read" "@\$c"
+is_basic || lk_macos_kb_add_shortcut com.apple.mail "Send" "@\U21a9"
 
 killall -u "$USER" cfprefsd
 killall Dock
 killall Finder
 
-! lk_command_exists code || {
-    lk_console_message "Checking Visual Studio Code extensions"
-    . "$_ROOT/vscode/extensions.sh" || exit
-    ! lk_in_array bmewburn.vscode-intelephense-client VSCODE_EXTENSIONS ||
-        lk_vscode_extension_disable vscode.php-language-features ||
-        lk_warn "error disabling: vscode.php-language-features" || true
-    VSCODE_MISSING_EXTENSIONS=($(
-        comm -13 \
-            <(code --list-extensions | sort -u) \
-            <(lk_echo_array VSCODE_EXTENSIONS | sort -u)
-    ))
-    [ "${#VSCODE_MISSING_EXTENSIONS[@]}" -eq "0" ] ||
-        for EXT in "${VSCODE_MISSING_EXTENSIONS[@]}"; do
-            code --install-extension "$EXT"
-        done
-    VSCODE_EXTRA_EXTENSIONS=($(
-        comm -23 \
-            <(code --list-extensions | sort -u) \
-            <(lk_echo_array VSCODE_EXTENSIONS | sort -u)
-    ))
-    [ "${#VSCODE_EXTRA_EXTENSIONS[@]}" -eq "0" ] || {
-        echo
-        lk_echo_array VSCODE_EXTRA_EXTENSIONS |
-            lk_console_detail_list \
-                "Remove or add to $_ROOT/vscode/extensions.sh:" \
-                extension extensions
-        lk_console_detail "To remove, run" "code --uninstall-extension <ext-id>"
-    }
-}
+is_basic || vscode_sync_extensions "$_ROOT/vscode/extensions.sh"
