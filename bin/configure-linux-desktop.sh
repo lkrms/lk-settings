@@ -190,6 +190,7 @@ symlink_if_not_running \
 
 symlink_if_not_running \
     "$_ROOT/smerge/User/" ~/.config/sublime-merge/Packages/User \
+    "$_ROOT/smerge/Default/" ~/.config/sublime-merge/Packages/Default \
     "Sublime Merge" "pgrep -x sublime_merge"
 
 symlink_if_not_running \

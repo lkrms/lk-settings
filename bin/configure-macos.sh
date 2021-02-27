@@ -81,6 +81,7 @@ is_basic || symlink_if_not_running \
 
 is_basic || symlink_if_not_running \
     "$_ROOT/smerge/User/" "$_APP_SUPPORT/Sublime Merge/Packages/User" \
+    "$_ROOT/smerge/Default/" "$_APP_SUPPORT/Sublime Merge/Packages/Default" \
     "Sublime Merge" "pgrep -x sublime_merge"
 
 FILE=~/Library/Containers/fr.handbrake.HandBrake/Data
@@ -191,7 +192,7 @@ else
         lk_plist_replace ":New Bookmarks:0:Columns" integer 120
         lk_plist_replace ":New Bookmarks:0:Custom Directory" string "Advanced"
         lk_plist_replace ":New Bookmarks:0:Flashing Bell" bool true
-        lk_plist_replace ":New Bookmarks:0:Normal Font" string "Menlo-Regular 12"
+        lk_plist_replace ":New Bookmarks:0:Normal Font" string "Menlo-Regular 10"
         lk_plist_replace ":New Bookmarks:0:Option Key Sends" integer 2
         lk_plist_replace ":New Bookmarks:0:Place Prompt at First Column" bool false
         lk_plist_replace ":New Bookmarks:0:Right Option Key Sends" integer 2
