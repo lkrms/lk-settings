@@ -11,6 +11,9 @@
     "[jsonc]": {
         "editor.defaultFormatter": "vscode.json-language-features"
     },
+    "[nginx]": {
+        "editor.defaultFormatter": "ahmadalli.vscode-nginx-conf"
+    },
     "[php]": {
         "editor.autoClosingBrackets": "languageDefined"
     },

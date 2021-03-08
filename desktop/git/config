@@ -24,6 +24,7 @@
 	expandtab = true
 	safemode = true
 	statusshowtotals = true
+	startupmode = list
 
 [gui]
 	editor = code

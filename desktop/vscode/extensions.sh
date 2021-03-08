@@ -9,6 +9,7 @@ VSCODE_EXTENSIONS=(
     # salesforce.salesforcedx-vscode
     # Sophisticode.php-formatter
     # thiagoabreu.vala
+    ahmadalli.vscode-nginx-conf
     alefragnani.Bookmarks
     bmewburn.vscode-intelephense-client
     chenxsan.vscode-standardjs
