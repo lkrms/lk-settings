@@ -37,6 +37,7 @@ VSCODE_EXTENSIONS=(
     mitchdenny.ecdc
     mrmlnc.vscode-apache
     ms-azuretools.vscode-azurefunctions
+    ms-azuretools.vscode-azureresourcegroups
     ms-python.python
     ms-toolsai.jupyter
     ms-vscode-remote.remote-ssh-edit

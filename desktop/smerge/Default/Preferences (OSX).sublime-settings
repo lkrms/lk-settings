@@ -1,6 +1,6 @@
 {
-  "font_face": "JetBrains Mono",
-  "font_size": 10,
+  "font_face": "Menlo",
+  "font_size": 12,
   "scroll_past_end": false,
   "find_selected_text": false,
   "move_to_limit_on_up_down": true,

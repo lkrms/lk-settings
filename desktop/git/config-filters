@@ -28,7 +28,7 @@
 	smudge = cat
 
 [filter "dbeaver-prefs"]
-	clean = sed -E '/^(SQLEditor.resultSet.ratio|[a-zA-Z._]+_TAB_(BG_(END|START)|TEXT_COLOR))=/d'
+	clean = sed -E '/^((SQLEditor.[^.]+.ratio|[a-zA-Z._]+_TAB_(BG_(END|START)|TEXT_COLOR))=|column[0-9]+=[0-9]+$)/d'
 	smudge = cat
 
 [filter "flameshot"]

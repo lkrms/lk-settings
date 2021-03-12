@@ -62,6 +62,7 @@
     "extensions.ignoreRecommendations": true,
     "files.associations": {
         "**/.git/info/attributes": "properties",
+        "**/.nginx/*/*": "nginx",
         "**/bash/*": "shellscript",
         "**/git/ignore": "ignore",
         "**/git/{config*,attributes}": "properties",
@@ -212,6 +213,7 @@
     "material-icon-theme.languages.associations": {
         "php": "php_elephant"
     },
+    "nginx-conf-hint.syntax": "sublime",
     "nightswitch.autoSwitch": false,
     "nightswitch.themeDay": "Ayu Light Bordered",
     "nightswitch.themeNight": "Dracula Soft",
