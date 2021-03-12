@@ -103,7 +103,9 @@ lk_console_message "Checking Flycut"
 if pgrep -xq Flycut; then
     lk_warn "cannot apply settings: Flycut is running"
 else
-    lk_plist_set_file "$_PREFS/com.generalarcade.flycut.plist"
+    FILE=~/Library/Containers/com.generalarcade.flycut/Data/Library/Preferences
+    FILE=$FILE/com.generalarcade.flycut.plist
+    lk_plist_set_file "$FILE"
     lk_plist_replace ":menuSelectionPastes" bool false
     lk_plist_replace ":savePreference" integer 2
     lk_plist_replace ":rememberNum" real 99
