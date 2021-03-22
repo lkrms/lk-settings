@@ -239,10 +239,12 @@
         "SC2034",
         "SC2128",
         "SC2154",
+        "SC2206",
         "SC2207"
     ],
     "shellcheck.executablePath": "shellcheck",
     "shellcheck.run": "onSave",
+    "shellformat.flag": "-i 4",
     "standard.enable": false,
     "telemetry.enableTelemetry": false,
     "terminal.external.osxExec": "iTerm.app",
@@ -250,10 +252,14 @@
     "terminal.integrated.cwd": "${fileDirname}",
     "terminal.integrated.detectLocale": "off",
     "terminal.integrated.enableFileLinks": false,
+    "terminal.integrated.env.linux": {
+        "LC_BYOBU": "0"
+    },
     "terminal.integrated.fontSize": 12,
     "terminal.integrated.lineHeight": 1.2,
     "terminal.integrated.scrollback": 10000,
     "terminal.integrated.sendKeybindingsToShell": true,
+    "terminal.integrated.shell.osx": "/opt/homebrew/bin/bash",
     "terminal.integrated.showExitAlert": false,
     "trailing-spaces.highlightCurrentLine": false,
     "typescript.autoClosingTags": false,
@@ -274,5 +280,6 @@
     "workbench.startupEditor": "newUntitledFile",
     "xml.format.emptyElements": "collapse",
     "xml.format.enforceQuoteStyle": "preferred",
+    "xml.format.preserveAttributeLineBreaks": true,
     "xml.format.preservedNewlines": 0
 }

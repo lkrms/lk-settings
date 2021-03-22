@@ -76,7 +76,7 @@
 	smudge = jsonlint -Sf --sort preserve | jq -c | xxd -p | tr -d '\\n'
 
 [filter "typora-plist"]
-	clean = "! test -x /usr/libexec/PlistBuddy&&cat||{ f=$(mktemp)&&cat >\"$f\"&&for k in ClosedWindowFrame NSNavLastRootDirectory NSNavPanelExpandedSizeForOpenMode \"NSWindow Frame _ClosedWindowFrame\" \"NSWindow Frame SUUpdateAlert\" SUHasLaunchedBefore SULastCheckTime SUUpdateRelaunchingMarker currentThemeFolder initialize_ver recentFolder savedLastOpen uuid;do /usr/libexec/PlistBuddy -c \"Delete \\\":$k\\\"\" \"$f\" >&2||:;done&&cat \"$f\"&&rm \"$f\";}"
+	clean = "! test -x /usr/libexec/PlistBuddy&&cat||{ f=$(mktemp)&&cat >\"$f\"&&for k in ClosedWindowFrame NSNavLastRootDirectory NSNavLastUserSetHideExtensionButtonState NSNavPanelExpandedSizeForOpenMode \"NSWindow Frame _ClosedWindowFrame\" \"NSWindow Frame SUUpdateAlert\" SUHasLaunchedBefore SULastCheckTime SUUpdateRelaunchingMarker currentThemeFolder initialize_ver recentFolder savedLastOpen uuid;do /usr/libexec/PlistBuddy -c \"Delete \\\":$k\\\"\" \"$f\" >&2||:;done&&cat \"$f\"&&rm \"$f\";}"
 	smudge = cat
 
 [filter "vscodekeybindings"]
@@ -84,7 +84,7 @@
 	smudge = cat
 
 [filter "vscodesettings"]
-	clean = jsonlint -Sf --sort preserve | jq -S --indent 4 'del(.\"breadcrumbs.enabled\",.\"editor.fontSize\",.\"editor.minimap.enabled\",.\"salesforcedx-vscode-apex.java.home\",.\"window.zoomLevel\",.\"workbench.colorTheme\")|walk(if type==\"array\" then sort_by(try ascii_upcase catch \"\") else . end)'
+	clean = jsonlint -Sf --sort preserve | jq -S --indent 4 'del(.\"breadcrumbs.enabled\",.\"editor.fontSize\",.\"editor.minimap.enabled\",.\"salesforcedx-vscode-apex.java.home\",.\"shellformat.path\",.\"window.zoomLevel\",.\"workbench.colorTheme\")|walk(if type==\"array\" then sort_by(try ascii_upcase catch \"\") else . end)'
 	smudge = cat
 
 [filter "whiskermenu"]

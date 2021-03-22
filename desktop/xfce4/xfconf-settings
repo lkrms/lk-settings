@@ -93,6 +93,7 @@ xfce4-keyboard-shortcuts,/xfwm4/custom/override,bool,true
 # xfce4-keyboard-shortcuts,/commands/custom/<Alt><Super>Escape,string,xkill
 xfce4-keyboard-shortcuts,/commands/custom/<Alt>F2,string,xfce4-popup-applicationsmenu
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>l,string,xflock4
+xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>q,string,xflock4
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>r,string,xfrun4
 xfce4-keyboard-shortcuts,/commands/custom/<Super>space,string,xfce4-popup-whiskermenu
 
@@ -129,6 +130,7 @@ xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>i,string,nomacs
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>k,string,keepassxc
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>n,string,lk-note-open.sh
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>n,string,code \"${LK_NOTE_DIR:-$HOME/Desktop}\"
+xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>o,string,todoist
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>s,string,exo-open --launch TerminalEmulator bash -ic 'lk-unison.sh -batch'
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>semicolon,string,libreoffice --calc
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>v,string,virt-manager
