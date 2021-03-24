@@ -44,6 +44,10 @@ SH=$(xq \
         '[.forward|to_array[]|.["to-guest"]|to_array[]]' \
         ISOLATE \
         '.isolate != null' \
+        NO_LOG \
+        '.isolate|has("no-log")' \
+        NO_REJECT \
+        '.isolate|has("no-reject")' \
         ALLOW_HOST \
         '.isolate.allow|has("gateway")' \
         ALLOW_HOST_NET \
@@ -218,10 +222,12 @@ for GUEST_IP in "${GUEST_IPS[@]}"; do
                 lk_iptables_append "$ISOLATE_CHAIN" \
                     -d "$IP" -j ACCEPT
             done
-            lk_iptables_append "$ISOLATE_CHAIN" \
-                -j LOG --log-prefix "blocked: "
-            lk_iptables_append "$ISOLATE_CHAIN" \
-                -j "$REJECT_CHAIN"
+            lk_is_true NO_LOG ||
+                lk_iptables_append "$ISOLATE_CHAIN" \
+                    -j LOG --log-prefix "blocked: "
+            lk_is_true NO_REJECT ||
+                lk_iptables_append "$ISOLATE_CHAIN" \
+                    -j "$REJECT_CHAIN"
             lk_iptables_insert FORWARD \
                 -i "$GUEST_BRIDGE" -s "$GUEST_IP" -j "$ISOLATE_CHAIN"
         fi

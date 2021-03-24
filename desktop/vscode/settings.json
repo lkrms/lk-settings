@@ -6,7 +6,7 @@
         "editor.defaultFormatter": "HookyQR.beautify"
     },
     "[json]": {
-        "editor.defaultFormatter": "vscode.json-language-features"
+        "editor.defaultFormatter": "HookyQR.beautify"
     },
     "[jsonc]": {
         "editor.defaultFormatter": "vscode.json-language-features"
