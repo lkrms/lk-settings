@@ -72,7 +72,7 @@
 	smudge = cat
 
 [filter "typora"]
-	clean = xxd -r -p | jsonlint -Sf --sort preserve | jq -S --indent 4 'del(.\"sidebar-width\",.customZoom,.initialize_ver,.lastClosedBounds,.lastSavePath,.pinFolder,.sidebar_tab,.uuid,.zoomFactor,.zoomLevel)'
+	clean = xxd -r -p | jsonlint -Sf --sort preserve | jq -S --indent 4 'del(.\"sidebar-width\",.customZoom,.initialize_ver,.lastClosedBounds,.lastSavePath,.pinFolder,.sidebar_tab,.uuid,.zoomFactor,.zoomLevel)|.preLinebreakOnExport=false'
 	smudge = jsonlint -Sf --sort preserve | jq -c | xxd -p | tr -d '\\n'
 
 [filter "typora-plist"]
@@ -85,7 +85,7 @@
 
 [filter "vscodesettings"]
 	clean = jsonlint -Sf --sort preserve | jq -S --indent 4 'del(.\"breadcrumbs.enabled\",.\"editor.fontSize\",.\"editor.minimap.enabled\",.\"salesforcedx-vscode-apex.java.home\",.\"shellformat.path\",.\"window.zoomLevel\",.\"workbench.colorTheme\")|walk(if type==\"array\" then sort_by(try ascii_upcase catch \"\") else . end)'
-	smudge = cat
+	smudge = jsonlint -Sf --sort preserve | jq -S --indent 4 --arg shfmt \"$(type -P shfmt)\" '.+={\"shellformat.path\":$shfmt,\"workbench.colorTheme\":\"Dracula Soft\"}'
 
 [filter "whiskermenu"]
 	clean = sed -E '/^(recent|menu-(width|height)|[a-z]+-icon-size)=/d'

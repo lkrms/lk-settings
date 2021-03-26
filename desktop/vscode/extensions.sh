@@ -64,4 +64,5 @@ VSCODE_EXTENSIONS=(
     wmaurer.change-case
     yzhang.markdown-all-in-one
     zhuangtongfa.material-theme
+    ziyasal.vscode-open-in-github
 )
