@@ -10,19 +10,47 @@ _criteria = {}
 _actions = {}
 _places = {}
 
-_criteria.sticky = {
-    operator.AND,
+_places.chat = {display = 2, xy = {5, 1}, wh = {2, 1}}
+_places.sticky_utility = {display = 2, xy = {5, 2}, wh = {2, 1}}
+
+_criteria.multihead = {
     function(state)
         return #state.displays > 1
-    end,
+    end
+}
+
+_criteria.primary_display = {
+    display = 1
+}
+
+_criteria.not_primary_display = {
+    function(state)
+        return state.display ~= 1
+    end
+}
+
+_criteria.sticky = {
+    operator.AND,
+    _criteria.multihead,
     {
         operator.OR,
         event = "open",
         {
             operator.AND,
             event = {"focus", "blur"},
-            display = 2
+            _criteria.not_primary_display
         }
+    }
+}
+
+_criteria.private = {
+    operator.AND,
+    _criteria.multihead,
+    _criteria.not_primary_display,
+    class_instance_name = {
+        "caprine",
+        "skype",
+        "keepassxc"
     }
 }
 
@@ -35,9 +63,28 @@ _actions.undecorated_sticky = {
     pin_on
 }
 
-_places.sticky_utility = {display = 2, xy = {1, 2}, wh = {2, 1}}
-
 rules = {
+    {
+        criteria = {
+            operator.AND,
+            event = {"open", "blur"},
+            _criteria.private
+        },
+        actions = {
+            maximize_off,
+            shade_on
+        }
+    },
+    {
+        criteria = {
+            operator.AND,
+            event = "focus",
+            _criteria.private
+        },
+        actions = {
+            shade_off
+        }
+    },
     {
         criteria = {
             operator.AND,
@@ -57,12 +104,11 @@ rules = {
             },
             _criteria.sticky
         },
-        actions = append(
-            _actions.undecorated_sticky,
-            {
-                {to_place, {_places.sticky_utility}}
-            }
-        )
+        actions = {
+            decorate_off,
+            {to_workspace, {1}},
+            {to_place, {_places.sticky_utility}}
+        }
     },
     {
         criteria = {
@@ -91,7 +137,7 @@ rules = {
         actions = append(
             _actions.sticky,
             {
-                {to_place, {{display = 2, xy = {3, 1}, wh = {2, 1}}}}
+                {to_place, {_places.chat}}
             }
         )
     },
@@ -107,7 +153,7 @@ rules = {
         actions = append(
             _actions.sticky,
             {
-                {to_place, {{display = 2, xy = {3, 2}, wh = {2, 1}}}}
+                {to_place, {_places.chat}}
             }
         )
     },
@@ -124,11 +170,9 @@ rules = {
                 return state.hints and state.hints.min_width > 903
             end
         },
-        actions = append(
-            _actions.sticky,
-            {
-                {to_place, {{display = 2, xy = {1, 1}, wh = {2, 1}}}}
-            }
-        )
+        actions = {
+            {to_workspace, {1}},
+            {to_place, {_places.chat}}
+        }
     }
 }

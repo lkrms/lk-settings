@@ -193,6 +193,7 @@ function get_state(event)
         application_name = event == "close" and "" or (get_application_name() or ""),
         window_geometry = {get_window_geometry()},
         window_client_geometry = {get_window_client_geometry()},
+        window_is_maximized = get_window_is_maximized(),
         window_type = get_window_type(),
         class_instance_name = get_class_instance_name() or "",
         window_role = get_window_role(),
@@ -236,6 +237,30 @@ function decorate_off(state)
     log.info("Calling undecorate_window() on " .. state.class_instance_name)
     undecorate_window()
     state.just_undecorated = true
+end
+
+function shade_on(state)
+    log.info("Calling shade() on " .. state.class_instance_name)
+    shade()
+end
+
+function shade_off(state)
+    log.info("Calling unshade() on " .. state.class_instance_name)
+    unshade()
+end
+
+function maximize_on(state)
+    if not state.window_is_maximized then
+        log.info("Calling maximize() on " .. state.class_instance_name)
+        maximize()
+    end
+end
+
+function maximize_off(state)
+    if state.window_is_maximized then
+        log.info("Calling unmaximize() on " .. state.class_instance_name)
+        unmaximize()
+    end
 end
 
 function _to_place(display, grid_columns, grid_rows, column1, row1, columns, rows, state)
