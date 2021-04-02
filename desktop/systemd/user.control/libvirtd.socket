@@ -1,0 +1,12 @@
+[Unit]
+Description=Libvirt local socket
+Before=libvirtd.service
+
+
+[Socket]
+ListenStream=%t/libvirt/libvirt-sock
+Service=libvirtd.service
+SocketMode=0666
+
+[Install]
+WantedBy=sockets.target

@@ -178,6 +178,11 @@ symlink "$_ROOT/quicktile/quicktile.cfg" ~/.config/quicktile.cfg
 symlink "$_ROOT/remmina/" ~/.config/remmina
 symlink "$_ROOT/todoist/.todoist-linux.json" ~/.config/.todoist-linux.json
 
+unset LK_SYMLINK_NO_CHANGE
+symlink "$_ROOT/systemd/user.control" ~/.config/systemd/user.control
+lk_is_true LK_SYMLINK_NO_CHANGE ||
+    systemctl --user daemon-reload
+
 symlink_if_not_running \
     "$_ROOT/nextcloud/sync-exclude.lst" ~/.config/Nextcloud/sync-exclude.lst \
     Nextcloud "pgrep -x nextcloud"

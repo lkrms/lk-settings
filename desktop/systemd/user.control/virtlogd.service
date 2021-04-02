@@ -1,0 +1,14 @@
+[Unit]
+Description=Virtual machine log manager
+Requires=virtlogd.socket
+Requires=virtlogd-admin.socket
+Before=libvirtd.service
+
+[Service]
+ExecStart=/usr/bin/virtlogd
+ExecReload=/bin/kill -USR1 $MAINPID
+OOMScoreAdjust=-900
+LimitNOFILE=16384
+
+[Install]
+Also=virtlogd.socket

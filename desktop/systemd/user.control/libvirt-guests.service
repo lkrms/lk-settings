@@ -1,0 +1,17 @@
+[Unit]
+Description=Shut down running libvirt guests
+BindsTo=libvirtd.service
+After=libvirtd.service
+After=dbus.service
+
+[Service]
+Environment=LK_TTY_NO_COLOUR=1
+ExecStop=/opt/lk-platform/bin/lk-virsh-shutdown-all-domains.sh
+Type=oneshot
+RemainAfterExit=yes
+StandardOutput=journal+console
+TimeoutStopSec=0
+
+[Install]
+WantedBy=default.target
+WantedBy=libvirtd.service

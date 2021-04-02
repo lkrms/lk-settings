@@ -1,0 +1,24 @@
+[Unit]
+Description=Session virtualization daemon
+Requires=virtlogd.socket
+Requires=virtlockd.socket
+Wants=libvirtd.socket
+Wants=libvirtd-admin.socket
+Before=libvirt-guests.service
+After=dbus.service
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/libvirtd
+ExecReload=/bin/kill -HUP $MAINPID
+KillMode=process
+Restart=on-failure
+LimitNOFILE=8192
+TasksMax=32768
+LimitMEMLOCK=64M
+
+[Install]
+WantedBy=default.target
+Also=virtlockd.socket
+Also=virtlogd.socket
+Also=libvirtd.socket

@@ -1,0 +1,14 @@
+[Unit]
+Description=Virtual machine lock manager
+Requires=virtlockd.socket
+Requires=virtlockd-admin.socket
+Before=libvirtd.service
+
+[Service]
+ExecStart=/usr/bin/virtlockd
+ExecReload=/bin/kill -USR1 $MAINPID
+OOMScoreAdjust=-900
+LimitNOFILE=40960
+
+[Install]
+Also=virtlockd.socket
