@@ -6,7 +6,8 @@ BS=${BASH_SOURCE[0]} &&
     lk_die "unable to resolve path to script"
 
 # shellcheck source=./settings-common.sh
-include=linux,provision . "$_ROOT/../bin/settings-common.sh"
+. "$_ROOT/../bin/settings-common.sh"
+lk_include linux provision
 
 lk_assert_command_exists xfconf-query
 
@@ -113,9 +114,9 @@ if [ -n "$DPI" ] && [ -f /etc/default/grub ]; then
                 sudo install -v -d -m 0755 "$_GRUB_FONT_DIR"
             sudo install -v -m 0755 "$_PF2" "$GRUB_FONT"
             LK_SUDO=1
-            lk_file_add_newline /etc/default/grub
+            _FILE=$(sed -E '/^GRUB_FONT=/d' /etc/default/grub)
             lk_file_replace /etc/default/grub \
-                "$(sed -E '/^GRUB_FONT=/d' /etc/default/grub &&
+                "$(echo "$_FILE" &&
                     echo "$GRUB_FONT_VAR")"
             unset LK_SUDO
             ! lk_command_exists update-grub ||

@@ -16,11 +16,12 @@ lk_die() { s=$? && echo "$BASH_SOURCE: $1" >&2 && (exit $s) && false || exit; }
     { . /etc/default/lk-platform && [ -n "${LK_BASE:-}" ]; } ||
     lk_die "LK_BASE not set"
 
-include=iptables,provision . "$LK_BASE/lib/bash/common.sh"
+. "$LK_BASE/lib/bash/common.sh"
+lk_include iptables provision
 
 LK_VERBOSE=1
 
-lk_log_output
+lk_log_start
 
 lk_console_log "Processing domain XML"
 

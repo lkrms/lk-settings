@@ -25,6 +25,7 @@ VSCODE_EXTENSIONS=(
     henriiik.vscode-sort
     HookyQR.beautify
     humao.rest-client
+    idleberg.applescript
     jflbr.jwt-decoder
     jkjustjoshing.vscode-text-pastry
     jprestidge.theme-material-theme
@@ -48,6 +49,7 @@ VSCODE_EXTENSIONS=(
     PKief.material-icon-theme
     pthorsson.vscode-jsp
     redhat.java
+    redhat.vscode-commons
     redhat.vscode-xml
     redhat.vscode-yaml
     rogalmic.bash-debug

@@ -67,6 +67,10 @@ ssh_tcp_keepcnt=3
 ssh_tcp_usrtimeout=60000
 screenshot_name=remmina_%p_%h_%Y%m%d-%H%M%S
 trust_all=false
+dark_theme=false
+shortcutkey_multimon=65365
+grab_color=#00ff00
+grab_color_switch=false
 
 [ssh_colors]
 background=rgb(213,204,186)
@@ -88,6 +92,10 @@ color12=rgb(66,106,121)
 color13=rgb(151,82,44)
 color14=rgb(152,154,156)
 color15=rgb(213,204,186)
+cursor_foreground=#d5ccba
+highlight=#45373c
+highlight_foreground=#d5ccba
+colorBD=#45373c
 
 [usage_stats]
 periodic_usage_stats_permission_asked=true

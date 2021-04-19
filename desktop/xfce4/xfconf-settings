@@ -60,6 +60,7 @@ xfce4-desktop,/desktop-icons/file-icons/show-network-removable,bool,false
 xfce4-desktop,/desktop-icons/file-icons/show-removable,bool,false
 xfce4-desktop,/desktop-icons/file-icons/show-trash,bool,false
 xfce4-desktop,/desktop-icons/file-icons/show-unknown-removable,bool,false
+xfce4-desktop,/desktop-icons/gravity,int,2
 xfce4-desktop,/desktop-icons/primary,bool,true
 xfce4-desktop,/desktop-icons/style,int,2
 xfce4-desktop,/windowlist-menu/show-add-remove-workspaces,bool,false

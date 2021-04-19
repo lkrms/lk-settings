@@ -5,7 +5,8 @@ BS=${BASH_SOURCE[0]} &&
     [ ! -L "$BS" ] && _ROOT=$(cd "${BS%/*}/../desktop" && pwd -P) ||
     lk_die "unable to resolve path to script"
 
-include=linux . "$_ROOT/../bin/settings-common.sh"
+. "$_ROOT/../bin/settings-common.sh"
+lk_include linux
 
 lk_assert_not_root
 lk_assert_is_linux

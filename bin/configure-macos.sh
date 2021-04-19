@@ -5,7 +5,8 @@ BS=${BASH_SOURCE[0]} &&
     [ ! -L "$BS" ] && _ROOT=$(cd "${BS%/*}/../desktop" && pwd -P) ||
     lk_die "unable to resolve path to script"
 
-include=macos . "$_ROOT/../bin/settings-common.sh"
+. "$_ROOT/../bin/settings-common.sh"
+lk_include macos
 
 lk_assert_not_root
 lk_assert_is_macos
@@ -158,7 +159,7 @@ defaults write com.googlecode.iterm2 CopyWithStylesByDefault -bool true
 defaults write com.googlecode.iterm2 DisallowCopyEmptyString -bool true
 defaults write com.googlecode.iterm2 DoubleClickPerformsSmartSelection -bool true
 defaults write com.googlecode.iterm2 OptionClickMovesCursor -bool false
-defaults write com.googlecode.iterm2 QuitWhenAllWindowsClosed -bool false
+defaults write com.googlecode.iterm2 QuitWhenAllWindowsClosed -bool true
 defaults write com.googlecode.iterm2 SensitiveScrollWheel -bool true
 defaults write com.googlecode.iterm2 SmartPlacement -bool true
 defaults write com.googlecode.iterm2 SoundForEsc -bool false
@@ -175,39 +176,68 @@ if pgrep -xq iTerm2; then
     lk_warn "cannot apply settings: iTerm2 is running"
 else
     lk_plist_set_file "$_PREFS/com.googlecode.iterm2.plist"
-    lk_plist_maybe_add ":Window Arrangements" dict
-    lk_plist_replace ":Window Arrangements:No windows" array
-    lk_plist_replace ":Default Arrangement Name" string "No windows"
-    lk_plist_replace ":OpenArrangementAtStartup" bool true
-    lk_plist_replace ":OpenNoWindowsAtStartup" bool false
+    #lk_plist_maybe_add ":Window Arrangements" dict
+    #lk_plist_replace ":Window Arrangements:No windows" array
+    #lk_plist_replace ":Default Arrangement Name" string "No windows"
+    #lk_plist_replace ":OpenArrangementAtStartup" bool true
+    #lk_plist_replace ":OpenNoWindowsAtStartup" bool false
 
     lk_plist_replace_from_file ":Custom Color Presets" dict \
         "$_ROOT/iterm2/Custom Color Presets.plist"
 
-    if ! lk_plist_exists ":New Bookmarks:0"; then
-        lk_warn "no profile to configure"
-    else
-        lk_plist_replace ":New Bookmarks:0:AWDS Pane Option" string "Recycle"
-        lk_plist_replace ":New Bookmarks:0:AWDS Tab Option" string "Recycle"
-        lk_plist_replace ":New Bookmarks:0:AWDS Window Option" string "Recycle"
-        lk_plist_replace ":New Bookmarks:0:BM Growl" bool false
-        lk_plist_replace ":New Bookmarks:0:Columns" integer 120
-        lk_plist_replace ":New Bookmarks:0:Custom Directory" string "Advanced"
-        lk_plist_replace ":New Bookmarks:0:Flashing Bell" bool true
-        lk_plist_replace ":New Bookmarks:0:Normal Font" string "Menlo-Regular 10"
-        lk_plist_replace ":New Bookmarks:0:Option Key Sends" integer 2
-        lk_plist_replace ":New Bookmarks:0:Place Prompt at First Column" bool false
-        lk_plist_replace ":New Bookmarks:0:Right Option Key Sends" integer 2
-        lk_plist_replace ":New Bookmarks:0:Rows" integer 35
-        lk_plist_replace ":New Bookmarks:0:Screen" integer -2
-        lk_plist_replace ":New Bookmarks:0:Scrollback Lines" integer 0
-        lk_plist_replace ":New Bookmarks:0:Show Mark Indicators" bool false
-        lk_plist_replace ":New Bookmarks:0:Silence Bell" bool true
-        lk_plist_replace ":New Bookmarks:0:Title Components" integer 512
-        lk_plist_replace ":New Bookmarks:0:Unlimited Scrollback" bool true
-        lk_plist_replace_from_file ":New Bookmarks:0:Keyboard Map" dict \
+    PLIST=$(lk_mktemp_file)
+    lk_delete_on_exit "$PLIST"
+    i=0
+    while lk_plist_exists ":New Bookmarks:$i"; do
+        lk_plist_replace ":New Bookmarks:$i:AWDS Pane Option" string "Recycle"
+        lk_plist_replace ":New Bookmarks:$i:AWDS Tab Option" string "Recycle"
+        lk_plist_replace ":New Bookmarks:$i:AWDS Window Option" string "Recycle"
+        lk_plist_replace ":New Bookmarks:$i:BM Growl" bool false
+        lk_plist_replace ":New Bookmarks:$i:Columns" integer 120
+        lk_plist_replace ":New Bookmarks:$i:Custom Directory" string "Advanced"
+        lk_plist_replace ":New Bookmarks:$i:Flashing Bell" bool true
+        lk_plist_replace ":New Bookmarks:$i:Normal Font" string "Menlo-Regular 12"
+        lk_plist_replace ":New Bookmarks:$i:Option Key Sends" integer 2
+        lk_plist_replace ":New Bookmarks:$i:Place Prompt at First Column" bool false
+        lk_plist_replace ":New Bookmarks:$i:Right Option Key Sends" integer 2
+        lk_plist_replace ":New Bookmarks:$i:Rows" integer 35
+        lk_plist_replace ":New Bookmarks:$i:Screen" integer -2
+        lk_plist_replace ":New Bookmarks:$i:Scrollback Lines" integer 0
+        lk_plist_replace ":New Bookmarks:$i:Show Mark Indicators" bool false
+        lk_plist_replace ":New Bookmarks:$i:Silence Bell" bool true
+        lk_plist_replace ":New Bookmarks:$i:Title Components" integer 512
+        lk_plist_replace ":New Bookmarks:$i:Unlimited Scrollback" bool true
+        lk_plist_replace_from_file ":New Bookmarks:$i:Keyboard Map" dict \
             "$_ROOT/iterm2/Keyboard Map.plist"
-    fi
+        case "$i" in
+        0)
+            CUSTOM_COMMAND="Custom Shell"
+            COMMAND=$(type -P bash)
+            DESCRIPTION=Default
+            COLOR_PRESET=Elio
+            ;;
+        1)
+            CUSTOM_COMMAND="No"
+            COMMAND=""
+            DESCRIPTION="Bash 3.2"
+            COLOR_PRESET=Broadcast
+            ;;
+        *)
+            continue
+            ;;
+        esac
+        lk_plist_replace ":New Bookmarks:$i:Custom Command" string "$CUSTOM_COMMAND"
+        lk_plist_replace ":New Bookmarks:$i:Command" string "$COMMAND"
+        lk_plist_replace ":New Bookmarks:$i:Description" string "$DESCRIPTION"
+        plutil -extract "$COLOR_PRESET" xml1 -o "$PLIST" \
+            "$_ROOT/iterm2/Custom Color Presets.plist" ||
+            lk_warn "unable to extract color preset: $COLOR_PRESET" || continue
+        for k in {"Ansi "{0..15},Background,Foreground}" Color"; do
+            lk_plist_maybe_delete ":New Bookmarks:$i:$k"
+        done
+        lk_plist_merge_from_file ":New Bookmarks:$i" "$PLIST"
+        ((++i))
+    done
 fi
 
 is_basic || symlink_if_not_running \
@@ -265,10 +295,10 @@ is_basic || symlink_if_not_running \
     Typora "pgrep -x Typora"
 
 is_basic || symlink_if_not_running \
-    "$_ROOT/vscode/settings.json" "$_APP_SUPPORT/VSCodium/User/settings.json" \
-    "$_ROOT/vscode/keybindings.mac.json" "$_APP_SUPPORT/VSCodium/User/keybindings.json" \
-    "$_ROOT/vscode/snippets" "$_APP_SUPPORT/VSCodium/User/snippets" \
-    "VS Code" "pgrep -f '^/Applications/VSCodium.app/Contents/MacOS/Electron'"
+    "$_ROOT/vscode/settings.json" "$_APP_SUPPORT/Code/User/settings.json" \
+    "$_ROOT/vscode/keybindings.mac.json" "$_APP_SUPPORT/Code/User/keybindings.json" \
+    "$_ROOT/vscode/snippets" "$_APP_SUPPORT/Code/User/snippets" \
+    "VS Code" "pgrep -f '^/Applications/Visual Studio Code.app/Contents/MacOS/Electron'"
 
 FILE=/Applications/VSCodium.app/Contents/Resources/app/product.json
 if [ -f "$FILE" ]; then
@@ -448,7 +478,7 @@ if lk_has_arg "--reset"; then
     lk_macos_kb_reset_shortcuts com.apple.mail
 fi
 
-lk_macos_kb_add_shortcut NSGlobalDomain "Lock Screen" "@^l"
+lk_macos_kb_add_shortcut NSGlobalDomain "Lock Screen" "@^q"
 is_basic || lk_macos_kb_add_shortcut com.apple.mail "Mark All Messages as Read" "@\$c"
 is_basic || lk_macos_kb_add_shortcut com.apple.mail "Send" "@\U21a9"
 

@@ -394,5 +394,7 @@
             "data": "With your eyes closed, slowly and gently move eyes to the left, then slowly to the right.",
             "enabled": true
         }
-    ]
+    ],
+    "showBreaksAsRegularWindows": false,
+    "appExclusions": []
 }
