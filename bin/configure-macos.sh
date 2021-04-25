@@ -272,20 +272,20 @@ is_basic || symlink_if_not_running \
 #done
 
 lk_console_message "Checking Todoist"
-# ^⌘Q
+# ^⌘A
 defaults write com.todoist.mac.Todoist TDQuickAddShortcut "<data>
-YnBsaXN0MDDUAQIDBAUGBwpYJHZlcnNpb25ZJGFyY2hpdmVyVCR0b3BYJG9iamVjdHMSAAGGoF8Q
-D05TS2V5ZWRBcmNoaXZlctEICVRyb290gAGjCwwTVSRudWxs0w0ODxAREldLZXlDb2RlViRjbGFz
-c11Nb2RpZmllckZsYWdzEAyAAhIAFAAA0hQVFhdaJGNsYXNzbmFtZVgkY2xhc3Nlc1tNQVNTaG9y
-dGN1dKIYGVtNQVNTaG9ydGN1dFhOU09iamVjdAgRGiQpMjdJTFFTV11kbHOBg4WKj5qjr7K+AAAA
+YnBsaXN0MDDUAQIDBAUGFhdYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoKMH
+CA9VJG51bGzTCQoLDA0OV0tleUNvZGVWJGNsYXNzXU1vZGlmaWVyRmxhZ3MQAIACEgAUAADSEBES
+E1okY2xhc3NuYW1lWCRjbGFzc2VzW01BU1Nob3J0Y3V0ohQVW01BU1Nob3J0Y3V0WE5TT2JqZWN0
+XxAPTlNLZXllZEFyY2hpdmVy0RgZVHJvb3SAAQgRGiMtMjc7QUhQV2VnaW5zfoeTlqKrvcDFAAAA
 AAAAAQEAAAAAAAAAGgAAAAAAAAAAAAAAAAAAAMc=
 </data>"
 # ^⌘O
 defaults write com.todoist.mac.Todoist TDToggleShortcut "<data>
-YnBsaXN0MDDUAQIDBAUGBwpYJHZlcnNpb25ZJGFyY2hpdmVyVCR0b3BYJG9iamVjdHMSAAGGoF8Q
-D05TS2V5ZWRBcmNoaXZlctEICVRyb290gAGjCwwTVSRudWxs0w0ODxAREldLZXlDb2RlViRjbGFz
-c11Nb2RpZmllckZsYWdzEB+AAhIAFAAA0hQVFhdaJGNsYXNzbmFtZVgkY2xhc3Nlc1tNQVNTaG9y
-dGN1dKIYGVtNQVNTaG9ydGN1dFhOU09iamVjdAgRGiQpMjdJTFFTV11kbHOBg4WKj5qjr7K+AAAA
+YnBsaXN0MDDUAQIDBAUGFhdYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoKMH
+CA9VJG51bGzTCQoLDA0OV0tleUNvZGVWJGNsYXNzXU1vZGlmaWVyRmxhZ3MQH4ACEgAUAADSEBES
+E1okY2xhc3NuYW1lWCRjbGFzc2VzW01BU1Nob3J0Y3V0ohQVW01BU1Nob3J0Y3V0WE5TT2JqZWN0
+XxAPTlNLZXllZEFyY2hpdmVy0RgZVHJvb3SAAQgRGiMtMjc7QUhQV2VnaW5zfoeTlqKrvcDFAAAA
 AAAAAQEAAAAAAAAAGgAAAAAAAAAAAAAAAAAAAMc=
 </data>"
 
@@ -458,6 +458,7 @@ is_basic || defaults write com.apple.Safari SuppressSearchSuggestions -bool true
 is_basic || defaults write com.apple.Safari IncludeDevelopMenu -bool true
 is_basic || defaults write com.apple.Safari WebKitDeveloperExtrasEnabledPreferenceKey -bool true
 is_basic || defaults write com.apple.Safari WebKitPreferences.developerExtrasEnabled -bool true
+is_basic || defaults write com.apple.Safari.SandboxBroker ShowDevelopMenu -bool true
 
 # Mail
 defaults write com.apple.mail ConversationViewSpansMailboxes -bool false

@@ -198,6 +198,7 @@ for GUEST_IP in "${GUEST_IPS[@]}"; do
         if lk_is_true ISOLATE; then
             ! lk_is_true ALLOW_HOST || _ALLOW_HOSTS+=("$GUEST_BRIDGE_IP")
             ! lk_is_true ALLOW_HOST_NET || _ALLOW_HOSTS+=("$HOST_NET")
+            _ALLOW_HOSTS+=(${ALLOW_HOSTS[@]+"${ALLOW_HOSTS[@]}"})
             [ ${#ALLOW_URLS[@]} -eq 0 ] ||
                 lk_console_message "Downloading host lists"
             for i in "${!ALLOW_URLS[@]}"; do

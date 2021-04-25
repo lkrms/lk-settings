@@ -77,6 +77,8 @@
         ".{bash_login,bash_profile,bashrc,profile,xsessionrc}": "shellscript"
     },
     "files.exclude": {
+        "**/*.compiled.*": true,
+        "**/*.min.*": true,
         "**/extjs/build/**": true
     },
     "files.watcherExclude": {
@@ -288,6 +290,12 @@
     "workbench.editor.highlightModifiedTabs": true,
     "workbench.editor.limit.enabled": true,
     "workbench.editor.revealIfOpen": true,
+    "workbench.editorAssociations": [
+        {
+            "filenamePattern": "*.ipynb",
+            "viewType": "jupyter.notebook.ipynb"
+        }
+    ],
     "workbench.enableExperiments": false,
     "workbench.iconTheme": "material-icon-theme",
     "workbench.settings.enableNaturalLanguageSearch": false,
