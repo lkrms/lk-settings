@@ -1,0 +1,666 @@
+{
+  "First Time Launch" : true,
+  "analytics" : 
+  {
+    "enabled" : true
+  },
+  "backlight" : 
+  {
+    "Logitech.Gaming.Keyboard.Pro.C339" : 
+    {
+      "M1" : "#ffffff",
+      "M2" : "#ffffff",
+      "M3" : "#ffffff"
+    }
+  },
+  "current_profile_id" : "{09D92D75-3C8C-4723-B06C-4090BCB899C0}",
+  "gameApplets" : 
+  {
+    "|Applications|Logitech|Logitech Gaming Software.app|Contents|MacOS|ArxApplets|Screen Sampler|ScreenSampler.app" : 
+    {
+      "id" : "scan_from_known_folder",
+      "launch" : 
+      {
+        "type" : "never"
+      },
+      "name" : "Screen Sampler",
+      "support" : 
+      {
+        "arx" : 
+        {
+          "enabled" : false,
+          "support" : false
+        },
+        "led" : 
+        {
+          "enabled" : true,
+          "support" : true
+        }
+      }
+    }
+  },
+  "inputTracker" : 
+  {
+    "Logitech.Gaming.Keyboard.Pro.C339" : 
+    {
+      "deviceHeatmap" : true,
+      "showCenter" : true
+    },
+    "spectrum" : 2
+  },
+  "lcd" : 
+  {
+    "applets" : 
+    {
+      "en-US" : 
+      {
+        "2ee4" : 
+        {
+          "appPath" : "/Applications/Logitech/Logitech Gaming Software.app",
+          "autostartable" : false,
+          "format" : 1,
+          "iconPath" : "",
+          "name" : "G-Series Profile Selector"
+        },
+        "3f6d" : 
+        {
+          "appPath" : "/Applications/Logitech/Logitech Gaming Software.app",
+          "autostartable" : false,
+          "format" : 0,
+          "iconPath" : "",
+          "name" : "G-Series Profile Selector"
+        },
+        "6300" : 
+        {
+          "appPath" : "/Applications/Logitech/Logitech Gaming Software.app/Contents/MacOS/LCore",
+          "autostartable" : false,
+          "format" : 0,
+          "iconPath" : "",
+          "name" : "Logitech Gaming Profiler"
+        },
+        "7289" : 
+        {
+          "appPath" : "/Applications/Logitech/Logitech Gaming Software.app/Contents/MacOS/LCore",
+          "autostartable" : false,
+          "format" : 1,
+          "iconPath" : "",
+          "name" : "Logitech Gaming Profiler"
+        }
+      }
+    }
+  },
+  "lightingSettings" : 
+  {
+    "Logitech.Gaming.Keyboard.Pro.C339" : 
+    {
+      "CustomEffects" : 
+      {
+        "0" : 0,
+        "effect_Id" : "{09dc2d75-3c8c-4723-306c-4090bcb899c4}",
+        "speed" : 125
+      },
+      "Zone" : 
+      {
+        "selectedZone" : "{c92b9f78-e103-4a8e-bfd4-331d65aa152a}",
+        "zones" : 
+        {
+          "{4fa10f7d-adea-4298-87fc-a83d1d6b4f52}" : 
+          {
+            "color" : "#8e9e61",
+            "keys" : 
+            [
+              {
+                "id" : "0x49",
+                "type" : "0x1"
+              },
+              {
+                "id" : "0x4e",
+                "type" : "0x1"
+              },
+              {
+                "id" : "0x4c",
+                "type" : "0x1"
+              },
+              {
+                "id" : "0x4b",
+                "type" : "0x1"
+              },
+              {
+                "id" : "0x4d",
+                "type" : "0x1"
+              }
+            ],
+            "name" : "Special"
+          },
+          "{5fe8ac85-424a-4400-ab34-2162a664548d}" : 
+          {
+            "color" : "#ff0000",
+            "keys" : 
+            [
+              {
+                "id" : "0x4a",
+                "type" : "0x1"
+              }
+            ],
+            "name" : "Home"
+          },
+          "{985ab4c8-cba1-4dc2-8432-8d02ac623186}" : 
+          {
+            "color" : "#ffdc00",
+            "keys" : 
+            [
+              {
+                "id" : "0x50",
+                "type" : "0x1"
+              },
+              {
+                "id" : "0x51",
+                "type" : "0x1"
+              },
+              {
+                "id" : "0x52",
+                "type" : "0x1"
+              },
+              {
+                "id" : "0x4f",
+                "type" : "0x1"
+              }
+            ],
+            "name" : "Arrow Keys"
+          },
+          "{a6467a3b-8166-479f-a87c-ec13b9454fca}" : 
+          {
+            "color" : "#8e9e61",
+            "keys" : 
+            [
+              {
+                "id" : "0x31",
+                "type" : "0x1"
+              },
+              {
+                "id" : "0x18",
+                "type" : "0x1"
+              },
+              {
+                "id" : "0x16",
+                "type" : "0x1"
+              },
+              {
+                "id" : "0x12",
+                "type" : "0x1"
+              },
+              {
+                "id" : "0xb",
+                "type" : "0x1"
+              },
+              {
+                "id" : "0x14",
+                "type" : "0x1"
+              },
+              {
+                "id" : "0x17",
+                "type" : "0x1"
+              },
+              {
+                "id" : "0x30",
+                "type" : "0x1"
+              },
+              {
+                "id" : "0x38",
+                "type" : "0x1"
+              },
+              {
+                "id" : "0x1c",
+                "type" : "0x1"
+              },
+              {
+                "id" : "0xc",
+                "type" : "0x1"
+              },
+              {
+                "id" : "0x11",
+                "type" : "0x1"
+              },
+              {
+                "id" : "0x36",
+                "type" : "0x1"
+              },
+              {
+                "id" : "0x1b",
+                "type" : "0x1"
+              },
+              {
+                "id" : "0x37",
+                "type" : "0x1"
+              },
+              {
+                "id" : "0xf",
+                "type" : "0x1"
+              },
+              {
+                "id" : "0x34",
+                "type" : "0x1"
+              },
+              {
+                "id" : "0x15",
+                "type" : "0x1"
+              },
+              {
+                "id" : "0x2b",
+                "type" : "0x1"
+              },
+              {
+                "id" : "0x5",
+                "type" : "0x1"
+              },
+              {
+                "id" : "0x4",
+                "type" : "0x1"
+              },
+              {
+                "id" : "0x10",
+                "type" : "0x1"
+              },
+              {
+                "id" : "0x1d",
+                "type" : "0x1"
+              },
+              {
+                "id" : "0x2f",
+                "type" : "0x1"
+              },
+              {
+                "id" : "0x8",
+                "type" : "0x1"
+              },
+              {
+                "id" : "0xe",
+                "type" : "0x1"
+              },
+              {
+                "id" : "0x33",
+                "type" : "0x1"
+              },
+              {
+                "id" : "0x19",
+                "type" : "0x1"
+              },
+              {
+                "id" : "0x9",
+                "type" : "0x1"
+              },
+              {
+                "id" : "0x7",
+                "type" : "0x1"
+              },
+              {
+                "id" : "0x13",
+                "type" : "0x1"
+              },
+              {
+                "id" : "0xa",
+                "type" : "0x1"
+              },
+              {
+                "id" : "0x1a",
+                "type" : "0x1"
+              },
+              {
+                "id" : "0xd",
+                "type" : "0x1"
+              },
+              {
+                "id" : "0x6",
+                "type" : "0x1"
+              }
+            ],
+            "name" : "Typing"
+          },
+          "{c92b9f78-e103-4a8e-bfd4-331d65aa152a}" : 
+          {
+            "color" : "#00dcff",
+            "keys" : 
+            [
+              {
+                "id" : "0x39",
+                "type" : "0x1"
+              },
+              {
+                "id" : "0x2c",
+                "type" : "0x1"
+              },
+              {
+                "id" : "0x28",
+                "type" : "0x1"
+              },
+              {
+                "id" : "0xe2",
+                "type" : "0x1"
+              },
+              {
+                "id" : "0xe0",
+                "type" : "0x1"
+              },
+              {
+                "id" : "0x65",
+                "type" : "0x1"
+              },
+              {
+                "id" : "0xe6",
+                "type" : "0x1"
+              },
+              {
+                "id" : "0xe4",
+                "type" : "0x1"
+              },
+              {
+                "id" : "0xe1",
+                "type" : "0x1"
+              },
+              {
+                "id" : "0xe3",
+                "type" : "0x1"
+              },
+              {
+                "id" : "0xe5",
+                "type" : "0x1"
+              }
+            ],
+            "name" : "Modifiers"
+          },
+          "{d520a655-e6dd-4e34-9ed9-567fc7535fd8}" : 
+          {
+            "color" : "#00dcff",
+            "keys" : 
+            [
+              {
+                "id" : "0x1",
+                "type" : "0x40"
+              },
+              {
+                "id" : "0x1",
+                "type" : "0x10"
+              },
+              {
+                "id" : "0x2",
+                "type" : "0x40"
+              }
+            ],
+            "name" : "Indicators"
+          },
+          "{ddc81010-b337-43b0-905f-d2bd09e58894}" : 
+          {
+            "color" : "#ffdc00",
+            "keys" : 
+            [
+              {
+                "id" : "0x1f",
+                "type" : "0x1"
+              },
+              {
+                "id" : "0x21",
+                "type" : "0x1"
+              },
+              {
+                "id" : "0x22",
+                "type" : "0x1"
+              },
+              {
+                "id" : "0x20",
+                "type" : "0x1"
+              },
+              {
+                "id" : "0x35",
+                "type" : "0x1"
+              },
+              {
+                "id" : "0x24",
+                "type" : "0x1"
+              },
+              {
+                "id" : "0x25",
+                "type" : "0x1"
+              },
+              {
+                "id" : "0x2a",
+                "type" : "0x1"
+              },
+              {
+                "id" : "0x2d",
+                "type" : "0x1"
+              },
+              {
+                "id" : "0x2e",
+                "type" : "0x1"
+              },
+              {
+                "id" : "0x23",
+                "type" : "0x1"
+              },
+              {
+                "id" : "0x26",
+                "type" : "0x1"
+              },
+              {
+                "id" : "0x27",
+                "type" : "0x1"
+              },
+              {
+                "id" : "0x1e",
+                "type" : "0x1"
+              }
+            ],
+            "name" : "Typing - first row"
+          },
+          "{e5c1024a-1fc2-40d0-a934-cb7116dee284}" : 
+          {
+            "color" : "#ffffff",
+            "keys" : 
+            [
+              {
+                "id" : "0xe7",
+                "type" : "0x1"
+              },
+              {
+                "id" : "0x3f",
+                "type" : "0x1"
+              },
+              {
+                "id" : "0x45",
+                "type" : "0x1"
+              },
+              {
+                "id" : "0x3b",
+                "type" : "0x1"
+              },
+              {
+                "id" : "0x40",
+                "type" : "0x1"
+              },
+              {
+                "id" : "0x46",
+                "type" : "0x1"
+              },
+              {
+                "id" : "0x29",
+                "type" : "0x1"
+              },
+              {
+                "id" : "0x3c",
+                "type" : "0x1"
+              },
+              {
+                "id" : "0x3e",
+                "type" : "0x1"
+              },
+              {
+                "id" : "0x41",
+                "type" : "0x1"
+              },
+              {
+                "id" : "0x44",
+                "type" : "0x1"
+              },
+              {
+                "id" : "0x47",
+                "type" : "0x1"
+              },
+              {
+                "id" : "0x42",
+                "type" : "0x1"
+              },
+              {
+                "id" : "0x43",
+                "type" : "0x1"
+              },
+              {
+                "id" : "0x48",
+                "type" : "0x1"
+              },
+              {
+                "id" : "0x3a",
+                "type" : "0x1"
+              },
+              {
+                "id" : "0x3d",
+                "type" : "0x1"
+              }
+            ],
+            "name" : "Top row"
+          }
+        }
+      },
+      "current" : "Zone"
+    }
+  },
+  "mainapp" : 
+  {
+    "autostart" : false
+  },
+  "mainwindow" : 
+  {
+    "ScanForGames" : true,
+    "dynamicImageDownload" : true,
+    "enableLEDSDK" : true,
+    "lastUsedDevice" : "Logitech.Gaming.Keyboard.Pro.C339"
+  },
+  "mobile" : 
+  {
+    "service" : 
+    {
+      "enabled" : true
+    },
+    "service_guid" : "{f468eb25-7503-4dd3-99e4-2d710fc1b9b5}"
+  },
+  "notification" : 
+  {
+    "showBatteryWarningOnLCD" : true,
+    "showBatteryWarningOnTaskbar" : true
+  },
+  "palette" : 
+  {
+    "custom" : 
+    {
+      "colors" : "4287536737, NULL, NULL, NULL, NULL, NULL, ",
+      "coloumn" : 3,
+      "row" : 2
+    },
+    "fix" : 
+    {
+      "colors" : "4294901760, 4294922240, 4294958080, 4278255360, 4294967295, 4278246655, 4278190335, 4286578943, 4294902015, 4278190080, ",
+      "coloumn" : 5,
+      "row" : 2
+    }
+  },
+  "profiler" : 
+  {
+    "defaultProfile" : "{09D92D75-3C8C-4723-B06C-4090BCB899C0}",
+    "enableQuickMacroDelays" : false,
+    "joystickMouseSpeed" : 127,
+    "lastProfile" : "{09D92D75-3C8C-4723-B06C-4090BCB899C0}",
+    "showProfileActivationOnLCD" : true,
+    "showQuickMacrosOnLCD" : true
+  },
+  "splashscreen" : 
+  {
+    "G560_first" : true
+  },
+  "sync_effect_settings" : 
+  {
+    "settings" : null,
+    "synckeyboard" : false
+  },
+  "webcam_settings" : 
+  {
+    "Logitech.Webcam.C922" : 
+    {
+      "global" : 
+      {
+        "0" : 
+        {
+          "0" : 
+          {
+            "flags" : 2,
+            "value" : 128
+          },
+          "1" : 
+          {
+            "flags" : 2,
+            "value" : 128
+          },
+          "3" : 
+          {
+            "flags" : 2,
+            "value" : 128
+          },
+          "4" : 
+          {
+            "flags" : 2,
+            "value" : 128
+          },
+          "7" : 
+          {
+            "flags" : 1,
+            "value" : 4000
+          },
+          "8" : 
+          {
+            "flags" : 2,
+            "value" : 1
+          }
+        },
+        "1" : 
+        {
+          "0" : 
+          {
+            "flags" : 2,
+            "value" : 0
+          },
+          "1" : 
+          {
+            "flags" : 2,
+            "value" : 0
+          },
+          "3" : 
+          {
+            "flags" : 2,
+            "value" : 100
+          },
+          "7" : 
+          {
+            "flags" : 2,
+            "value" : 0
+          }
+        },
+        "FoV" : 0
+      }
+    }
+  },
+  "xC339" : 
+  {
+    "Extend_Model" : 
+    {
+      "842614537" : 1
+    }
+  }
+}
