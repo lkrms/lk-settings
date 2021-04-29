@@ -211,24 +211,25 @@ else
             "$_ROOT/iterm2/Keyboard Map.plist"
         case "$i" in
         0)
+            NAME=Default
             CUSTOM_COMMAND="Custom Shell"
             COMMAND=$(type -P bash)
-            DESCRIPTION=Default
             COLOR_PRESET=Elio
             ;;
         1)
+            NAME="Bash 3.2"
             CUSTOM_COMMAND="No"
             COMMAND=""
-            DESCRIPTION="Bash 3.2"
             COLOR_PRESET=Broadcast
             ;;
         *)
             continue
             ;;
         esac
+        lk_plist_replace ":New Bookmarks:$i:Name" string "$NAME"
         lk_plist_replace ":New Bookmarks:$i:Custom Command" string "$CUSTOM_COMMAND"
         lk_plist_replace ":New Bookmarks:$i:Command" string "$COMMAND"
-        lk_plist_replace ":New Bookmarks:$i:Description" string "$DESCRIPTION"
+        lk_plist_replace ":New Bookmarks:$i:Description" string "Default"
         plutil -extract "$COLOR_PRESET" xml1 -o "$PLIST" \
             "$_ROOT/iterm2/Custom Color Presets.plist" ||
             lk_warn "unable to extract color preset: $COLOR_PRESET" || continue
