@@ -14,6 +14,7 @@ export LK_PROXY_PAC_URL=${LK_PROXY_PAC_URL:-http://lk.lan/proxy.pac}
 export LK_PROXY_BROWSER_ONLY=${LK_PROXY_BROWSER_ONLY:-}
 export LK_BRIDGE_INTERFACE=br0
 export LK_NODE_TIMEZONE=Australia/Sydney
+export LK_SAMBA_WORKGROUP=LINAC
 export LK_NTP_SERVER=ntp.linacreative.com
 export LK_ARCH_REPOS="lk|http://lk.repo|||Optional TrustAll,aur|http://aur.repo|||Optional TrustAll"
 export LK_ARCH_MIRROR=http://arch.mirror/\$repo/os/\$arch
