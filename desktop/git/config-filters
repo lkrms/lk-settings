@@ -64,7 +64,7 @@
 	smudge = cat
 
 [filter "remmina-connection"]
-	clean = "F=$(cat); echo \"$F\" | head -n1; echo \"$F\" | tail -n+2 | sort"
+	clean = "F=$(cat); echo \"$F\" | head -n1; echo \"$F\" | tail -n+2 | LC_ALL=C sort"
 	smudge = cat
 
 [filter "speedcrunch"]

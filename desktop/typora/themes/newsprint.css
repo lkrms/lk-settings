@@ -583,6 +583,7 @@ input {
 
 .dropdown-menu .divider {
 	border-color: #e5e5e5;
+	opacity: 1;
 }
 
 /* https://github.com/typora/typora-issues/issues/2046 */

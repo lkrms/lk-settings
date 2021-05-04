@@ -320,7 +320,7 @@ code,
 kbd,
 tt,
 var {
-    font-size: 0.875rem;
+    font-size: 0.875em;
     font-family: Monaco, Consolas, "Andale Mono", "DejaVu Sans Mono", monospace;
 }
 
@@ -676,6 +676,7 @@ h6.md-focus .md-attr,
 .context-menu.dropdown-menu .divider,
 .dropdown-menu .divider {
     background-color: #777777;
+    opacity: 1;
 }
 
 footer {
@@ -982,7 +983,7 @@ footer.ty-footer {
 }
 
 .nav-group-item:active {
-    background-color: #474d54;
+    background-color: #474d54 !important;
 }
 
 .md-search-hit {
@@ -996,12 +997,6 @@ footer.ty-footer {
 
 #md-searchpanel input {
     color: white;
-}
-
-.export-detail,
-.export-item.active,
-.export-items-list-control {
-    background: #d6d6d4
 }
 
 .modal-backdrop.in {

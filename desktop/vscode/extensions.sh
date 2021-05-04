@@ -48,6 +48,7 @@ VSCODE_EXTENSIONS=(
     piotrpalarz.vscode-gitignore-generator
     PKief.material-icon-theme
     pthorsson.vscode-jsp
+    rebornix.ruby
     redhat.java
     redhat.vscode-commons
     redhat.vscode-xml
@@ -63,6 +64,7 @@ VSCODE_EXTENSIONS=(
     twxs.cmake
     Tyriar.lorem-ipsum
     Tyriar.sort-lines
+    wingrunr21.vscode-ruby
     wmaurer.change-case
     yzhang.markdown-all-in-one
     zhuangtongfa.material-theme

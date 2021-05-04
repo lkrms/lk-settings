@@ -104,19 +104,21 @@ lk_console_message "Checking Flycut"
 if pgrep -xq Flycut; then
     lk_warn "cannot apply settings: Flycut is running"
 else
-    FILE=~/Library/Containers/com.generalarcade.flycut/Data/Library/Preferences
-    FILE=$FILE/com.generalarcade.flycut.plist
-    lk_plist_set_file "$FILE"
-    lk_plist_replace ":menuSelectionPastes" bool false
-    lk_plist_replace ":savePreference" integer 2
-    lk_plist_replace ":rememberNum" real 99
-    lk_plist_maybe_add ":displayNum" real 20
-    lk_plist_replace ":removeDuplicates" bool true
-    lk_plist_replace ":pasteMovesToTop" bool true
-    lk_plist_replace ":ShortcutRecorder mainHotkey" dict
-    lk_plist_replace ":ShortcutRecorder mainHotkey:keyCode" integer 9
-    lk_plist_replace ":ShortcutRecorder mainHotkey:modifierFlags" integer 1441792
-    lk_plist_replace ":menuIcon" integer 2
+    FILE=~/Library/Containers/com.generalarcade.flycut/Data
+    FILE=$FILE/Library/Preferences/com.generalarcade.flycut.plist
+    [ ! -d "${FILE%/*}" ] || {
+        lk_plist_set_file "$FILE"
+        lk_plist_replace ":menuSelectionPastes" bool false
+        lk_plist_replace ":savePreference" integer 2
+        lk_plist_replace ":rememberNum" real 99
+        lk_plist_maybe_add ":displayNum" real 20
+        lk_plist_replace ":removeDuplicates" bool true
+        lk_plist_replace ":pasteMovesToTop" bool true
+        lk_plist_replace ":ShortcutRecorder mainHotkey" dict
+        lk_plist_replace ":ShortcutRecorder mainHotkey:keyCode" integer 9
+        lk_plist_replace ":ShortcutRecorder mainHotkey:modifierFlags" integer 1441792
+        lk_plist_replace ":menuIcon" integer 2
+    }
 fi
 
 lk_console_message "Checking iCanHazShortcut"
@@ -273,20 +275,18 @@ is_basic || symlink_if_not_running \
 #done
 
 lk_console_message "Checking Todoist"
-# ^⌘A
+# Disabled
 defaults write com.todoist.mac.Todoist TDQuickAddShortcut "<data>
-YnBsaXN0MDDUAQIDBAUGFhdYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoKMH
-CA9VJG51bGzTCQoLDA0OV0tleUNvZGVWJGNsYXNzXU1vZGlmaWVyRmxhZ3MQAIACEgAUAADSEBES
-E1okY2xhc3NuYW1lWCRjbGFzc2VzW01BU1Nob3J0Y3V0ohQVW01BU1Nob3J0Y3V0WE5TT2JqZWN0
-XxAPTlNLZXllZEFyY2hpdmVy0RgZVHJvb3SAAQgRGiMtMjc7QUhQV2VnaW5zfoeTlqKrvcDFAAAA
-AAAAAQEAAAAAAAAAGgAAAAAAAAAAAAAAAAAAAMc=
+YnBsaXN0MDDUAQIDBAUGBwpYJHZlcnNpb25ZJGFyY2hpdmVyVCR0b3BYJG9iamVjdHMSAAGGoF8Q
+D05TS2V5ZWRBcmNoaXZlctEICVRyb290gAChC1UkbnVsbAgRGiQpMjdJTFFTVQAAAAAAAAEBAAAA
+AAAAAAwAAAAAAAAAAAAAAAAAAABb
 </data>"
 # ^⌘O
 defaults write com.todoist.mac.Todoist TDToggleShortcut "<data>
-YnBsaXN0MDDUAQIDBAUGFhdYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoKMH
-CA9VJG51bGzTCQoLDA0OV0tleUNvZGVWJGNsYXNzXU1vZGlmaWVyRmxhZ3MQH4ACEgAUAADSEBES
-E1okY2xhc3NuYW1lWCRjbGFzc2VzW01BU1Nob3J0Y3V0ohQVW01BU1Nob3J0Y3V0WE5TT2JqZWN0
-XxAPTlNLZXllZEFyY2hpdmVy0RgZVHJvb3SAAQgRGiMtMjc7QUhQV2VnaW5zfoeTlqKrvcDFAAAA
+YnBsaXN0MDDUAQIDBAUGBwpYJHZlcnNpb25ZJGFyY2hpdmVyVCR0b3BYJG9iamVjdHMSAAGGoF8Q
+D05TS2V5ZWRBcmNoaXZlctEICVRyb290gAGjCwwTVSRudWxs0w0ODxAREldLZXlDb2RlViRjbGFz
+c11Nb2RpZmllckZsYWdzEB+AAhIAFAAA0hQVFhdaJGNsYXNzbmFtZVgkY2xhc3Nlc1tNQVNTaG9y
+dGN1dKIYGVtNQVNTaG9ydGN1dFhOU09iamVjdAgRGiQpMjdJTFFTV11kbHOBg4WKj5qjr7K+AAAA
 AAAAAQEAAAAAAAAAGgAAAAAAAAAAAAAAAAAAAMc=
 </data>"
 

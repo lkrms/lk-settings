@@ -4,6 +4,5 @@
   "expand_merge_commits_by_default": true,
   "theme": "Merge Dark.sublime-theme",
   "side_bar_layout": "commit_graph_as_column",
-  "diff_style": "side-by-side",
-  "hardware_acceleration": "opengl"
+  "diff_style": "side-by-side"
 }
