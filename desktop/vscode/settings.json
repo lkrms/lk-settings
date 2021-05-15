@@ -261,7 +261,8 @@
         "SC2153",
         "SC2154",
         "SC2206",
-        "SC2207"
+        "SC2207",
+        "SC3013"
     ],
     "shellcheck.executablePath": "shellcheck",
     "shellcheck.run": "onSave",
@@ -298,6 +299,7 @@
     "workbench.editor.highlightModifiedTabs": true,
     "workbench.editor.limit.enabled": true,
     "workbench.editor.revealIfOpen": true,
+    "workbench.editor.untitled.hint": "hidden",
     "workbench.editorAssociations": [
         {
             "filenamePattern": "*.ipynb",

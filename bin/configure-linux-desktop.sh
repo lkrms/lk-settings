@@ -13,7 +13,7 @@ lk_assert_is_linux
 
 cleanup
 
-_PRIV=${1:-}
+_PRIV=${1-}
 
 [ ! -d "$_PRIV" ] || {
 
@@ -177,6 +177,7 @@ symlink "$_ROOT/git" ~/.config/git
 symlink "$_ROOT/plank/" ~/.config/plank
 symlink "$_ROOT/quicktile/quicktile.cfg" ~/.config/quicktile.cfg
 symlink "$_ROOT/remmina/" ~/.config/remmina
+symlink "$_ROOT/rubocop/.rubocop.yml" ~/.rubocop.yml
 symlink "$_ROOT/todoist/.todoist-linux.json" ~/.config/.todoist-linux.json
 
 unset LK_SYMLINK_NO_CHANGE
@@ -291,7 +292,7 @@ lk_console_message "Checking printers"
 
 LK_SUDO=1 lk_file_replace /etc/papersize a4
 
-if [ -n "${DISPLAY:-}" ]; then
+if [ -n "${DISPLAY-}" ]; then
     lk_console_message "Setting dconf values"
     START_PLANK=1
     killall plank 2>/dev/null || START_PLANK=0

@@ -41,7 +41,7 @@
 		"prefix": "arg",
 		"body": [
 			"local FLAG",
-			"[ \"\\${1:-}\" != ${0:-f} ] || { FLAG=1 && shift; }"
+			"[ \"\\${1-}\" != ${0:-f} ] || { FLAG=1 && shift; }"
 		]
 	},
 	"arg: value": {
@@ -49,7 +49,7 @@
 		"prefix": "arg2",
 		"body": [
 			"local VALUE",
-			"[ \"\\${1:-}\" != ${0:-v} ] || { VALUE=\\$2 && shift 2; }"
+			"[ \"\\${1-}\" != ${0:-v} ] || { VALUE=\\$2 && shift 2; }"
 		]
 	},
 	"arg: getopts": {

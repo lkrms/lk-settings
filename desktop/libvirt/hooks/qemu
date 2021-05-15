@@ -12,8 +12,8 @@
 
 set -euo pipefail
 lk_die() { s=$? && echo "$BASH_SOURCE: $1" >&2 && (exit $s) && false || exit; }
-[ -n "${LK_BASE:-}" ] ||
-    { . /etc/default/lk-platform && [ -n "${LK_BASE:-}" ]; } ||
+[ -n "${LK_BASE-}" ] ||
+    { . /etc/default/lk-platform && [ -n "${LK_BASE-}" ]; } ||
     lk_die "LK_BASE not set"
 
 . "$LK_BASE/lib/bash/common.sh"

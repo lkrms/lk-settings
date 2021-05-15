@@ -2,14 +2,14 @@
 
 set -euo pipefail
 lk_die() { echo "$BASH_SOURCE: $1" >&2 && exit 1; }
-[ -d "${LK_BASE:-}" ] || lk_die "LK_BASE not set"
+[ -d "${LK_BASE-}" ] || lk_die "LK_BASE not set"
 . "$LK_BASE/lib/bash/common.sh"
 lk_include misc
 
 shopt -s nullglob
 
 function is_basic() {
-    [ -n "${_BASIC:-}" ]
+    [ -n "${_BASIC-}" ]
 }
 
 function cleanup() {

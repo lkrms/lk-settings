@@ -40,6 +40,7 @@ VSCODE_EXTENSIONS=(
     ms-azuretools.vscode-azurefunctions
     ms-azuretools.vscode-azureresourcegroups
     ms-python.python
+    ms-python.vscode-pylance
     ms-toolsai.jupyter
     ms-vscode-remote.remote-ssh-edit
     ms-vscode.azure-account
@@ -55,6 +56,7 @@ VSCODE_EXTENSIONS=(
     redhat.vscode-yaml
     rogalmic.bash-debug
     ryu1kn.partial-diff
+    sfodje.perltidy
     shardulm94.trailing-spaces
     stkb.rewrap
     TaoKlerks.poor-mans-t-sql-formatter-vscode

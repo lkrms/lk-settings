@@ -60,7 +60,7 @@
 	smudge = cat
 
 [filter "remmina"]
-	clean = sed -E '/^(last_quickconnect_protocol|secret|screenshot_path|recent_[A-Z]+|periodic_rmnews_[a-z_]+|main_(width|height|maximize|sort_(column_id|order)))=/d'
+	clean = sed -E '/^(expanded_group|last_quickconnect_protocol|secret|screenshot_path|recent_[A-Z]+|periodic_rmnews_[a-z_]+|main_(width|height|maximize|sort_(column_id|order)))=/d'
 	smudge = cat
 
 [filter "remmina-connection"]
@@ -72,7 +72,7 @@
 	smudge = cat
 
 [filter "typora"]
-	clean = xxd -r -p | jsonlint -Sf --sort preserve | jq -S --indent 4 'del(.\"sidebar-width\",.customZoom,.initialize_ver,.lastClosedBounds,.lastSavePath,.pinFolder,.sidebar_tab,.uuid,.zoomFactor,.zoomLevel)|.preLinebreakOnExport=false'
+	clean = xxd -r -p | jsonlint -Sf --sort preserve | jq -S --indent 4 'del(.\"sidebar-width\",.customZoom,.initialize_ver,.lastClosedBounds,.lastSavePath,.pinFolder,.sidebar_tab,.uuid,.verInitTime,.zoomFactor,.zoomLevel)|.preLinebreakOnExport=false'
 	smudge = jsonlint -Sf --sort preserve | jq -c | xxd -p | tr -d '\\n'
 
 [filter "typora-plist"]

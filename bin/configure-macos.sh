@@ -17,7 +17,7 @@ done
 
 cleanup
 
-_PRIV=${1:-}
+_PRIV=${1-}
 _PREFS=~/Library/Preferences
 _APP_SUPPORT=~/Library/"Application Support"
 _BASIC=
@@ -69,6 +69,7 @@ symlink "$_ROOT/.tidyrc" ~/.tidyrc
 symlink "$_ROOT/.byoburc" ~/.byoburc
 symlink "$_ROOT/byobu/" ~/.byobu
 symlink "$_ROOT/git" ~/.config/git
+symlink "$_ROOT/rubocop/.rubocop.yml" ~/.rubocop.yml
 
 is_basic || symlink_if_not_running \
     "$_ROOT/nextcloud/sync-exclude.lst" "$_PREFS/Nextcloud/sync-exclude.lst" \
