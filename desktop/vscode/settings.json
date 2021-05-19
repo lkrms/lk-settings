@@ -227,6 +227,7 @@
     "python.formatting.autopep8Args": [
         "--aggressive"
     ],
+    "redhat.telemetry.enabled": false,
     "ruby.format": "rubocop",
     "ruby.lint": {
         "rubocop": true
@@ -262,6 +263,7 @@
         "SC2154",
         "SC2206",
         "SC2207",
+        "SC2261",
         "SC3013"
     ],
     "shellcheck.executablePath": "shellcheck",

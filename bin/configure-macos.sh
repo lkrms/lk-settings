@@ -250,20 +250,42 @@ is_basic || symlink_if_not_running \
 
 lk_console_message "Checking Magnet"
 lk_plist_set_file "$_PREFS/com.crowdcafe.windowmagnet.plist"
+lk_plist_replace ":appAlreadyLaunchedKey" bool true
 lk_plist_replace ":expandWindowNorthWestComboKey" dict
+lk_plist_replace ":expandWindowNorthWestComboKey:keyCode" integer 114
+lk_plist_replace ":expandWindowNorthWestComboKey:modifierFlags" integer 786432
 lk_plist_replace ":expandWindowNorthEastComboKey" dict
+lk_plist_replace ":expandWindowNorthEastComboKey:keyCode" integer 116
+lk_plist_replace ":expandWindowNorthEastComboKey:modifierFlags" integer 786432
 lk_plist_replace ":expandWindowSouthWestComboKey" dict
+lk_plist_replace ":expandWindowSouthWestComboKey:keyCode" integer 117
+lk_plist_replace ":expandWindowSouthWestComboKey:modifierFlags" integer 786432
 lk_plist_replace ":expandWindowSouthEastComboKey" dict
+lk_plist_replace ":expandWindowSouthEastComboKey:keyCode" integer 121
+lk_plist_replace ":expandWindowSouthEastComboKey:modifierFlags" integer 786432
 lk_plist_replace ":expandWindowLeftThirdComboKey" dict
+lk_plist_replace ":expandWindowLeftThirdComboKey:keyCode" integer 105
+lk_plist_replace ":expandWindowLeftThirdComboKey:modifierFlags" integer 786432
 lk_plist_replace ":expandWindowLeftTwoThirdsComboKey" dict
+lk_plist_replace ":expandWindowLeftTwoThirdsComboKey:keyCode" integer 103
+lk_plist_replace ":expandWindowLeftTwoThirdsComboKey:modifierFlags" integer 786432
 lk_plist_replace ":expandWindowCenterThirdComboKey" dict
+lk_plist_replace ":expandWindowCenterThirdComboKey:keyCode" integer 107
+lk_plist_replace ":expandWindowCenterThirdComboKey:modifierFlags" integer 786432
 lk_plist_replace ":expandWindowRightTwoThirdsComboKey" dict
+lk_plist_replace ":expandWindowRightTwoThirdsComboKey:keyCode" integer 111
+lk_plist_replace ":expandWindowRightTwoThirdsComboKey:modifierFlags" integer 786432
 lk_plist_replace ":expandWindowRightThirdComboKey" dict
+lk_plist_replace ":expandWindowRightThirdComboKey:keyCode" integer 113
+lk_plist_replace ":expandWindowRightThirdComboKey:modifierFlags" integer 786432
 lk_plist_replace ":moveWindowToNextDisplay" dict
 lk_plist_replace ":moveWindowToPreviousDisplay" dict
 lk_plist_replace ":centerWindowComboKey" dict
 lk_plist_replace ":centerWindowComboKey:keyCode" integer 49
 lk_plist_replace ":centerWindowComboKey:modifierFlags" integer 786432
+lk_plist_replace ":restoreWindowComboKey" dict
+lk_plist_replace ":restoreWindowComboKey:keyCode" integer 101
+lk_plist_replace ":restoreWindowComboKey:modifierFlags" integer 786432
 
 is_basic || symlink_if_not_running \
     "$_ROOT/stretchly/config.json" "$_APP_SUPPORT/stretchly/config.json" \
@@ -404,6 +426,11 @@ defaults write com.apple.systempreferences NSQuitAlwaysKeepsWindows -bool false
 is_basic || defaults write NSGlobalDomain NSAutomaticWindowAnimationsEnabled -bool false
 is_basic || defaults write NSGlobalDomain NSWindowResizeTime -float 0.001
 is_basic || defaults write NSGlobalDomain QLPanelAnimationDuration -float 0
+
+# Improve Big Sur performance, especially on 4K displays (note: these settings
+# are applied to their com.apple.Accessibility counterparts automatically)
+is_basic || defaults write com.apple.universalaccess reduceMotion -bool true
+is_basic || defaults write com.apple.universalaccess reduceTransparency -bool true
 
 is_basic || defaults write com.apple.menuextra.clock DateFormat -string "EEE d MMM  h:mm:ss a"
 is_basic || defaults write com.apple.screencapture location -string "${LK_SCREENSHOT_DIR:-$HOME/Desktop}"
