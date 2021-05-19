@@ -495,7 +495,13 @@ defaults write com.apple.mail DeleteAttachmentsAfterHours -int 0
 defaults write com.apple.mail NewMessagesSoundName -string ""
 defaults write com.apple.mail PlayMailSounds -bool false
 defaults write com.apple.mail ShouldShowUnreadMessagesInBold -bool true
-is_basic || defaults write com.apple.mail ThreadingDefault -bool false
+is_basic || {
+    defaults write com.apple.mail InboxViewerAttributes -dict-add \
+        DisplayInThreadedMode NO SortOrder received-date SortedDescending NO
+    defaults write com.apple.mail SentMessagesViewerAttributes -dict-add \
+        DisplayInThreadedMode NO SortOrder received-date SortedDescending NO
+    defaults write com.apple.mail ThreadingDefault -bool false
+}
 
 # "Use classic layout" (<=10.14)
 defaults write com.apple.mail RichMessageList -bool false
