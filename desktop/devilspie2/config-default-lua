@@ -3,6 +3,7 @@ event_log = log_state
 --event_log = log_window_full
 
 log_level = log.INFO
+--log_level = log.DEBUG
 
 default_grid = {6, 2}
 
@@ -54,6 +55,16 @@ _criteria.private = {
     }
 }
 
+_criteria.dev = {
+    operator.AND,
+    _criteria.multihead,
+    _criteria.not_primary_display,
+    class_instance_name = {
+        "vscodium",
+        "sublime_merge"
+    }
+}
+
 _actions.sticky = {
     pin_on
 }
@@ -83,6 +94,16 @@ rules = {
         },
         actions = {
             shade_off
+        }
+    },
+    {
+        criteria = {
+            operator.AND,
+            event = "open",
+            _criteria.dev
+        },
+        actions = {
+            {to_display, {1}}
         }
     },
     {
