@@ -11,7 +11,7 @@
 /panels/panel-1/mode uint32 0
 /panels/panel-1/nrows uint32 1
 /panels/panel-1/output-name 'DP-1'
-/panels/panel-1/plugin-ids [<1>, <2>, <3>, <18>, <7>, <17>, <4>, <6>, <9>, <8>, <10>, <16>, <15>, <5>, <14>]
+/panels/panel-1/plugin-ids [<1>, <2>, <3>, <7>, <17>, <4>, <11>, <6>, <9>, <8>, <10>, <16>, <15>, <5>]
 /panels/panel-1/position 'p=6;x=0;y=0'
 /panels/panel-1/position-locked true
 /panels/panel-1/size 36
@@ -25,11 +25,8 @@
 /panels/panel-2/size 36
 /plugins/plugin-1 'whiskermenu'
 /plugins/plugin-10 'notification-plugin'
-/plugins/plugin-14 'actions'
-/plugins/plugin-14/appearance uint32 0
-/plugins/plugin-14/ask-confirmation true
-/plugins/plugin-14/invert-orientation false
-/plugins/plugin-14/items [<'+lock-screen'>, <'+switch-user'>, <'-separator'>, <'-suspend'>, <'-hibernate'>, <'-hybrid-sleep'>, <'-separator'>, <'-shutdown'>, <'-restart'>, <'-separator'>, <'-logout'>, <'-logout-dialog'>]
+/plugins/plugin-11 'separator'
+/plugins/plugin-11/style uint32 0
 /plugins/plugin-15 'clock'
 /plugins/plugin-15/digital-format '%a %-d %b, %-I:%M%P'
 /plugins/plugin-15/tooltip-format 'week %V'
@@ -37,8 +34,6 @@
 /plugins/plugin-16/style uint32 0
 /plugins/plugin-17 'separator'
 /plugins/plugin-17/style uint32 0
-/plugins/plugin-18 'separator'
-/plugins/plugin-18/style uint32 0
 /plugins/plugin-2 'tasklist'
 /plugins/plugin-2/grouping uint32 0
 /plugins/plugin-2/include-all-monitors false
@@ -68,7 +63,7 @@
 /plugins/plugin-26/show-seconds true
 /plugins/plugin-28 'actions'
 /plugins/plugin-28/appearance uint32 0
-/plugins/plugin-28/items [<'+lock-screen'>, <'+switch-user'>, <'-separator'>, <'-suspend'>, <'-hibernate'>, <'-hybrid-sleep'>, <'-separator'>, <'-shutdown'>, <'-restart'>, <'-separator'>, <'-logout'>, <'-logout-dialog'>]
+/plugins/plugin-28/items [<'-lock-screen'>, <'-switch-user'>, <'-separator'>, <'-suspend'>, <'-hibernate'>, <'-hybrid-sleep'>, <'-separator'>, <'-shutdown'>, <'-restart'>, <'-separator'>, <'+logout'>, <'-logout-dialog'>]
 /plugins/plugin-29 'separator'
 /plugins/plugin-29/style uint32 0
 /plugins/plugin-3 'separator'
@@ -84,11 +79,12 @@
 /plugins/plugin-5 'separator'
 /plugins/plugin-5/style uint32 0
 /plugins/plugin-6 'systray'
-/plugins/plugin-6/hidden-items [<'Todoist1'>, <'remmina-icon'>, <'blueman'>]
-/plugins/plugin-6/hidden-legacy-items [<'networkmanager applet'>]
+/plugins/plugin-6/hidden-items [<'Stretchly1'>, <'Todoist1'>, <'remmina-icon'>, <'blueman'>]
+/plugins/plugin-6/hidden-legacy-items [<'networkmanager applet'>, <'remmina'>]
+/plugins/plugin-6/hide-new-items true
 /plugins/plugin-6/icon-size 28
-/plugins/plugin-6/known-items [<'blueman'>, <'copyq'>, <'Nextcloud'>, <'remmina-icon'>, <'Stretchly1'>, <'Skype1'>, <'Caprine1'>, <'Microsoft Teams - Preview1'>, <'Todoist1'>]
-/plugins/plugin-6/known-legacy-items [<'skypeforlinux'>, <'electron'>, <'bluetooth enabled'>, <'teams'>, <'todoist'>, <'networkmanager applet'>]
+/plugins/plugin-6/known-items [<'blueman'>, <'copyq'>, <'Nextcloud'>, <'Todoist1'>, <'remmina-icon'>, <'Microsoft Teams - Preview1'>, <'Skype1'>, <'Caprine1'>, <'Stretchly1'>]
+/plugins/plugin-6/known-legacy-items [<'networkmanager applet'>, <'bluetooth enabled'>, <'todoist'>, <'remmina'>, <'teams'>, <'skypeforlinux'>, <'electron'>]
 /plugins/plugin-6/square-icons true
 /plugins/plugin-7 'cpugraph'
 /plugins/plugin-8 'pulseaudio'

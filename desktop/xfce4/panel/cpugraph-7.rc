@@ -11,4 +11,5 @@ InTerminal=0
 StartupNotification=1
 ColorMode=1
 Background=rgb(0,0,0)
+PerCore=0
 

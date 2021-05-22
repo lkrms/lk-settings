@@ -22,7 +22,7 @@ xfwm4,/general/titleless_maximize,bool,true
 xfwm4,/general/toggle_workspaces,bool,true
 xfwm4,/general/use_compositing,bool,true
 reset:xfwm4,/general/workspace_count,int,${WORKSPACE_COUNT:-3}
-reset:xfwm4,/general/workspace_names,array,$(xfce4_string_array ${WORKSPACE_NAMES:-1 2 3})
+reset:xfwm4,/general/workspace_names,array,$(xfce4_string_array ${WORKSPACE_NAMES:-linaC PLC HW})
 xfwm4,/general/wrap_cycle,bool,true
 xfwm4,/general/wrap_layout,bool,true
 xfwm4,/general/wrap_windows,bool,false
