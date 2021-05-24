@@ -53,7 +53,6 @@ rdp_quality_9=80
 rdp_deviceScaleFactor=0
 rdp_desktopScaleFactor=0
 rdp_desktopOrientation=0
-datadir_path=
 remmina_file_name=%G_%P_%N_%h
 deny_screenshot_clipboard=true
 use_master_password=false

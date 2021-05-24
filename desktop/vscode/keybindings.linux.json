@@ -34,6 +34,26 @@
         "when": "editorTextFocus && !editorReadonly"
     },
     {
+        "key": "alt+f3",
+        "command": "-editor.action.dirtydiff.next",
+        "when": "editorTextFocus"
+    },
+    {
+        "key": "ctrl+shift+f12",
+        "command": "editor.action.dirtydiff.next",
+        "when": "editorTextFocus"
+    },
+    {
+        "key": "ctrl+shift+f11",
+        "command": "editor.action.dirtydiff.previous",
+        "when": "editorTextFocus"
+    },
+    {
+        "key": "shift+alt+f3",
+        "command": "-editor.action.dirtydiff.previous",
+        "when": "editorTextFocus"
+    },
+    {
         "command": "-editor.action.formatDocument",
         "key": "ctrl+shift+i",
         "when": "editorHasDocumentFormattingProvider && editorHasDocumentFormattingProvider && editorTextFocus && !editorReadonly && !inCompositeEditor"
@@ -62,6 +82,11 @@
         "command": "-editor.action.insertCursorAtEndOfEachLineSelected",
         "key": "shift+alt+i",
         "when": "editorTextFocus"
+    },
+    {
+        "key": "ctrl+shift+enter",
+        "command": "-editor.action.insertLineBefore",
+        "when": "editorTextFocus && !editorReadonly"
     },
     {
         "command": "-editor.action.removeCommentLine",
@@ -93,6 +118,16 @@
     {
         "command": "extension.toggleTheme",
         "key": "ctrl+alt+d"
+    },
+    {
+        "key": "ctrl+shift+g",
+        "command": "git.openChange",
+        "when": "editorTextFocus && !isInDiffEditor"
+    },
+    {
+        "key": "ctrl+shift+enter",
+        "command": "git.stageSelectedRanges",
+        "when": "editorHasSelection && editorTextFocus"
     },
     {
         "command": "gitlens.externalDiff",
@@ -152,6 +187,16 @@
         "command": "sortLines.sortLinesNatural",
         "key": "f9",
         "when": "editorTextFocus && editorHasSelection && !inDebugMode"
+    },
+    {
+        "key": "ctrl+shift+space",
+        "command": "toggle.diff.ignoreTrimWhitespace",
+        "when": "isInDiffEditor"
+    },
+    {
+        "key": "ctrl+shift+g",
+        "command": "toggle.diff.renderSideBySide",
+        "when": "editorTextFocus && isInDiffEditor"
     },
     {
         "command": "-toggleFindCaseSensitive",
@@ -236,6 +281,26 @@
     {
         "command": "workbench.action.editor.changeLanguageMode",
         "key": "ctrl+k ctrl+m"
+    },
+    {
+        "key": "alt+f5",
+        "command": "-workbench.action.editor.nextChange",
+        "when": "editorTextFocus"
+    },
+    {
+        "key": "ctrl+f12",
+        "command": "workbench.action.editor.nextChange",
+        "when": "editorTextFocus"
+    },
+    {
+        "key": "ctrl+f11",
+        "command": "workbench.action.editor.previousChange",
+        "when": "editorTextFocus"
+    },
+    {
+        "key": "shift+alt+f5",
+        "command": "-workbench.action.editor.previousChange",
+        "when": "editorTextFocus"
     },
     {
         "command": "workbench.action.editorLayoutSingle",
