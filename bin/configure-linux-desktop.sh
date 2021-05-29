@@ -178,7 +178,6 @@ symlink "$_ROOT/plank/" ~/.config/plank
 symlink "$_ROOT/quicktile/quicktile.cfg" ~/.config/quicktile.cfg
 symlink "$_ROOT/remmina/" ~/.config/remmina
 symlink "$_ROOT/rubocop/.rubocop.yml" ~/.rubocop.yml
-symlink "$_ROOT/todoist/.todoist-linux.json" ~/.config/.todoist-linux.json
 
 unset LK_SYMLINK_NO_CHANGE
 symlink "$_ROOT/systemd/user.control" ~/.config/systemd/user.control

@@ -59,6 +59,28 @@
 	<video-files/>
 </action>
 <action>
+	<icon>vscodium</icon>
+	<name>Open in VSCodium</name>
+	<unique-id>1622004381003641-1</unique-id>
+	<command>code %f</command>
+	<description>Open VSCodium in this directory</description>
+	<patterns>*</patterns>
+	<directories/>
+</action>
+<action>
+	<icon>vscodium</icon>
+	<name>Open in VSCodium</name>
+	<unique-id>1622042146177639-1</unique-id>
+	<command>code %d</command>
+	<description>Open VSCodium in the containing directory</description>
+	<patterns>*</patterns>
+	<audio-files/>
+	<image-files/>
+	<other-files/>
+	<text-files/>
+	<video-files/>
+</action>
+<action>
 	<icon>sublime-merge</icon>
 	<name>Open in Sublime Merge</name>
 	<unique-id>1584495832566667-1</unique-id>
