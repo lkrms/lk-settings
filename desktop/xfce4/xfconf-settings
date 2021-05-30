@@ -1,8 +1,8 @@
-# available types: bool, int, uint, int64, uint64, double, string
+# Available types: bool, int, uint, int64, uint64, double, string
 
 reset:xfwm4,/,reset
 
-# this triggers other changes, so do it first
+# This triggers other changes, so do it first
 reset:xfwm4,/general/easy_click,string,Mod3
 
 xfwm4,/general/activate_action,string,switch
@@ -21,8 +21,8 @@ xfwm4,/general/snap_to_windows,bool,true
 xfwm4,/general/titleless_maximize,bool,true
 xfwm4,/general/toggle_workspaces,bool,true
 xfwm4,/general/use_compositing,bool,true
-reset:xfwm4,/general/workspace_count,int,${WORKSPACE_COUNT:-3}
-reset:xfwm4,/general/workspace_names,array,$(xfce4_string_array ${WORKSPACE_NAMES:-linaC PLC HW})
+xfwm4,/general/workspace_count,int,${WORKSPACE_COUNT:-3}
+xfwm4,/general/workspace_names,array,$(xfce4_string_array ${WORKSPACE_NAMES:-linaC PLC HW})
 xfwm4,/general/wrap_cycle,bool,true
 xfwm4,/general/wrap_layout,bool,true
 xfwm4,/general/wrap_windows,bool,false
@@ -43,8 +43,8 @@ thunar,/misc-volume-management,bool,true
 thunar,/shortcuts-icon-emblems,bool,true
 thunar,/tree-icon-emblems,bool,true
 thunar-volman,/autobrowse/enabled,bool,false
-# thunar-volman,/autokeyboard/command,string,lk-xkb-load.sh
-# thunar-volman,/autokeyboard/enabled,bool,true
+thunar-volman,/autokeyboard/command,string,lk-xkb-load.sh
+thunar-volman,/autokeyboard/enabled,bool,true
 thunar-volman,/automount-drives/enabled,bool,false
 thunar-volman,/automount-drives/enabled,bool,false
 thunar-volman,/automount-media/enabled,bool,false
@@ -66,9 +66,9 @@ xfce4-desktop,/desktop-icons/style,int,2
 xfce4-desktop,/windowlist-menu/show-add-remove-workspaces,bool,false
 xfce4-desktop,/windowlist-menu/show-sticky-once,bool,true
 
-# xfce4-panel,/plugins/clock/digital-format,string,%a %-d %b
-# xfce4-panel,/plugins/clock/tooltip-format,string,week %V
-# xfce4-panel,/plugins/pager/miniature-view,bool,true
+#xfce4-panel,/plugins/clock/digital-format,string,%a %-d %b
+#xfce4-panel,/plugins/clock/tooltip-format,string,week %V
+#xfce4-panel,/plugins/pager/miniature-view,bool,true
 xfce4-panel,/plugins/pager/workspace-scrolling,bool,true
 xfce4-panel,/plugins/systray/show-frame,bool,false
 xfce4-panel,/plugins/tasklist/flat-buttons,reset
@@ -79,19 +79,19 @@ xfce4-panel,/plugins/tasklist/show-wireframes,bool,true
 xfce4-panel,/plugins/tasklist/sort-order,uint,1
 xfce4-panel,/plugins/tasklist/window-scrolling,bool,false
 
-# the order of these 4 entries matters
+# The order of these 4 entries matters
 xfce4-keyboard-shortcuts,/,reset
 xfce4-keyboard-shortcuts,/providers,array,-t string -s commands -t string -s xfwm4
 xfce4-keyboard-shortcuts,/commands/custom/override,bool,true
 xfce4-keyboard-shortcuts,/xfwm4/custom/override,bool,true
 
-# check for conflicts with sxhkdrc before using these shortcuts:
+# Check for conflicts with sxhkdrc before using these shortcuts:
 #
 # <Super>
 # <Shift><Super>
 # <Alt><Super>
 
-# xfce4-keyboard-shortcuts,/commands/custom/<Alt><Super>Escape,string,xkill
+#xfce4-keyboard-shortcuts,/commands/custom/<Alt><Super>Escape,string,xkill
 xfce4-keyboard-shortcuts,/commands/custom/<Alt>F2,string,xfce4-popup-applicationsmenu
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>l,string,xflock4
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>q,string,xflock4
@@ -190,7 +190,7 @@ xfce4-notifyd,/primary-monitor,uint,1
 
 reset:xfce4-power-manager,/,reset
 
-# suspend at 4% battery
+# Suspend at 4% battery
 laptop:xfce4-power-manager,/xfce4-power-manager/critical-power-action,uint,1
 laptop:xfce4-power-manager,/xfce4-power-manager/critical-power-level,uint,4
 
@@ -208,27 +208,27 @@ laptop:xfce4-power-manager,/xfce4-power-manager/dpms-on-battery-sleep,uint,5
 laptop:xfce4-power-manager,/xfce4-power-manager/brightness-on-ac,uint,9
 laptop:xfce4-power-manager,/xfce4-power-manager/brightness-on-battery,uint,9
 
-# fun fact: 14 is the same as never
+# Fun fact: 14 is the same as never
 xfce4-power-manager,/xfce4-power-manager/inactivity-on-ac,reset
 laptop:xfce4-power-manager,/xfce4-power-manager/inactivity-on-battery,uint,6
 
-# if patched, xfce4-power-manager will run this when AC power is disconnected
+# If patched, xfce4-power-manager will run this when AC power is disconnected
 laptop:xfce4-power-manager,/xfce4-power-manager/heartbeat-command,string,xdotool key shift
 
-# another fun fact: if not explicitly set to suspend, Xfce 4.12 will attempt to hibernate
+# Another fun fact: if not explicitly set to suspend, Xfce 4.12 will attempt to hibernate
 xfce4-power-manager,/xfce4-power-manager/inactivity-sleep-mode-on-ac,uint,1
 laptop:xfce4-power-manager,/xfce4-power-manager/inactivity-sleep-mode-on-battery,uint,1
 
-# suspend when laptop lid is closed
+# Suspend when laptop lid is closed
 laptop:xfce4-power-manager,/xfce4-power-manager/lid-action-on-ac,uint,1
 laptop:xfce4-power-manager,/xfce4-power-manager/lid-action-on-battery,uint,1
 
-# without this, locking will fail
+# Without this, locking will fail
 laptop:xfce4-power-manager,/xfce4-power-manager/logind-handle-lid-switch,bool,false
 
 xfce4-power-manager,/xfce4-power-manager/lock-screen-suspend-hibernate,bool,true
 
-# do nothing when power buttons are pressed
+# Do nothing when power buttons are pressed
 xfce4-power-manager,/xfce4-power-manager/battery-button-action,uint,0
 xfce4-power-manager,/xfce4-power-manager/hibernate-button-action,uint,0
 xfce4-power-manager,/xfce4-power-manager/power-button-action,uint,0
@@ -244,12 +244,5 @@ xfce4-session,/general/SaveOnExit,bool,false
 xfce4-session,/shutdown/LockScreen,bool,true
 
 xfce4-screensaver,/,reset
-# xfce4-screensaver,/lock/enabled,bool,true
-# xfce4-screensaver,/lock/saver-activation/delay,int,1
-# xfce4-screensaver,/lock/saver-activation/enabled,bool,true
-# xfce4-screensaver,/lock/user-switching/enabled,bool,false
-# xfce4-screensaver,/saver/fullscreen-inhibit,bool,true
-# xfce4-screensaver,/saver/idle-activation/delay,int,2
-# xfce4-screensaver,/saver/mode,int,0
 
 xsettings,/Net/EnableEventSounds,bool,true
