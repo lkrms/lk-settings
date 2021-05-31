@@ -15,7 +15,7 @@ export LK_NODE_TIMEZONE=Australia/Sydney
 export LK_SAMBA_WORKGROUP=LINAC
 export LK_NTP_SERVER=ntp.linacreative.com
 export LK_ARCH_MIRROR=http://arch.mirror/\$repo/os/\$arch
-export LK_ARCH_REPOS="lk|http://lk.repo|http://lkr.ms/gpg|B7304A7EB769E24D,aur|http://aur.repo|http://lkr.ms/gpg|B7304A7EB769E24D"
+export LK_ARCH_REPOS="lk|http://lk.repo|http://lkr.ms/gpg|B7304A7EB769E24D,aur|http://aur.repo|http://lkr.ms/gpg|B7304A7EB769E24D,quarry|http://quarry.repo|http://lkr.ms/gpg|B7304A7EB769E24D"
 export LK_PLATFORM_BRANCH=${LK_PLATFORM_BRANCH:-develop}
 
 URL=https://raw.githubusercontent.com/lkrms/lk-platform/$LK_PLATFORM_BRANCH/lib/arch/bootstrap.sh
