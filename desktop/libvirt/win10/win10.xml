@@ -1,0 +1,89 @@
+<domain type="kvm">
+  <name>win10</name>
+  <metadata>
+    <libosinfo:libosinfo xmlns:libosinfo="http://libosinfo.org/xmlns/libvirt/domain/1.0">
+      <libosinfo:os id="http://microsoft.com/win/10" />
+    </libosinfo:libosinfo>
+  </metadata>
+  <memory>4194304</memory>
+  <currentMemory>4194304</currentMemory>
+  <vcpu>2</vcpu>
+  <os>
+    <type arch="x86_64" machine="q35">hvm</type>
+  </os>
+  <features>
+    <acpi />
+    <apic />
+    <hyperv>
+      <relaxed state="on" />
+      <vapic state="on" />
+      <spinlocks state="on" retries="8191" />
+      <vpindex state="on" />
+      <runtime state="on" />
+      <synic state="on" />
+      <stimer state="on" />
+      <tlbflush state="on" />
+      <ipi state="on" />
+    </hyperv>
+    <vmport state="off" />
+  </features>
+  <cpu mode="host-model" />
+  <clock offset="localtime">
+    <timer name="rtc" tickpolicy="catchup" />
+    <timer name="pit" tickpolicy="delay" />
+    <timer name="hpet" present="no" />
+    <timer name="hypervclock" present="yes" />
+  </clock>
+  <pm>
+    <suspend-to-mem enabled="no" />
+    <suspend-to-disk enabled="no" />
+  </pm>
+  <devices>
+    <emulator>/usr/bin/qemu-system-x86_64</emulator>
+    <disk type="file" device="disk">
+      <driver name="qemu" type="qcow2" discard="unmap" />
+      <source file="/var/lib/libvirt/images/win10.qcow2" />
+      <target dev="sda" bus="scsi" />
+      <boot order="1" />
+    </disk>
+    <disk type="file" device="cdrom">
+      <driver name="qemu" />
+      <target dev="sdb" bus="scsi" />
+      <readonly />
+      <boot order="2" />
+    </disk>
+    <!-- Use this during setup to load virtio SCSI drivers, then remove -->
+    <disk type="file" device="cdrom">
+      <driver name="qemu" />
+      <target dev="sdc" bus="sata" />
+      <readonly />
+    </disk>
+    <controller type="usb" model="qemu-xhci" />
+    <controller type="scsi" model="virtio-scsi" />
+    <interface type="network">
+      <source network="default" />
+      <model type="virtio" />
+    </interface>
+    <console type="pty" />
+    <channel type="unix">
+      <target type="virtio" name="org.qemu.guest_agent.0" />
+    </channel>
+    <channel type="spicevmc">
+      <target type="virtio" name="com.redhat.spice.0" />
+    </channel>
+    <input type="tablet" bus="usb" />
+    <graphics type="spice" autoport="yes">
+      <image compression="off" />
+    </graphics>
+    <sound model="ich9" />
+    <video>
+      <model type="qxl" vgamem="65536" />
+    </video>
+    <!--<hostdev mode="subsystem" type="usb">
+      <source startupPolicy="optional">
+        <vendor id="0x04b8" />
+        <product id="0x0155" />
+      </source>
+    </hostdev>-->
+  </devices>
+</domain>
