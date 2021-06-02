@@ -17,6 +17,8 @@ _PRIV=${1-}
 
 [ ! -d "$_PRIV" ] || {
 
+    _PRIV=$(realpath "$_PRIV")
+
     symlink_private_common "$_PRIV"
     symlink \
         "$_PRIV/.face" ~/.face \

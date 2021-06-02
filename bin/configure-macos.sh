@@ -25,6 +25,8 @@ _BASIC=
 
 [ ! -d "$_PRIV" ] || {
 
+    _PRIV=$(lk_realpath "$_PRIV")
+
     symlink_private_common "$_PRIV"
     symlink \
         "$_PRIV/espanso/" "$_PREFS/espanso" \
