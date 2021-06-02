@@ -1,10 +1,5 @@
 #!/bin/bash
 
-# shellcheck disable=SC2153
-
-[[ $2 =~ ^(start|release)$ ]] ||
-    exit 0
-
 [ "$EUID" -eq 0 ] || {
     sudo -H "$0" "$@"
     exit
@@ -13,8 +8,8 @@
 set -euo pipefail
 lk_die() { s=$? && echo "$BASH_SOURCE: $1" >&2 && (exit $s) && false || exit; }
 [ -n "${LK_BASE-}" ] ||
-    { . /etc/default/lk-platform && [ -n "${LK_BASE-}" ]; } ||
-    lk_die "LK_BASE not set"
+    { . /opt/lk-platform/etc/lk-platform/lk-platform.conf &&
+        [ -n "${LK_BASE-}" ]; } || lk_die "LK_BASE not set"
 
 . "$LK_BASE/lib/bash/common.sh"
 lk_include iptables provision
@@ -22,6 +17,9 @@ lk_include iptables provision
 LK_VERBOSE=1
 
 lk_log_start
+
+[[ $2 =~ ^(start|release)$ ]] ||
+    exit 0
 
 lk_console_log "Processing domain XML"
 
@@ -115,32 +113,6 @@ lk_iptables_has_chain -b "$REJECT_CHAIN" || REJECT_CHAIN=REJECT
 
 eval "$(lk_get_regex IPV4_REGEX IPV6_REGEX)"
 IP_REGEX="($IPV4_REGEX|$IPV6_REGEX)"
-
-#ALLOW_HOSTS=(
-#    #
-#    entropy.ubuntu.com
-#    keyserver.ubuntu.com
-#    launchpad.net
-#    ppa.launchpad.net
-#
-#    #
-#    pypi.org
-#    bootstrap.pypa.io
-#    files.pythonhosted.org
-#
-#    #
-#    api.github.com
-#    raw.githubusercontent.com
-#
-#    #
-#    api.wordpress.org
-#    downloads.wordpress.org
-#    plugins.svn.wordpress.org
-#    wordpress.org
-#
-#    #
-#    ${ALLOW_HOSTS[@]+"${ALLOW_HOSTS[@]}"}
-#)
 
 function ip() {
     command ip "$_46" "$@"

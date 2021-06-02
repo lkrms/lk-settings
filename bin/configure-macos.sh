@@ -518,6 +518,11 @@ lk_macos_kb_add_shortcut NSGlobalDomain "Lock Screen" "@^q"
 is_basic || lk_macos_kb_add_shortcut com.apple.mail "Mark All Messages as Read" "@\$c"
 is_basic || lk_macos_kb_add_shortcut com.apple.mail "Send" "@\U21a9"
 
+# Disable Control-Command-D
+is_basic ||
+    defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add \
+        70 "<dict><key>enabled</key><false/></dict>"
+
 killall -u "$USER" cfprefsd
 killall Dock
 killall Finder

@@ -51,6 +51,7 @@
     "editor.renderControlCharacters": false,
     "editor.renderWhitespace": "selection",
     "editor.rulers": [
+        76,
         80
     ],
     "editor.suggest.localityBonus": true,
