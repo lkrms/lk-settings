@@ -162,6 +162,7 @@ pref("general.config.filename", "firefox.cfg");
 pref("general.config.obscure_value", 0);
 EOF
     FILE=$DIR/firefox.cfg
+    lk_install -m 00644 "$FILE"
     lk_file_replace "$FILE" <<"EOF"
 // the first line is ignored
 defaultPref("services.sync.prefs.dangerously_allow_arbitrary", true);

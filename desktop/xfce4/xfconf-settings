@@ -43,7 +43,7 @@ thunar,/misc-volume-management,bool,true
 thunar,/shortcuts-icon-emblems,bool,true
 thunar,/tree-icon-emblems,bool,true
 thunar-volman,/autobrowse/enabled,bool,false
-thunar-volman,/autokeyboard/command,string,lk-xkb-load.sh
+thunar-volman,/autokeyboard/command,string,autorandr -c --force
 thunar-volman,/autokeyboard/enabled,bool,true
 thunar-volman,/automount-drives/enabled,bool,false
 thunar-volman,/automount-drives/enabled,bool,false
@@ -123,7 +123,7 @@ xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>parenleft,strin
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>apostrophe,string,libreoffice --writer
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>b,string,galculator
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>c,string,code
-xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>c,string,code \"$HOME/Code/lk-platform/lk-platform.code-workspace\"
+xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>c,string,code $(f=~/Code/lk-platform/lk-platform.code-workspace;[ -f "$f" ]||f=/opt/lk-settings;lk_double_quote "$f")
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>d,string,dbeaver
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>g,string,smerge
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>g,string,git-cola
