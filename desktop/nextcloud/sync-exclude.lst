@@ -40,3 +40,7 @@ My Saved Places.
 unison.log
 unison.*.log
 *_backup.*
+*_log
+*_log.*
+cwd_history
+rl_history
