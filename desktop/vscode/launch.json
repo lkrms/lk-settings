@@ -5,22 +5,34 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Listen for XDebug",
+            "name": "PHP: Listen for Xdebug",
             "type": "php",
             "request": "launch",
-            "port": 9000
+            "port": 9003
         },
         {
-            "name": "Launch currently open script",
+            "name": "PHP: Current File",
             "type": "php",
             "request": "launch",
             "program": "${file}",
             "cwd": "${fileDirname}",
-            "args": [],
+            "port": 0,
+            "runtimeArgs": [
+                "-dxdebug.start_with_request=yes"
+            ],
             "env": {
-                "XDEBUG_SESSION": "vscode"
+                "XDEBUG_MODE": "debug,develop",
+                "XDEBUG_CONFIG": "client_port=${port}"
             },
-            "port": 9003
+            "args": []
+        },
+        {
+            "name": "Python: Current File",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "args": []
         }
     ]
 }

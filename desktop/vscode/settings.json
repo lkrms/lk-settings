@@ -160,6 +160,7 @@
         "gettext",
         "gmp",
         "hash",
+        "ibm_db2",
         "iconv",
         "imap",
         "intl",
@@ -241,6 +242,7 @@
         "**/*.log": true
     },
     "search.followSymlinks": false,
+    "security.workspace.trust.enabled": false,
     "shellcheck.customArgs": [
         "-x"
     ],
@@ -251,6 +253,7 @@
         "SC1091",
         "SC2001",
         "SC2010",
+        "SC2012",
         "SC2015",
         "SC2016",
         "SC2027",
@@ -308,14 +311,9 @@
     "workbench.editor.closeOnFileDelete": true,
     "workbench.editor.highlightModifiedTabs": true,
     "workbench.editor.limit.enabled": true,
+    "workbench.editor.limit.perEditorGroup": true,
     "workbench.editor.revealIfOpen": true,
     "workbench.editor.untitled.hint": "hidden",
-    "workbench.editorAssociations": [
-        {
-            "filenamePattern": "*.ipynb",
-            "viewType": "jupyter.notebook.ipynb"
-        }
-    ],
     "workbench.enableExperiments": false,
     "workbench.iconTheme": "material-icon-theme",
     "workbench.settings.enableNaturalLanguageSearch": false,

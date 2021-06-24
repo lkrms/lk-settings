@@ -44,6 +44,13 @@ _criteria.sticky = {
     }
 }
 
+_criteria.tacky = {
+    operator.AND,
+    _criteria.multihead,
+    _criteria.not_primary_display,
+    event = "open"
+}
+
 _criteria.private = {
     operator.AND,
     _criteria.multihead,
@@ -185,7 +192,7 @@ rules = {
                 "microsoft teams",
                 "microsoft teams - preview"
             },
-            _criteria.sticky,
+            _criteria.tacky,
             function(state)
                 state.hints = state.hints or get_size_hints()
                 return state.hints and state.hints.min_width > 903

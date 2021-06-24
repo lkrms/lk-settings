@@ -259,6 +259,19 @@
         "when": "searchViewletFocus && searchViewletVisible"
     },
     {
+        "key": "alt+f4",
+        "command": "-workbench.action.closeWindow"
+    },
+    {
+        "key": "ctrl+shift+w",
+        "command": "-workbench.action.closeWindow"
+    },
+    {
+        "key": "ctrl+w",
+        "command": "workbench.action.closeWindow",
+        "when": "!editorIsOpen && !multipleEditorGroups"
+    },
+    {
         "command": "workbench.action.compareEditor.nextChange",
         "key": "alt+down",
         "when": "textCompareEditorVisible"

@@ -84,7 +84,7 @@
 	smudge = cat
 
 [filter "vscodesettings"]
-	clean = jsonlint -Sf --sort preserve | jq -S --indent 4 'del(.\"breadcrumbs.enabled\",.\"diffEditor.renderSideBySide\",.\"editor.fontSize\",.\"editor.minimap.enabled\",.\"salesforcedx-vscode-apex.java.home\",.\"shellformat.path\",.\"window.zoomLevel\",.\"workbench.colorTheme\")|walk(if type==\"array\" then sort_by(try ascii_upcase catch \"\") else . end)'
+	clean = jsonlint -Sf --sort preserve | jq -S --indent 4 'del(.\"breadcrumbs.enabled\",.\"diffEditor.renderSideBySide\",.\"editor.fontSize\",.\"editor.minimap.enabled\",.\"salesforcedx-vscode-apex.java.home\",.\"shellformat.path\",.\"window.zoomLevel\",.\"workbench.colorTheme\",.\"workbench.editorAssociations\")|walk(if type==\"array\" then sort_by(try ascii_upcase catch \"\") else . end)'
 	smudge = jsonlint -Sf --sort preserve | jq -S --indent 4 --arg shfmt \"$(type -P shfmt)\" '.+={\"shellformat.path\":$shfmt,\"workbench.colorTheme\":\"Dracula Soft\"}'
 
 [filter "whiskermenu"]
