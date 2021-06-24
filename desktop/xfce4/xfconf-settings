@@ -179,13 +179,14 @@ xfce4-keyboard-shortcuts,/xfwm4/custom/<Super>Tab,string,cycle_windows_key
 reset:xfce4-notifyd,/,reset
 xfce4-notifyd,/do-fadeout,bool,true
 xfce4-notifyd,/do-slideout,bool,false
-xfce4-notifyd,/expire-timeout,int,10
-xfce4-notifyd,/initial-opacity,double,0.90
+xfce4-notifyd,/expire-timeout,int,5
+xfce4-notifyd,/initial-opacity,double,0.80
 xfce4-notifyd,/log-level-apps,uint,0
 xfce4-notifyd,/log-level,uint,1
 xfce4-notifyd,/notification-log,bool,true
 xfce4-notifyd,/notify-location,uint,2
 xfce4-notifyd,/primary-monitor,uint,1
+xfce4-notifyd,/theme,string,Retro
 
 reset:xfce4-power-manager,/,reset
 
