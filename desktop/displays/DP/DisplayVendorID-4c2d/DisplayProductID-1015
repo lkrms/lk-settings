@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>DisplayProductName</key>
+  <string>LU28R55 (RGB override, DP)</string>
+  <key>IODisplayEDID</key>
+  <data>AP///////wBMLRUQQlZCMC4eAQS1PyR4Isi1rVBEniUPUFS/74BxT4EAgcCB
+gKnAswCVAAEBTdAAoPBwPoAwIDUAeGghAAAaAAAA/QAeSx6HPAAKICAgICAg
+AAAA/ABMVTI4UjU1CiAgICAgAAAA/wBITk1OQjAxMTE0CiAgABc=
+</data>
+  <key>DisplayVendorID</key>
+  <integer>19501</integer>
+  <key>DisplayProductID</key>
+  <integer>4117</integer>
+</dict>
+</plist>

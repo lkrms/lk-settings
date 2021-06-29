@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>DisplayProductName</key>
+  <string>U2790VQ (RGB override, DP)</string>
+  <key>IODisplayEDID</key>
+  <data>AP///////wAF45AnGCwAAAQdAQS1PCJ4ImehpVVNoicOUFS/7wDRwLMAlQCB
+gIFAgcABAQEBTdAAoPBwPoAwIDUAVVAhAAAao2YAoPBwH4AwIDUAVVAhAAAa
+AAAA/ABVMjc5MEIKICAgICAgAAAA/QAXUB6gPAEKICAgICAgAFM=
+</data>
+  <key>DisplayVendorID</key>
+  <integer>1507</integer>
+  <key>DisplayProductID</key>
+  <integer>10128</integer>
+</dict>
+</plist>
