@@ -128,7 +128,7 @@ for GUEST_IP in "${GUEST_IPS[@]}"; do
     [[ $GUEST_IP =~ ^$IPV4_REGEX$ ]] && _46=-4 && _default=0/0 ||
         { [[ $GUEST_IP =~ ^$IPV6_REGEX$ ]] && _46=-6 && _default=::/0; } ||
         lk_die "invalid IP address: $GUEST_IP"
-    LK_IPTABLES_46=$_46
+    _LK_IPTABLES_46=$_46
 
     lk_console_item "Processing" "$GUEST_IP"
 

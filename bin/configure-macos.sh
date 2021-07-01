@@ -107,6 +107,7 @@ defaults write com.lwouis.alt-tab-macos holdShortcut2 -string $'\xe2\x8c\xa5'
 defaults write com.lwouis.alt-tab-macos previousWindowShortcut -string $'\xe2\x87\xa7\xe2\x87\xa5'
 defaults write com.lwouis.alt-tab-macos menubarIcon -string 3
 defaults write com.lwouis.alt-tab-macos mouseHoverEnabled -string false
+defaults write com.lwouis.alt-tab-macos showOnScreen -string 2
 defaults write com.lwouis.alt-tab-macos spacesToShow -string 2
 defaults write com.lwouis.alt-tab-macos spacesToShow2 -string 2
 
@@ -328,8 +329,9 @@ dGN1dKIYGVtNQVNTaG9ydGN1dFhOU09iamVjdAgRGiQpMjdJTFFTV11kbHOBg4WKj5qjr7K+AAAA
 AAAAAQEAAAAAAAAAGgAAAAAAAAAAAAAAAAAAAMc=
 </data>"
 
+# TODO: configure Typora via `defaults` in lieu of symlinking
+# abnerworks.Typora.plist
 is_basic || symlink_if_not_running \
-    "$_ROOT/typora/abnerworks.Typora.plist" "$_PREFS/abnerworks.Typora.plist" \
     "$_ROOT/typora/themes" "$_APP_SUPPORT/abnerworks.Typora/themes" \
     Typora "pgrep -x Typora"
 
@@ -510,13 +512,23 @@ defaults write com.apple.mail DeleteAttachmentsAfterHours -int 0
 defaults write com.apple.mail NewMessagesSoundName -string ""
 defaults write com.apple.mail PlayMailSounds -bool false
 defaults write com.apple.mail ShouldShowUnreadMessagesInBold -bool true
-is_basic || {
+if ! is_basic && lk_has_arg "--reset"; then
     defaults write com.apple.mail InboxViewerAttributes -dict-add \
-        DisplayInThreadedMode NO SortOrder received-date SortedDescending NO
+        DisplayInThreadedMode NO SortOrder received-date SortedDescending YES
     defaults write com.apple.mail SentMessagesViewerAttributes -dict-add \
-        DisplayInThreadedMode NO SortOrder received-date SortedDescending NO
+        DisplayInThreadedMode NO SortOrder received-date SortedDescending YES
     defaults write com.apple.mail ThreadingDefault -bool false
-}
+    lk_mapfile FILES <(find ~/Library/Mail -type d -name '*.mbox' \
+        -exec test -f '{}/Info.plist' \; -print | sed -E 's/$/\/Info.plist/')
+    for FILE in ${FILES+"${FILES[@]}"}; do
+        lk_plist_set_file "$FILE"
+        lk_plist_replace ":DisplayInThreadedMode" string NO &&
+            lk_plist_replace ":SortOrder" string received-date &&
+            lk_plist_replace ":SortedDescending" string YES &&
+            lk_plist_maybe_delete ":MailboxViewingState" ||
+            lk_warn "error updating $FILE" || break
+    done
+fi
 
 # "Use classic layout" (<=10.14)
 defaults write com.apple.mail RichMessageList -bool false
@@ -524,19 +536,21 @@ defaults write com.apple.mail RichMessageList -bool false
 # "View" > "Use Column Layout" (>=10.15)
 defaults write com.apple.mail ColumnLayoutMessageList -int 1
 
-if lk_has_arg "--reset"; then
-    lk_macos_kb_reset_shortcuts NSGlobalDomain
-    lk_macos_kb_reset_shortcuts com.apple.mail
-fi
+if ! is_basic; then
+    if lk_has_arg "--reset"; then
+        lk_macos_kb_reset_shortcuts NSGlobalDomain
+        lk_macos_kb_reset_shortcuts com.apple.mail
+        lk_macos_kb_reset_shortcuts abnerworks.Typora
+    fi
 
-lk_macos_kb_add_shortcut NSGlobalDomain "Lock Screen" "@^q"
-is_basic || lk_macos_kb_add_shortcut com.apple.mail "Mark All Messages as Read" "@\$c"
-is_basic || lk_macos_kb_add_shortcut com.apple.mail "Send" "@\U21a9"
+    lk_macos_kb_add_shortcut com.apple.mail "Mark All Messages as Read" $'@$c'
+    lk_macos_kb_add_shortcut com.apple.mail "Send" $'@\xe2\x86\xa9'
+    lk_macos_kb_add_shortcut abnerworks.Typora "Toggle Sidebar" $'@$b'
 
-# Disable Control-Command-D
-is_basic ||
+    # Disable Control-Command-D
     defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add \
         70 "<dict><key>enabled</key><false/></dict>"
+fi
 
 killall -u "$USER" cfprefsd
 killall Dock

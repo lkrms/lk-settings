@@ -75,6 +75,7 @@
         "*.service": "properties",
         "*.socket": "properties",
         "*.target": "properties",
+        "*.timer": "properties",
         "*crontab*": "properties",
         ".{bash_login,bash_profile,bashrc,profile,xsessionrc}": "shellscript"
     },
