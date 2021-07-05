@@ -128,7 +128,8 @@ rules = {
         criteria = {
             operator.AND,
             class_instance_name = {
-                "todoist"
+                "todoist",
+                "spotify"
             },
             _criteria.sticky
         },

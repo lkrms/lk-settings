@@ -41,6 +41,8 @@
 	<string>per-file-assert</string>
 	<key>match_pari_markdown</key>
 	<true/>
+	<key>ol_style</key>
+	<real>1</real>
 	<key>preLinebreakOnExport</key>
 	<false/>
 	<key>quitAfterWindowClose</key>

@@ -42,6 +42,8 @@ function symlink_private_common() {
         "$1/linode-cli/linode-cli" ~/.config/linode-cli \
         "$1/s3cmd/.s3cfg" ~/.s3cfg \
         "$1/ssh/" ~/.ssh
+    [ -L ~/.unison ] ||
+        symlink "$1/unison/" ~/.unison
     for FILE in "$1"/.*-settings; do
         lk_symlink "$FILE" ~/"${FILE##*/}" || return
     done
@@ -49,13 +51,14 @@ function symlink_private_common() {
 
 # symlink_if_not_running [TARGET LINK]... APP_NAME RUNNING_TEST
 function symlink_if_not_running() {
-    local CURRENT PASSED=
+    local EVAL=${*: -1} CURRENT PASSED=
+    EVAL=${EVAL//pgrep /pgrep -u $USER}
     ! lk_verbose || lk_console_message "Checking ${*: -2:1}"
     while [ $# -ge 4 ]; do
         if [ -e "$1" ]; then
             if [ ! -L "$2" ] || ! CURRENT=$(readlink "$2") ||
                 [ "$CURRENT" != "$1" ]; then
-                [ -n "$PASSED" ] || ! eval "${*: -1}" &>/dev/null || lk_warn \
+                [ -n "$PASSED" ] || ! eval "$EVAL" &>/dev/null || lk_warn \
                     "cannot apply settings: ${*: -2:1} is running" || return 0
                 PASSED=1
                 lk_symlink "${@:1:2}" || return

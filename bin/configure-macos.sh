@@ -29,8 +29,7 @@ _BASIC=
 
     symlink_private_common "$_PRIV"
     symlink \
-        "$_PRIV/espanso/" "$_PREFS/espanso" \
-        "$_PRIV/unison/" "$_APP_SUPPORT/unison"
+        "$_PRIV/espanso/" "$_PREFS/espanso"
 
     symlink_if_not_running \
         "$_PRIV/DBeaverData/" ~/Library/DBeaverData \

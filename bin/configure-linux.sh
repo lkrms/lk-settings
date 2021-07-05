@@ -11,6 +11,10 @@ lk_include linux
 lk_assert_not_root
 lk_assert_is_linux
 
+while [ $# -gt 0 ] && [[ $1 == -* ]]; do
+    shift
+done
+
 cleanup
 
 _PRIV=${1-}
@@ -26,8 +30,7 @@ _PRIV=${1-}
         "$_PRIV/offlineimap/.offlineimaprc" ~/.offlineimaprc \
         "$_PRIV/remmina/data/" ~/.local/share/remmina \
         "$_PRIV/robo3t/.3T/" ~/.3T \
-        "$_PRIV/robo3t/3T/" ~/.config/3T \
-        "$_PRIV/unison/" ~/.unison
+        "$_PRIV/robo3t/3T/" ~/.config/3T
 
     symlink_if_not_running \
         "$_PRIV/DBeaverData/" ~/.local/share/DBeaverData \
@@ -42,7 +45,7 @@ _PRIV=${1-}
     done
 
     for FILE in "$_PRIV/autostart"/*.desktop; do
-        lk_symlink "$FILE" ~/.config/autostart/"${FILE##*/}"
+        lk_symlink "$FILE" ~/.config/autostart/"${FILE##*/}" || true
     done
 
     for FILE in "$_PRIV/applications"/*.desktop; do
