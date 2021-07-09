@@ -1,0 +1,8 @@
+[Unit]
+Description=Sync package repositories every hour
+
+[Timer]
+OnCalendar=hourly
+
+[Install]
+WantedBy=timers.target

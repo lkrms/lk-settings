@@ -1,5 +1,10 @@
 #!/bin/bash
 
+[[ $- != *i* ]] && return
+
+alias ls='ls --color=auto'
+PS1='[\u@\h \W]\$ '
+
 if [ -f /opt/lk-platform/lib/bash/rc.sh ]; then
     . /opt/lk-platform/lib/bash/rc.sh
 fi

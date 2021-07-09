@@ -1,0 +1,13 @@
+# These settings are not in active use now that we're using NetworkManager
+plugin rp-pppoe.so
+en1
+noipdefault
+usepeerdns
+defaultroute
+persist
+noauth
+lcp-echo-interval 20
+lcp-echo-failure 3
+lcp-echo-adaptive
+mtu 1492
+user "0201364747@nsw.exetel.com.au"
