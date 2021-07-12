@@ -68,6 +68,25 @@ Use rsync to copy files from hub to doo after completing a dry run." || return
     done
 }
 
+function plc-sync-uploads() {
+    local ARGS=()
+    while [[ "${1-}" == -* ]]; do
+        ARGS[${#ARGS[*]}]=$1
+        shift
+    done
+    local DIR=${1:-~/Code/plc/plc-wp-4mation/wp-content/uploads/}
+    [ -d "$DIR" ] || lk_warn "directory not found: $DIR" || return
+    lk_run rsync -vrlpt \
+        --delete \
+        --exclude=/gravity_forms/ \
+        --exclude=/cache/ \
+        --exclude="/*backup*/" \
+        --delete-excluded \
+        ${ARGS+"${ARGS[@]}"} \
+        pymblelc@plc-wp-prod1:public_html/wp-content/uploads/ \
+        "${DIR%/}"
+}
+
 alias gpg-cache-check='gpg-connect-agent "keyinfo --list" /bye'
 alias gpg-cache-passphrase='gpg-preset-passphrase --preset "$GPGKEYGRIP" <~/.gpg-"$GPGKEY"'
 alias gpg-list-keygrips='gpg --list-secret-keys --with-keygrip'
