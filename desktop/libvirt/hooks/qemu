@@ -183,7 +183,7 @@ for GUEST_IP in "${GUEST_IPS[@]}"; do
                 _ALLOW_HOSTS+=(${URL_IPS[@]+"${URL_IPS[@]}"})
             done
             if [ ${#_ALLOW_HOSTS[@]} -gt 0 ]; then
-                ALLOW_IP=($(lk_hosts_resolve "${_ALLOW_HOSTS[@]}" |
+                ALLOW_IP=($(lk_dns_resolve_hosts "${_ALLOW_HOSTS[@]}" |
                     lk_filter_ipv"${_46#-}")) ||
                     lk_die "unable to resolve host names"
             fi

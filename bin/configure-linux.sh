@@ -6,7 +6,7 @@ BS=${BASH_SOURCE[0]} &&
     lk_die "unable to resolve path to script"
 
 . "$_ROOT/../bin/settings-common.sh"
-lk_include linux
+lk_include linux provision
 
 lk_assert_not_root
 lk_assert_is_linux
@@ -189,6 +189,10 @@ unset LK_SYMLINK_NO_CHANGE
 symlink "$_ROOT/systemd/user.control" ~/.config/systemd/user.control
 lk_is_true LK_SYMLINK_NO_CHANGE ||
     systemctl --user daemon-reload
+[ "$(lk_system_memory)" -lt 7 ] || {
+    lk_systemctl_enable_now -u libvirtd.service
+    lk_systemctl_enable_now -u libvirt-guests.service
+}
 
 symlink_if_not_running \
     "$_ROOT/nextcloud/sync-exclude.lst" ~/.config/Nextcloud/sync-exclude.lst \

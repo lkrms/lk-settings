@@ -49,6 +49,7 @@ VSCODE_EXTENSIONS=(
     piotrpalarz.vscode-gitignore-generator
     PKief.material-icon-theme
     pthorsson.vscode-jsp
+    rangav.vscode-thunder-client
     rebornix.ruby
     redhat.java
     redhat.vscode-commons

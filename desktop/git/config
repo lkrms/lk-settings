@@ -9,14 +9,21 @@
 	default = nothing
 	followTags = true
 
-[diff]
-	tool = meld
+[pull]
+	ff = only
 
 [merge]
 	tool = meld
 
-[pull]
-	ff = only
+[alias]
+	hide = update-index --assume-unchanged
+	unhide = update-index --no-assume-unchanged
+	unhide-all = update-index --really-refresh
+	hidden = "!f(){ git -C \"$GIT_PREFIX\" ls-files -v \"$@\"|grep '^[[:lower:]]';};f"
+	ignored = "!f(){ git -C \"$GIT_PREFIX\" status --short --ignored \"$@\"|grep '^!!';};f"
+
+[url "github.com:"]
+	pushInsteadOf = https://github.com/
 
 [cola]
 	spellcheck = false
@@ -26,11 +33,11 @@
 	statusshowtotals = true
 	startupmode = list
 
-[gui]
-	editor = code
-
 [icdiff]
 	options = -HNU2
+
+[gui]
+	editor = code
 
 [difftool "sourcetree"]
 	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
@@ -38,6 +45,3 @@
 [mergetool "sourcetree"]
 	cmd = /Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
 	trustExitCode = true
-
-[url "github.com:"]
-	insteadOf = https://github.com/

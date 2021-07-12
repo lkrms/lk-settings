@@ -82,7 +82,8 @@
     "files.exclude": {
         "**/*.compiled.*": true,
         "**/*.min.*": true,
-        "**/extjs/build/**": true
+        "**/extjs/build/**": true,
+        "**/vendor/": true
     },
     "files.watcherExclude": {
         "**/wp-content/uploads/**": true
@@ -264,6 +265,7 @@
         "SC2034",
         "SC2046",
         "SC2054",
+        "SC2059",
         "SC2064",
         "SC2086",
         "SC2094",
