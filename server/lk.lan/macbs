@@ -1,0 +1,15 @@
+#!/bin/bash
+
+set -euo pipefail
+
+export LK_PLATFORM_BRANCH=${LK_PLATFORM_BRANCH:-develop}
+
+FILE=~/lk-provision-macos.sh
+URL=https://raw.githubusercontent.com/lkrms/lk-platform/$LK_PLATFORM_BRANCH/bin/lk-provision-macos.sh
+
+[ -e "$FILE" ] ||
+    curl --location --output "$FILE" "$URL" ||
+    rm -f "$FILE"
+
+[ ! -e "$FILE" ] ||
+    bash "$FILE" "$@"

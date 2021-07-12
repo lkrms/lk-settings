@@ -1,0 +1,10 @@
+[Unit]
+Description=Sync package repositories
+After=default.target
+
+[Service]
+Type=oneshot
+ExecStart=/opt/lk-settings/bin/sync-arch.sh
+
+[Install]
+WantedBy=default.target

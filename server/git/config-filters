@@ -1,0 +1,3 @@
+[filter "bs"]
+	clean = "bash -c \"F=\\$(sed -Ee 's/(USERNAME|PASSWORD|KEY|FULL_NAME)=.*/\\\\1=/' -e '/^#LK_/d');_F=\\$(echo \\\"\\$F\\\"|shfmt -i 4 2>/dev/null)||_F=\\$F;echo \\\"\\$_F\\\"\""
+	smudge = cat
