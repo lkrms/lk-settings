@@ -1,9 +1,12 @@
-# See https://www.ietf.org/rfc/rfc4890.txt (especially 4.3 and 4.4) and
-# https://blog.apnic.net/2017/07/12/local-packet-filtering-ipv6/
 *filter
 :INPUT DROP [0:0]
 :FORWARD DROP [0:0]
 :OUTPUT DROP [0:0]
+:LIBVIRT_FWI - [0:0]
+:LIBVIRT_FWO - [0:0]
+:LIBVIRT_FWX - [0:0]
+:LIBVIRT_INP - [0:0]
+:LIBVIRT_OUT - [0:0]
 :lk_check - [0:0]
 :lk_check_local - [0:0]
 :lk_forward - [0:0]
@@ -11,20 +14,26 @@
 :lk_output - [0:0]
 :lk_reject - [0:0]
 :lk_trusted - [0:0]
+:z_lan_to_node - [0:0]
+:z_lan_to_wan - [0:0]
+:z_wan_to_lan - [0:0]
+:z_wan_to_node - [0:0]
+-A INPUT -j LIBVIRT_INP
 -A INPUT -j lk_check
 -A INPUT -j lk_check_local
--A INPUT -j lk_input
+-A INPUT -m conntrack --ctstate NEW -j lk_input
 -A INPUT -i lo -j ACCEPT
 -A INPUT -j lk_reject
+-A FORWARD -j LIBVIRT_FWX
+-A FORWARD -j LIBVIRT_FWI
+-A FORWARD -j LIBVIRT_FWO
 -A FORWARD -j lk_check
--A FORWARD -j lk_forward
+-A FORWARD -m conntrack --ctstate NEW -j lk_forward
 -A FORWARD -j lk_reject
+-A OUTPUT -j LIBVIRT_OUT
 -A OUTPUT -j lk_check
 -A OUTPUT -j lk_check_local
--A OUTPUT -p udp -m udp --dport 547 -j ACCEPT
--A OUTPUT -p udp -m udp --dport 53 -j ACCEPT
--A OUTPUT -p udp -m udp --dport 123 -j ACCEPT
--A OUTPUT -j lk_output
+-A OUTPUT -m conntrack --ctstate NEW -j lk_output
 -A OUTPUT -o lo -j ACCEPT
 -A OUTPUT -j lk_reject
 -A lk_check -m conntrack --ctstate ESTABLISHED -j ACCEPT
@@ -52,19 +61,68 @@
 -A lk_check_local -s fe80::/10 -p ipv6-icmp -m hl --hl-eq 1 -m icmp6 --icmpv6-type 151 -j ACCEPT
 -A lk_check_local -s fe80::/10 -p ipv6-icmp -m hl --hl-eq 1 -m icmp6 --icmpv6-type 152 -j ACCEPT
 -A lk_check_local -s fe80::/10 -p ipv6-icmp -m hl --hl-eq 1 -m icmp6 --icmpv6-type 153 -j ACCEPT
+-A lk_forward -j lk_check_local
+-A lk_forward -i br0 -o ppp0 -j z_lan_to_wan
+-A lk_forward -i br0 -o en1 -j z_lan_to_wan
+-A lk_forward -i en0 -o ppp0 -j z_lan_to_wan
+-A lk_forward -i en0 -o en1 -j z_lan_to_wan
+-A lk_forward -i ppp0 -o br0 -j z_wan_to_lan
+-A lk_forward -i ppp0 -o en0 -j z_wan_to_lan
+-A lk_forward -i en1 -o br0 -j z_wan_to_lan
+-A lk_forward -i en1 -o en0 -j z_wan_to_lan
 -A lk_input -p tcp -m tcp --dport 22 -j lk_trusted
+-A lk_input -i br0 -j z_lan_to_node
+-A lk_input -i en0 -j z_lan_to_node
+-A lk_input -i ppp0 -j z_wan_to_node
+-A lk_input -i en1 -j z_wan_to_node
+-A lk_input -d ::1/128 -p tcp -m tcp --dport 80 -j lk_reject
+-A lk_input -d ::1/128 -p tcp -m tcp --dport 443 -j lk_reject
+-A lk_output -p udp -m udp --dport 547 -j ACCEPT
+-A lk_output -p udp -m udp --dport 53 -j ACCEPT
+-A lk_output -p udp -m udp --dport 123 -j ACCEPT
+-A lk_output -j ACCEPT
 -A lk_reject -p udp -m udp -j REJECT --reject-with icmp6-port-unreachable
 -A lk_reject -p tcp -m tcp -j REJECT --reject-with tcp-reset
 -A lk_reject -j REJECT --reject-with icmp6-adm-prohibited
--A lk_forward -j lk_check_local
--A lk_output -j ACCEPT
 -A lk_trusted -j ACCEPT
+-A z_lan_to_node -p tcp -m tcp --dport 25 -j ACCEPT
+-A z_lan_to_node -p tcp -m tcp --dport 53 -j ACCEPT
+-A z_lan_to_node -p tcp -m tcp --dport 80 -j ACCEPT
+-A z_lan_to_node -p tcp -m tcp --dport 139 -j ACCEPT
+-A z_lan_to_node -p tcp -m tcp --dport 445 -j ACCEPT
+-A z_lan_to_node -p tcp -m tcp --dport 873 -j ACCEPT
+-A z_lan_to_node -p tcp -m tcp --dport 3128 -j ACCEPT
+-A z_lan_to_node -p tcp -m tcp --dport 3129 -j ACCEPT
+-A z_lan_to_node -p udp -m udp --dport 53 -j ACCEPT
+-A z_lan_to_node -p udp -m udp --dport 123 -j ACCEPT
+-A z_lan_to_node -p udp -m udp --dport 137 -j ACCEPT
+-A z_lan_to_node -p udp -m udp --dport 138 -j ACCEPT
+-A z_lan_to_node -p udp -m udp --sport 546 --dport 547 -j ACCEPT
+-A z_lan_to_wan -j ACCEPT
+-A z_wan_to_node -p tcp -m tcp --dport 25 -j ACCEPT
+-A z_wan_to_node -p tcp -m tcp --dport 80 -j ACCEPT
+-A z_wan_to_node -p udp -m udp --dport 123 -j ACCEPT
+-A z_wan_to_node -p udp -m udp --sport 547 --dport 546 -j ACCEPT
 COMMIT
 *nat
 :PREROUTING ACCEPT [0:0]
 :INPUT ACCEPT [0:0]
 :OUTPUT ACCEPT [0:0]
 :POSTROUTING ACCEPT [0:0]
+:LIBVIRT_PRT - [0:0]
+:z_from_lan - [0:0]
+:z_from_wan - [0:0]
+:z_to_lan - [0:0]
+:z_to_wan - [0:0]
+-A PREROUTING -i br0 -j z_from_lan
+-A PREROUTING -i en0 -j z_from_lan
+-A PREROUTING -i ppp0 -j z_from_wan
+-A PREROUTING -i en1 -j z_from_wan
+-A POSTROUTING -j LIBVIRT_PRT
+-A POSTROUTING -o br0 -j z_to_lan
+-A POSTROUTING -o en0 -j z_to_lan
+-A POSTROUTING -o ppp0 -j z_to_wan
+-A POSTROUTING -o en1 -j z_to_wan
 COMMIT
 *mangle
 :PREROUTING ACCEPT [0:0]
@@ -72,6 +130,9 @@ COMMIT
 :FORWARD ACCEPT [0:0]
 :OUTPUT ACCEPT [0:0]
 :POSTROUTING ACCEPT [0:0]
+:LIBVIRT_PRT - [0:0]
+-A FORWARD -o ppp0 -p tcp -m tcp --tcp-flags SYN,RST SYN -m tcpmss --mss 1433:65475 -j TCPMSS --set-mss 1432
+-A POSTROUTING -j LIBVIRT_PRT
 COMMIT
 *raw
 :PREROUTING ACCEPT [0:0]
