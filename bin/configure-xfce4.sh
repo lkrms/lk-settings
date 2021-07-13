@@ -85,7 +85,7 @@ for i in "${!XFCONF_SETTING[@]}"; do
 done
 
 ! lk_command_exists autorandr ||
-    lk_env_clean autorandr -c --force
+    lk_env_clean autorandr --change --force
 
 DPI=$(lk_x_dpi) || DPI=
 

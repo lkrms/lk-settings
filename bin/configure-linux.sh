@@ -66,6 +66,24 @@ LK_SUDO=1
 
 symlink "$_ROOT/.vimrc" /root/.vimrc
 
+FILE=~lightdm/.config/autorandr
+sudo test -d "$FILE" || {
+    sudo -u lightdm install -d -m 00700 "${FILE%/*}" &&
+        sudo -u lightdm ln -sfTv "$_ROOT/autorandr/" "$FILE"
+}
+FILE=/etc/modules-load.d/i2c_dev.conf
+lk_install -m 00644 "$FILE"
+lk_file_replace "$FILE" <<EOF
+i2c_dev
+EOF
+FILE=/etc/sudoers.d/lightdm-ddcutil
+lk_install -m 00440 "$FILE"
+lk_file_replace "$FILE" <<EOF
+lightdm ALL=(ALL) NOPASSWD:/usr/bin/ddcutil
+EOF
+
+symlink "$_ROOT/autorandr/postadd" /etc/xdg/autorandr/postadd
+symlink "$_ROOT/autorandr/postremove" /etc/xdg/autorandr/postremove
 symlink "$_ROOT/iptables/iptables.rules" /etc/iptables/iptables.rules
 symlink "$_ROOT/iptables/ip6tables.rules" /etc/iptables/ip6tables.rules
 symlink "$_ROOT/libvirt/hooks/qemu" /etc/libvirt/hooks/qemu
