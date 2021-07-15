@@ -224,7 +224,7 @@
     },
     "nginx-conf-hint.syntax": "sublime",
     "nightswitch.autoSwitch": false,
-    "nightswitch.themeDay": "Ayu Light Bordered",
+    "nightswitch.themeDay": "Quiet Light",
     "nightswitch.themeNight": "Dracula Soft",
     "partialDiff.enableTelemetry": false,
     "poor-mans-t-sql-formatter.std.indent": "    ",
