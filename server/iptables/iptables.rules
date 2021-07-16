@@ -12,6 +12,8 @@
 :lk_input - [0:0]
 :lk_output - [0:0]
 :lk_reject - [0:0]
+:lk_reject_quiet - [0:0]
+:lk_related - [0:0]
 :lk_trusted - [0:0]
 :z_lan_to_node - [0:0]
 :z_lan_to_wan - [0:0]
@@ -34,8 +36,10 @@
 -A OUTPUT -o lo -j ACCEPT
 -A OUTPUT -j lk_reject
 -A lk_check -m conntrack --ctstate ESTABLISHED -j ACCEPT
+-A lk_check -m conntrack --ctstate RELATED -j lk_related
+-A lk_check -m limit --limit 12/min -m conntrack --ctstate INVALID -j LOG --log-prefix "dropped (INVALID): "
 -A lk_check -m conntrack --ctstate INVALID -j DROP
--A lk_check -p tcp -m conntrack --ctstate RELATED -m helper --helper ftp -m tcp --dport 1024:65535 -j ACCEPT
+-A lk_check -p tcp -m tcp ! --tcp-flags FIN,SYN,RST,ACK SYN -m conntrack --ctstate NEW -m limit --limit 12/min -j LOG --log-prefix "rejected (NEW not SYN): "
 -A lk_check -p tcp -m tcp ! --tcp-flags FIN,SYN,RST,ACK SYN -m conntrack --ctstate NEW -j REJECT --reject-with tcp-reset
 -A lk_check -p icmp -m icmp --icmp-type 8 -m conntrack --ctstate NEW -j ACCEPT
 -A lk_forward -i br0 -o ppp0 -j z_lan_to_wan
@@ -51,15 +55,24 @@
 -A lk_input -i en0 -j z_lan_to_node
 -A lk_input -i ppp0 -j z_wan_to_node
 -A lk_input -i en1 -j z_wan_to_node
--A lk_input -d 127.0.0.1/32 -p tcp -m tcp --dport 80 -j lk_reject
--A lk_input -d 127.0.0.1/32 -p tcp -m tcp --dport 443 -j lk_reject
+-A lk_input -d 127.0.0.1/32 -p tcp -m tcp --dport 80 -j lk_reject_quiet
+-A lk_input -d 127.0.0.1/32 -p tcp -m tcp --dport 443 -j lk_reject_quiet
 -A lk_output -p udp -m udp --dport 67 -j ACCEPT
 -A lk_output -p udp -m udp --dport 53 -j ACCEPT
 -A lk_output -p udp -m udp --dport 123 -j ACCEPT
 -A lk_output -j ACCEPT
--A lk_reject -p udp -m udp -j REJECT --reject-with icmp-port-unreachable
--A lk_reject -p tcp -m tcp -j REJECT --reject-with tcp-reset
--A lk_reject -j REJECT --reject-with icmp-proto-unreachable
+-A lk_reject -p udp -m udp --dport 1900 -j lk_reject_quiet
+-A lk_reject -p udp -m udp --sport 54915 --dport 54915 -j lk_reject_quiet
+-A lk_reject -p udp -m udp --sport 57621 --dport 57621 -j lk_reject_quiet
+-A lk_reject -m limit --limit 12/min -j LOG --log-prefix "rejected: "
+-A lk_reject -j lk_reject_quiet
+-A lk_reject_quiet -p udp -m udp -j REJECT --reject-with icmp-port-unreachable
+-A lk_reject_quiet -p tcp -m tcp -j REJECT --reject-with tcp-reset
+-A lk_reject_quiet -j REJECT --reject-with icmp-proto-unreachable
+-A lk_related -p icmp -j ACCEPT
+-A lk_related -p tcp -m helper --helper ftp -m tcp --dport 1024:65535 -j ACCEPT
+-A lk_related -m limit --limit 12/min -j LOG --log-prefix "RELATED not expected: "
+-A lk_related -j ACCEPT
 -A lk_trusted -j ACCEPT
 -A z_lan_to_node -p tcp -m tcp --dport 25 -j ACCEPT
 -A z_lan_to_node -p tcp -m tcp --dport 53 -j ACCEPT
