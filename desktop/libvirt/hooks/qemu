@@ -86,7 +86,7 @@ done
 lk_console_message "Metadata for domain '$1':"
 {
     printf '%s\t%s\0' \
-        "Guest IP$(lk_maybe_plural ${#GUEST_IPS[@]} "" s)" \
+        "Guest IP$(lk_plural ${#GUEST_IPS[@]} "" s)" \
         "$(lk_echo_array GUEST_IPS)" \
         "Forwarding" \
         "${FORWARDING:-<none>}"
@@ -178,7 +178,7 @@ for GUEST_IP in "${GUEST_IPS[@]}"; do
                     "${ALLOW_URLS[$i]}" | jq -r "${ALLOW_SELECTORS[$i]}")} ||
                     lk_warn "error downloading ${ALLOW_URLS[$i]}" || continue
                 URL_IPS=(${_ALLOW_URLS[$i]})
-                lk_console_detail "Adding ${#URL_IPS[@]} $(lk_maybe_plural \
+                lk_console_detail "Adding ${#URL_IPS[@]} $(lk_plural \
                     ${#URL_IPS[@]} host hosts) from" "${ALLOW_URLS[$i]}"
                 _ALLOW_HOSTS+=(${URL_IPS[@]+"${URL_IPS[@]}"})
             done

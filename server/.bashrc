@@ -87,6 +87,95 @@ function plc-sync-uploads() {
         "${DIR%/}"
 }
 
+function _do-rename-media() {
+    lk_confirm "Proceed?" Y || lk_warn "cancelled by user" || return
+    for FILE in "${MV[@]}"; do
+        eval "mv -vn $FILE"
+    done
+}
+
+function rename-tv-episodes() {
+    local FILE SHOW SEASON NAME EXT RE LAST= EP PRINTED NEW_FILE MV=() \
+    SEASON_RE='/([^/]+)/(([0-9]+\>)[^/]+|[^/]+(\<[0-9]+))/([^/]+)\.([^.]+)$'
+    while read -rd '' FILE; do
+        if [[ $FILE =~ $SEASON_RE ]]; then
+            SHOW=${BASH_REMATCH[1]}
+            SEASON=${BASH_REMATCH[3]}${BASH_REMATCH[4]}
+            NAME=${BASH_REMATCH[5]}
+            EXT=${BASH_REMATCH[6]}
+        elif [[ $FILE =~ /([^/]+)/([^/]+)\.([^.]+)$ ]]; then
+            SHOW=${BASH_REMATCH[1]}
+            SEASON=
+            NAME=${BASH_REMATCH[2]}
+            EXT=${BASH_REMATCH[3]}
+        else
+            lk_console_warning "Skipping (invalid path):" "$FILE"
+            continue
+        fi
+        [ "$LAST" = "$SHOW/$SEASON" ] || {
+            ! lk_verbose || lk_tty_print "Checking" "${FILE%/*}"
+            RE=$(lk_ere_escape "$SHOW")${SEASON:+"_S0*$SEASON"}"_E([0-9]{2,})"
+            LAST=$SHOW/$SEASON
+            EP=0
+            PRINTED=
+        }
+        [ "$EXT" != mp4 ] || EXT=m4v
+        if [[ $NAME =~ ^$RE$ ]]; then
+            EP=${BASH_REMATCH[1]} || true
+            NEW_FILE=${FILE%/*}/$NAME.$EXT
+        else
+            while ((++EP)); do
+                NEW_FILE=${FILE%/*}/$(printf \
+                    '%s_S%d_E%02d' "$SHOW" "$SEASON" "$EP").$EXT
+                [ -e "$NEW_FILE" ] || break
+            done
+        fi
+        [ "$FILE" != "$NEW_FILE" ] || {
+            ! lk_verbose ||
+                lk_tty_detail "Skipping (already renamed):" "${FILE##*/}"
+            continue
+        }
+        # e.g. if an episode has the wrong extension but a file with the correct
+        # extension already exists
+        [ ! -e "$NEW_FILE" ] ||
+            lk_warn "target already exists: $NEW_FILE" || return
+        lk_verbose || [ -n "$PRINTED" ] || {
+            lk_tty_print "In" "${FILE%/*}"
+            PRINTED=1
+        }
+        lk_tty_detail "${FILE##*/} -> $LK_BOLD${NEW_FILE##*/}$LK_RESET"
+        MV[${#MV[@]}]=$(printf '%q %q' "$FILE" "$NEW_FILE")
+    done < <(find "${1:-.}" -type f -regextype posix-egrep \
+        -regex '.*/[^/.][^/]*\.(m4v|mkv|mp4)' -print0 |
+        xargs -0 realpath -z | sort -zV)
+    _do-rename-media
+}
+
+function rename-movies() {
+    local FILE NAME EXT NEW_FILE RE='(.*[^ ])-[^ ]+'
+    while read -rd '' FILE; do
+        NAME=${FILE##*/}
+        EXT=${NAME##*.}
+        NAME=${NAME%.*}
+        [ "$EXT" != mp4 ] || EXT=m4v
+        [[ ! $NAME =~ ^$RE$ ]] ||
+            NAME=${BASH_REMATCH[1]}
+        NEW_FILE=${FILE%/*}/$NAME.$EXT
+        [ "$FILE" != "$NEW_FILE" ] || {
+            ! lk_verbose ||
+                lk_tty_detail "Skipping (already renamed):" "${FILE##*/}"
+            continue
+        }
+        [ ! -e "$NEW_FILE" ] ||
+            lk_warn "target already exists: $NEW_FILE" || return
+        lk_tty_detail "${FILE##*/} -> $LK_BOLD${NEW_FILE##*/}$LK_RESET"
+        MV[${#MV[@]}]=$(printf '%q %q' "$FILE" "$NEW_FILE")
+    done < <(find "${1:-.}" -type f -regextype posix-egrep \
+        -regex '.*/[^/.][^/]*\.(m4v|mkv|mp4)' -print0 |
+        xargs -0 realpath -z | sort -zV)
+    _do-rename-media
+}
+
 alias gpg-cache-check='gpg-connect-agent "keyinfo --list" /bye'
 alias gpg-cache-passphrase='gpg-preset-passphrase --preset "$GPGKEYGRIP" <~/.gpg-"$GPGKEY"'
 alias gpg-list-keygrips='gpg --list-secret-keys --with-keygrip'

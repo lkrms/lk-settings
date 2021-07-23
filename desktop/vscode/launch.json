@@ -16,7 +16,7 @@
             "request": "launch",
             "program": "${file}",
             "cwd": "${fileDirname}",
-            "port": 9003,
+            "port": 0,
             "runtimeArgs": [
                 "-dxdebug.start_with_request=yes"
             ],
@@ -24,7 +24,13 @@
                 "XDEBUG_MODE": "debug,develop",
                 "XDEBUG_CONFIG": "client_port=${port}"
             },
-            "args": []
+            "args": [],
+            "osx": {
+                "name": "PHP: Current File",
+                "type": "php",
+                "request": "launch",
+                "runtimeExecutable": "/usr/local/bin/php"
+            }
         },
         {
             "name": "Python: Current File",

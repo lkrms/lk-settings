@@ -259,6 +259,10 @@
         "when": "searchViewletFocus && searchViewletVisible"
     },
     {
+        "key": "ctrl+meta+u",
+        "command": "vscsm.openInSublimeMerge"
+    },
+    {
         "key": "alt+f4",
         "command": "-workbench.action.closeWindow"
     },

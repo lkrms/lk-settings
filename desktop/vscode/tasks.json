@@ -14,9 +14,8 @@
             "problemMatcher": [],
             "presentation": {
                 "reveal": "never",
-                "panel": "dedicated",
-                "showReuseMessage": false,
-                "clear": true,
+                "panel": "new",
+                "close": true
             }
         }
     ]

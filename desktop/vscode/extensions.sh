@@ -1,20 +1,13 @@
 #!/bin/bash
 
 VSCODE_EXTENSIONS=(
-    # James-Yu.latex-workshop
-    # ms-vscode-remote.remote-ssh-edit
-    # ms-vscode-remote.vscode-remote-extensionpack
-    # mtxr.sqltools
-    # neilbrayfield.php-docblocker
-    # salesforce.salesforcedx-vscode
-    # Sophisticode.php-formatter
-    # thiagoabreu.vala
     ahmadalli.vscode-nginx-conf
     alefragnani.Bookmarks
     bmewburn.vscode-intelephense-client
     chenxsan.vscode-standardjs
     chrmarti.regex
     dakara.transformer
+    david-rickard.git-diff-and-merge-tool
     dbaeumer.vscode-eslint
     DotJoshJohnson.xml
     dracula-theme.theme-dracula
@@ -22,6 +15,7 @@ VSCODE_EXTENSIONS=(
     felixfbecker.php-debug
     foxundermoon.shell-format
     gharveymn.nightswitch-lite
+    giovdk21.vscode-sublime-merge
     henriiik.vscode-sort
     HookyQR.beautify
     humao.rest-client
@@ -67,6 +61,7 @@ VSCODE_EXTENSIONS=(
     twxs.cmake
     Tyriar.lorem-ipsum
     Tyriar.sort-lines
+    valeryanm.vscode-phpsab
     wingrunr21.vscode-ruby
     wmaurer.change-case
     yzhang.markdown-all-in-one

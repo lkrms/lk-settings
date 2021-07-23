@@ -196,7 +196,7 @@ rules = {
             _criteria.tacky,
             function(state)
                 state.hints = state.hints or get_size_hints()
-                return state.hints and state.hints.min_width > 903
+                return state.hints and state.hints.min_width == 1080 and state.hints.min_height == 750
             end
         },
         actions = {

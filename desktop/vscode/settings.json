@@ -82,8 +82,7 @@
     "files.exclude": {
         "**/*.compiled.*": true,
         "**/*.min.*": true,
-        "**/extjs/build/**": true,
-        "**/vendor/": true
+        "**/extjs/build/**": true
     },
     "files.watcherExclude": {
         "**/wp-content/uploads/**": true
@@ -227,6 +226,8 @@
     "nightswitch.themeDay": "Quiet Light",
     "nightswitch.themeNight": "Dracula Soft",
     "partialDiff.enableTelemetry": false,
+    "phpsab.snifferEnable": false,
+    "phpsab.standard": "PSR12",
     "poor-mans-t-sql-formatter.std.indent": "    ",
     "poor-mans-t-sql-formatter.std.trailingCommas": false,
     "powershell.startAutomatically": false,
@@ -241,7 +242,8 @@
     },
     "ruby.useLanguageServer": true,
     "search.exclude": {
-        "**/*.log": true
+        "**/*.log": true,
+        "**/vendor": true
     },
     "search.followSymlinks": false,
     "security.workspace.trust.enabled": false,
@@ -298,13 +300,20 @@
     },
     "terminal.integrated.fontSize": 12,
     "terminal.integrated.lineHeight": 1.2,
+    "terminal.integrated.profiles.osx": {
+        "bash": {
+            "args": [
+                "-l"
+            ],
+            "icon": "terminal-bash",
+            "path": "/opt/homebrew/bin/bash"
+        }
+    },
     "terminal.integrated.scrollback": 10000,
     "terminal.integrated.sendKeybindingsToShell": true,
-    "terminal.integrated.shell.osx": "/opt/homebrew/bin/bash",
     "terminal.integrated.showExitAlert": false,
     "trailing-spaces.highlightCurrentLine": false,
     "typescript.autoClosingTags": false,
-    "update.mode": "none",
     "update.showReleaseNotes": false,
     "window.newWindowDimensions": "inherit",
     "window.restoreFullscreen": true,

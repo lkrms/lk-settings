@@ -250,6 +250,10 @@
         "when": "searchViewletFocus"
     },
     {
+        "key": "ctrl+cmd+u",
+        "command": "vscsm.openInSublimeMerge"
+    },
+    {
         "command": "workbench.action.compareEditor.nextChange",
         "key": "alt+down",
         "when": "textCompareEditorVisible"
