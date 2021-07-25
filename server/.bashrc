@@ -176,6 +176,18 @@ function rename-movies() {
     _do-rename-media
 }
 
+function update-notracking() {
+    local TEMP_FILE LK_FILE_REPLACE_NO_CHANGE \
+        FILE=/opt/lk-settings/server/dnsmasq/dnsmasq.d/notracking.conf \
+        URL=https://github.com/notracking/hosts-blocklists/raw/master/dnsmasq/dnsmasq.blacklist.txt
+    TEMP_FILE=$(lk_mktemp_file) &&
+        lk_delete_on_exit "$TEMP_FILE" &&
+        curl -fsSL "$URL" >"$TEMP_FILE" &&
+        lk_file_replace -f "$TEMP_FILE" "$FILE" || return
+    ! lk_is_false LK_FILE_REPLACE_NO_CHANGE ||
+        lk_systemctl_reload dnsmasq.service
+}
+
 alias gpg-cache-check='gpg-connect-agent "keyinfo --list" /bye'
 alias gpg-cache-passphrase='gpg-preset-passphrase --preset "$GPGKEYGRIP" <~/.gpg-"$GPGKEY"'
 alias gpg-list-keygrips='gpg --list-secret-keys --with-keygrip'
