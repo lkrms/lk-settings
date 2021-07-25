@@ -370,7 +370,7 @@ palette-name='Elio'
 current-workspace-only=true
 dock-items=['thunderbird.dockitem', 'todoist.dockitem', 'teams.dockitem', 'skypeforlinux.dockitem', 'caprine.dockitem', 'org.keepassxc.KeePassXC.dockitem']
 lock-items=true
-theme='Adapta'
+theme='Transparent'
 
 [org/gnome/desktop/interface]
 document-font-name='Cantarell 9'
@@ -436,13 +436,13 @@ EOF
 
     lk_console_message "Checking Xfce4"
     "$_ROOT/../bin/configure-xfce4.sh" "$@" && {
-        xfconf-query -c xfwm4 -p /general/theme -n -t string -s "Adapta"
+        xfconf-query -c xfwm4 -p /general/theme -n -t string -s "Materia-compact"
         xfconf-query -c xfwm4 -p /general/title_font -n -t string -s "Cantarell 9"
         xfconf-query -c xsettings -p /Gtk/FontName -n -t string -s "Cantarell 9"
         xfconf-query -c xsettings -p /Gtk/MonospaceFontName -n -t string -s "Source Code Pro 10"
         xfconf-query -c xsettings -p /Net/IconThemeName -n -t string -s "Papirus"
         xfconf-query -c xsettings -p /Net/SoundThemeName -n -t string -s "elementary"
-        xfconf-query -c xsettings -p /Net/ThemeName -n -t string -s "Adapta"
+        xfconf-query -c xsettings -p /Net/ThemeName -n -t string -s "Materia-compact"
     }
 fi
 

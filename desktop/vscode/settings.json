@@ -6,7 +6,7 @@
         "editor.defaultFormatter": "HookyQR.beautify"
     },
     "[json]": {
-        "editor.defaultFormatter": "HookyQR.beautify"
+        "editor.defaultFormatter": "vscode.json-language-features"
     },
     "[jsonc]": {
         "editor.defaultFormatter": "vscode.json-language-features"
@@ -51,7 +51,8 @@
     "editor.renderControlCharacters": false,
     "editor.renderWhitespace": "selection",
     "editor.rulers": [
-        80
+        80,
+        120
     ],
     "editor.suggest.localityBonus": true,
     "emmet.triggerExpansionOnTab": true,
