@@ -1,0 +1,18 @@
+10.10.0.1 lk.lan proxy.lan wpad.linacreative.com
+10.10.0.1 ntp.linacreative.com
+
+10.10.0.1 aur.repo lk.repo quarry.repo
+10.10.0.1 arch.mirror ubuntu.mirror ports.ubuntu.mirror cloud-images.ubuntu.mirror
+10.10.0.1 sublimetext.mirror
+
+fe80::ac86:59d6:ec7d:2b64 doo.linacreative.com
+fe80::ac86:59d6:ec7d:2b64 ntp.linacreative.com
+
+10.10.10.20 bamm-bamm.linacreative.com
+fe80::8642:c102:f00b:aa7c bamm-bamm.linacreative.com
+
+10.10.10.22 slab.linacreative.com
+fe80::828:99f3:d639:1cd2 slab.linacreative.com
+
+10.10.10.2 hub.linacreative.com
+fe80::96c6:91ff:fe14:f0fa hub.linacreative.com
