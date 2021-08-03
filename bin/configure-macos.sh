@@ -294,11 +294,11 @@ lk_plist_replace ":expandWindowRightThirdComboKey" dict
 lk_plist_replace ":expandWindowRightThirdComboKey:keyCode" integer 113
 lk_plist_replace ":expandWindowRightThirdComboKey:modifierFlags" integer 786432
 lk_plist_replace ":moveWindowToNextDisplay" dict
-lk_plist_replace ":expandWindowRightThirdComboKey:keyCode" integer 30
-lk_plist_replace ":expandWindowRightThirdComboKey:modifierFlags" integer 786432
+lk_plist_replace ":moveWindowToNextDisplay:keyCode" integer 30
+lk_plist_replace ":moveWindowToNextDisplay:modifierFlags" integer 786432
 lk_plist_replace ":moveWindowToPreviousDisplay" dict
-lk_plist_replace ":expandWindowRightThirdComboKey:keyCode" integer 33
-lk_plist_replace ":expandWindowRightThirdComboKey:modifierFlags" integer 786432
+lk_plist_replace ":moveWindowToPreviousDisplay:keyCode" integer 33
+lk_plist_replace ":moveWindowToPreviousDisplay:modifierFlags" integer 786432
 lk_plist_replace ":centerWindowComboKey" dict
 lk_plist_replace ":centerWindowComboKey:keyCode" integer 49
 lk_plist_replace ":centerWindowComboKey:modifierFlags" integer 786432

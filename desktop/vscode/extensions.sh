@@ -3,6 +3,7 @@
 VSCODE_EXTENSIONS=(
     ahmadalli.vscode-nginx-conf
     alefragnani.Bookmarks
+    alexcvzz.vscode-sqlite
     bmewburn.vscode-intelephense-client
     chenxsan.vscode-standardjs
     chrmarti.regex
@@ -53,6 +54,7 @@ VSCODE_EXTENSIONS=(
     ryu1kn.partial-diff
     sfodje.perltidy
     shardulm94.trailing-spaces
+    stansw.vscode-odata
     stkb.rewrap
     TaoKlerks.poor-mans-t-sql-formatter-vscode
     teabyii.ayu

@@ -24,6 +24,11 @@
                 "XDEBUG_MODE": "debug,develop",
                 "XDEBUG_CONFIG": "client_port=${port}"
             },
+            "xdebugSettings": {
+                "max_children": 10000,
+                "show_hidden": 1,
+                "max_data": 10000000
+            },
             "args": [],
             "osx": {
                 "name": "PHP: Current File",

@@ -22,6 +22,7 @@
     "isDarkMode": false,
     "line_ending_crlf": false,
     "match_pari_markdown": true,
+    "noHintForOpenLink": true,
     "noWarnigForDeleteFile": true,
     "noWarnigForMoveFile": true,
     "ol_style": 1,
