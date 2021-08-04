@@ -330,7 +330,7 @@ if [ -n "${DISPLAY-}" ]; then
         dconf reset -f /org/gtk/settings/file-chooser/
     fi
     LK_SCREENSHOT_DIR=${LK_SCREENSHOT_DIR:-~/Desktop}
-    dconf load / <<EOF
+    dconf load / <<"EOF"
 [apps/guake/general]
 infinite-history=true
 prompt-on-quit=false
@@ -383,6 +383,9 @@ folder-columns=[('size', true), ('modification time', true), ('permissions', tru
 highlight-syntax=true
 indent-width=4
 show-line-numbers=true
+style-scheme='cobalt'
+text-filters=[('CVS/SVN keywords', false, '\\$\\w+(:[^\\n$]+)?\\$'), ('C++ comment', false, '//.*'), ('C comment', false, '/\\*.*?\\*/'), ('All whitespace', false, '[ \\t\\r\\f\\v]*'), ('Leading whitespace', true, '^[ \\t\\r\\f\\v]*'), ('Trailing whitespace', false, '[ \\t\\r\\f\\v]*$'), ('Script comment', false, '#.*')]
+use-system-editor=false
 wrap-mode='word'
 
 [org/gnome/nm-applet]
@@ -435,14 +438,16 @@ EOF
     }
 
     lk_console_message "Checking Xfce4"
+    ! lk_has_arg --reset ||
+        set -- --reset
     "$_ROOT/../bin/configure-xfce4.sh" "$@" && {
-        xfconf-query -c xfwm4 -p /general/theme -n -t string -s "Materia-compact"
+        xfconf-query -c xfwm4 -p /general/theme -n -t string -s "Zukitre-dark"
         xfconf-query -c xfwm4 -p /general/title_font -n -t string -s "Cantarell 9"
         xfconf-query -c xsettings -p /Gtk/FontName -n -t string -s "Cantarell 9"
         xfconf-query -c xsettings -p /Gtk/MonospaceFontName -n -t string -s "Source Code Pro 10"
-        xfconf-query -c xsettings -p /Net/IconThemeName -n -t string -s "Papirus"
-        xfconf-query -c xsettings -p /Net/SoundThemeName -n -t string -s "elementary"
-        xfconf-query -c xsettings -p /Net/ThemeName -n -t string -s "Materia-compact"
+        xfconf-query -c xsettings -p /Net/IconThemeName -n -t string -s "elementary-xfce"
+        xfconf-query -c xsettings -p /Net/SoundThemeName -n -t string -s "Smooth"
+        xfconf-query -c xsettings -p /Net/ThemeName -n -t string -s "Zukitre-dark"
     }
 fi
 
