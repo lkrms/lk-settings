@@ -72,6 +72,7 @@ symlink "$_ROOT/.byoburc" ~/.byoburc
 symlink "$_ROOT/byobu/" ~/.byobu
 symlink "$_ROOT/git" ~/.config/git
 symlink "$_ROOT/rubocop/.rubocop.yml" ~/.rubocop.yml
+symlink "$_ROOT/displays/ColorSync/Profiles/" ~/Library/ColorSync/Profiles
 
 is_basic || symlink_if_not_running \
     "$_ROOT/nextcloud/sync-exclude.lst" "$_PREFS/Nextcloud/sync-exclude.lst" \
