@@ -73,6 +73,7 @@ symlink "$_ROOT/byobu/" ~/.byobu
 symlink "$_ROOT/git" ~/.config/git
 symlink "$_ROOT/rubocop/.rubocop.yml" ~/.rubocop.yml
 symlink "$_ROOT/displays/ColorSync/Profiles/" ~/Library/ColorSync/Profiles
+symlink "$_ROOT/hammerspoon" ~/.hammerspoon
 
 is_basic || symlink_if_not_running \
     "$_ROOT/nextcloud/sync-exclude.lst" "$_PREFS/Nextcloud/sync-exclude.lst" \
@@ -136,39 +137,6 @@ else
         lk_plist_replace ":ShortcutRecorder mainHotkey:modifierFlags" integer 1441792
         lk_plist_replace ":menuIcon" integer 2
     }
-fi
-
-lk_console_message "Checking iCanHazShortcut"
-if pgrep -xq iCanHazShortcut; then
-    lk_warn "cannot apply settings: iCanHazShortcut is running"
-else
-    symlink "$_ROOT/icanhazshortcut/" ~/.config/iCanHazShortcut
-    FILE=~/Library/LaunchAgents/info.deseven.icanhazshortcut.plist
-    if [ -d /Applications/iCanHazShortcut.app ] && [ ! -e "$FILE" ]; then
-        lk_install -d -m 00755 "${FILE%/*}"
-        lk_install -m 00644 "$FILE"
-        cat >"$FILE" <<"EOF"
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-	<key>Label</key>
-	<string>info.deseven.icanhazshortcut</string>
-	<key>ProgramArguments</key>
-	<array>
-		<string>/usr/bin/open</string>
-		<string>/Applications/iCanHazShortcut.app</string>
-	</array>
-	<key>RunAtLoad</key>
-	<true/>
-	<key>KeepAlive</key>
-	<false/>
-	<key>LimitLoadToSessionType</key>
-	<string>Aqua</string></dict>
-</plist>
-EOF
-        launchctl load -w "$FILE"
-    fi
 fi
 
 lk_console_message "Checking iTerm2"
