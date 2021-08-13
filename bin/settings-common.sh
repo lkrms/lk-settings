@@ -14,15 +14,20 @@ function is_basic() {
 
 function cleanup() {
     local LINK
-    for LINK in ~/.gitconfig ~/.gitignore; do
+    for LINK in ~/.gitconfig ~/.gitignore "$@"; do
         [ ! -L "$LINK" ] || [ -e "$LINK" ] ||
-            rm -fv "$LINK"
+            lk_run_detail rm -f "$LINK" || break
     done
 }
 
 function symlink() {
+    local DEV_ONLY=
+    [ "${1-}" != -d ] || { DEV_ONLY=1 && shift; }
     while [ $# -ge 2 ]; do
-        if [ -e "$1" ]; then
+        if [ -n "$DEV_ONLY" ] && is_basic; then
+            [ ! -L "$2" ] || [ ! "$1" -ef "$2" ] ||
+                lk_run_detail rm -f "$2" || break
+        elif [ -e "$1" ]; then
             lk_symlink "${@:1:2}" || return
         else
             is_basic || lk_console_warning "Not found:" "$1"

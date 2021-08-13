@@ -137,6 +137,9 @@ xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>s,string,exo-open --la
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>semicolon,string,libreoffice --calc
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>v,string,virt-manager
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>x,string,autorandr --change --force
+xfce4-keyboard-shortcuts,/commands/custom/<Primary><Alt>x,string,autorandr --change --force
+xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>x,string,env ACTION=add DDCUTIL_SLEEP=10 autorandr --change --force
+xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Alt>x,string,env ACTION=add DDCUTIL_SLEEP=10 autorandr --change --force
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>y,string,spotify
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>y,string,clementine
 xfce4-keyboard-shortcuts,/commands/custom/<Shift><Super>space,string,recoll

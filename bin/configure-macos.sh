@@ -15,13 +15,22 @@ while [ $# -gt 0 ] && [[ $1 == -* ]]; do
     shift
 done
 
-cleanup
-
 _PRIV=${1-}
 _PREFS=~/Library/Preferences
 _APP_SUPPORT=~/Library/"Application Support"
 _BASIC=
-! lk_has_arg "--basic" || _BASIC=1
+! lk_has_arg "--basic" || touch "$_ROOT/../.is_basic"
+[ ! -e "$_ROOT/../.is_basic" ] || _BASIC=1
+
+lk_tty_print "Cleaning up detritus"
+FILE=~/Library/LaunchAgents/info.deseven.icanhazshortcut.plist
+if [ -e "$FILE" ]; then
+    lk_run_detail launchctl unload -w "$FILE" || true
+    lk_run_detail rm -f "$FILE"
+fi
+! pgrep -xq iCanHazShortcut || lk_run_detail pkill -x iCanHazShortcut
+
+cleanup ~/.config/iCanHazShortcut
 
 [ ! -d "$_PRIV" ] || {
 
@@ -70,10 +79,10 @@ symlink "$_ROOT/.vimrc" ~/.vimrc
 symlink "$_ROOT/.tidyrc" ~/.tidyrc
 symlink "$_ROOT/.byoburc" ~/.byoburc
 symlink "$_ROOT/byobu/" ~/.byobu
-symlink "$_ROOT/git" ~/.config/git
-symlink "$_ROOT/rubocop/.rubocop.yml" ~/.rubocop.yml
-symlink "$_ROOT/displays/ColorSync/Profiles/" ~/Library/ColorSync/Profiles
-symlink "$_ROOT/hammerspoon" ~/.hammerspoon
+symlink -d "$_ROOT/git" ~/.config/git
+symlink -d "$_ROOT/rubocop/.rubocop.yml" ~/.rubocop.yml
+symlink -d "$_ROOT/displays/ColorSync/Profiles/" ~/Library/ColorSync/Profiles
+symlink -d "$_ROOT/hammerspoon" ~/.hammerspoon
 
 is_basic || symlink_if_not_running \
     "$_ROOT/nextcloud/sync-exclude.lst" "$_PREFS/Nextcloud/sync-exclude.lst" \
@@ -132,9 +141,11 @@ else
         lk_plist_maybe_add ":displayNum" real 20
         lk_plist_replace ":removeDuplicates" bool true
         lk_plist_replace ":pasteMovesToTop" bool true
-        lk_plist_replace ":ShortcutRecorder mainHotkey" dict
-        lk_plist_replace ":ShortcutRecorder mainHotkey:keyCode" integer 9
-        lk_plist_replace ":ShortcutRecorder mainHotkey:modifierFlags" integer 1441792
+        is_basic || {
+            lk_plist_replace ":ShortcutRecorder mainHotkey" dict
+            lk_plist_replace ":ShortcutRecorder mainHotkey:keyCode" integer 9
+            lk_plist_replace ":ShortcutRecorder mainHotkey:modifierFlags" integer 1441792
+        }
         lk_plist_replace ":menuIcon" integer 2
     }
 fi

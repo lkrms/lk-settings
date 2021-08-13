@@ -308,6 +308,14 @@
             ],
             "icon": "terminal-bash",
             "path": "/opt/homebrew/bin/bash"
+        },
+        "bash --noprofile": {
+            "args": [
+                "--noprofile",
+                "-l"
+            ],
+            "icon": "terminal-bash",
+            "path": "/opt/homebrew/bin/bash"
         }
     },
     "terminal.integrated.scrollback": 10000,

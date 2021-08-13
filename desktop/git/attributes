@@ -13,7 +13,6 @@
 Clementine.conf filter=clementine
 flameshot.ini filter=flameshot
 geeqierc.xml filter=geeqie
-**/i[cC]an[hH]az[sS]hortcut/config.ini filter=icanhazshortcut
 **/*.sublime-settings filter=jq
 keepassxc.ini filter=keepassxc
 **/nomacs/*.conf filter=nomacs

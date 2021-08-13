@@ -39,10 +39,6 @@
 	clean = sed -E '/^[[:blank:]]+((file_ops\\.safe_delete|home|last)_path|(main|folder|float|properties|log|search|dupe)_window\\.(x|y|w|h|maximized|[a-z]+_pos)) ?=/d'
 	smudge = cat
 
-[filter "icanhazshortcut"]
-	clean = sed -E '/^(window_(x|y|width|height)|[a-z]+_column_(enabled|width)) ?=/d'
-	smudge = cat
-
 [filter "jq"]
 	clean = jsonlint -Sf --sort preserve | jq
 	smudge = cat
