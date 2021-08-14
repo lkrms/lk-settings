@@ -186,6 +186,13 @@ function update-notracking() {
         lk_file_replace -f "$TEMP_FILE" "$FILE" || return
     ! lk_is_false LK_FILE_REPLACE_NO_CHANGE ||
         lk_systemctl_reload dnsmasq.service
+    unset LK_FILE_REPLACE_NO_CHANGE
+    FILE=/opt/lk-settings/server/squid/notracking.dstdomain
+    URL=https://github.com/notracking/hosts-blocklists/raw/master/dnscrypt-proxy/dnscrypt-proxy.blacklist.txt
+    curl -fsSL "$URL" | sed -E 's/^[^#[:blank:]]/.&/' >"$TEMP_FILE" &&
+        lk_file_replace -f "$TEMP_FILE" "$FILE" || return
+    ! lk_is_false LK_FILE_REPLACE_NO_CHANGE ||
+        lk_systemctl_reload squid.service
 }
 
 alias gpg-cache-check='gpg-connect-agent "keyinfo --list" /bye'

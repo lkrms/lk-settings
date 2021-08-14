@@ -1,1 +1,3 @@
 /dnsmasq/dnsmasq.d/notracking.conf
+/squid/notracking.dstdomain
+/squid/unblocked.dstdomain
