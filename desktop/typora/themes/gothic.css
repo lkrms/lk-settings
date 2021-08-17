@@ -67,8 +67,9 @@ body,
 #write{
 	background: #fcfcfc;
 	background: var(--bg-color);
-	font-family: 'TeXGyreAdventor', "Century Gothic", "Didact Gothic", "Yu Gothic", sans-serif;
+	font-family: 'TeXGyreAdventor', "Century Gothic", "Didact Gothic", "Yu Gothic", 'Segoe UI Emoji', sans-serif;
 	font-weight: 300;
+	-webkit-font-smoothing: antialiased;
 }
 h1,
 h2,

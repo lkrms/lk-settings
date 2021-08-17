@@ -81,6 +81,14 @@ lk_install -m 00440 "$FILE"
 lk_file_replace "$FILE" <<EOF
 lightdm ALL=(ALL) NOPASSWD:/usr/bin/ddcutil
 EOF
+if [ "$(grep -Ec '^(iwlwifi|iwlmvm) ' /proc/modules)" -eq 2 ]; then
+    FILE=/etc/modprobe.d/iwlwifi.conf
+    lk_install -m 00644 "$FILE"
+    lk_file_replace "$FILE" <<EOF
+options iwlwifi power_save=0 11n_disable=8 bt_coex_active=0
+options iwlmvm power_scheme=1
+EOF
+fi
 
 symlink "$_ROOT/autorandr/postadd" /etc/xdg/autorandr/postadd
 symlink "$_ROOT/autorandr/postremove" /etc/xdg/autorandr/postremove

@@ -301,6 +301,19 @@
     },
     "terminal.integrated.fontSize": 12,
     "terminal.integrated.lineHeight": 1.2,
+    "terminal.integrated.profiles.linux": {
+        "bash": {
+            "icon": "terminal-bash",
+            "path": "bash"
+        },
+        "bash --norc": {
+            "args": [
+                "--norc"
+            ],
+            "icon": "terminal-bash",
+            "path": "bash"
+        }
+    },
     "terminal.integrated.profiles.osx": {
         "bash": {
             "args": [

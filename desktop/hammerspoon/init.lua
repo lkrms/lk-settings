@@ -41,8 +41,11 @@ function homePath(path)
     end
 end
 
-function run(command)
+function run(command, detach)
     local sh = 'eval "$(/usr/libexec/path_helper -s)" && {\n' .. command .. "\n} 2>&1"
+    if detach then
+        sh = "(" .. sh .. ') >>"$(mktemp /tmp/lk.hammerspoon.XXXXXX)" 2>&1 &'
+    end
     logger.d("Running: " .. sh)
     local output, status, type, rc = hs.execute(sh)
     if not status then
@@ -132,7 +135,7 @@ hs.hotkey.bind(
     {"ctrl", "cmd", "shift"},
     "g",
     function()
-        run("/opt/homebrew/bin/git-cola --prompt")
+        run("/opt/homebrew/bin/git-cola --prompt", true)
     end
 )
 
@@ -188,7 +191,7 @@ hs.hotkey.bind(
     {"ctrl", "cmd"},
     "v",
     function()
-        run("/usr/local/bin/virt-manager")
+        run("/usr/local/bin/virt-manager", true)
     end
 )
 
@@ -199,3 +202,19 @@ hs.hotkey.bind(
         openNewWindow(apps.browser)
     end
 )
+
+hs.hotkey.bind(
+    {"ctrl", "cmd"},
+    "x",
+    function()
+        hs.reload()
+    end
+)
+
+hs.notify.new(
+    {
+        title = "Hammerspoon",
+        informativeText = "Config reloaded",
+        withdrawAfter = 2
+    }
+):send()

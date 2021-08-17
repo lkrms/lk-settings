@@ -250,4 +250,4 @@ xfce4-session,/shutdown/LockScreen,bool,true
 
 xfce4-screensaver,/,reset
 
-xsettings,/Net/EnableEventSounds,bool,true
+xsettings,/Net/EnableEventSounds,reset
