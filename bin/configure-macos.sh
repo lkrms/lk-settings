@@ -22,7 +22,7 @@ _BASIC=
 ! lk_has_arg "--basic" || touch "$_ROOT/../.is_basic"
 [ ! -e "$_ROOT/../.is_basic" ] || _BASIC=1
 
-lk_tty_print "Cleaning up detritus"
+lk_tty_print "Cleaning up legacy settings"
 FILE=~/Library/LaunchAgents/info.deseven.icanhazshortcut.plist
 if [ -e "$FILE" ]; then
     lk_run_detail launchctl unload -w "$FILE" || true
@@ -533,10 +533,13 @@ if ! is_basic; then
     # Disable Control-Command-D
     defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add \
         70 "<dict><key>enabled</key><false/></dict>"
+
+    lk_tty_print "Checking Dock"
+    "$_ROOT/../bin/configure-macos-dock.sh"
 fi
 
 killall -u "$USER" cfprefsd
-killall Dock
+! is_basic || killall Dock
 killall Finder
 
 is_basic || vscode_sync_extensions "$_ROOT/vscode/extensions.sh"

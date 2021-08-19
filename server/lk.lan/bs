@@ -11,6 +11,7 @@ export LK_IPV4_GATEWAY=${LK_IPV4_GATEWAY-}
 export LK_DNS_SERVERS=${LK_DNS_SERVERS-}
 export LK_DNS_SEARCH=${LK_DNS_SEARCH-}
 export LK_BRIDGE_INTERFACE=br0
+export LK_WIFI_REGDOM=AU
 export LK_NODE_TIMEZONE=Australia/Sydney
 export LK_SAMBA_WORKGROUP=LINAC
 export LK_NTP_SERVER=ntp.linacreative.com

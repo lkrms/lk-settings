@@ -195,6 +195,11 @@ function update-notracking() {
         lk_systemctl_reload squid.service
 }
 
+function iperf3-server() {
+    lk_unbuffer iperf3 --server |
+        tee -a ~/Temp/iperf3.server."$(lk_hostname)".log
+}
+
 alias gpg-cache-check='gpg-connect-agent "keyinfo --list" /bye'
 alias gpg-cache-passphrase='gpg-preset-passphrase --preset "$GPGKEYGRIP" <~/.gpg-"$GPGKEY"'
 alias gpg-list-keygrips='gpg --list-secret-keys --with-keygrip'
