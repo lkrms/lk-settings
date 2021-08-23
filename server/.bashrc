@@ -176,25 +176,6 @@ function rename-movies() {
     _do-rename-media
 }
 
-function update-notracking() {
-    local TEMP_FILE LK_FILE_REPLACE_NO_CHANGE \
-        FILE=/opt/lk-settings/server/dnsmasq/dnsmasq.d/notracking.conf \
-        URL=https://github.com/notracking/hosts-blocklists/raw/master/dnsmasq/dnsmasq.blacklist.txt
-    TEMP_FILE=$(lk_mktemp_file) &&
-        lk_delete_on_exit "$TEMP_FILE" &&
-        curl -fsSL "$URL" >"$TEMP_FILE" &&
-        lk_file_replace -f "$TEMP_FILE" "$FILE" || return
-    ! lk_is_false LK_FILE_REPLACE_NO_CHANGE ||
-        lk_systemctl_reload dnsmasq.service
-    unset LK_FILE_REPLACE_NO_CHANGE
-    FILE=/opt/lk-settings/server/squid/notracking.dstdomain
-    URL=https://github.com/notracking/hosts-blocklists/raw/master/dnscrypt-proxy/dnscrypt-proxy.blacklist.txt
-    curl -fsSL "$URL" | sed -E 's/^[^#[:blank:]]/.&/' >"$TEMP_FILE" &&
-        lk_file_replace -f "$TEMP_FILE" "$FILE" || return
-    ! lk_is_false LK_FILE_REPLACE_NO_CHANGE ||
-        lk_systemctl_reload squid.service
-}
-
 function iperf3-server() {
     lk_unbuffer iperf3 --server |
         tee -a ~/Temp/iperf3.server."$(lk_hostname)".log
