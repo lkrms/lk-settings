@@ -31,7 +31,7 @@ function quote(string)
 end
 
 function scriptPath(script)
-    return hs.configdir .. "/" .. script
+    return hs.configdir .. "/../../bin/" .. script
 end
 
 function homePath(path)
@@ -167,7 +167,7 @@ hs.hotkey.bind(
     {"ctrl", "cmd"},
     "s",
     function()
-        runInTerminal(scriptPath("sync-files"))
+        runInTerminal(scriptPath("sync-files.sh"))
     end
 )
 
