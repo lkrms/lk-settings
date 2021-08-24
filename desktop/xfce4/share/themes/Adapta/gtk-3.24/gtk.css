@@ -1,8 +1,9 @@
-/* Disable urgent window blinking in Xfce4 Window Buttons panel */
 @import url("/usr/share/themes/Adapta/gtk-3.24/gtk.css");
 
-.xfce4-panel widget.tasklist button:active {
+/* Disable urgent window blinking in Xfce4 Window Buttons panel (not working
+   since https://gitlab.xfce.org/xfce/xfce4-panel/-/commit/0ede27ae) */
+/*.xfce4-panel widget.tasklist button:active {
   background-color: transparent;
   color: inherit;
   box-shadow: none;
-}
+}*/

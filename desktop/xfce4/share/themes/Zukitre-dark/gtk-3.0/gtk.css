@@ -1,0 +1,5 @@
+@import url("/usr/share/themes/Zukitre-dark/gtk-3.0/gtk.css");
+
+#xfwm-tabwin {
+  -XfwmTabwinWidget-listview-icon-size: 32px;
+}
