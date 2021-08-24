@@ -20,6 +20,7 @@
 :z_wan_to_lan - [0:0]
 :z_wan_to_node - [0:0]
 -A INPUT -j LIBVIRT_INP
+-A INPUT -d 10.10.0.1/32 -p tcp -m tcp --dport 3128 -j ACCEPT
 -A INPUT -j lk_check
 -A INPUT -m conntrack --ctstate NEW -j lk_input
 -A INPUT -i lo -j ACCEPT
@@ -31,12 +32,14 @@
 -A FORWARD -m conntrack --ctstate NEW -j lk_forward
 -A FORWARD -j lk_reject
 -A OUTPUT -j LIBVIRT_OUT
+-A OUTPUT -m cgroup --path "system.slice/squid.service" -j ACCEPT
 -A OUTPUT -j lk_check
 -A OUTPUT -m conntrack --ctstate NEW -j lk_output
 -A OUTPUT -o lo -j ACCEPT
 -A OUTPUT -j lk_reject
 -A lk_check -m conntrack --ctstate ESTABLISHED -j ACCEPT
 -A lk_check -m conntrack --ctstate RELATED -j lk_related
+-A lk_check -p tcp -m conntrack --ctstate INVALID -m tcp --tcp-flags RST RST -j DROP
 -A lk_check -m limit --limit 12/min -m conntrack --ctstate INVALID -j LOG --log-prefix "dropped (INVALID): "
 -A lk_check -m conntrack --ctstate INVALID -j DROP
 -A lk_check -p tcp -m tcp ! --tcp-flags FIN,SYN,RST,ACK SYN -m conntrack --ctstate NEW -m limit --limit 12/min -j LOG --log-prefix "rejected (NEW not SYN): "

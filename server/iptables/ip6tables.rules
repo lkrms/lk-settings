@@ -33,6 +33,7 @@
 -A FORWARD -m conntrack --ctstate NEW -j lk_forward
 -A FORWARD -j lk_reject
 -A OUTPUT -j LIBVIRT_OUT
+-A OUTPUT -m cgroup --path "system.slice/squid.service" -j ACCEPT
 -A OUTPUT -j lk_check
 -A OUTPUT -j lk_check_local
 -A OUTPUT -m conntrack --ctstate NEW -j lk_output
@@ -40,6 +41,7 @@
 -A OUTPUT -j lk_reject
 -A lk_check -m conntrack --ctstate ESTABLISHED -j ACCEPT
 -A lk_check -m conntrack --ctstate RELATED -j lk_related
+-A lk_check -p tcp -m conntrack --ctstate INVALID -m tcp --tcp-flags RST RST -j DROP
 -A lk_check -m limit --limit 12/min -m conntrack --ctstate INVALID -j LOG --log-prefix "dropped (INVALID): "
 -A lk_check -m conntrack --ctstate INVALID -j DROP
 -A lk_check -p tcp -m tcp ! --tcp-flags FIN,SYN,RST,ACK SYN -m conntrack --ctstate NEW -m limit --limit 12/min -j LOG --log-prefix "rejected (NEW not SYN): "
@@ -103,11 +105,13 @@
 -A z_lan_to_node -p tcp -m tcp --dport 873 -j ACCEPT
 -A z_lan_to_node -p tcp -m tcp --dport 3128 -j ACCEPT
 -A z_lan_to_node -p tcp -m tcp --dport 3129 -j ACCEPT
+-A z_lan_to_node -p tcp -m tcp --dport 5201 -j ACCEPT
 -A z_lan_to_node -p udp -m udp --dport 53 -j ACCEPT
 -A z_lan_to_node -p udp -m udp --dport 123 -j ACCEPT
 -A z_lan_to_node -p udp -m udp --dport 137 -j ACCEPT
 -A z_lan_to_node -p udp -m udp --dport 138 -j ACCEPT
 -A z_lan_to_node -p udp -m udp --sport 546 --dport 547 -j ACCEPT
+-A z_lan_to_node -p udp -m udp --dport 5201 -j ACCEPT
 -A z_lan_to_wan -j ACCEPT
 -A z_wan_to_node -p tcp -m tcp --dport 25 -j ACCEPT
 -A z_wan_to_node -p tcp -m tcp --dport 80 -j ACCEPT

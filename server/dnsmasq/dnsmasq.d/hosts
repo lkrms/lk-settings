@@ -5,14 +5,14 @@
 10.10.0.1 arch.mirror ubuntu.mirror ports.ubuntu.mirror cloud-images.ubuntu.mirror
 10.10.0.1 sublimetext.mirror
 
-fe80::ac86:59d6:ec7d:2b64 doo.linacreative.com
-fe80::ac86:59d6:ec7d:2b64 ntp.linacreative.com
+10.10.0.1 doo.linacreative.com
+2406:3400:217:e031:8fd9:540f:9915:7f2b doo.linacreative.com ntp.linacreative.com
 
 10.10.10.21 bamm-bamm.linacreative.com
-fe80::a777:8606:c9b9:2377 bamm-bamm.linacreative.com
+2406:3400:217:e031:69a0:f934:c099:198f bamm-bamm.linacreative.com
 
 10.10.10.23 slab.linacreative.com
-fe80::c5e:5d3a:28b9:51aa slab.linacreative.com
+2406:3400:217:e031:1ce8:fd1e:e02d:1d28 slab.linacreative.com
 
 10.10.10.2 hub.linacreative.com
-fe80::96c6:91ff:fe14:f0fa hub.linacreative.com
+2406:3400:217:e031::1 hub.linacreative.com
