@@ -1,3 +1,6 @@
+127.0.0.1 localhost
+::1 localhost
+
 10.10.0.1 lk.lan proxy.lan wpad.linacreative.com
 10.10.0.1 ntp.linacreative.com
 

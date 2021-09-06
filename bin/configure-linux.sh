@@ -29,7 +29,6 @@ _PRIV=${1-}
         "$_PRIV/espanso/" ~/.config/espanso \
         "$_PRIV/offlineimap/.offlineimaprc" ~/.offlineimaprc \
         "$_PRIV/remmina/data/" ~/.local/share/remmina \
-        "$_PRIV/robo3t/.3T/" ~/.3T \
         "$_PRIV/robo3t/3T/" ~/.config/3T
 
     symlink_if_not_running \
@@ -113,7 +112,7 @@ unset LK_SUDO
         -v STRETCHLY="$(lk_double_quote "$_ROOT/stretchly/stretchly.sh")" \
         '$6=="stretchly"{$6=STRETCHLY}{print}' \
         "$_ROOT/cron/crontab")
-    diff -q <(crontab -l) <(echo "${CRONTAB%$'\n'}") >/dev/null || {
+    diff <(crontab -l) <(echo "${CRONTAB%$'\n'}") >/dev/null || {
         lk_console_message "Updating crontab"
         crontab <(echo "${CRONTAB%$'\n'}")
     }
@@ -292,7 +291,7 @@ if [ -f "$FILE" ]; then
     "serviceUrl": "https://marketplace.visualstudio.com/_apis/public/gallery",
     "itemUrl": "https://marketplace.visualstudio.com/items"
 }' <"$FILE")
-    diff -q <(jq <"$FILE") <(echo "$VSCODE_PRODUCT_JSON") >/dev/null ||
+    diff <(jq <"$FILE") <(echo "$VSCODE_PRODUCT_JSON") >/dev/null ||
         LK_SUDO=1 lk_file_replace "$FILE" "$VSCODE_PRODUCT_JSON"
 fi
 

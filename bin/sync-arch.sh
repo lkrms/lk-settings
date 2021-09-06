@@ -5,10 +5,10 @@ LK_TTY_NO_COLOUR=1 \
 lk_include arch
 
 function update-notracking() {
-    local TEMP_FILE LK_FILE_REPLACE_NO_CHANGE LK_VERBOSE=1 \
+    local TEMP_FILE LK_FILE_REPLACE_NO_CHANGE LK_VERBOSE=1 LK_FILE_NO_DIFF=1 \
         FILE=/opt/lk-settings/server/dnsmasq/dnsmasq.d/notracking.conf \
         URL=https://github.com/notracking/hosts-blocklists/raw/master/dnsmasq/dnsmasq.blacklist.txt \
-        UNBLOCKED=/opt/lk-settings/server/squid/unblocked.dstdomain
+        UNBLOCKED=/opt/lk-settings/server/squid/unblock.dstdomain
     lk_tty_print "Checking notracking blocklists"
     [ ! /etc/dnsmasq.d -ef /opt/lk-settings/server/dnsmasq/dnsmasq.d ] || {
         lk_tty_detail "$FILE"
@@ -17,9 +17,6 @@ function update-notracking() {
             curl -fsSL "$URL" | grep -Evf <(sed -E '/^[[:blank:]]*(#|$)/d
 s/\./\\./g; s/^\\\./(.+\\.)?/; s/.*/\/&\//' "$UNBLOCKED") >"$TEMP_FILE" &&
             lk_file_replace -f "$TEMP_FILE" "$FILE" || return
-        ! lk_is_false LK_FILE_REPLACE_NO_CHANGE || ! lk_systemctl_running dnsmasq ||
-            lk_systemctl_restart dnsmasq
-        unset LK_FILE_REPLACE_NO_CHANGE
     }
     [ ! /etc/squid/squid.conf -ef /opt/lk-settings/server/squid/squid.conf ] || {
         FILE=/opt/lk-settings/server/squid/notracking.dstdomain
@@ -27,8 +24,10 @@ s/\./\\./g; s/^\\\./(.+\\.)?/; s/.*/\/&\//' "$UNBLOCKED") >"$TEMP_FILE" &&
         lk_tty_detail "$FILE"
         curl -fsSL "$URL" | sed -E 's/^[^#[:blank:]]/.&/' >"$TEMP_FILE" &&
             lk_file_replace -f "$TEMP_FILE" "$FILE" || return
-        ! lk_is_false LK_FILE_REPLACE_NO_CHANGE || ! lk_systemctl_running squid ||
-            lk_systemctl_reload squid
+    }
+    ! lk_is_false LK_FILE_REPLACE_NO_CHANGE || {
+        ! lk_systemctl_running dnsmasq || lk_systemctl_restart dnsmasq
+        ! lk_systemctl_running squid || lk_systemctl_restart squid
     }
 }
 

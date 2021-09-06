@@ -286,31 +286,52 @@ lk_plist_replace ":restoreWindowComboKey" dict
 lk_plist_replace ":restoreWindowComboKey:keyCode" integer 101
 lk_plist_replace ":restoreWindowComboKey:modifierFlags" integer 786432
 
+lk_console_message "Checking KeepingYouAwake"
+defaults write info.marcel-dierkes.KeepingYouAwake \
+    "info.marcel-dierkes.KeepingYouAwake.LaunchAtLogin" -bool true
+
 is_basic || symlink_if_not_running \
     "$_ROOT/stretchly/config.json" "$_APP_SUPPORT/stretchly/config.json" \
     Stretchly "pgrep -x stretchly"
 
-#for KEY in TDQuickAddShortcut TDToggleShortcut; do
-#    defaults export com.todoist.mac.Todoist - |
-#        plutil -extract "$KEY" xml1 -o - - |
-#        xq -x '{data:.plist.data}'
-#done
+is_basic || {
+    lk_console_message "Checking Todoist"
+    FILE=~/Library/Containers/com.todoist.mac.Todoist/Data
+    FILE="$FILE/Library/Application Support/Todoist/config.json"
+    TEMP=$(lk_mktemp_file)
+    lk_delete_on_exit "$TEMP"
+    jq 'del(.global_shortcuts.quick_add)' "$FILE" >"$TEMP"
+    diff <(jq '.' "$FILE") "$TEMP" >/dev/null ||
+        if pgrep -x Todoist >/dev/null; then
+            lk_warn "cannot apply settings: Todoist is running"
+        else
+            lk_file_keep_original "$FILE"
+            lk_file_replace -f "$TEMP" "$FILE"
+        fi
+}
 
-lk_console_message "Checking Todoist"
-# Disabled
-defaults write com.todoist.mac.Todoist TDQuickAddShortcut "<data>
-YnBsaXN0MDDUAQIDBAUGBwpYJHZlcnNpb25ZJGFyY2hpdmVyVCR0b3BYJG9iamVjdHMSAAGGoF8Q
-D05TS2V5ZWRBcmNoaXZlctEICVRyb290gAChC1UkbnVsbAgRGiQpMjdJTFFTVQAAAAAAAAEBAAAA
-AAAAAAwAAAAAAAAAAAAAAAAAAABb
+is_basic || {
+    lk_console_message "Checking Harvest"
+    # ^⌘O
+    defaults write com.getharvest.harvestxapp kNewTimerShortcut "<data>
+YnBsaXN0MDDUAQIDBAUGBwpYJHZlcnNpb25ZJGFyY2hpdmVyVCR0b3BYJG9iamVjdHMS
+AAGGoF8QD05TS2V5ZWRBcmNoaXZlctEICVRyb290gAGjCwwTVSRudWxs0w0ODxAREldL
+ZXlDb2RlViRjbGFzc11Nb2RpZmllckZsYWdzEASAAhIAFAAA0hQVFhdaJGNsYXNzbmFt
+ZVgkY2xhc3Nlc1tNQVNTaG9ydGN1dKIYGVtNQVNTaG9ydGN1dFhOU09iamVjdAgRGiQp
+MjdJTFFTV11kbHOBg4WKj5qjr7K+AAAAAAAAAQEAAAAAAAAAGgAAAAAAAAAAAAAAAAAA
+AMc=
 </data>"
-# ^⌘O
-defaults write com.todoist.mac.Todoist TDToggleShortcut "<data>
-YnBsaXN0MDDUAQIDBAUGBwpYJHZlcnNpb25ZJGFyY2hpdmVyVCR0b3BYJG9iamVjdHMSAAGGoF8Q
-D05TS2V5ZWRBcmNoaXZlctEICVRyb290gAGjCwwTVSRudWxs0w0ODxAREldLZXlDb2RlViRjbGFz
-c11Nb2RpZmllckZsYWdzEB+AAhIAFAAA0hQVFhdaJGNsYXNzbmFtZVgkY2xhc3Nlc1tNQVNTaG9y
-dGN1dKIYGVtNQVNTaG9ydGN1dFhOU09iamVjdAgRGiQpMjdJTFFTV11kbHOBg4WKj5qjr7K+AAAA
-AAAAAQEAAAAAAAAAGgAAAAAAAAAAAAAAAAAAAMc=
+    for KEY in kShowFavoritesShortcut \
+        kShowTimeSummaryShortcut \
+        kShowTimesheetShortcut; do
+        # Disabled
+        defaults write com.getharvest.harvestxapp "$KEY" "<data>
+YnBsaXN0MDDUAQIDBAUGBwpYJHZlcnNpb25ZJGFyY2hpdmVyVCR0b3BYJG9iamVjdHMS
+AAGGoF8QD05TS2V5ZWRBcmNoaXZlctEICVRyb290gAChC1UkbnVsbAgRGiQpMjdJTFFT
+VQAAAAAAAAEBAAAAAAAAAAwAAAAAAAAAAAAAAAAAAABb
 </data>"
+    done
+}
 
 # TODO: configure Typora via `defaults` in lieu of symlinking
 # abnerworks.Typora.plist
@@ -331,7 +352,7 @@ if [ -f "$FILE" ]; then
     "serviceUrl": "https://marketplace.visualstudio.com/_apis/public/gallery",
     "itemUrl": "https://marketplace.visualstudio.com/items"
 }' <"$FILE")
-    diff -q <(jq <"$FILE") <(echo "$VSCODE_PRODUCT_JSON") >/dev/null ||
+    diff <(jq <"$FILE") <(echo "$VSCODE_PRODUCT_JSON") >/dev/null ||
         LK_SUDO=1 lk_file_replace "$FILE" "$VSCODE_PRODUCT_JSON"
 fi
 
@@ -404,11 +425,24 @@ defaults write NSGlobalDomain NSAutomaticCapitalizationEnabled -bool false
 defaults write NSGlobalDomain NSAutomaticPeriodSubstitutionEnabled -bool false
 is_basic || defaults write NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool false
 defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false
+defaults write NSGlobalDomain WebAutomaticSpellingCorrectionEnabled -bool false
+
+# Touch Bar typing suggestions
+is_basic || defaults write NSGlobalDomain NSAutomaticTextCompletionEnabled -bool false
+is_basic || defaults write com.apple.touchbar.agent PresentationModeGlobal -string functionKeys
+is_basic || defaults write com.apple.touchbar.agent PresentationModeFnModes -dict functionKeys fullControlStrip
+
+defaults write com.apple.HIToolbox AppleDictationAutoEnable -int 0
+# Disable Dictation > Shortcut
+#defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add \
+#    164 "<dict><key>enabled</key><false/></dict>"
 
 # Sound
 defaults write NSGlobalDomain com.apple.sound.beep.feedback -bool true
 
 # General
+is_basic || defaults write com.apple.loginwindow TALLogoutSavesState -bool false
+
 defaults write NSGlobalDomain AppleAccentColor -int 0
 defaults write NSGlobalDomain AppleHighlightColor -string "1.000000 0.733333 0.721569 Red"
 defaults write NSGlobalDomain AppleShowScrollBars -string Always
