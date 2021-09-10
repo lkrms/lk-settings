@@ -107,9 +107,10 @@ lk_console_message "Metadata for domain '$1':"
     exit 0
 
 P=${LK_PATH_PREFIX%-}_
-REJECT_CHAIN=${P}reject
-FORWARD_CHAIN=${P}forward
-lk_iptables_has_chain -b "$REJECT_CHAIN" || REJECT_CHAIN=REJECT
+REJECT=${P}reject
+FORWARD=${P}forward
+lk_iptables_has_chain -b "$REJECT" || REJECT=REJECT
+lk_iptables_has_chain -b "$FORWARD" || FORWARD=FORWARD
 
 eval "$(lk_get_regex IPV4_REGEX IPV6_REGEX)"
 IP_REGEX="($IPV4_REGEX|$IPV6_REGEX)"
@@ -125,8 +126,8 @@ _ALLOW_URLS=()
 for GUEST_IP in "${GUEST_IPS[@]}"; do
 
     _ALLOW_HOSTS=()
-    [[ $GUEST_IP =~ ^$IPV4_REGEX$ ]] && _46=-4 && _default=0/0 ||
-        { [[ $GUEST_IP =~ ^$IPV6_REGEX$ ]] && _46=-6 && _default=::/0; } ||
+    [[ $GUEST_IP =~ ^$IPV4_REGEX$ ]] && _46=-4 && _default=0/0 && _lo=127.0.0.1 ||
+        { [[ $GUEST_IP =~ ^$IPV6_REGEX$ ]] && _46=-6 && _default=::/0 && _lo=::1; } ||
         lk_die "invalid IP address: $GUEST_IP"
     _LK_IPTABLES_46=$_46
 
@@ -153,9 +154,10 @@ for GUEST_IP in "${GUEST_IPS[@]}"; do
         awk '$1 ~ /^inet6?$/ { split($2, a, "/"); print a[1] }' |
         lk_require_output head -n1) ||
         lk_die "unable to find host IP on interface $HOST_INTERFACE"
-    GUEST_NAME=$(sed -E 's/[^-a-zA-Z0-9_]+//g' <<<"$1")
-    ISOLATE_CHAIN=${P}isolate-$GUEST_NAME
-    ISOLATE_CHAIN=${ISOLATE_CHAIN:0:28}
+    GUEST_NAME=$(sed -E "s/[^-a-zA-Z0-9_]+//g
+s/^.*(.{$((28 - (${#P} + 4)))})\$/\\1/" <<<"$1")
+    FORWARD_CHAIN=${P}fwd_$GUEST_NAME
+    ISOLATE_CHAIN=${P}iso_$GUEST_NAME
 
     printf '%s\t%s\0' \
         "Bridge interface" "$GUEST_BRIDGE" \
@@ -201,54 +203,64 @@ for GUEST_IP in "${GUEST_IPS[@]}"; do
                     -j LOG --log-prefix "blocked: "
             lk_is_true NO_REJECT ||
                 lk_iptables_append "$ISOLATE_CHAIN" \
-                    -j "$REJECT_CHAIN"
-            lk_iptables_insert FORWARD \
+                    -j "$REJECT"
+            lk_iptables_insert "$FORWARD" \
                 -i "$GUEST_BRIDGE" -s "$GUEST_IP" -j "$ISOLATE_CHAIN"
         fi
-        lk_iptables_has_chain "$FORWARD_CHAIN" ||
+        if [ ${#FORWARD_TO[@]} -gt 0 ]; then
+            sysctl -w net.ipv4.conf.all.route_localnet=1
+            lk_iptables_maybe_append POSTROUTING -t nat \
+                -m addrtype --src-type LOCAL --dst-type UNICAST -j MASQUERADE
             lk_iptables_flush_chain "$FORWARD_CHAIN"
-        for i in "${!FORWARD_TO[@]}"; do
-            TO=${FORWARD_TO[$i]}
-            FROM=${FORWARD_FROM[$i]}
-            PROTO=${FORWARD_PROTO[$i]}
-            lk_iptables_maybe_append "$FORWARD_CHAIN" \
-                -p "$PROTO" -m "$PROTO" --dport "$TO" \
-                -j ACCEPT
-            lk_iptables_insert PREROUTING -t nat -i "$HOST_INTERFACE" \
-                -p "$PROTO" -m "$PROTO" --dport "$FROM" \
-                -j DNAT --to-destination "$GUEST_IP:$TO"
-            lk_iptables_insert OUTPUT -t nat -d "$HOST_IP" \
-                -p "$PROTO" -m "$PROTO" --dport "$FROM" \
-                -j DNAT --to-destination "$GUEST_IP:$TO"
-        done
-        lk_iptables_insert FORWARD \
-            -o "$GUEST_BRIDGE" -d "$GUEST_IP" -j "$FORWARD_CHAIN"
+            lk_iptables_flush_chain "$FORWARD_CHAIN" nat
+            _ips=0
+            for _ip in "$_lo" "$HOST_IP"; do
+                for i in "${!FORWARD_TO[@]}"; do
+                    TO=${FORWARD_TO[$i]}
+                    FROM=${FORWARD_FROM[$i]}
+                    PROTO=${FORWARD_PROTO[$i]}
+                    ((_ips)) ||
+                        lk_iptables_append "$FORWARD_CHAIN" \
+                            -p "$PROTO" -m "$PROTO" --dport "$TO" \
+                            -j ACCEPT
+                    lk_iptables_append "$FORWARD_CHAIN" -t nat -d "$_ip" \
+                        -p "$PROTO" -m "$PROTO" --dport "$FROM" \
+                        -j DNAT --to-destination "$GUEST_IP:$TO"
+                done
+                ((++_ips))
+            done
+            lk_iptables_insert "$FORWARD" \
+                -o "$GUEST_BRIDGE" -d "$GUEST_IP" -j "$FORWARD_CHAIN"
+            lk_iptables_insert PREROUTING -t nat -j "$FORWARD_CHAIN"
+            lk_iptables_insert OUTPUT -t nat -j "$FORWARD_CHAIN"
+        fi
         ;;
 
     release)
         set +e
         trap - ERR
         if lk_is_true ISOLATE; then
-            lk_iptables_delete_all FORWARD \
+            lk_iptables_delete_all "$FORWARD" \
                 -i "$GUEST_BRIDGE" -s "$GUEST_IP" -j "$ISOLATE_CHAIN"
             ! lk_iptables_has_chain "$ISOLATE_CHAIN" || {
                 lk_iptables_flush_chain "$ISOLATE_CHAIN"
                 lk_iptables_delete_chain "$ISOLATE_CHAIN"
             }
         fi
-        lk_iptables_delete_all FORWARD \
-            -o "$GUEST_BRIDGE" -d "$GUEST_IP" -j "$FORWARD_CHAIN"
-        for i in "${!FORWARD_TO[@]}"; do
-            TO=${FORWARD_TO[$i]}
-            FROM=${FORWARD_FROM[$i]}
-            PROTO=${FORWARD_PROTO[$i]}
-            lk_iptables_delete_all PREROUTING -t nat -i "$HOST_INTERFACE" \
-                -p "$PROTO" -m "$PROTO" --dport "$FROM" \
-                -j DNAT --to-destination "$GUEST_IP:$TO"
-            lk_iptables_delete_all OUTPUT -t nat -d "$HOST_IP" \
-                -p "$PROTO" -m "$PROTO" --dport "$FROM" \
-                -j DNAT --to-destination "$GUEST_IP:$TO"
-        done
+        if [ ${#FORWARD_TO[@]} -gt 0 ]; then
+            lk_iptables_delete_all "$FORWARD" \
+                -o "$GUEST_BRIDGE" -d "$GUEST_IP" -j "$FORWARD_CHAIN"
+            lk_iptables_delete_all PREROUTING -t nat -j "$FORWARD_CHAIN"
+            lk_iptables_delete_all OUTPUT -t nat -j "$FORWARD_CHAIN"
+            ! lk_iptables_has_chain "$FORWARD_CHAIN" nat || {
+                lk_iptables_flush_chain "$FORWARD_CHAIN" nat
+                lk_iptables_delete_chain "$FORWARD_CHAIN" nat
+            }
+            ! lk_iptables_has_chain "$FORWARD_CHAIN" || {
+                lk_iptables_flush_chain "$FORWARD_CHAIN"
+                lk_iptables_delete_chain "$FORWARD_CHAIN"
+            }
+        fi
         ;;
 
     esac
