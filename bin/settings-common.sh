@@ -45,6 +45,7 @@ function symlink_private_common() {
         "$1/lftp/.lftprc" ~/.lftprc \
         "$1/lftp/share/" ~/.local/share/lftp \
         "$1/linode-cli/linode-cli" ~/.config/linode-cli \
+        "$1/lk-platform/token/" ~/.config/lk-platform/token \
         "$1/robo3t/.3T/" ~/.3T \
         "$1/s3cmd/.s3cfg" ~/.s3cfg \
         "$1/ssh/" ~/.ssh
@@ -103,7 +104,7 @@ function vscode_sync_extensions() {
             lk_console_detail_list "Orphaned:" extension extensions
         ! lk_confirm "Remove the above?" N ||
             for EXT in "${REMOVE[@]}"; do
-                code --uninstall-extension "$EXT"
+                code --uninstall-extension "$EXT" || true
             done
     }
 }

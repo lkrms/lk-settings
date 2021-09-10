@@ -205,6 +205,7 @@ else
         lk_plist_replace ":New Bookmarks:$i:Silence Bell" bool true
         lk_plist_replace ":New Bookmarks:$i:Title Components" integer 512
         lk_plist_replace ":New Bookmarks:$i:Unlimited Scrollback" bool true
+        lk_plist_replace ":New Bookmarks:$i:Use libtickit protocol" bool true
         lk_plist_replace_from_file ":New Bookmarks:$i:Keyboard Map" dict \
             "$_ROOT/iterm2/Keyboard Map.plist"
         case "$i" in
@@ -298,16 +299,18 @@ is_basic || {
     lk_console_message "Checking Todoist"
     FILE=~/Library/Containers/com.todoist.mac.Todoist/Data
     FILE="$FILE/Library/Application Support/Todoist/config.json"
-    TEMP=$(lk_mktemp_file)
-    lk_delete_on_exit "$TEMP"
-    jq 'del(.global_shortcuts.quick_add)' "$FILE" >"$TEMP"
-    diff <(jq '.' "$FILE") "$TEMP" >/dev/null ||
-        if pgrep -x Todoist >/dev/null; then
-            lk_warn "cannot apply settings: Todoist is running"
-        else
-            lk_file_keep_original "$FILE"
-            lk_file_replace -f "$TEMP" "$FILE"
-        fi
+    [ ! -e "$FILE" ] || {
+        TEMP=$(lk_mktemp_file)
+        lk_delete_on_exit "$TEMP"
+        jq 'del(.global_shortcuts.quick_add)' "$FILE" >"$TEMP"
+        diff <(jq '.' "$FILE") "$TEMP" >/dev/null ||
+            if pgrep -x Todoist >/dev/null; then
+                lk_warn "cannot apply settings: Todoist is running"
+            else
+                lk_file_keep_original "$FILE"
+                lk_file_replace -f "$TEMP" "$FILE"
+            fi
+    }
 }
 
 is_basic || {
@@ -505,6 +508,9 @@ is_basic || defaults write com.apple.finder DisableAllAnimations -bool true
 
 defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
 defaults write com.apple.desktopservices DSDontWriteUSBStores -bool true
+
+# Messages
+defaults write com.apple.MobileSMS PlaySoundsKey -bool false
 
 # Safari
 is_basic || defaults write com.apple.Safari AlwaysRestoreSessionAtLaunch -bool true

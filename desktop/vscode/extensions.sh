@@ -6,9 +6,7 @@ VSCODE_EXTENSIONS=(
     alexcvzz.vscode-sqlite
     bmewburn.vscode-intelephense-client
     chenxsan.vscode-standardjs
-    chrmarti.regex
     dakara.transformer
-    david-rickard.git-diff-and-merge-tool
     dbaeumer.vscode-eslint
     DotJoshJohnson.xml
     dracula-theme.theme-dracula
@@ -21,7 +19,6 @@ VSCODE_EXTENSIONS=(
     HookyQR.beautify
     humao.rest-client
     idleberg.applescript
-    jflbr.jwt-decoder
     jkjustjoshing.vscode-text-pastry
     jprestidge.theme-material-theme
     jq-syntax-highlighting.jq-syntax-highlighting
@@ -36,7 +33,6 @@ VSCODE_EXTENSIONS=(
     ms-azuretools.vscode-azureresourcegroups
     ms-python.python
     ms-python.vscode-pylance
-    ms-toolsai.jupyter
     ms-vscode-remote.remote-ssh-edit
     ms-vscode.azure-account
     ms-vscode.cpptools
@@ -50,7 +46,6 @@ VSCODE_EXTENSIONS=(
     redhat.vscode-commons
     redhat.vscode-xml
     redhat.vscode-yaml
-    rogalmic.bash-debug
     ryu1kn.partial-diff
     sfodje.perltidy
     shardulm94.trailing-spaces
@@ -63,10 +58,8 @@ VSCODE_EXTENSIONS=(
     twxs.cmake
     Tyriar.lorem-ipsum
     Tyriar.sort-lines
-    valeryanm.vscode-phpsab
     wingrunr21.vscode-ruby
     wmaurer.change-case
     yzhang.markdown-all-in-one
     zhuangtongfa.material-theme
-    ziyasal.vscode-open-in-github
 )
