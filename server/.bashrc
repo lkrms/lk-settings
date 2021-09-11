@@ -181,6 +181,36 @@ function iperf3-server() {
         tee -a ~/Temp/iperf3.server."$(lk_hostname)".log
 }
 
+function system-update() { (
+    shopt -s nullglob
+    LAST_FAILED=0
+    for DIR in /opt/lk-*/.git ""; do
+        ! ((LAST_FAILED)) || lk_confirm "Check failed. Continue?" Y || return
+        [ -n "$DIR" ] || break
+        LAST_FAILED=1
+        DIR=${DIR%/.git}
+        _DIR=~/Code/"${DIR##*/}"
+        [ ! "$DIR" -ef "$_DIR" ] || { LAST_FAILED=0 && continue; }
+        lk_console_item "Checking for updates:" "$DIR"
+        cd "$DIR" && BRANCH=$(lk_git_branch_current) ||
+            lk_warn "detached HEAD: $DIR" || continue
+        [ ! -d "$_DIR" ] || { {
+            git remote | grep -Fx local >/dev/null ||
+                lk_run_detail git remote add -f local "file://$_DIR"
+        } && {
+            lk_git_branch_upstream | grep -Fx local/"$BRANCH" >/dev/null ||
+                lk_run_detail git branch --set-upstream-to=local/"$BRANCH"
+        }; } || continue
+        REMOTE=$(lk_git_branch_upstream_remote) ||
+            lk_warn "no upstream remote: $DIR" || continue
+        lk_git_update_repo_to -f "$REMOTE" "$BRANCH" || continue
+        LAST_FAILED=0
+    done
+    lk-provision-arch.sh &&
+        lk_tty_print &&
+        lk_run /opt/lk-settings/bin/sync-arch.sh
+); }
+
 alias gpg-cache-check='gpg-connect-agent "keyinfo --list" /bye'
 alias gpg-cache-passphrase='gpg-preset-passphrase --preset "$GPGKEYGRIP" <~/.gpg-"$GPGKEY"'
 alias gpg-list-keygrips='gpg --list-secret-keys --with-keygrip'

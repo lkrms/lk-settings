@@ -31,6 +31,8 @@ s/\./\\./g; s/^\\\./(.+\\.)?/; s/.*/\/&\//' "$UNBLOCKED") >"$TEMP_FILE" &&
     }
 }
 
+lk_lock
+
 lk_log_start
 
 STATUS=0
