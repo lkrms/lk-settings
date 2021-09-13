@@ -1,0 +1,21 @@
+# Only bring the WAN connection up if ip[6]tables started successfully
+[Unit]
+Description=WAN connection on %i
+Requires=NetworkManager.service
+Wants=NetworkManager-wait-online.service
+Requires=iptables.service
+Requires=ip6tables.service
+After=NetworkManager.service
+After=NetworkManager-wait-online.service
+After=iptables.service
+After=ip6tables.service
+Before=network-online.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/bin/sh -c '/usr/bin/nmcli -g name connection show --active | grep -Fx "$1" >/dev/null || /usr/bin/nmcli connection up "$1"' sh %i
+ExecStop=/bin/sh -c '/usr/bin/nmcli -g name connection show --active | grep -Fx "$1" >/dev/null && /usr/bin/nmcli connection down "$1"' sh %i
+
+[Install]
+WantedBy=network-online.target

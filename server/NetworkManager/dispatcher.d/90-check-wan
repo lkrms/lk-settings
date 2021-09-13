@@ -1,0 +1,34 @@
+#!/bin/bash
+
+LK_TTY_NO_COLOUR=1 \
+    . /opt/lk-platform/bin/lk-bash-load.sh || exit
+
+lk_log_start
+
+WAN_IFACE=ppp0
+LAN_IFACE=br0
+
+case "$1" in
+"$WAN_IFACE" | "$LAN_IFACE")
+    lk_tty_print "Environment:" $'\n'"$(printenv |
+        grep -E '^(CONNECTION_|DEVICE_|DHCP4_|IP[46]_|NM_)' |
+        sort)"
+    nmcli -g device connection show --active |
+        grep -Fx "$WAN_IFACE" >/dev/null &&
+        { lk_tty_print "$WAN_IFACE:" active && METHOD=shared; } ||
+        { lk_tty_print "$WAN_IFACE:" inactive && METHOD=auto; }
+    CURRENT_METHOD=$(nmcli -g ipv6.method connection show "$LAN_IFACE") ||
+        CURRENT_METHOD=
+    lk_tty_print "$LAN_IFACE:" "ipv6.method=$CURRENT_METHOD"
+    case "$CURRENT_METHOD" in
+    "" | "$METHOD")
+        lk_tty_detail "No action required"
+        ;;
+    *)
+        lk_run_detail nmcli connection modify --temporary \
+            "$LAN_IFACE" ipv6.method "$METHOD"
+        lk_run_detail nmcli connection up "$LAN_IFACE"
+        ;;
+    esac
+    ;;
+esac

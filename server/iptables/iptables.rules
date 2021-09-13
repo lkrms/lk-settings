@@ -32,7 +32,6 @@
 -A FORWARD -m conntrack --ctstate NEW -j lk_forward
 -A FORWARD -j lk_reject
 -A OUTPUT -j LIBVIRT_OUT
--A OUTPUT -m cgroup --path "system.slice/squid.service" -j ACCEPT
 -A OUTPUT -j lk_check
 -A OUTPUT -m conntrack --ctstate NEW -j lk_output
 -A OUTPUT -o lo -j ACCEPT
@@ -64,6 +63,7 @@
 -A lk_output -p udp -m udp --dport 53 -j ACCEPT
 -A lk_output -p udp -m udp --dport 123 -j ACCEPT
 -A lk_output -j ACCEPT
+-A lk_reject -i ppp0 -j lk_reject_quiet
 -A lk_reject -p udp -m udp --dport 1900 -j lk_reject_quiet
 -A lk_reject -p udp -m udp --sport 54915 --dport 54915 -j lk_reject_quiet
 -A lk_reject -p udp -m udp --sport 57621 --dport 57621 -j lk_reject_quiet
@@ -73,6 +73,7 @@
 -A lk_reject_quiet -p tcp -m tcp -j REJECT --reject-with tcp-reset
 -A lk_reject_quiet -j REJECT --reject-with icmp-proto-unreachable
 -A lk_related -p icmp -j ACCEPT
+-A lk_related -p tcp -m tcp --tcp-flags RST RST -j ACCEPT
 -A lk_related -p tcp -m helper --helper ftp -m tcp --dport 1024:65535 -j ACCEPT
 -A lk_related -m limit --limit 12/min -j LOG --log-prefix "RELATED not expected: "
 -A lk_related -j ACCEPT

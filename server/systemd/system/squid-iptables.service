@@ -1,0 +1,18 @@
+[Unit]
+Description=Always allow Squid IPv4 egress traffic
+Requisite=iptables.service
+Requisite=squid.service
+After=iptables.service
+After=squid.service
+ReloadPropagatedFrom=iptables.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/bin/sh -c '"$1" -C "${@:3}" >/dev/null 2>&1 || "$@"' sh /usr/bin/iptables -I OUTPUT -m cgroup --path system.slice/squid.service -j ACCEPT
+ExecReload=/bin/sh -c '"$1" -C "${@:3}" >/dev/null 2>&1 || "$@"' sh /usr/bin/iptables -I OUTPUT -m cgroup --path system.slice/squid.service -j ACCEPT
+ExecStop=/bin/sh -c '"$@" 2>/dev/null || true' sh /usr/bin/iptables -D OUTPUT -m cgroup --path system.slice/squid.service -j ACCEPT
+
+[Install]
+WantedBy=iptables.service
+WantedBy=squid.service

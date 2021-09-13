@@ -1,0 +1,18 @@
+[Unit]
+Description=Always allow Squid IPv6 egress traffic
+Requisite=ip6tables.service
+Requisite=squid.service
+After=ip6tables.service
+After=squid.service
+ReloadPropagatedFrom=ip6tables.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/bin/sh -c '"$1" -C "${@:3}" >/dev/null 2>&1 || "$@"' sh /usr/bin/ip6tables -I OUTPUT -m cgroup --path system.slice/squid.service -j ACCEPT
+ExecReload=/bin/sh -c '"$1" -C "${@:3}" >/dev/null 2>&1 || "$@"' sh /usr/bin/ip6tables -I OUTPUT -m cgroup --path system.slice/squid.service -j ACCEPT
+ExecStop=/bin/sh -c '"$@" 2>/dev/null || true' sh /usr/bin/ip6tables -D OUTPUT -m cgroup --path system.slice/squid.service -j ACCEPT
+
+[Install]
+WantedBy=ip6tables.service
+WantedBy=squid.service
