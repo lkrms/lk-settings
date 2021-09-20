@@ -14,8 +14,14 @@ Before=network-online.target
 [Service]
 Type=oneshot
 RemainAfterExit=yes
-ExecStart=/bin/sh -c '/usr/bin/nmcli -g name connection show --active | grep -Fx "$1" >/dev/null || /usr/bin/nmcli connection up "$1"' sh %i
-ExecStop=/bin/sh -c '/usr/bin/nmcli -g name connection show --active | grep -Fx "$1" >/dev/null && /usr/bin/nmcli connection down "$1"' sh %i
+ExecStart=/bin/sh -c 'nmcli -g NAME,AUTOCONNECT conn show --active | grep -Fx "$1:yes" >/dev/null || {\
+  nmcli conn mod --temporary "$1" connection.autoconnect yes connection.autoconnect-retries 0;\
+  nmcli conn up "$1";\
+}' sh %i
+ExecStop=/bin/sh -c 'nmcli -g NAME conn show --active | grep -Fx "$1" >/dev/null && {\
+  nmcli conn mod --temporary "$1" connection.autoconnect no;\
+  nmcli conn down "$1";\
+}' sh %i
 
 [Install]
 WantedBy=network-online.target

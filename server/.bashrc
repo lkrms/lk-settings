@@ -1,6 +1,6 @@
 #!/bin/bash
 
-[[ $- != *i* ]] && return
+[[ $- == *i* ]] || shopt -s expand_aliases
 
 alias ls='ls --color=auto'
 PS1='[\u@\h \W]\$ '
@@ -210,6 +210,18 @@ function system-update() { (
         lk_tty_print &&
         lk_run /opt/lk-settings/bin/sync-arch.sh
 ); }
+
+function iptables-persist() {
+    lk_iptables_save | sed \
+        -E '/( --path |f2b)/d' >/opt/lk-settings/server/iptables/iptables.rules
+    lk_iptables_save -6 | sed \
+        -E '/( --path |f2b)/d' >/opt/lk-settings/server/iptables/ip6tables.rules
+}
+
+function iptables-reload() {
+    sudo systemctl reload iptables.service ip6tables.service &&
+        sudo systemctl restart fail2ban.service
+}
 
 alias gpg-cache-check='gpg-connect-agent "keyinfo --list" /bye'
 alias gpg-cache-passphrase='gpg-preset-passphrase --preset "$GPGKEYGRIP" <~/.gpg-"$GPGKEY"'

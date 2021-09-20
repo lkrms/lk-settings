@@ -15,12 +15,15 @@
 :lk_reject_quiet - [0:0]
 :lk_related - [0:0]
 :lk_trusted - [0:0]
+:r_invalid - [0:0]
+:r_new_not_syn - [0:0]
 :z_lan_to_node - [0:0]
 :z_lan_to_wan - [0:0]
 :z_wan_to_lan - [0:0]
 :z_wan_to_node - [0:0]
 -A INPUT -j LIBVIRT_INP
--A INPUT -d 10.10.0.1/32 -p tcp -m tcp --dport 3128 -j ACCEPT
+-A INPUT -d 10.10.0.1/32 -i br0 -p tcp -m tcp --dport 3128 -j ACCEPT
+-A INPUT -d 10.10.0.1/32 -i en0 -p tcp -m tcp --dport 3128 -j ACCEPT
 -A INPUT -j lk_check
 -A INPUT -m conntrack --ctstate NEW -j lk_input
 -A INPUT -i lo -j ACCEPT
@@ -37,12 +40,10 @@
 -A OUTPUT -o lo -j ACCEPT
 -A OUTPUT -j lk_reject
 -A lk_check -m conntrack --ctstate ESTABLISHED -j ACCEPT
+-A lk_check -m mark --mark 0x2/0x2 -j ACCEPT
 -A lk_check -m conntrack --ctstate RELATED -j lk_related
--A lk_check -p tcp -m conntrack --ctstate INVALID -m tcp --tcp-flags RST RST -j DROP
--A lk_check -m limit --limit 12/min -m conntrack --ctstate INVALID -j LOG --log-prefix "dropped (INVALID): "
--A lk_check -m conntrack --ctstate INVALID -j DROP
--A lk_check -p tcp -m tcp ! --tcp-flags FIN,SYN,RST,ACK SYN -m conntrack --ctstate NEW -m limit --limit 12/min -j LOG --log-prefix "rejected (NEW not SYN): "
--A lk_check -p tcp -m tcp ! --tcp-flags FIN,SYN,RST,ACK SYN -m conntrack --ctstate NEW -j REJECT --reject-with tcp-reset
+-A lk_check -m conntrack --ctstate INVALID -j r_invalid
+-A lk_check -p tcp -m tcp ! --tcp-flags FIN,SYN,RST,ACK SYN -m conntrack --ctstate NEW -j r_new_not_syn
 -A lk_check -p icmp -m icmp --icmp-type 8 -m conntrack --ctstate NEW -j ACCEPT
 -A lk_forward -i br0 -o ppp0 -j z_lan_to_wan
 -A lk_forward -i br0 -o en1 -j z_lan_to_wan
@@ -63,11 +64,7 @@
 -A lk_output -p udp -m udp --dport 53 -j ACCEPT
 -A lk_output -p udp -m udp --dport 123 -j ACCEPT
 -A lk_output -j ACCEPT
--A lk_reject -i ppp0 -j lk_reject_quiet
--A lk_reject -p udp -m udp --dport 1900 -j lk_reject_quiet
--A lk_reject -p udp -m udp --sport 54915 --dport 54915 -j lk_reject_quiet
--A lk_reject -p udp -m udp --sport 57621 --dport 57621 -j lk_reject_quiet
--A lk_reject -m limit --limit 12/min -j LOG --log-prefix "rejected: "
+-A lk_reject -m mark ! --mark 0x1/0x1 -m limit --limit 12/min -j LOG --log-prefix "rejected: "
 -A lk_reject -j lk_reject_quiet
 -A lk_reject_quiet -p udp -m udp -j REJECT --reject-with icmp-port-unreachable
 -A lk_reject_quiet -p tcp -m tcp -j REJECT --reject-with tcp-reset
@@ -78,6 +75,11 @@
 -A lk_related -m limit --limit 12/min -j LOG --log-prefix "RELATED not expected: "
 -A lk_related -j ACCEPT
 -A lk_trusted -j ACCEPT
+-A r_invalid -p tcp -m tcp --tcp-flags RST RST -j DROP
+-A r_invalid -m mark ! --mark 0x1/0x1 -m limit --limit 12/min -j LOG --log-prefix "dropped (INVALID): "
+-A r_invalid -j DROP
+-A r_new_not_syn -m mark ! --mark 0x1/0x1 -m limit --limit 12/min -j LOG --log-prefix "rejected (NEW not SYN): "
+-A r_new_not_syn -p tcp -j REJECT --reject-with tcp-reset
 -A z_lan_to_node -p tcp -m tcp --dport 25 -j ACCEPT
 -A z_lan_to_node -p tcp -m tcp --dport 53 -j ACCEPT
 -A z_lan_to_node -p tcp -m tcp --dport 80 -j ACCEPT
@@ -105,6 +107,7 @@ COMMIT
 :OUTPUT ACCEPT [0:0]
 :POSTROUTING ACCEPT [0:0]
 :LIBVIRT_PRT - [0:0]
+:transparent_proxy - [0:0]
 :z_from_lan - [0:0]
 :z_from_wan - [0:0]
 :z_to_lan - [0:0]
@@ -117,8 +120,13 @@ COMMIT
 -A POSTROUTING -o br0 -j z_to_lan
 -A POSTROUTING -o en0 -j z_to_lan
 -A POSTROUTING -o ppp0 -j z_to_wan
+-A POSTROUTING -o ppp0 -j SNAT --to-source 220.233.122.8
 -A POSTROUTING -o en1 -j z_to_wan
--A z_to_wan -j SNAT --to-source 220.233.122.8
+-A POSTROUTING -o en1 -j SNAT --to-source 192.168.20.2
+-A transparent_proxy -d 10.10.0.0/16 -j RETURN
+-A transparent_proxy -d 192.168.0.0/16 -j RETURN
+-A transparent_proxy -p tcp -m mark ! --mark 0x2/0x2 -j REDIRECT --to-ports 3129
+-A z_from_lan -p tcp -m tcp --dport 80 -j transparent_proxy
 COMMIT
 *mangle
 :PREROUTING ACCEPT [0:0]
@@ -127,6 +135,17 @@ COMMIT
 :OUTPUT ACCEPT [0:0]
 :POSTROUTING ACCEPT [0:0]
 :LIBVIRT_PRT - [0:0]
+-A PREROUTING -i ppp0 -j MARK --set-xmark 0x1/0xffffffff
+-A PREROUTING -p udp -m udp --dport 1900 -j MARK --set-xmark 0x1/0xffffffff
+-A PREROUTING -p udp -m udp --sport 54915 --dport 54915 -j MARK --set-xmark 0x1/0xffffffff
+-A PREROUTING -p udp -m udp --sport 57621 --dport 57621 -j MARK --set-xmark 0x1/0xffffffff
+-A PREROUTING -i br0 -m mac --mac-source 1c:98:c1:5c:39:ba -m comment --comment playstation4 -j MARK --set-xmark 0x1/0xffffffff
+-A PREROUTING -i br0 -m mac --mac-source 34:7e:5c:90:d0:23 -m comment --comment sonos-beam -j MARK --set-xmark 0x2/0xffffffff
+-A PREROUTING -i br0 -m mac --mac-source 78:28:ca:33:ee:32 -m comment --comment sonos-play1-1 -j MARK --set-xmark 0x2/0xffffffff
+-A PREROUTING -i br0 -m mac --mac-source 78:28:ca:2a:04:e4 -m comment --comment sonos-play1-2 -j MARK --set-xmark 0x2/0xffffffff
+-A PREROUTING -i br0 -m mac --mac-source 78:28:ca:33:ec:84 -m comment --comment sonos-play1-3 -j MARK --set-xmark 0x2/0xffffffff
+-A PREROUTING -i br0 -m mac --mac-source 34:7e:5c:44:cd:56 -m comment --comment sonos-play1-4 -j MARK --set-xmark 0x2/0xffffffff
+-A PREROUTING -i br0 -m mac --mac-source 48:a6:b8:16:2e:20 -m comment --comment sonos-onesl-1 -j MARK --set-xmark 0x2/0xffffffff
 -A FORWARD -o ppp0 -p tcp -m tcp --tcp-flags SYN,RST SYN -m tcpmss --mss 1453:65495 -j TCPMSS --set-mss 1452
 -A POSTROUTING -j LIBVIRT_PRT
 COMMIT

@@ -1,0 +1,90 @@
+#!/bin/bash
+
+LAN_IFACE=br0  # For IPv6 prefix delegation
+WAN_IFACE=ppp0 # For routing
+LAN_ATTACH=()  # For `ip link set <DEVICE> master <LAN_IFACE>`
+
+LK_TTY_NO_COLOUR=1 \
+    . /opt/lk-platform/bin/lk-bash-load.sh || exit
+lk_include linux
+
+#lk_log_start
+
+eval "$(lk_get_regex IPV6_REGEX)"
+
+function connection_is_up() {
+    nmcli -g DEVICE,STATE connection show |
+        grep -Fx "$1:activated" >/dev/null
+}
+
+LAN_METHOD=
+LAN_MAYBE_APPLY=
+LAN_NO_APPLY=
+
+case "$1,$2" in
+"$WAN_IFACE",up)
+    LAN_METHOD=shared
+    ;;
+"$WAN_IFACE",down)
+    LAN_METHOD=auto
+    ;;
+"$LAN_IFACE",*)
+    connection_is_up "$WAN_IFACE" &&
+        LAN_METHOD=shared ||
+        LAN_METHOD=auto
+    ;;&
+"$LAN_IFACE",up)
+    LAN_MAYBE_APPLY=1
+    for IFACE in ${LAN_ATTACH+"${LAN_ATTACH[@]}"} $(
+        # Include active libvirt interfaces connected to this bridge
+        for VM in $(virsh list --name 2>/dev/null); do
+            virsh domiflist "$VM" | sed '1d; /^[[:blank:]-]*$/d' |
+                awk -v "source=$LAN_IFACE" \
+                    '$2 == "bridge" && $3 == source {print $1}'
+        done
+    ); do
+        [ -d "/sys/class/net/$IFACE" ] || continue
+        [ "/sys/class/net/$LAN_IFACE" -ef "/sys/class/net/$IFACE/master" ] ||
+            lk_run ip link set "$IFACE" master "$LAN_IFACE" || true
+    done
+    ;;
+"$LAN_IFACE",down)
+    LAN_NO_APPLY=1
+    ;;
+esac
+
+[ -n "$LAN_METHOD" ] || exit 0
+
+CURRENT_METHOD=$(nmcli -g ipv6.method connection show "$LAN_IFACE") ||
+    CURRENT_METHOD=
+
+! lk_verbose || {
+    lk_tty_print "Arguments:" "$(lk_echo_args "$@")"
+    lk_tty_print "Environment:" "$(printenv |
+        grep -E '^(CONNECTION_|DEVICE_|DHCP4_|IP[46]_|NM_)' |
+        sort)"
+    lk_tty_print "$LAN_IFACE ipv6.method (current/required):" \
+        "${CURRENT_METHOD:-<unknown>}/$LAN_METHOD"
+}
+
+UNIT=add-ipv6-pd-route.service
+[ "$LAN_METHOD" != shared ] || [ -n "$LAN_NO_APPLY" ] ||
+    { lk_systemctl_exists "$UNIT" && ! lk_systemctl_failed "$UNIT"; } || {
+    systemctl reset-failed "$UNIT" 2>/dev/null || true
+    systemd-run --no-block \
+        --unit="$UNIT" \
+        --service-type=oneshot \
+        -pTimeoutStartSec=60 \
+        /opt/lk-settings/bin/add-ipv6-pd-route.sh \
+        "$LAN_IFACE" "$WAN_IFACE" || true
+}
+
+if [ "$CURRENT_METHOD" = "$LAN_METHOD" ]; then
+    [ -z "$LAN_MAYBE_APPLY" ] || LAN_NO_APPLY=1
+else
+    lk_run nmcli connection modify --temporary \
+        "$LAN_IFACE" ipv6.method "$LAN_METHOD"
+fi
+
+[ -n "$LAN_NO_APPLY" ] ||
+    lk_run nmcli connection up "$LAN_IFACE"

@@ -231,6 +231,9 @@
     "phpsab.standard": "PSR12",
     "poor-mans-t-sql-formatter.std.indent": "    ",
     "poor-mans-t-sql-formatter.std.trailingCommas": false,
+    "powershell.codeFormatting.newLineAfterCloseBrace": false,
+    "powershell.codeFormatting.pipelineIndentationStyle": "IncreaseIndentationForFirstPipeline",
+    "powershell.codeFormatting.trimWhitespaceAroundPipe": true,
     "powershell.startAutomatically": false,
     "python.formatting.autopep8Args": [
         "--aggressive"
