@@ -11,8 +11,8 @@ _criteria = {}
 _actions = {}
 _places = {}
 
-_places.chat = {display = 2, xy = {5, 1}, wh = {2, 1}}
-_places.sticky_utility = {display = 2, xy = {5, 2}, wh = {2, 1}}
+_places.chat = {display = 2, xy = {1, 1}, wh = {2, 1}}
+_places.sticky_utility = {display = 2, xy = {1, 2}, wh = {2, 1}}
 
 _criteria.multihead = {
     function(state)
@@ -56,8 +56,8 @@ _criteria.private = {
     _criteria.multihead,
     _criteria.not_primary_display,
     class_instance_name = {
-        "caprine",
-        "skype",
+        --"caprine",
+        --"skype",
         "keepassxc"
     }
 }

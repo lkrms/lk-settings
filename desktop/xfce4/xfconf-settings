@@ -138,8 +138,8 @@ xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>semicolon,string,libre
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>v,string,virt-manager
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>x,string,autorandr --change --force
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Alt>x,string,autorandr --change --force
-xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>x,string,env ACTION=add DDCUTIL_SLEEP=10 autorandr --change --force
-xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Alt>x,string,env ACTION=add DDCUTIL_SLEEP=10 autorandr --change --force
+xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>x,string,sh -c 'for a in remove add; do env ACTION=\$a autorandr --change --force; done'
+xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Alt>x,string,sh -c 'for a in remove add; do env ACTION=\$a autorandr --change --force; done'
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>y,string,spotify
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>y,string,clementine
 xfce4-keyboard-shortcuts,/commands/custom/<Shift><Super>space,string,recoll

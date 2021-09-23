@@ -174,6 +174,8 @@ if pgrep -xq iTerm2; then
     lk_warn "cannot apply settings: iTerm2 is running"
 else
     lk_plist_set_file "$_PREFS/com.googlecode.iterm2.plist"
+    lk_plist_replace ":NoSyncConfirmRunOpenFile" bool true
+    lk_plist_replace ":NoSyncConfirmRunOpenFile_selection" integer 0
     #lk_plist_maybe_add ":Window Arrangements" dict
     #lk_plist_replace ":Window Arrangements:No windows" array
     #lk_plist_replace ":Default Arrangement Name" string "No windows"
@@ -187,6 +189,9 @@ else
     lk_delete_on_exit "$PLIST"
     i=0
     while lk_plist_exists ":New Bookmarks:$i"; do
+        GUID=$(lk_plist_get ":New Bookmarks:$i:Guid")
+        lk_plist_replace ":NeverWarnAboutShortLivedSessions_${GUID}" bool true
+        lk_plist_replace ":NeverWarnAboutShortLivedSessions_${GUID}_selection" integer 0
         lk_plist_replace ":New Bookmarks:$i:AWDS Pane Option" string "Recycle"
         lk_plist_replace ":New Bookmarks:$i:AWDS Tab Option" string "Recycle"
         lk_plist_replace ":New Bookmarks:$i:AWDS Window Option" string "Recycle"
@@ -197,6 +202,7 @@ else
         lk_plist_replace ":New Bookmarks:$i:Normal Font" string "Menlo-Regular 12"
         lk_plist_replace ":New Bookmarks:$i:Option Key Sends" integer 2
         lk_plist_replace ":New Bookmarks:$i:Place Prompt at First Column" bool false
+        lk_plist_replace ":New Bookmarks:$i:Prevent Opening in a Tab" bool true
         lk_plist_replace ":New Bookmarks:$i:Right Option Key Sends" integer 2
         lk_plist_replace ":New Bookmarks:$i:Rows" integer 35
         lk_plist_replace ":New Bookmarks:$i:Screen" integer -2
@@ -205,7 +211,7 @@ else
         lk_plist_replace ":New Bookmarks:$i:Silence Bell" bool true
         lk_plist_replace ":New Bookmarks:$i:Title Components" integer 512
         lk_plist_replace ":New Bookmarks:$i:Unlimited Scrollback" bool true
-        lk_plist_replace ":New Bookmarks:$i:Use libtickit protocol" bool true
+        lk_plist_maybe_delete ":New Bookmarks:$i:Use libtickit protocol"
         lk_plist_replace_from_file ":New Bookmarks:$i:Keyboard Map" dict \
             "$_ROOT/iterm2/Keyboard Map.plist"
         case "$i" in
