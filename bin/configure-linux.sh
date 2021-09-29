@@ -99,10 +99,13 @@ unset LK_SYMLINK_NO_CHANGE
 # Fix weird Calibri rendering in Thunderbird
 symlink \
     "$_ROOT/fonts/ms-no-bitmaps.conf" /etc/fonts/conf.d/99-ms-no-bitmaps.conf
-# Remove emoji from all fonts other than Noto Color Emoji
+# Remove emoji from all fonts other than Twemoji
+FILE=/etc/fonts/conf.d/99-emoji-fix.conf
 symlink \
-    "$_ROOT/fonts/emoji-fix.conf" /etc/fonts/conf.d/99-emoji-fix.conf
-lk_is_true LK_SYMLINK_NO_CHANGE ||
+    "$_ROOT/fonts/emoji-fix.conf" "$FILE"
+#[ ! -L "$FILE" ] || { LK_SYMLINK_NO_CHANGE=0 &&
+#    lk_elevate rm -f "$FILE"; }
+! lk_is_false LK_SYMLINK_NO_CHANGE ||
     { sudo -H fc-cache --force --verbose && fc-cache --force --verbose; }
 
 unset LK_SUDO
@@ -212,7 +215,7 @@ symlink "$_ROOT/rubocop/.rubocop.yml" ~/.rubocop.yml
 
 unset LK_SYMLINK_NO_CHANGE
 symlink "$_ROOT/systemd/user.control" ~/.config/systemd/user.control
-lk_is_true LK_SYMLINK_NO_CHANGE ||
+! lk_is_false LK_SYMLINK_NO_CHANGE ||
     systemctl --user daemon-reload
 [ "$(lk_system_memory)" -lt 7 ] || {
     lk_systemctl_enable_now -u libvirtd.service

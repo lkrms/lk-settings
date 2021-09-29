@@ -88,7 +88,7 @@ function plc-sync-uploads() {
 }
 
 function _do-rename-media() {
-    lk_confirm "Proceed?" Y || lk_warn "cancelled by user" || return
+    lk_confirm "Proceed?" Y || lk_warn "cancelled by user" || return 0
     for FILE in "${MV[@]}"; do
         eval "mv -vn $FILE"
     done
@@ -145,7 +145,7 @@ function rename-tv-episodes() {
         }
         lk_tty_detail "${FILE##*/} -> $LK_BOLD${NEW_FILE##*/}$LK_RESET"
         MV[${#MV[@]}]=$(printf '%q %q' "$FILE" "$NEW_FILE")
-    done < <(find "${1:-.}" -type f -regextype posix-egrep \
+    done < <(find "${@:-.}" -type f -regextype posix-egrep \
         -regex '.*/[^/.][^/]*\.(m4v|mkv|mp4)' -print0 |
         xargs -0 realpath -z | sort -zV)
     _do-rename-media
@@ -170,11 +170,20 @@ function rename-movies() {
             lk_warn "target already exists: $NEW_FILE" || return
         lk_tty_detail "${FILE##*/} -> $LK_BOLD${NEW_FILE##*/}$LK_RESET"
         MV[${#MV[@]}]=$(printf '%q %q' "$FILE" "$NEW_FILE")
-    done < <(find "${1:-.}" -type f -regextype posix-egrep \
+    done < <(find "${@:-.}" -type f -regextype posix-egrep \
         -regex '.*/[^/.][^/]*\.(m4v|mkv|mp4)' -print0 |
         xargs -0 realpath -z | sort -zV)
     _do-rename-media
 }
+
+function fix-media() { (
+    shopt -s globstar
+    find "/data/media" \
+        \( -type d ! -perm 0755 -exec chmod -c 00755 '{}' + \) -o \
+        \( -type f ! -perm 0644 -exec chmod -c 00644 '{}' + \)
+    rename-tv-episodes /data/media/**/"TV Shows" &&
+        rename-movies /data/media/**/{Documentaries,Movies}
+); }
 
 function iperf3-server() {
     lk_unbuffer iperf3 --server |
@@ -223,6 +232,7 @@ function iptables-reload() {
         sudo systemctl restart fail2ban.service
 }
 
+alias disable-proxy='unset http{,s}_proxy'
 alias gpg-cache-check='gpg-connect-agent "keyinfo --list" /bye'
 alias gpg-cache-passphrase='gpg-preset-passphrase --preset "$GPGKEYGRIP" <~/.gpg-"$GPGKEY"'
 alias gpg-list-keygrips='gpg --list-secret-keys --with-keygrip'
@@ -238,3 +248,5 @@ export GPGKEY=B7304A7EB769E24D
 GPGKEYGRIP=056A5FE1D4AE65E25C0E8037DD3B221BD1C7F3B1
 gpg-cache-passphrase
 export CHROOT=~/chroot
+
+eval export http{,s}_proxy=http://localhost:3127

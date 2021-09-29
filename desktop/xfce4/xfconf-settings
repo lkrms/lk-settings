@@ -111,6 +111,9 @@ xfce4-keyboard-shortcuts,/commands/custom/XF86WWW,string,exo-open --launch WebBr
 # [Control-]Shift-Super-3 (whole screen)
 # [Control-]Shift-Super-4 (selection)
 # [Control-]Shift-Super-5 (top window)
+# [Control-]Shift-Super-6 (whole screen, 5-second delay)
+# [Control-]Shift-Super-7 (selection, 5-second delay)
+# [Control-]Shift-Super-8 (top window, 5-second delay)
 # [Control-]Shift-Super-9 (selection)
 xfce4-keyboard-shortcuts,/commands/custom/<Shift><Super>numbersign,string,flameshot screen
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>numbersign,string,flameshot screen -p \"${LK_SCREENSHOT_DIR:-$HOME/Desktop}\"
@@ -118,6 +121,12 @@ xfce4-keyboard-shortcuts,/commands/custom/<Shift><Super>dollar,string,flameshot 
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>dollar,string,flameshot gui -p \"${LK_SCREENSHOT_DIR:-$HOME/Desktop}\"
 xfce4-keyboard-shortcuts,/commands/custom/<Shift><Super>percent,string,xfce4-screenshooter -w -c
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>percent,string,xfce4-screenshooter -w -s \"${LK_SCREENSHOT_DIR:-$HOME/Desktop}\"
+xfce4-keyboard-shortcuts,/commands/custom/<Shift><Super>asciicircum,string,flameshot screen -d 5000
+xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>asciicircum,string,flameshot screen -p \"${LK_SCREENSHOT_DIR:-$HOME/Desktop}\" -d 5000
+xfce4-keyboard-shortcuts,/commands/custom/<Shift><Super>ampersand,string,flameshot gui -d 5000
+xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>ampersand,string,flameshot gui -p \"${LK_SCREENSHOT_DIR:-$HOME/Desktop}\" -d 5000
+xfce4-keyboard-shortcuts,/commands/custom/<Shift><Super>asterisk,string,xfce4-screenshooter -w -c -d 5
+xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>asterisk,string,xfce4-screenshooter -w -s \"${LK_SCREENSHOT_DIR:-$HOME/Desktop}\" -d 5
 xfce4-keyboard-shortcuts,/commands/custom/<Shift><Super>parenleft,string,flameshot gui
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>parenleft,string,flameshot gui -p \"${LK_SCREENSHOT_DIR:-$HOME/Desktop}\"
 

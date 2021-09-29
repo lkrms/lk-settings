@@ -22,6 +22,8 @@
 :z_wan_to_lan - [0:0]
 :z_wan_to_node - [0:0]
 -A INPUT -j LIBVIRT_INP
+-A INPUT -d 10.10.0.1/32 -i br0 -p tcp -m tcp --dport 3127 -j ACCEPT
+-A INPUT -d 10.10.0.1/32 -i en0 -p tcp -m tcp --dport 3127 -j ACCEPT
 -A INPUT -d 10.10.0.1/32 -i br0 -p tcp -m tcp --dport 3128 -j ACCEPT
 -A INPUT -d 10.10.0.1/32 -i en0 -p tcp -m tcp --dport 3128 -j ACCEPT
 -A INPUT -j lk_check
@@ -86,6 +88,7 @@
 -A z_lan_to_node -p tcp -m tcp --dport 139 -j ACCEPT
 -A z_lan_to_node -p tcp -m tcp --dport 445 -j ACCEPT
 -A z_lan_to_node -p tcp -m tcp --dport 873 -j ACCEPT
+-A z_lan_to_node -p tcp -m tcp --dport 3127 -j ACCEPT
 -A z_lan_to_node -p tcp -m tcp --dport 3128 -j ACCEPT
 -A z_lan_to_node -p tcp -m tcp --dport 3129 -j ACCEPT
 -A z_lan_to_node -p tcp -m tcp --dport 5201 -j ACCEPT
