@@ -78,6 +78,7 @@
         "*.target": "properties",
         "*.timer": "properties",
         "*crontab*": "properties",
+        ".env{,.*}": "properties",
         ".{bash_login,bash_profile,bashrc,profile,xsessionrc}": "shellscript"
     },
     "files.exclude": {
@@ -281,6 +282,7 @@
         "SC2153",
         "SC2154",
         "SC2164",
+        "SC2178",
         "SC2206",
         "SC2207",
         "SC2261",

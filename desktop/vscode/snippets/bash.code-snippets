@@ -58,7 +58,7 @@
 		"body": [
 			"local OPTIND OPTARG OPT LK_USAGE FLAG VALUE",
 			"LK_USAGE=\"\\",
-			"Usage: \\$(lk_myself -f) $0\"",
+			"Usage: \\$FUNCNAME $0\"",
 			"while getopts \":fv:\" OPT; do",
 			"    case \"\\$OPT\" in",
 			"    f)",
