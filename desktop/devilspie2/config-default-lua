@@ -68,7 +68,8 @@ _criteria.dev = {
     _criteria.not_primary_display,
     class_instance_name = {
         "vscodium",
-        "sublime_merge"
+        "sublime_merge",
+        "DBeaver"
     }
 }
 

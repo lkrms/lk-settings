@@ -30,6 +30,10 @@ function quote(string)
     return "'" .. string:gsub("'", "'\\''") .. "'"
 end
 
+function fileExists(path)
+    return (hs.fs.displayName(path) ~= nil)
+end
+
 function scriptPath(script)
     return hs.configdir .. "/../../bin/" .. script
 end
@@ -103,7 +107,11 @@ hs.hotkey.bind(
     {"ctrl", "cmd", "shift"},
     "c",
     function()
-        open("com.microsoft.VSCode", homePath("/Code/lk-platform/lk-platform.code-workspace"))
+        local workspace = homePath("/Code/lk-platform/lk-platform.code-workspace")
+        if not fileExists(workspace) then
+            workspace = homePath("/Nextcloud/Settings/settings.code-workspace")
+        end
+        open("com.microsoft.VSCode", workspace)
     end
 )
 

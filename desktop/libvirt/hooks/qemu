@@ -83,7 +83,7 @@ for i in "${!ALLOW_URLS[@]}"; do
         "${ALLOW_URLS[$i]}" "${ALLOW_SELECTORS[$i]}")
 done
 
-lk_console_message "Metadata for domain '$1':"
+lk_tty_print "Metadata for domain '$1':"
 {
     printf '%s\t%s\0' \
         "Guest IP$(lk_plural ${#GUEST_IPS[@]} "" s)" \
@@ -119,7 +119,7 @@ function ip() {
     command ip "$_46" "$@"
 }
 
-lk_console_blank
+lk_tty_print
 lk_console_log "Applying firewall changes"
 
 _ALLOW_URLS=()
@@ -131,7 +131,7 @@ for GUEST_IP in "${GUEST_IPS[@]}"; do
         lk_die "invalid IP address: $GUEST_IP"
     _LK_IPTABLES_46=$_46
 
-    lk_console_item "Processing" "$GUEST_IP"
+    lk_tty_print "Processing" "$GUEST_IP"
 
     GUEST_BRIDGE=$(ip route get "$GUEST_IP" |
         awk -v "ip=$GUEST_IP" '$1 == ip && $2 == "dev" { print $3 }' |
@@ -174,20 +174,35 @@ s/^.*(.{$((28 - (${#P} + 4)))})\$/\\1/" <<<"$1")
             ! lk_is_true ALLOW_HOST_NET || _ALLOW_HOSTS+=("$HOST_NET")
             _ALLOW_HOSTS+=(${ALLOW_HOSTS[@]+"${ALLOW_HOSTS[@]}"})
             [ ${#ALLOW_URLS[@]} -eq 0 ] ||
-                lk_console_message "Downloading host lists"
+                lk_tty_print "Downloading host lists"
             for i in "${!ALLOW_URLS[@]}"; do
                 _ALLOW_URLS[$i]=${_ALLOW_URLS[$i]-$(lk_curl \
                     "${ALLOW_URLS[$i]}" | jq -r "${ALLOW_SELECTORS[$i]}")} ||
                     lk_warn "error downloading ${ALLOW_URLS[$i]}" || continue
                 URL_IPS=(${_ALLOW_URLS[$i]})
-                lk_console_detail "Adding ${#URL_IPS[@]} $(lk_plural \
+                lk_tty_detail "Adding ${#URL_IPS[@]} $(lk_plural \
                     ${#URL_IPS[@]} host hosts) from" "${ALLOW_URLS[$i]}"
                 _ALLOW_HOSTS+=(${URL_IPS[@]+"${URL_IPS[@]}"})
             done
+            ALLOW_IP=()
             if [ ${#_ALLOW_HOSTS[@]} -gt 0 ]; then
-                ALLOW_IP=($(lk_dns_resolve_hosts "${_ALLOW_HOSTS[@]}" |
-                    lk_filter_ipv"${_46#-}")) ||
+                HOSTS=$(lk_dns_resolve_names \
+                    $(printf '%s\n' "${_ALLOW_HOSTS[@]}" |
+                        lk_filter_ipv4 -v | lk_filter_ipv6 -v)) &&
+                    ALLOW_IP=($({ printf '%s\n' "${_ALLOW_HOSTS[@]}" &&
+                        awk '{ print $1 }' <<<"$HOSTS"; } |
+                        lk_filter_ipv"${_46#-}")) ||
                     lk_die "unable to resolve host names"
+                REGEX=IPV${_46#-}_REGEX
+                if HOSTS=$(grep -E "^${!REGEX}" <<<"$HOSTS"); then
+                    lk_tty_print "Adding hosts:" $'\n'"$HOSTS"
+                    unset LK_FILE_REPLACE_NO_CHANGE
+                    while read -r IP HOST; do
+                        LK_VERBOSE= lk_hosts_file_add "$IP" "$HOST"
+                    done <<<"$HOSTS"
+                    ! lk_is_false LK_FILE_REPLACE_NO_CHANGE ||
+                        lk_run killall -HUP dnsmasq
+                fi
             fi
             lk_iptables_flush_chain "$ISOLATE_CHAIN"
             lk_iptables_append "$ISOLATE_CHAIN" \

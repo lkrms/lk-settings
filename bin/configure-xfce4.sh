@@ -127,6 +127,7 @@ fi
 
 mkdir -pv ~/.config/xfce4/panel
 cp -nv "$_ROOT/xfce4/panel"/*.rc ~/.config/xfce4/panel/
+lk_symlink "$_ROOT/xfce4/.hidden" ~/.hidden
 lk_symlink "$_ROOT/xfce4/terminal/config" ~/.config/xfce4/terminal
 lk_symlink "$_ROOT/xfce4/terminal/data" ~/.local/share/xfce4/terminal
 lk_symlink "$_ROOT/xfce4/thunar/" ~/.config/Thunar
