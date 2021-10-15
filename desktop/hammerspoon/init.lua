@@ -45,6 +45,14 @@ function homePath(path)
     end
 end
 
+function getCommand(commandArray)
+    local command = ""
+    for i, arg in ipairs(commandArray) do
+        command = command .. (i == 1 and "" or " ") .. quote(arg)
+    end
+    return command
+end
+
 function run(command, detach)
     local sh = 'eval "$(/usr/libexec/path_helper -s)" && {\n' .. command .. "\n} 2>&1"
     if detach then
@@ -61,12 +69,19 @@ function run(command, detach)
     return status
 end
 
-function open(bundleID, file)
-    if file then
-        run(string.format("/usr/bin/open -b %s %s", bundleID, quote(file)))
-    else
-        run(string.format("/usr/bin/open -b %s", bundleID))
+function open(bundleID, file, background)
+    local command = {"/usr/bin/open"}
+    if bundleID then
+        table.insert(command, "-b")
+        table.insert(command, bundleID)
     end
+    if background then
+        table.insert(command, "-g")
+    end
+    if file then
+        table.insert(command, file)
+    end
+    run(getCommand(command))
 end
 
 function runInTerminal(path)
@@ -86,6 +101,22 @@ function openNewWindow(rules)
         open(rules.bundleID)
     end
 end
+
+hs.hotkey.bind(
+    {"ctrl", "option"},
+    "a",
+    function()
+        open(nil, "keepingyouawake:///activate", true)
+    end
+)
+
+hs.hotkey.bind(
+    {"ctrl", "option"},
+    "s",
+    function()
+        open(nil, "keepingyouawake:///deactivate", true)
+    end
+)
 
 hs.hotkey.bind(
     {"ctrl", "cmd"},

@@ -14,8 +14,36 @@ function update-notracking() {
         lk_tty_detail "$FILE"
         TEMP_FILE=$(lk_mktemp_file) &&
             lk_delete_on_exit "$TEMP_FILE" &&
-            curl -fsSL "$URL" | grep -Evf <(sed -E '/^[[:blank:]]*(#|$)/d
-s/\./\\./g; s/^\\\./(.+\\.)?/; s/.*/\/&\//' "$UNBLOCKED") >"$TEMP_FILE" &&
+            curl -fsSL "$URL" |
+            awk -v "unblocked=$UNBLOCKED" -v "verbose=${LK_VERBOSE-0}" '
+function print_err(str) {
+  if (verbose) {
+    print str > "/dev/stderr"
+  }
+}
+BEGIN {
+  while (getline l < unblocked) {
+    if (l ~ /^[[:blank:]]*(#|$)/) {
+      continue
+    }
+    d[++i] = l
+    gsub(/\./, "\\.", l)
+    sub(/^\\\./, "(.+\\.)?", l)
+    r[i] = "/" l "/"
+    print_err("Added regex " r[i] " for unblock entry " d[i])
+  }
+  close(unblocked)
+  FS="/"
+}
+/^address=\// {
+  for (i = 1; i <= length(r); i++) {
+    if ($0 ~ r[i] || substr(d[i], length(d[i]) - length($2)) == "." $2) {
+      print_err("Removing " $2 " (" d[i] " is unblocked)")
+      next
+    }
+  }
+}
+{ print }' >"$TEMP_FILE" &&
             lk_file_replace -f "$TEMP_FILE" "$FILE" || return
     }
     [ ! /etc/squid/squid.conf -ef /opt/lk-settings/server/squid/squid.conf ] || {

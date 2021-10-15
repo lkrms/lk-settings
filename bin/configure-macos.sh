@@ -576,9 +576,34 @@ if ! is_basic; then
     lk_macos_kb_add_shortcut com.apple.mail "Send" $'@\xe2\x86\xa9'
     lk_macos_kb_add_shortcut abnerworks.Typora "Toggle Sidebar" $'@$b'
 
-    # Disable Control-Command-D
-    defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add \
-        70 "<dict><key>enabled</key><false/></dict>"
+    DISABLE=(
+        7 8 9 10 11 12 13 57 # Control-F1 to Control-F8
+        36 37                # F11 ("Show Desktop")
+        70                   # Control-Command-D ("Look Up")
+        127                  # Control-0 ("Switch to Desktop 10")
+        128 129 130          # Control-Option-1 to Control-Option-6
+        131 132 133          # ("Switch to Desktop" for desktops 11 to 16)
+    )
+    for KEY in ${DISABLE+"${DISABLE[@]}"}; do
+        defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add "$KEY" "<dict><key>enabled</key><false/></dict>"
+    done
+
+    # Control-Command-<n> (^⌘<n>) -> "Switch to Desktop" for desktops 1 to 9
+    KEY_CODES=(18 19 20 21 23 22 26 28 25)
+    for i in {0..8}; do
+        defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add $((118 + i)) "<dict><key>enabled</key><true/><key>value</key><dict><key>parameters</key><array><integer>$((49 + i))</integer><integer>${KEY_CODES[i]}</integer><integer>1310720</integer></array><key>type</key><string>standard</string></dict></dict>"
+    done
+
+    # Control-Option-Q (⌃⌥Q) -> "Turn Do Not Disturb On/Off"
+    defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 175 "<dict><key>enabled</key><true/><key>value</key><dict><key>parameters</key><array><integer>113</integer><integer>12</integer><integer>786432</integer></array><key>type</key><string>standard</string></dict></dict>"
+
+    # Control-Command-Left Arrow (^⌘←) -> "Move left a space"
+    defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 79 "<dict><key>enabled</key><true/><key>value</key><dict><key>parameters</key><array><integer>65535</integer><integer>123</integer><integer>11796480</integer></array><key>type</key><string>standard</string></dict></dict>"
+    defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 80 "<dict><key>enabled</key><true/><key>value</key><dict><key>parameters</key><array><integer>65535</integer><integer>123</integer><integer>11927552</integer></array><key>type</key><string>standard</string></dict></dict>"
+
+    # Control-Command-Right Arrow (^⌘→) -> "Move right a space"
+    defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 81 "<dict><key>enabled</key><true/><key>value</key><dict><key>parameters</key><array><integer>65535</integer><integer>124</integer><integer>11796480</integer></array><key>type</key><string>standard</string></dict></dict>"
+    defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 82 "<dict><key>enabled</key><true/><key>value</key><dict><key>parameters</key><array><integer>65535</integer><integer>124</integer><integer>11927552</integer></array><key>type</key><string>standard</string></dict></dict>"
 
     lk_tty_print "Checking Dock"
     "$_ROOT/../bin/configure-macos-dock.sh"

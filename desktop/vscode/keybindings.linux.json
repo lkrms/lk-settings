@@ -164,16 +164,6 @@
         "when": "editorLangId == 'markdown'"
     },
     {
-        "command": "-poor-mans-t-sql-formatter.formatSql",
-        "key": "ctrl+k shift+f",
-        "when": "editorTextFocus"
-    },
-    {
-        "command": "poor-mans-t-sql-formatter.formatSql",
-        "key": "shift+alt+f",
-        "when": "editorTextFocus && !editorReadonly && editorLangId == 'sql'"
-    },
-    {
         "command": "-sortLines.sortLines",
         "key": "f9",
         "when": "editorTextFocus"

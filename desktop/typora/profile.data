@@ -1,6 +1,6 @@
 {
     "SmartyPantsOnRendering": true,
-    "apply_image_move_for_web": false,
+    "apply_image_move_for_web": true,
     "autoEscapeImageURL": true,
     "auto_expand_block": false,
     "backgroundColor": "#FFFFFF",
@@ -41,6 +41,6 @@
     "twoHyphensToEm": true,
     "useCustomFontSize": false,
     "useTreeStyle": true,
-    "use_relative_path_for_img": false,
+    "use_relative_path_for_img": true,
     "wordsPerMinute": 240
 }

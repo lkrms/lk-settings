@@ -1,3 +1,5 @@
+myabandonware.com
+
 # https://www.newcastleherald.com.au/
 .piano.io
 
@@ -7,8 +9,11 @@ tags.news.com.au
 # https://amazon.com.au
 .amazon-adsystem.com
 
-# SBS email ads
+# SBS emails
 sbs.demdex.net
+
+# Sporcle emails
+tbs8v877.r.us-east-1.awstrack.me
 
 # Telstra live chat
 .telstra.com
@@ -17,5 +22,3 @@ sbs.demdex.net
 
 # kmail-lists.com unsubscribe links
 trk.klclick.com
-
-myabandonware.com

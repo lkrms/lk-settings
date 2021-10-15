@@ -144,7 +144,7 @@ COMMIT
 -A POSTROUTING -o en0 -j z_to_lan
 -A POSTROUTING -o ppp0 -j z_to_wan
 -A POSTROUTING -o en1 -j z_to_wan
--A transparent_proxy -d 2406:3400:217:e030::/64 -j RETURN
+-A transparent_proxy -d 2406:3400:217:e030::/60 -j RETURN
 -A transparent_proxy -d fe80::/10 -j RETURN
 -A transparent_proxy -p tcp -m mark ! --mark 0x2/0x2 -j REDIRECT --to-ports 3129
 -A z_from_lan -p tcp -m tcp --dport 80 -j transparent_proxy

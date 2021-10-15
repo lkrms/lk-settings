@@ -37,6 +37,7 @@ VSCODE_EXTENSIONS=(
     ms-vscode.azure-account
     ms-vscode.cpptools
     ms-vscode.powershell
+    mtxr.sqltools
     piotrpalarz.vscode-gitignore-generator
     PKief.material-icon-theme
     pthorsson.vscode-jsp
