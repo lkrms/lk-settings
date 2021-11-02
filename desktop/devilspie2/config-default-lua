@@ -201,7 +201,7 @@ rules = {
             end
         },
         actions = {
-            {to_workspace, {1}},
+            _actions.sticky,
             {to_place, {_places.chat}}
         }
     }

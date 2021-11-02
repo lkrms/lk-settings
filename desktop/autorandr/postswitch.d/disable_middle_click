@@ -1,0 +1,4 @@
+#!/bin/bash
+
+# Prevent accidental pasting
+xinput set-button-map "SynPS/2 Synaptics TouchPad" 1 0 3 || true

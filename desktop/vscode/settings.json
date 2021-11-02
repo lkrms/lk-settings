@@ -35,6 +35,7 @@
         "space_before_conditional": true,
         "wrap_line_length": 80
     },
+    "debug.saveBeforeStart": "none",
     "editor.autoClosingBrackets": "never",
     "editor.autoClosingQuotes": "never",
     "editor.autoIndent": "advanced",
@@ -257,6 +258,7 @@
     ],
     "shellcheck.disableVersionCheck": true,
     "shellcheck.exclude": [
+        "SC1004",
         "SC1007",
         "SC1090",
         "SC1091",
@@ -293,13 +295,12 @@
     ],
     "shellcheck.executablePath": "shellcheck",
     "shellcheck.run": "onSave",
-    "shellformat.flag": "-i 4",
+    "shellformat.flag": "-i 4 -s",
     "standard.enable": false,
-    "telemetry.enableTelemetry": false,
+    "telemetry.telemetryLevel": "off",
     "terminal.external.osxExec": "iTerm.app",
     "terminal.integrated.copyOnSelection": true,
     "terminal.integrated.cwd": "${fileDirname}",
-    "terminal.integrated.detectLocale": "off",
     "terminal.integrated.enableFileLinks": false,
     "terminal.integrated.env.linux": {
         "LC_BYOBU": "0"

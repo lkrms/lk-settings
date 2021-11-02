@@ -130,6 +130,7 @@ COMMIT
 -A transparent_proxy -d 192.168.0.0/16 -j RETURN
 -A transparent_proxy -p tcp -m mark ! --mark 0x2/0x2 -j REDIRECT --to-ports 3129
 -A z_from_lan -p tcp -m tcp --dport 80 -j transparent_proxy
+-A z_from_lan -p udp -m udp --dport 123 -j REDIRECT
 COMMIT
 *mangle
 :PREROUTING ACCEPT [0:0]

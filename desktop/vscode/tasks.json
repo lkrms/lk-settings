@@ -17,6 +17,26 @@
                 "panel": "new",
                 "close": true
             }
+        },
+        {
+            "label": "Pretty PHP (reset line breaks)",
+            "type": "process",
+            "command": "php",
+            "args": [
+                "${env:HOME}/Code/dev-tools/pretty-php/pretty.php",
+                "${file}",
+            ],
+            "options": {
+                "env": {
+                    "PRETTY_IGNORE_LINE_BREAKS": "1"
+                }
+            },
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "never",
+                "panel": "new",
+                "close": true
+            }
         }
     ]
 }

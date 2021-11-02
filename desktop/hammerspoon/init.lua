@@ -1,8 +1,18 @@
 -- One of: "nothing", "error", "warning", "info", "debug", "verbose"
-hs.logger.defaultLogLevel = "verbose"
+hs.logger.defaultLogLevel = "debug"
+logger = hs.logger.new("init")
+wf = hs.window.filter
+hs.window.animationDuration = 0
 
--- Configure your preferred apps here
-apps = {
+hs.loadSpoon("ReloadConfiguration")
+spoon.ReloadConfiguration:start()
+
+-- Configure your preferred apps with:
+-- - `bundleID` (required): string
+-- - `commandLine` (optional): string, "{{app}}" is replaced with path to .app
+-- - `menuItem` (optional): passed to hs.application:selectMenuItem(), overrides
+--   `commandLine` if both are set
+_app = {
     terminal = {
         bundleID = "com.googlecode.iterm2",
         menuItem = {"Shell", "New Window"}
@@ -21,10 +31,206 @@ apps = {
     }
 }
 
-hs.loadSpoon("ReloadConfiguration")
-spoon.ReloadConfiguration:start()
+_place = {
+    top3_1 = {x = 0, y = 0, w = 1 / 3, h = 0.5},
+    top3_2 = {x = 1 / 3, y = 0, w = 1 / 3, h = 0.5},
+    top3_3 = {x = 2 / 3, y = 0, w = 1 / 3, h = 0.5},
+    bottom3_1 = {x = 0, y = 0.5, w = 1 / 3, h = 0.5},
+    bottom3_2 = {x = 1 / 3, y = 0.5, w = 1 / 3, h = 0.5},
+    bottom3_3 = {x = 2 / 3, y = 0.5, w = 1 / 3, h = 0.5}
+}
 
-logger = hs.logger.new("init")
+_operator = {
+    AND = "and",
+    OR = "or"
+}
+
+_criteria = {
+    multihead = function()
+        return _screen2 and true or false
+    end,
+    primary = function(ev)
+        return ev.window:screen():getUUID() == _screen1:getUUID()
+    end,
+    notPrimary = function(ev)
+        return ev.window:screen():getUUID() ~= _screen1:getUUID()
+    end
+}
+
+_criteria.sticky = {
+    _operator.AND,
+    _criteria.multihead,
+    {
+        _operator.OR,
+        event = wf.windowCreated,
+        {
+            _operator.AND,
+            event = {wf.windowFocused, wf.windowUnfocused},
+            _criteria.notPrimary
+        }
+    }
+}
+
+_criteria.tacky = {
+    _operator.AND,
+    _criteria.multihead,
+    _criteria.notPrimary,
+    event = wf.windowCreated
+}
+
+_criteria.dev = {
+    appBundleId = {
+        "com.microsoft.VSCode",
+        "com.sublimemerge",
+        "org.jkiss.dbeaver.core.product"
+    }
+}
+
+_action = {
+    moveTo = function(ev, screen, rect)
+        if screen and _screen[screen] ~= nil then
+            ev.window:moveToScreen(_screen[screen])
+        end
+        if rect then
+            ev.window:moveToUnit(rect)
+        end
+    end
+}
+
+_rule = {
+    {
+        criteria = {
+            _criteria.multihead,
+            _criteria.notPrimary,
+            _criteria.dev,
+            event = wf.windowCreated
+        },
+        action = {{_action.moveTo, 1}}
+    },
+    {
+        criteria = {_criteria.multihead, appName = {"Mail"}},
+        action = {{_action.moveTo, 1, hs.layout.left50}}
+    },
+    {
+        criteria = {_criteria.multihead, appName = {"Microsoft Teams", "Skype"}},
+        action = {{_action.moveTo, 2, _place.top3_1}}
+    },
+    {
+        criteria = {_criteria.multihead, appName = {"Messenger", "Messages"}},
+        action = {{_action.moveTo, 2, _place.top3_2}}
+    },
+    {
+        criteria = {_criteria.multihead, appName = {"KeePassXC", "Todoist"}},
+        action = {{_action.moveTo, 2, _place.bottom3_1}}
+    },
+    {
+        criteria = {_criteria.multihead, appName = {"Calendar"}},
+        action = {{_action.moveTo, 2, _place.bottom3_2}}
+    }
+}
+
+function initScreens()
+    _screen1, _screen2 = hs.screen.primaryScreen(), nil
+    _screen = {_screen1}
+    for i, screen in pairs(hs.screen.allScreens()) do
+        if screen:getUUID() ~= _screen1:getUUID() then
+            _screen2 = _screen2 and _screen2 or screen
+            _screen[#_screen + 1] = screen
+        end
+    end
+end
+
+function processCriteria(criteria, ev)
+    logger.v("Checking criteria " .. hs.inspect.inspect(criteria) .. " against ev " .. hs.inspect.inspect(ev))
+    local andResult, orResult, op = true, false
+    for k, v in pairs(criteria) do
+        local result
+        if type(k) == "number" then
+            if v == _operator.AND then
+                if andResult == false then
+                    return false
+                end
+                op = _operator.AND
+            elseif v == _operator.OR then
+                if orResult == true then
+                    return true
+                end
+                op = _operator.OR
+            elseif type(v) == "function" then
+                result = v(ev)
+            elseif type(v) == "table" then
+                result = processCriteria(v, ev)
+            end
+        elseif type(v) == "table" then
+            result = hs.fnutils.contains(v, ev[k])
+        else
+            result = ev[k] == v
+        end
+        if result ~= nil then
+            andResult = andResult and result
+            orResult = orResult or result
+            if op == _operator.AND and andResult == false then
+                return false
+            elseif op == _operator.OR and orResult == true then
+                return true
+            end
+        end
+    end
+    return andResult
+end
+
+actionMap = {
+    ["function"] = function(fn, ev)
+        fn(ev)
+    end,
+    ["table"] = function(t, ev)
+        local args = hs.fnutils.copy(t)
+        args[1] = ev
+        t[1](table.unpack(args))
+    end
+}
+
+function processEvent(window, appName, event)
+    logger.d("Event received from " .. appName .. ": " .. event)
+    if _rule == nil then
+        return
+    end
+    local ev = {
+        window = window,
+        appName = appName,
+        event = event,
+        appTitle = window:application():title(),
+        appBundleId = window:application():bundleID(),
+        windowTitle = window:title(),
+        isStandard = window:isStandard(),
+        role = window:role(),
+        subrole = window:subrole()
+    }
+    for i, rule in ipairs(_rule) do
+        if rule.criteria ~= nil and not processCriteria(rule.criteria, ev) then
+            logger.v("_rule[" .. i .. "] criteria not met: " .. hs.inspect.inspect(rule.criteria))
+        else
+            logger.d("_rule[" .. i .. "] criteria met: " .. hs.inspect.inspect(rule.criteria))
+            ev.rule = rule
+            for j, action in ipairs(rule.action) do
+                logger.v("_rule[" .. i .. "].action[" .. j .. "] = " .. hs.inspect.inspect(action))
+                local _action = actionMap[type(action)]
+                if _action ~= nil then
+                    ev.action = action
+                    _action(action, ev)
+                else
+                    logger.e("Invalid type '" .. type(action) .. "': _rule[" .. i .. "].action[" .. j .. "]")
+                end
+            end
+        end
+    end
+end
+
+function initWindowFilter()
+    _filter = wf.new(nil)
+    _filter:subscribe(wf.windowCreated, processEvent, true)
+    _filter:subscribe({wf.windowFocused, wf.windowUnfocused}, processEvent)
+end
 
 function quote(string)
     return "'" .. string:gsub("'", "'\\''") .. "'"
@@ -85,7 +291,7 @@ function open(bundleID, file, background)
 end
 
 function runInTerminal(path)
-    open(apps.terminal.bundleID, path)
+    open(_app.terminal.bundleID, path)
 end
 
 function openNewWindow(rules)
@@ -101,6 +307,26 @@ function openNewWindow(rules)
         open(rules.bundleID)
     end
 end
+
+function dumpWindows()
+    hs.fnutils.each(
+        hs.window.allWindows(),
+        function(w)
+            local window = {
+                appTitle = w:application():title(),
+                appBundleId = w:application():bundleID(),
+                windowTitle = w:title(),
+                isStandard = w:isStandard(),
+                role = w:role(),
+                subrole = w:subrole()
+            }
+            logger.i(hs.inspect.inspect(window))
+        end
+    )
+end
+
+initScreens()
+initWindowFilter()
 
 hs.hotkey.bind(
     {"ctrl", "option"},
@@ -130,7 +356,7 @@ hs.hotkey.bind(
     {"ctrl", "cmd"},
     "c",
     function()
-        openNewWindow(apps.textEditor)
+        openNewWindow(_app.textEditor)
     end
 )
 
@@ -158,7 +384,7 @@ hs.hotkey.bind(
     {"ctrl", "cmd"},
     "e",
     function()
-        openNewWindow(apps.fileManager)
+        openNewWindow(_app.fileManager)
     end
 )
 
@@ -214,7 +440,7 @@ hs.hotkey.bind(
     {"ctrl", "cmd"},
     "t",
     function()
-        openNewWindow(apps.terminal)
+        openNewWindow(_app.terminal)
     end
 )
 
@@ -238,12 +464,21 @@ hs.hotkey.bind(
     {"ctrl", "cmd"},
     "w",
     function()
-        openNewWindow(apps.browser)
+        openNewWindow(_app.browser)
     end
 )
 
 hs.hotkey.bind(
     {"ctrl", "cmd"},
+    "x",
+    function()
+        _filter:unsubscribeAll()
+        initWindowFilter()
+    end
+)
+
+hs.hotkey.bind(
+    {"ctrl", "cmd", "shift"},
     "x",
     function()
         hs.reload()

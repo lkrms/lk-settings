@@ -109,6 +109,7 @@ is_basic || [ ! -d "${FILE%/*}" ] || {
 }
 
 lk_console_message "Checking AltTab"
+defaults write com.lwouis.alt-tab-macos hideWindowlessApps -string true
 # Command (⌘)
 defaults write com.lwouis.alt-tab-macos holdShortcut -string $'\xe2\x8c\x98'
 # Option (⌥)
@@ -117,9 +118,9 @@ defaults write com.lwouis.alt-tab-macos holdShortcut2 -string $'\xe2\x8c\xa5'
 defaults write com.lwouis.alt-tab-macos previousWindowShortcut -string $'\xe2\x87\xa7\xe2\x87\xa5'
 defaults write com.lwouis.alt-tab-macos menubarIcon -string 3
 defaults write com.lwouis.alt-tab-macos mouseHoverEnabled -string false
-defaults write com.lwouis.alt-tab-macos showOnScreen -string 2
-defaults write com.lwouis.alt-tab-macos spacesToShow -string 2
-defaults write com.lwouis.alt-tab-macos spacesToShow2 -string 2
+defaults write com.lwouis.alt-tab-macos showOnScreen -string 0
+defaults write com.lwouis.alt-tab-macos spacesToShow -string 1
+defaults write com.lwouis.alt-tab-macos spacesToShow2 -string 1
 
 ! lk_command_exists espanso || {
     lk_console_message "Checking espanso"

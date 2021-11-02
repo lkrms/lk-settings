@@ -34,7 +34,11 @@
                 "name": "PHP: Current File",
                 "type": "php",
                 "request": "launch",
-                "runtimeExecutable": "/usr/local/bin/php"
+                "runtimeExecutable": "/usr/local/bin/php",
+                "env": {
+                    "XDEBUG_MODE": "debug,develop",
+                    "XDEBUG_CONFIG": "client_port=${port}"
+                }
             }
         },
         {
