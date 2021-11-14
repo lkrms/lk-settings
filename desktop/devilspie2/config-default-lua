@@ -1,6 +1,10 @@
 event_log = log_state
 --event_log = log_window
 --event_log = log_window_full
+--event_log = function(event)
+--    log_state(event)
+--    log_window_full(event)
+--end
 
 log_level = log.INFO
 --log_level = log.DEBUG
@@ -200,9 +204,11 @@ rules = {
                 return state.hints and state.hints.min_width == 1080 and state.hints.min_height == 750
             end
         },
-        actions = {
+        actions = append(
             _actions.sticky,
-            {to_place, {_places.chat}}
-        }
+            {
+                {to_place, {_places.chat}}
+            }
+        )
     }
 }

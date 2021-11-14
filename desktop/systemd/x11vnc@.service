@@ -1,0 +1,11 @@
+[Unit]
+Description=VNC Server for X11 - output %i
+Requires=graphical.target
+After=graphical.target
+
+[Service]
+ExecStart=
+ExecStart=/usr/bin/x11vnc -rfbport 590%i -clip xinerama%i -forever -loop -localhost -env FD_XDM=1 -find -noxrecord -passwd x11vnc -nevershared
+
+[Install]
+WantedBy=graphical.target

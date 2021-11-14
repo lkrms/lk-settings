@@ -75,6 +75,16 @@
         "when": "editorTextFocus && !editorReadonly"
     },
     {
+        "key": "ctrl+\\",
+        "command": "editor.action.jumpToBracket",
+        "when": "editorTextFocus"
+    },
+    {
+        "key": "shift+cmd+\\",
+        "command": "-editor.action.jumpToBracket",
+        "when": "editorTextFocus"
+    },
+    {
         "command": "-editor.action.removeCommentLine",
         "key": "cmd+k cmd+u",
         "when": "editorTextFocus && !editorReadonly"
@@ -93,6 +103,11 @@
         "command": "-editor.action.selectHighlights",
         "key": "shift+cmd+l",
         "when": "editorFocus"
+    },
+    {
+        "key": "ctrl+shift+\\",
+        "command": "editor.action.selectToBracket",
+        "when": "editorTextFocus"
     },
     {
         "command": "editor.action.transformToLowercase",
@@ -143,16 +158,6 @@
         "command": "-markdown.extension.onShiftTabKey",
         "key": "shift+tab",
         "when": "editorTextFocus && !editorReadonly && !editorTabMovesFocus && !hasOtherSuggestions && !hasSnippetCompletions && !inSnippetMode && !suggestWidgetVisible && editorLangId == 'markdown'"
-    },
-    {
-        "command": "-poor-mans-t-sql-formatter.formatSql",
-        "key": "ctrl+k shift+f",
-        "when": "editorTextFocus"
-    },
-    {
-        "command": "poor-mans-t-sql-formatter.formatSql",
-        "key": "shift+alt+f",
-        "when": "editorTextFocus && !editorReadonly && editorLangId == 'sql'"
     },
     {
         "command": "-sortLines.sortLines",
@@ -357,6 +362,12 @@
     {
         "command": "-workbench.action.tasks.build",
         "key": "shift+cmd+b"
+    },
+    {
+        "args": "Pretty PHP (remove empty lines)",
+        "command": "workbench.action.tasks.runTask",
+        "key": "shift+alt+cmd+f",
+        "when": "editorTextFocus && !editorReadonly && editorLangId == 'php'"
     },
     {
         "args": "Pretty PHP",

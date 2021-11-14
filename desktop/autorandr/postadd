@@ -10,9 +10,10 @@ function maybe_setvcp() {
         { echo "${0##*/}: Setting VCP $1 to $2" >&2 && sudo ddcutil setvcp "$@" && CHANGED=1; }
 }
 
-STATUS=$(systemctl is-system-running) ||
-    [[ ! $STATUS =~ ^(initializing|starting)$ ]] || {
-    echo "${0##*/}: System is $STATUS, exiting" >&2
+{ STATUS=$(systemctl is-system-running) ||
+    [[ ! $STATUS =~ ^(initializing|starting)$ ]]; } &&
+    awk '$1<60{exit 1}' /proc/uptime || {
+    echo "${0##*/}: System is starting, exiting" >&2
     exit
 }
 echo "${0##*/}: System is $STATUS, continuing" >&2

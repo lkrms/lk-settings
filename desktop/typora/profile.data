@@ -10,6 +10,7 @@
     "customFontSize": 14,
     "customWordsPerMinute": true,
     "custom_image_save_location": "./.${filename}.assets",
+    "didShowWelcomePanel": true,
     "enableAutoSave": false,
     "enable_diagram": true,
     "enable_highlight": true,

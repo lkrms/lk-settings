@@ -19,7 +19,7 @@
             }
         },
         {
-            "label": "Pretty PHP (reset line breaks)",
+            "label": "Pretty PHP (remove empty lines)",
             "type": "process",
             "command": "php",
             "args": [
@@ -28,7 +28,8 @@
             ],
             "options": {
                 "env": {
-                    "PRETTY_IGNORE_LINE_BREAKS": "1"
+                    "PRETTY_NESTED_ARRAYS": "1",
+                    "PRETTY_REMOVE_EMPTY_LINES": "1"
                 }
             },
             "problemMatcher": [],

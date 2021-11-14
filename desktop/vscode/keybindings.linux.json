@@ -89,6 +89,16 @@
         "when": "editorTextFocus && !editorReadonly"
     },
     {
+        "key": "ctrl+\\",
+        "command": "editor.action.jumpToBracket",
+        "when": "editorTextFocus"
+    },
+    {
+        "key": "ctrl+shift+\\",
+        "command": "-editor.action.jumpToBracket",
+        "when": "editorTextFocus"
+    },
+    {
         "command": "-editor.action.removeCommentLine",
         "key": "ctrl+k ctrl+u",
         "when": "editorTextFocus && !editorReadonly"
@@ -102,6 +112,11 @@
         "command": "-editor.action.selectHighlights",
         "key": "ctrl+shift+l",
         "when": "editorFocus"
+    },
+    {
+        "key": "ctrl+shift+\\",
+        "command": "editor.action.selectToBracket",
+        "when": "editorTextFocus"
     },
     {
         "command": "editor.action.transformToLowercase",
@@ -386,6 +401,12 @@
         "args": "Pretty PHP",
         "command": "workbench.action.tasks.runTask",
         "key": "shift+alt+f",
+        "when": "editorTextFocus && !editorReadonly && editorLangId == 'php'"
+    },
+    {
+        "args": "Pretty PHP (remove empty lines)",
+        "command": "workbench.action.tasks.runTask",
+        "key": "shift+alt+meta+f",
         "when": "editorTextFocus && !editorReadonly && editorLangId == 'php'"
     },
     {

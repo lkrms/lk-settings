@@ -89,9 +89,11 @@ _criteria.dev = {
 _action = {
     moveTo = function(ev, screen, rect)
         if screen and _screen[screen] ~= nil then
+            logger.d("Moving " .. ev.appName .. " to screen " .. screen)
             ev.window:moveToScreen(_screen[screen])
         end
         if rect then
+            logger.d("Moving " .. ev.appName .. " to " .. hs.inspect.inspect(rect))
             ev.window:moveToUnit(rect)
         end
     end
@@ -112,19 +114,23 @@ _rule = {
         action = {{_action.moveTo, 1, hs.layout.left50}}
     },
     {
-        criteria = {_criteria.multihead, appName = {"Microsoft Teams", "Skype"}},
+        criteria = {_criteria.tacky, appName = {"Microsoft Teams"}},
         action = {{_action.moveTo, 2, _place.top3_1}}
     },
     {
-        criteria = {_criteria.multihead, appName = {"Messenger", "Messages"}},
+        criteria = {_criteria.sticky, appName = {"Skype"}},
+        action = {{_action.moveTo, 2, _place.top3_1}}
+    },
+    {
+        criteria = {_criteria.sticky, appName = {"Messenger", "Messages"}},
         action = {{_action.moveTo, 2, _place.top3_2}}
     },
     {
-        criteria = {_criteria.multihead, appName = {"KeePassXC", "Todoist"}},
+        criteria = {_criteria.sticky, appName = {"KeePassXC", "Todoist"}},
         action = {{_action.moveTo, 2, _place.bottom3_1}}
     },
     {
-        criteria = {_criteria.multihead, appName = {"Calendar"}},
+        criteria = {_criteria.sticky, appName = {"Calendar"}},
         action = {{_action.moveTo, 2, _place.bottom3_2}}
     }
 }

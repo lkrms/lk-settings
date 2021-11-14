@@ -15,7 +15,9 @@
         "editor.defaultFormatter": "ahmadalli.vscode-nginx-conf"
     },
     "[php]": {
-        "editor.autoClosingBrackets": "languageDefined"
+        "editor.rulers": [
+            120
+        ]
     },
     "[xml]": {
         "editor.defaultFormatter": "redhat.vscode-xml"
@@ -242,6 +244,7 @@
     ],
     "python.showStartPage": false,
     "redhat.telemetry.enabled": false,
+    "rewrap.wrappingColumn": 80,
     "ruby.format": "rubocop",
     "ruby.lint": {
         "rubocop": true
@@ -296,6 +299,11 @@
     "shellcheck.executablePath": "shellcheck",
     "shellcheck.run": "onSave",
     "shellformat.flag": "-i 4 -s",
+    "sqltools.format": {
+        "linesBetweenQueries": "preserve",
+        "reservedWordCase": "upper"
+    },
+    "sqltools.highlightQuery": false,
     "standard.enable": false,
     "telemetry.telemetryLevel": "off",
     "terminal.external.osxExec": "iTerm.app",
