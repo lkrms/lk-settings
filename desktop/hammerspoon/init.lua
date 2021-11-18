@@ -75,7 +75,7 @@ _criteria.tacky = {
     _operator.AND,
     _criteria.multihead,
     _criteria.notPrimary,
-    event = wf.windowCreated
+    event = {wf.windowCreated, wf.windowFocused, wf.windowUnfocused}
 }
 
 _criteria.dev = {
@@ -118,20 +118,24 @@ _rule = {
         action = {{_action.moveTo, 2, _place.top3_1}}
     },
     {
-        criteria = {_criteria.sticky, appName = {"Skype"}},
-        action = {{_action.moveTo, 2, _place.top3_1}}
-    },
-    {
-        criteria = {_criteria.sticky, appName = {"Messenger", "Messages"}},
+        criteria = {_criteria.sticky, appName = {"Messenger"}},
         action = {{_action.moveTo, 2, _place.top3_2}}
     },
     {
-        criteria = {_criteria.sticky, appName = {"KeePassXC", "Todoist"}},
+        criteria = {_criteria.sticky, appName = {"Calendar", "Skype"}},
+        action = {{_action.moveTo, 2, _place.top3_3}}
+    },
+    {
+        criteria = {_criteria.sticky, appName = {"KeePassXC"}},
         action = {{_action.moveTo, 2, _place.bottom3_1}}
     },
     {
-        criteria = {_criteria.sticky, appName = {"Calendar"}},
+        criteria = {_criteria.sticky, appName = {"Todoist"}},
         action = {{_action.moveTo, 2, _place.bottom3_2}}
+    },
+    {
+        criteria = {_criteria.sticky, appName = {"Messages"}},
+        action = {{_action.moveTo, 2, _place.bottom3_3}}
     }
 }
 

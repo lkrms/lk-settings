@@ -489,6 +489,7 @@ defaults write com.apple.dock wvous-tr-corner -int 5
 defaults write com.apple.dock wvous-tr-modifier -int 0
 
 # Dock
+defaults write com.apple.dock appswitcher-all-displays -bool true
 defaults write com.apple.dock autohide -bool true
 defaults write com.apple.dock autohide-delay -float 0
 defaults write com.apple.dock launchanim -bool false
