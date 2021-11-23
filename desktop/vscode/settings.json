@@ -15,6 +15,7 @@
         "editor.defaultFormatter": "ahmadalli.vscode-nginx-conf"
     },
     "[php]": {
+        "editor.autoClosingBrackets": "languageDefined",
         "editor.rulers": [
             120
         ]
@@ -253,6 +254,7 @@
     "ruby.useLanguageServer": true,
     "search.exclude": {
         "**/*.log": true,
+        "**/log": true,
         "**/vendor": true
     },
     "search.followSymlinks": false,

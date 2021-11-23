@@ -3,6 +3,7 @@ BEGIN {
   temp    = run("mktemp")
   proxy   = "http://127.0.0.1:3127"
   reverse = "http://brew.mirror/"
+  root    = "/srv/http/brew.mirror/public_html/"
 
   jq_bottles = quote("\
 .[] | select(.versions.bottle) | \
@@ -80,9 +81,8 @@ function bottle_url(tar, url, _url) {
 }
 
 function respond(response, url) {
-  if (url && url == request) {
-    print "OK"
-    next
+  if (!response || (url && url == request)) {
+    response = "OK"
   }
   print response
   if (!no_log) {
@@ -133,6 +133,10 @@ function redirect(url, status) {
   request = $1
 }
 
+$3 !~ /^(GET|HEAD|)$/ {
+  respond()
+}
+
 # Quickly pass our own requests through
 $1 ~ re_brew "/go/." && $2 == "127.0.0.1" {
   sub(re_brew "/go/", "", $1)
@@ -154,6 +158,21 @@ $1 ~ re_brew "/go/." && $2 == "127.0.0.1" {
   if (subs && $1 ~ "^https://ghcr\\.io/v2/.+/blobs/") {
     if (url = resolve_location(run(proxy "curl -fsS --dump-header /dev/stdout --max-filesize 0 " \
       "-H 'Authorization:Bearer QQ==' " reverse_go quote($1) " | awk " awk_redirect, 1), $1)) {
+      rewrite(url, 1)
+    }
+  }
+  if (subs && $1 ~ "^https://ghcr\\.io/v2/.+/manifests/") {
+    file = $1
+    sub("^https://ghcr\\.io/", "", file)
+    gsub("/", "__", file)
+    url = reverse "manifests/" file
+    file = root "manifests/" file
+    if (!system("\
+file=" quote(file) "; url=" quote($1) "; test -f \"$file\" || { " \
+  "curl -fsSLo \"$file\" \
+    -H 'Authorization:Bearer QQ==' \
+    -H 'Accept:application/vnd.oci.image.index.v1+json' \
+    \"$url\" && chmod 00644 \"$file\"; } || rm -f \"$file\"")) {
       rewrite(url, 1)
     }
   }

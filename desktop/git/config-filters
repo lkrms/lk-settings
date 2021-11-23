@@ -40,7 +40,7 @@
 	smudge = cat
 
 [filter "hosts"]
-	clean = sed -E \"s/^(127.0.1.1)[[:blank:]].*/\\\\1 HOSTNAME.localdomain HOSTNAME/\"
+	clean = "sed -E 's/^(127.0.1.1)[[:blank:]].*/\\1 HOSTNAME.localdomain HOSTNAME/;/#.* (##$|AUTOCREATED$|[gG]enerated)/d;s/^[[:blank:]]+$//'|awk '/^$/{if(l){next}l=1}/./{l=0}{print}'"
 	smudge = sed -E \"s/^(127.0.1.1)[[:blank:]].*/\\\\1 $(hostname -s).localdomain $(hostname -s)/\"
 
 [filter "jq"]
@@ -72,7 +72,7 @@
 	smudge = cat
 
 [filter "typora"]
-	clean = xxd -r -p | jsonlint -Sf --sort preserve | jq -S --indent 4 'del(.\"sidebar-width\",.customZoom,.initialize_ver,.lastClosedBounds,.lastSavePath,.pinFolder,.sidebar_tab,.uuid,.verInitTime,.zoomFactor,.zoomLevel)|.preLinebreakOnExport=false'
+	clean = xxd -r -p | jsonlint -Sf --sort preserve | jq -S --indent 4 'del(.\"sidebar-width\",.customZoom,.initialize_ver,.version,.lastClosedBounds,.lastSavePath,.pinFolder,.sidebar_tab,.uuid,.verInitTime,.zoomFactor,.zoomLevel)|.preLinebreakOnExport=false'
 	smudge = jsonlint -Sf --sort preserve | jq -c | xxd -p | tr -d '\\n'
 
 [filter "sublimemerge"]

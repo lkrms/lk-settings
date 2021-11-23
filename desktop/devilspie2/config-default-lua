@@ -13,10 +13,14 @@ default_grid = {6, 2}
 
 _criteria = {}
 _actions = {}
-_places = {}
-
-_places.chat = {display = 2, xy = {1, 1}, wh = {2, 1}}
-_places.sticky_utility = {display = 2, xy = {1, 2}, wh = {2, 1}}
+_places = {
+    d2_top3_1 = {display = 2, xy = {1, 1}, wh = {2, 1}},
+    d2_top3_2 = {display = 2, xy = {3, 1}, wh = {2, 1}},
+    d2_top3_3 = {display = 2, xy = {5, 1}, wh = {2, 1}},
+    d2_bottom3_1 = {display = 2, xy = {1, 2}, wh = {2, 1}},
+    d2_bottom3_2 = {display = 2, xy = {3, 2}, wh = {2, 1}},
+    d2_bottom3_3 = {display = 2, xy = {5, 2}, wh = {2, 1}}
+}
 
 _criteria.multihead = {
     function(state)
@@ -59,11 +63,10 @@ _criteria.private = {
     operator.AND,
     _criteria.multihead,
     _criteria.not_primary_display,
-    class_instance_name = {
-        --"caprine",
-        --"skype",
-        "keepassxc"
-    }
+    --"caprine",
+    --"skype",
+    --"keepassxc",
+    class_instance_name = {}
 }
 
 _criteria.dev = {
@@ -141,7 +144,7 @@ rules = {
         actions = {
             decorate_off,
             {to_workspace, {1}},
-            {to_place, {_places.sticky_utility}}
+            {to_place, {_places.d2_bottom3_2}}
         }
     },
     {
@@ -155,7 +158,7 @@ rules = {
         actions = append(
             _actions.sticky,
             {
-                {to_place, {_places.sticky_utility}}
+                {to_place, {_places.d2_bottom3_1}}
             }
         ),
         set_position = set_window_position
@@ -171,7 +174,7 @@ rules = {
         actions = append(
             _actions.sticky,
             {
-                {to_place, {_places.chat}}
+                {to_place, {_places.d2_top3_2}}
             }
         )
     },
@@ -179,7 +182,21 @@ rules = {
         criteria = {
             operator.AND,
             class_instance_name = {
-                "skype",
+                "skype"
+            },
+            _criteria.sticky
+        },
+        actions = append(
+            _actions.sticky,
+            {
+                {to_place, {_places.d2_top3_3}}
+            }
+        )
+    },
+    {
+        criteria = {
+            operator.AND,
+            class_instance_name = {
                 "teams.microsoft.com"
             },
             _criteria.sticky
@@ -187,7 +204,7 @@ rules = {
         actions = append(
             _actions.sticky,
             {
-                {to_place, {_places.chat}}
+                {to_place, {_places.d2_bottom3_3}}
             }
         )
     },
@@ -207,7 +224,7 @@ rules = {
         actions = append(
             _actions.sticky,
             {
-                {to_place, {_places.chat}}
+                {to_place, {_places.d2_top3_1}}
             }
         )
     }

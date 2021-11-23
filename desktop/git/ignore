@@ -3,6 +3,7 @@ Thumbs.db
 
 *.code-workspace
 .vscode/
+bin/test.*
 
 *.sublime-project
 *.sublime-workspace
