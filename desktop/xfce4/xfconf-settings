@@ -12,6 +12,7 @@ xfwm4,/general/cycle_draw_frame,bool,false
 xfwm4,/general/cycle_hidden,bool,true
 xfwm4,/general/cycle_minimum,bool,false
 xfwm4,/general/cycle_preview,reset
+xfwm4,/general/cycle_raise,bool,true
 xfwm4,/general/cycle_tabwin_mode,int,1
 xfwm4,/general/cycle_workspaces,bool,false
 xfwm4,/general/mousewheel_rollup,bool,true

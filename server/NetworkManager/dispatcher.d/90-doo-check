@@ -16,10 +16,28 @@ function connection_is_up() {
         grep -Fx "$1:activated" >/dev/null
 }
 
-function wan_service_is_running() {
-    lk_systemctl_running "NetworkManager-connect@$WAN_IFACE.service"
+function service_is_active() {
+    lk_systemctl_property_is ActiveState active "$1"
 }
 
+function wan_service_is_running() {
+    lk_systemctl_running "$WAN_SERVICE"
+}
+
+function wan_service_is_starting() {
+    lk_systemctl_property_is ActiveState activating "$WAN_SERVICE"
+}
+
+function maybe_restart_wan_service() {
+    wan_service_is_starting || connection_is_up "$WAN_IFACE" || {
+        lk_run systemctl stop "$WAN_SERVICE" || true
+        lk_run systemctl start "$WAN_SERVICE" || true
+        wan_service_is_running ||
+            lk_die "unable to restart service: $WAN_SERVICE"
+    }
+}
+
+WAN_SERVICE=NetworkManager-connect@$WAN_IFACE.service
 PPPOE_IFACE=$(nmcli -g pppoe.parent conn show "$WAN_IFACE")
 LAN_METHOD=
 
@@ -32,7 +50,7 @@ case "$1,$2" in
         ;;
     *)
         i=0
-        ! lk_systemctl_running squid.service ||
+        ! service_is_active squid.service ||
             while ((i++ < 2)); do
                 lk_run squidclient mgr:offline_toggle |
                     grep -E '^offline_mode\>.*\<ON$' || continue
@@ -46,11 +64,8 @@ case "$1,$2" in
     ;;
 "$WAN_IFACE",down)
     if wan_service_is_running; then
+        maybe_restart_wan_service
         LAN_METHOD=shared
-        connection_is_up "$WAN_IFACE" || {
-            sleep 10
-            lk_run nmcli --wait 0 conn up "$WAN_IFACE"
-        }
     else
         LAN_METHOD=auto
     fi
@@ -78,8 +93,7 @@ case "$1,$2" in
     ;;
 "$PPPOE_IFACE",up)
     ! wan_service_is_running ||
-        connection_is_up "$WAN_IFACE" ||
-        lk_run nmcli --wait 0 conn up "$WAN_IFACE"
+        maybe_restart_wan_service
     ;;
 esac
 

@@ -14,8 +14,10 @@ Before=network-online.target
 [Service]
 Type=oneshot
 RemainAfterExit=yes
-ExecStart=/usr/bin/nmcli --wait 0 conn up %i
+ExecStart=/usr/bin/nmcli conn up %i
 ExecStop=/bin/sh -c 'nmcli -g GENERAL.STATE conn show %i | grep . >/dev/null && nmcli conn down %i || :'
+Restart=on-failure
+RestartSec=30
 
 [Install]
 WantedBy=network-online.target
