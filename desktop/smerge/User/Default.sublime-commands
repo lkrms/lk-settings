@@ -1,0 +1,28 @@
+[
+  {
+    "caption": "Copy SHA (short)",
+    "command": "copy_to_clipboard",
+    "args": {
+      "text": "$short_commit"
+    }
+  },
+  {
+    "caption": "Copy SHA",
+    "command": "copy_to_clipboard",
+    "args": {
+      "text": "$commit"
+    }
+  },
+  {
+    "caption": "Cleanup (aggressive)",
+    "command": "git",
+    "args": {
+      "argv": [
+        "gc",
+        "--aggressive",
+        "--prune=now",
+        "--keep-largest-pack"
+      ]
+    }
+  }
+]

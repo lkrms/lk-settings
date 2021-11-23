@@ -1,6 +1,6 @@
 # Only bring the WAN connection up if ip[6]tables started successfully
 [Unit]
-Description=WAN connection on %i
+Description=WAN connection on %I
 Requires=NetworkManager.service
 Wants=NetworkManager-wait-online.service
 Requires=iptables.service
@@ -14,14 +14,8 @@ Before=network-online.target
 [Service]
 Type=oneshot
 RemainAfterExit=yes
-ExecStart=/bin/sh -c 'nmcli -g NAME,AUTOCONNECT conn show --active | grep -Fx "$1:yes" >/dev/null || {\
-  nmcli conn mod --temporary "$1" connection.autoconnect yes connection.autoconnect-retries 0;\
-  nmcli conn up "$1";\
-}' sh %i
-ExecStop=/bin/sh -c 'nmcli -g NAME conn show --active | grep -Fx "$1" >/dev/null && {\
-  nmcli conn mod --temporary "$1" connection.autoconnect no;\
-  nmcli conn down "$1";\
-}' sh %i
+ExecStart=/usr/bin/nmcli --wait 0 conn up %i
+ExecStop=/bin/sh -c 'nmcli -g GENERAL.STATE conn show %i | grep . >/dev/null && nmcli conn down %i || :'
 
 [Install]
 WantedBy=network-online.target

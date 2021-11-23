@@ -9,8 +9,9 @@ BEGIN {
     \"_\\(.revision)\" else \"\" end).\\($f.arch)\", $f.url ] | @tsv")
 
   awk_redirect = quote("\
-$1 ~ /^HTTP\\// && $2 ~ /^3[0-9]{2}$/   { r = r ? r : 1 } \
-r == 1 && tolower($1) == \"location:\"  { sub(\"\\r$\", \"\"); print $2; r = -1 }")
+$1 ~ /^HTTP\\// && $2 ~ /^3[0-9]{2}$/   { r = 1 } \
+r && tolower($1) == \"location:\"       { sub(\"\\r$\", \"\"); l = $2 } \
+END { if (r) print l }")
 
   re_brew = "^http://brew\\.mirror"
   re_bottle = "\\.bottle\\.([^.]+\\.)*tar\\.gz$"
@@ -85,8 +86,38 @@ function respond(response, url) {
   next
 }
 
-function rewrite(url) {
-  respond("OK rewrite-url=\"" url "\"", url)
+# Return location relative to uri
+function resolve_location(location, uri) {
+  if (!location) {
+    return
+  }
+  if (location ~ "^[^/:]+://") {
+    # absolute URI
+    return location
+  } else if (location ~ "^//") {
+    # network-path reference
+    if (match(uri, "^[^/:]+://")) {
+      return substr(uri, 1, RLENGTH - 2) location
+    }
+  } else if (location ~ "^/") {
+    # absolute-path reference
+    if (match(uri "/", "[^/:]/")) {
+      return substr(uri, 1, RSTART) location
+    }
+  } else {
+    # relative-path reference
+    sub("/[^/]*$", "/", uri)
+    return uri location
+  }
+}
+
+function rewrite(url, _url) {
+  _url = run("curl -I -fsL " quote(url) " | awk " awk_redirect, 1)
+  if (_url = resolve_location(_url, url)) {
+    redirect("http://brew.mirror/" _url)
+  } else {
+    respond("OK rewrite-url=\"" url "\"", url)
+  }
 }
 
 function redirect(url, status) {
@@ -107,9 +138,9 @@ function redirect(url, status) {
     }
   }
   if (subs && $1 ~ "^https://ghcr\\.io/v2/.+/blobs/") {
-    url = run("curl -fs --dump-header /dev/stdout --max-filesize 0 " \
+    url = run("curl -fsS --dump-header /dev/stdout --max-filesize 0 " \
       "-H 'Authorization:Bearer QQ==' " quote($1) " | awk " awk_redirect, 1)
-    if (url) {
+    if (url = resolve_location(url, $1)) {
       redirect("http://brew.mirror/" url)
     }
   }

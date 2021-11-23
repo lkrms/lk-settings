@@ -151,6 +151,10 @@
         "when": "editorHasSelection && editorTextFocus"
     },
     {
+        "key": "ctrl+alt+v",
+        "command": "gitlens.copyShaToClipboard"
+    },
+    {
         "command": "gitlens.externalDiff",
         "key": "cmd+k cmd+g"
     },

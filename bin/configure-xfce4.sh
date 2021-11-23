@@ -105,7 +105,7 @@ if [ -n "$DPI" ] && [ -f /etc/default/grub ]; then
     if [ -f "$GRUB_FONT_FILE" ]; then
         GRUB_FONT=${GRUB_FONT_FILE##*/}
         GRUB_FONT=/boot/grub/fonts/${GRUB_FONT%%.*}-$_16.pf2
-        GRUB_FONT_VAR=$(lk_get_shell_var GRUB_FONT)
+        GRUB_FONT_VAR=$(lk_var_sh GRUB_FONT)
         if ! grep -Fxq "$GRUB_FONT_VAR" /etc/default/grub ||
             [ ! -f "$GRUB_FONT" ]; then
             _PF2=$(mktemp)

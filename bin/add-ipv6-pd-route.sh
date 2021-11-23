@@ -9,7 +9,7 @@ eval "$(lk_get_regex IPV6_REGEX)"
 LAN_IFACE=$1
 WAN_IFACE=$2
 
-#lk_log_start
+lk_log_start
 
 trap 'kill 0' EXIT
 
@@ -40,8 +40,5 @@ ROUTE=(default via "${GATEWAY//\\:/:}"
     dev "$WAN_IFACE" protocol static metric 100 src "$WAN_IP")
 lk_require_output -q ip -6 route show "${ROUTE[@]}" || {
     lk_run ip -6 route replace "${ROUTE[@]}" &&
-        lk_run ip -6 route flush cache || return
-    set +e
-    lk_systemctl_reload squid.service
-    ! lk_systemctl_running smb.service || lk_systemctl_restart smb.service
+        lk_run ip -6 route flush cache
 }

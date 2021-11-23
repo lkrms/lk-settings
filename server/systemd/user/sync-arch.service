@@ -1,5 +1,7 @@
 [Unit]
-Description=Sync package repositories
+Description=Sync package repositories and blocklists
+Wants=network-online.target
+After=network-online.target
 After=default.target
 
 [Service]

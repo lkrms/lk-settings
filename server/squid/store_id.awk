@@ -23,7 +23,7 @@ function strip_query_terms(url) {
   request = $1
 }
 
-$1 ~ "^https://pkg-containers.githubusercontent.com/ghcr1/blobs/" {
+$1 ~ "^https://(objects|pkg-containers)\\.githubusercontent\\.com/" {
   rewrite(strip_query_terms($1))
 }
 

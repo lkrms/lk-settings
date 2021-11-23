@@ -1,5 +1,5 @@
 [Unit]
-Description=Sync package repositories every hour
+Description=Sync package repositories and blocklists every hour
 
 [Timer]
 OnBootSec=1h

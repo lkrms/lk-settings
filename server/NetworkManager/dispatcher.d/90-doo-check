@@ -8,25 +8,52 @@ LK_TTY_NO_COLOUR=1 \
     . /opt/lk-platform/bin/lk-bash-load.sh || exit
 lk_include linux
 
-#lk_log_start
-
-eval "$(lk_get_regex IPV6_REGEX)"
+LK_VERBOSE=1
+lk_log_start
 
 function connection_is_up() {
-    nmcli -g DEVICE,STATE connection show |
+    nmcli -g DEVICE,STATE conn show |
         grep -Fx "$1:activated" >/dev/null
 }
 
+function wan_service_is_running() {
+    lk_systemctl_running "NetworkManager-connect@$WAN_IFACE.service"
+}
+
+PPPOE_IFACE=$(nmcli -g pppoe.parent conn show "$WAN_IFACE")
 LAN_METHOD=
-LAN_MAYBE_APPLY=
-LAN_NO_APPLY=
 
 case "$1,$2" in
+*,connectivity-change)
+    case "$CONNECTIVITY_STATE" in
+    FULL)
+        lk_systemctl_reload_or_restart squid.service || true
+        lk_systemctl_reload_or_restart lighttpd.service || true
+        ;;
+    *)
+        i=0
+        ! lk_systemctl_running squid.service ||
+            while ((i++ < 2)); do
+                lk_run squidclient mgr:offline_toggle |
+                    grep -E '^offline_mode\>.*\<ON$' || continue
+                break
+            done
+        ;;
+    esac
+    ;;
 "$WAN_IFACE",up)
     LAN_METHOD=shared
     ;;
 "$WAN_IFACE",down)
-    LAN_METHOD=auto
+    if wan_service_is_running; then
+        LAN_METHOD=shared
+        connection_is_up "$WAN_IFACE" || {
+            sleep 10
+            lk_run nmcli --wait 0 conn up "$WAN_IFACE"
+        }
+    else
+        LAN_METHOD=auto
+    fi
     ;;
 "$LAN_IFACE",*)
     connection_is_up "$WAN_IFACE" &&
@@ -34,7 +61,8 @@ case "$1,$2" in
         LAN_METHOD=auto
     ;;&
 "$LAN_IFACE",up)
-    LAN_MAYBE_APPLY=1
+    ! lk_systemctl_running smb.service ||
+        lk_systemctl_restart smb.service || true
     for IFACE in ${LAN_ATTACH+"${LAN_ATTACH[@]}"} $(
         # Include active libvirt interfaces connected to this bridge
         for VM in $(virsh list --name 2>/dev/null); do
@@ -48,27 +76,34 @@ case "$1,$2" in
             lk_run ip link set "$IFACE" master "$LAN_IFACE" || true
     done
     ;;
-"$LAN_IFACE",down)
-    LAN_NO_APPLY=1
+"$PPPOE_IFACE",up)
+    ! wan_service_is_running ||
+        connection_is_up "$WAN_IFACE" ||
+        lk_run nmcli --wait 0 conn up "$WAN_IFACE"
     ;;
 esac
 
+! lk_verbose || {
+    lk_log_tty_off -a
+    #lk_tty_print "Arguments:" "$(lk_echo_args "$@")"
+    lk_tty_print "Environment:" "$(printenv |
+        grep -E '^(CONNECT|DEVICE_|DHCP[46]_|IP[46]_|NM_|VPN_)' |
+        sort)"
+}
+
 [ -n "$LAN_METHOD" ] || exit 0
 
-CURRENT_METHOD=$(nmcli -g ipv6.method connection show "$LAN_IFACE") ||
+CURRENT_METHOD=$(nmcli -g ipv6.method conn show "$LAN_IFACE") ||
     CURRENT_METHOD=
 
 ! lk_verbose || {
-    lk_tty_print "Arguments:" "$(lk_echo_args "$@")"
-    lk_tty_print "Environment:" "$(printenv |
-        grep -E '^(CONNECTION_|DEVICE_|DHCP4_|IP[46]_|NM_)' |
-        sort)"
     lk_tty_print "$LAN_IFACE ipv6.method (current/required):" \
         "${CURRENT_METHOD:-<unknown>}/$LAN_METHOD"
+    lk_log_tty_on
 }
 
 UNIT=add-ipv6-pd-route.service
-[ "$LAN_METHOD" != shared ] || [ -n "$LAN_NO_APPLY" ] ||
+[ "$LAN_METHOD" != shared ] ||
     { lk_systemctl_exists "$UNIT" && ! lk_systemctl_failed "$UNIT"; } || {
     systemctl reset-failed "$UNIT" 2>/dev/null || true
     systemd-run --no-block \
@@ -79,12 +114,10 @@ UNIT=add-ipv6-pd-route.service
         "$LAN_IFACE" "$WAN_IFACE" || true
 }
 
-if [ "$CURRENT_METHOD" = "$LAN_METHOD" ]; then
-    [ -z "$LAN_MAYBE_APPLY" ] || LAN_NO_APPLY=1
-else
-    lk_run nmcli connection modify --temporary \
-        "$LAN_IFACE" ipv6.method "$LAN_METHOD"
-fi
-
-[ -n "$LAN_NO_APPLY" ] ||
-    lk_run nmcli connection up "$LAN_IFACE"
+# Leave `ipv6.method` alone if it's already `shared` to avoid taking LAN_IFACE
+# down whenever there's a WAN_IFACE outage
+[ "$CURRENT_METHOD" = "$LAN_METHOD" ] ||
+    { [ "$CURRENT_METHOD" = shared ] && wan_service_is_running; } || {
+    lk_run nmcli conn modify --temporary "$LAN_IFACE" ipv6.method "$LAN_METHOD"
+    lk_run nmcli conn up "$LAN_IFACE"
+}

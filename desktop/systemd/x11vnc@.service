@@ -1,5 +1,5 @@
 [Unit]
-Description=VNC Server for X11 - output %i
+Description=VNC Server for X11 - output %I
 Requires=graphical.target
 After=graphical.target
 
