@@ -45,3 +45,4 @@ unison.*.log
 cwd_history
 rl_history
 ]config-*.d
+hosts

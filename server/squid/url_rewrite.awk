@@ -1,6 +1,8 @@
 BEGIN {
   bottles = "/tmp/homebrew-bottles.map"
   temp    = run("mktemp")
+  proxy   = "http://127.0.0.1:3127"
+  reverse = "http://brew.mirror/"
 
   jq_bottles = quote("\
 .[] | select(.versions.bottle) | \
@@ -13,10 +15,13 @@ $1 ~ /^HTTP\\// && $2 ~ /^3[0-9]{2}$/   { r = 1 } \
 r && tolower($1) == \"location:\"       { sub(\"\\r$\", \"\"); l = $2 } \
 END { if (r) print l }")
 
-  re_brew = "^http://brew\\.mirror"
+  re_brew   = "^http://brew\\.mirror"
   re_bottle = "\\.bottle\\.([^.]+\\.)*tar\\.gz$"
-  add_rule(re_brew "/https?://"   , re_brew "/"     , ""                      )
+  add_rule(re_brew "/https?://."  , re_brew "/"     , ""                      )
   add_rule(re_brew "/v2/"         , re_brew "/v2/"  , "https://ghcr.io/v2/"   )
+
+  proxy       = "http_proxy=" quote(proxy) " "
+  reverse_go  = quote(reverse) "go/"
 }
 
 function quote(str) {
@@ -49,8 +54,8 @@ function age(file) {
 
 function refresh() {
   if (age(bottles) > 600) {
-    if (system("curl -fsSLo " quote(temp) \
-      " http://brew.mirror/https://formulae.brew.sh/api/formula.json && " \
+    if (system(proxy "curl -fsSLo " quote(temp) \
+      " " reverse_go "https://formulae.brew.sh/api/formula.json && " \
       "jq -r " jq_bottles " < " quote(temp) " > " quote(bottles))) {
       exit 1
     }
@@ -75,13 +80,13 @@ function bottle_url(tar, url, _url) {
 }
 
 function respond(response, url) {
-  if (url == request) {
+  if (url && url == request) {
     print "OK"
     next
   }
   print response
   if (!no_log) {
-    print request " => " response > "/dev/stderr"
+    print line ORS "  => " response > "/dev/stderr"
   }
   next
 }
@@ -111,13 +116,11 @@ function resolve_location(location, uri) {
   }
 }
 
-function rewrite(url, _url) {
-  _url = run("curl -I -fsL " quote(url) " | awk " awk_redirect, 1)
-  if (_url = resolve_location(_url, url)) {
-    redirect("http://brew.mirror/" _url)
-  } else {
-    respond("OK rewrite-url=\"" url "\"", url)
+function rewrite(url, skip_location_check, _url) {
+  while (!skip_location_check && _url = resolve_location(run(proxy "curl -I -fs " reverse_go quote(url) " | awk " awk_redirect, 1), url)) {
+    url = _url
   }
+  respond("OK rewrite-url=\"" url "\"", url)
 }
 
 function redirect(url, status) {
@@ -126,7 +129,18 @@ function redirect(url, status) {
 }
 
 {
+  line = $0
   request = $1
+}
+
+# Quickly pass our own requests through
+$1 ~ re_brew "/go/." && $2 == "127.0.0.1" {
+  sub(re_brew "/go/", "", $1)
+  respond("OK rewrite-url=\"" $1 "\"", $1)
+  next
+}
+
+{
   subs = 0
   last_subs = -1
   while (last_subs < subs) {
@@ -138,10 +152,9 @@ function redirect(url, status) {
     }
   }
   if (subs && $1 ~ "^https://ghcr\\.io/v2/.+/blobs/") {
-    url = run("curl -fsS --dump-header /dev/stdout --max-filesize 0 " \
-      "-H 'Authorization:Bearer QQ==' " quote($1) " | awk " awk_redirect, 1)
-    if (url = resolve_location(url, $1)) {
-      redirect("http://brew.mirror/" url)
+    if (url = resolve_location(run(proxy "curl -fsS --dump-header /dev/stdout --max-filesize 0 " \
+      "-H 'Authorization:Bearer QQ==' " reverse_go quote($1) " | awk " awk_redirect, 1), $1)) {
+      rewrite(url, 1)
     }
   }
   if ($1 ~ re_brew "/[^/]+" re_bottle) {
@@ -149,9 +162,10 @@ function redirect(url, status) {
     gsub("(" re_brew "/|" re_bottle ")", "", $1)
     $1 = bottle_url($1, old1)
     if ($1 != old1) {
-      redirect("http://brew.mirror/" $1)
+      redirect(reverse $1)
     } else {
-      redirect("http://brew.mirror", 302)
+      respond("BH message=\"No such bottle\"")
+      next
     }
   }
   if (subs) {
