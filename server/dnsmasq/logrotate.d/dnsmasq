@@ -1,0 +1,13 @@
+/var/log/dnsmasq/*.log {
+    daily
+    missingok
+    rotate 7
+    compress
+    delaycompress
+    notifempty
+    sharedscripts
+    postrotate
+        ! systemctl is-active dnsmasq >/dev/null 2>&1 ||
+            systemctl kill --kill-who=main --signal=SIGUSR2 dnsmasq 2>/dev/null || true
+    endscript
+}

@@ -100,6 +100,7 @@ _action = {
 }
 
 _rule = {
+    -- Move dev apps to the primary display
     {
         criteria = {
             _criteria.multihead,

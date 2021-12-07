@@ -24,5 +24,14 @@
         "--keep-largest-pack"
       ]
     }
+  },
+  {
+    "caption": "Refresh index",
+    "command": "git",
+    "args": {
+      "argv": [
+        "status"
+      ]
+    }
   }
 ]

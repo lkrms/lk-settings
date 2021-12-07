@@ -1,6 +1,32 @@
 [
   {
     "keys": [
+      "super+g"
+    ],
+    "command": "show_command_palette",
+    "args": {
+      "command": "navigate_to_commit"
+    }
+  },
+  {
+    "keys": [
+      "super+r"
+    ],
+    "command": "refresh"
+  },
+  {
+    "keys": [
+      "super+shift+r"
+    ],
+    "command": "git",
+    "args": {
+      "argv": [
+        "status"
+      ]
+    }
+  },
+  {
+    "keys": [
       "ctrl+alt+shift+v"
     ],
     "command": "copy_to_clipboard",

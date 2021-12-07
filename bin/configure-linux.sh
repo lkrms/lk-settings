@@ -127,7 +127,7 @@ MIMEAPPS_FILE=~/.config/mimeapps.list
     REPLACE=(geany vim)
     REPLACE_WITH=(VSCodium VSCodium)
     PREFER=(
-        VSCodium
+        codium
 
         # Prefer Firefox over vscode for text/html
         firefox
@@ -136,8 +136,8 @@ MIMEAPPS_FILE=~/.config/mimeapps.list
         thunar
 
         #
-        nomacs
-        ristretto
+        org.nomacs.ImageLounge
+        org.xfce.ristretto
 
         #
         typora

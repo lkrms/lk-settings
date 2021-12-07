@@ -128,6 +128,13 @@ COMMIT
 -A POSTROUTING -o en1 -j SNAT --to-source 192.168.20.2
 -A transparent_proxy -d 10.10.0.0/16 -j RETURN
 -A transparent_proxy -d 192.168.0.0/16 -j RETURN
+-A transparent_proxy -d 17.253.67.207/32 -m comment --comment "safebrowsing-proxy.g.aaplimg.com" -j RETURN
+-A transparent_proxy -d 17.253.67.208/32 -m comment --comment "safebrowsing-proxy.g.aaplimg.com" -j RETURN
+-A transparent_proxy -d 17.253.69.210/32 -m comment --comment "safebrowsing-proxy.g.aaplimg.com" -j RETURN
+-A transparent_proxy -d 17.253.71.209/32 -m comment --comment "safebrowsing-proxy.g.aaplimg.com" -j RETURN
+-A transparent_proxy -d 17.253.83.207/32 -m comment --comment "safebrowsing-proxy.g.aaplimg.com" -j RETURN
+-A transparent_proxy -d 17.253.85.207/32 -m comment --comment "safebrowsing-proxy.g.aaplimg.com" -j RETURN
+-A transparent_proxy -d 17.253.85.208/32 -m comment --comment "safebrowsing-proxy.g.aaplimg.com" -j RETURN
 -A transparent_proxy -p tcp -m mark ! --mark 0x2/0x2 -j REDIRECT --to-ports 3129
 -A z_from_lan -p tcp -m tcp --dport 80 -j transparent_proxy
 -A z_from_lan -p udp -m udp --dport 123 -j REDIRECT

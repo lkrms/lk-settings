@@ -2,8 +2,11 @@
     "[html]": {
         "editor.defaultFormatter": "vscode.html-language-features"
     },
+    "[ignore]": {
+        "editor.defaultFormatter": "lkrms.inifmt"
+    },
     "[javascript]": {
-        "editor.defaultFormatter": "HookyQR.beautify"
+        "editor.defaultFormatter": "vscode.typescript-language-features"
     },
     "[json]": {
         "editor.defaultFormatter": "vscode.json-language-features"
@@ -19,6 +22,9 @@
         "editor.rulers": [
             120
         ]
+    },
+    "[properties]": {
+        "editor.defaultFormatter": "lkrms.inifmt"
     },
     "[xml]": {
         "editor.defaultFormatter": "redhat.vscode-xml"
@@ -233,8 +239,6 @@
     "nightswitch.themeDay": "Quiet Light",
     "nightswitch.themeNight": "Dracula Soft",
     "partialDiff.enableTelemetry": false,
-    "phpsab.snifferEnable": false,
-    "phpsab.standard": "PSR12",
     "poor-mans-t-sql-formatter.std.indent": "    ",
     "poor-mans-t-sql-formatter.std.trailingCommas": false,
     "powershell.codeFormatting.newLineAfterCloseBrace": false,
@@ -278,6 +282,7 @@
         "SC2029",
         "SC2030",
         "SC2031",
+        "SC2033",
         "SC2034",
         "SC2046",
         "SC2054",
@@ -376,5 +381,6 @@
     "xml.format.emptyElements": "collapse",
     "xml.format.enforceQuoteStyle": "preferred",
     "xml.format.preserveAttributeLineBreaks": true,
-    "xml.format.preservedNewlines": 0
+    "xml.format.preservedNewlines": 0,
+    "xml.format.splitAttributes": true
 }

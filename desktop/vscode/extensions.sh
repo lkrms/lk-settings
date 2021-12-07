@@ -23,6 +23,7 @@ VSCODE_EXTENSIONS=(
     jprestidge.theme-material-theme
     jq-syntax-highlighting.jq-syntax-highlighting
     jrebocho.vscode-random
+    lkrms.inifmt
     luggage66.AWK
     mads-hartmann.bash-ide-vscode
     mgmcdermott.vscode-language-babel
