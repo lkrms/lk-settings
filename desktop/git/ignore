@@ -13,8 +13,12 @@ bin/test.*
 .git-ftp.log
 php_errors.log
 
-# Built AUR packages
+# AUR package detritus
+*.deb
+*.log
+*.rpm
 *.tar.bz2*
 *.tar.gz*
 *.tar.xz*
 *.tar.zst*
+*.tgz

@@ -134,7 +134,7 @@ xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>parenleft,strin
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>apostrophe,string,libreoffice --writer
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>b,string,galculator
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>c,string,code
-xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>c,string,code $(f=~/Code/lk-platform/lk-platform.code-workspace;[ -f "$f" ]||f=~/Nextcloud/Settings/settings.code-workspace;lk_double_quote "$f")
+xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>c,string,sh -c 'f=~/Code/lk-platform/lk-platform.code-workspace;[ -f \"\$f\" ]||f=~/Nextcloud/Settings/settings.code-workspace;code \"\$f\"'
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>d,string,dbeaver
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>g,string,smerge
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>g,string,git-cola
@@ -149,6 +149,7 @@ xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>semicolon,string,libre
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>v,string,virt-manager
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>x,string,autorandr --change --force
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Alt>x,string,autorandr --change --force
+xfce4-keyboard-shortcuts,/commands/custom/<Primary><Alt>backslash,string,sh -c 'sh=\$(xdotool getactivewindow getwindowgeometry --shell) && eval \"\$sh\" && X=\$((X + WIDTH / 2)) && Y=\$((Y + HEIGHT / 2)) && xdotool mousemove \$X \$Y'
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>x,string,sh -c 'for a in remove add; do env ACTION=\$a autorandr --change --force; done'
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Alt>x,string,sh -c 'for a in remove add; do env ACTION=\$a autorandr --change --force; done'
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>y,string,spotify

@@ -40,7 +40,7 @@
 /plugins/plugin-2/middle-click uint32 0
 /plugins/plugin-2/show-handle false
 /plugins/plugin-2/show-wireframes true
-/plugins/plugin-2/sort-order uint32 0
+/plugins/plugin-2/sort-order uint32 1
 /plugins/plugin-2/window-scrolling false
 /plugins/plugin-21 'tasklist'
 /plugins/plugin-21/grouping uint32 0
@@ -48,7 +48,7 @@
 /plugins/plugin-21/show-handle false
 /plugins/plugin-21/show-labels true
 /plugins/plugin-21/show-wireframes true
-/plugins/plugin-21/sort-order uint32 0
+/plugins/plugin-21/sort-order uint32 1
 /plugins/plugin-21/window-scrolling false
 /plugins/plugin-22 'separator'
 /plugins/plugin-22/expand true
@@ -75,16 +75,16 @@
 /plugins/plugin-4 'pager'
 /plugins/plugin-4/miniature-view true
 /plugins/plugin-4/rows uint32 1
-/plugins/plugin-4/workspace-scrolling false
+/plugins/plugin-4/workspace-scrolling true
 /plugins/plugin-5 'separator'
 /plugins/plugin-5/style uint32 0
 /plugins/plugin-6 'systray'
-/plugins/plugin-6/hidden-items [<'Stretchly1'>, <'Todoist1'>, <'remmina-icon'>, <'blueman'>]
-/plugins/plugin-6/hidden-legacy-items [<'networkmanager applet'>, <'remmina'>]
+/plugins/plugin-6/hidden-items [<'Stretchly1'>, <'Todoist1'>, <'remmina-icon'>, <'blueman'>, <'flameshot'>]
+/plugins/plugin-6/hidden-legacy-items [<'networkmanager applet'>, <'thunar'>, <'system-config-printer'>, <'remmina'>]
 /plugins/plugin-6/hide-new-items true
 /plugins/plugin-6/icon-size 28
-/plugins/plugin-6/known-items [<'blueman'>, <'copyq'>, <'Nextcloud'>, <'Todoist1'>, <'remmina-icon'>, <'Microsoft Teams - Preview1'>, <'Skype1'>, <'Caprine1'>, <'Stretchly1'>]
-/plugins/plugin-6/known-legacy-items [<'networkmanager applet'>, <'bluetooth enabled'>, <'todoist'>, <'remmina'>, <'teams'>, <'skypeforlinux'>, <'electron'>]
+/plugins/plugin-6/known-items [<'blueman'>, <'copyq'>, <'flameshot'>, <'Nextcloud'>, <'Todoist1'>, <'RescueTime'>, <'remmina-icon'>, <'Microsoft Teams - Preview1'>, <'Skype1'>, <'Caprine1'>, <'zoom'>, <'Stretchly1'>]
+/plugins/plugin-6/known-legacy-items [<'system-config-printer'>, <'thunar'>, <'networkmanager applet'>, <'bluetooth enabled'>, <'todoist'>, <'remmina'>, <'teams'>, <'skypeforlinux'>, <'electron'>]
 /plugins/plugin-6/square-icons true
 /plugins/plugin-7 'cpugraph'
 /plugins/plugin-8 'pulseaudio'

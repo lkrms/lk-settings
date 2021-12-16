@@ -14,7 +14,7 @@
     }
   },
   {
-    "caption": "Cleanup (aggressive)",
+    "caption": "Cleanup (aggressive)\tgit gc --aggressive --prune=now --keep-largest-pack",
     "command": "git",
     "args": {
       "argv": [
@@ -26,7 +26,7 @@
     }
   },
   {
-    "caption": "Refresh index",
+    "caption": "Refresh index\tgit status",
     "command": "git",
     "args": {
       "argv": [

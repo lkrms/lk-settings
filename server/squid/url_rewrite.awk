@@ -4,6 +4,7 @@ BEGIN {
   proxy   = "http://127.0.0.1:3127"
   reverse = "http://brew.mirror/"
   root    = "/srv/http/brew.mirror/public_html/"
+  private = "/srv/http/brew.mirror/"
 
   jq_bottles = quote("\
 .[] | select(.versions.bottle) | \
@@ -18,8 +19,11 @@ END { if (r) print l }")
 
   re_brew   = "^http://brew\\.mirror"
   re_bottle = "\\.bottle\\.([^.]+\\.)*tar\\.gz$"
-  add_rule(re_brew "/https?://."  , re_brew "/"     , ""                      )
-  add_rule(re_brew "/v2/"         , re_brew "/v2/"  , "https://ghcr.io/v2/"   )
+  add_rule(re_brew "/https?://.", ""                      , re_brew "/" )
+  add_rule(re_brew "/v2/"       , "https://ghcr.io/v2/"                 )
+
+  # LibreOffice mirror selection is terrible
+  add_rule("^https?://download.documentfoundation.org/", "http://mirror.internode.on.net/pub/")
 
   proxy       = "http_proxy=" quote(proxy) " "
   reverse_go  = quote(reverse) "go/"
@@ -63,10 +67,11 @@ function refresh() {
   }
 }
 
-function add_rule(match_re, from_re, to) {
+# Alternatively: add_rule(match_re, to)
+function add_rule(match_re, to, from_re) {
   rules++
   rule_match[rules] = match_re
-  rule_from[rules]  = from_re
+  rule_from[rules]  = from_re ? from_re : match_re
   rule_to[rules]    = to
 }
 
@@ -116,9 +121,24 @@ function resolve_location(location, uri) {
   }
 }
 
-function rewrite(url, skip_location_check, _url) {
+function rewrite(url, skip_location_check, cache_location, _file, _url) {
+  if (cache_location) {
+    skip_location_check = 0
+    _file = url
+    gsub("[/:]", "__", _file)
+    _file = private "rewrite_cache/" _file
+    _url = run("test ! -f " quote(_file) " || cat " quote(_file))
+    if (_url) {
+      url = _url
+      skip_location_check = 1
+    }
+  }
   while (!skip_location_check && _url = resolve_location(run(proxy "curl -I -fs " reverse_go quote(url) " | awk " awk_redirect, 1), url)) {
     url = _url
+  }
+  if (cache_location && !skip_location_check) {
+    print url > _file
+    close(_file)
   }
   respond("OK rewrite-url=\"" url "\"", url)
 }
@@ -129,7 +149,7 @@ function redirect(url, status) {
 }
 
 {
-  line = $0
+  line    = $0
   request = $1
 }
 

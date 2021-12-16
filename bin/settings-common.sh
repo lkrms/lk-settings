@@ -40,6 +40,7 @@ function symlink_private_common() {
     local FILE
     symlink \
         "$1/.bashrc" ~/.bashrc \
+        "$1/sfdx/" ~/.sfdx \
         "$1/acme.sh/" ~/.acme.sh \
         "$1/aws/" ~/.aws \
         "$1/lftp/.lftprc" ~/.lftprc \

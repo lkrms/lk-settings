@@ -308,6 +308,7 @@ end
 function openNewWindow(rules)
     local app = hs.application.get(rules.bundleID)
     if app and rules.menuItem then
+        logger.d("Calling selectMenuItem(" .. hs.inspect.inspect(rules.menuItem) .. ") on " .. app:bundleID())
         app:selectMenuItem(rules.menuItem)
     elseif app and rules.commandLine then
         local path = hs.application.pathForBundleID(rules.bundleID)

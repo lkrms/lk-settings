@@ -121,6 +121,7 @@ defaults write com.lwouis.alt-tab-macos mouseHoverEnabled -string false
 defaults write com.lwouis.alt-tab-macos showOnScreen -string 0
 defaults write com.lwouis.alt-tab-macos spacesToShow -string 1
 defaults write com.lwouis.alt-tab-macos spacesToShow2 -string 1
+is_basic || defaults write com.lwouis.alt-tab-macos startAtLogin -string true
 
 ! lk_command_exists espanso || {
     lk_console_message "Checking espanso"
@@ -254,6 +255,7 @@ is_basic || symlink_if_not_running \
 lk_console_message "Checking Magnet"
 lk_plist_set_file "$_PREFS/com.crowdcafe.windowmagnet.plist"
 lk_plist_replace ":appAlreadyLaunchedKey" bool true
+lk_plist_replace ":launchAtLogin" bool true
 lk_plist_replace ":expandWindowNorthWestComboKey" dict
 lk_plist_replace ":expandWindowNorthWestComboKey:keyCode" integer 114
 lk_plist_replace ":expandWindowNorthWestComboKey:modifierFlags" integer 786432

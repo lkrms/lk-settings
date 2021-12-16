@@ -9,6 +9,6 @@ crtc 0
 mode 1920x1080
 pos 0x0
 primary
-prop-max_bpc 16
-prop-non_desktop 0
+x-prop-max_bpc 16
+x-prop-non_desktop 0
 rate 60.02

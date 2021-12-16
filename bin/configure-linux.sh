@@ -70,23 +70,25 @@ sudo test -d "$FILE" || {
     sudo -u lightdm install -d -m 00700 "${FILE%/*}" &&
         sudo -u lightdm ln -sfTv "$_ROOT/autorandr/" "$FILE"
 }
-FILE=/etc/modules-load.d/i2c_dev.conf
-lk_install -m 00644 "$FILE"
-lk_file_replace "$FILE" <<EOF
-i2c_dev
-EOF
-FILE=/etc/sudoers.d/lightdm-ddcutil
-lk_install -m 00440 "$FILE"
-lk_file_replace "$FILE" <<EOF
-lightdm ALL=(ALL) NOPASSWD:/usr/bin/ddcutil
-EOF
-if [ "$(grep -Ec '^(iwlwifi|iwlmvm) ' /proc/modules)" -eq 2 ]; then
-    FILE=/etc/modprobe.d/iwlwifi.conf
+if ! lk_is_portable; then
+    FILE=/etc/modules-load.d/i2c_dev.conf
     lk_install -m 00644 "$FILE"
     lk_file_replace "$FILE" <<EOF
-options iwlwifi power_save=0 11n_disable=8 bt_coex_active=0
+i2c_dev
+EOF
+    FILE=/etc/sudoers.d/lightdm-ddcutil
+    lk_install -m 00440 "$FILE"
+    lk_file_replace "$FILE" <<EOF
+lightdm ALL=(ALL) NOPASSWD:/usr/bin/ddcutil
+EOF
+    if [ "$(grep -Ec '^(iwlwifi|iwlmvm) ' /proc/modules)" -eq 2 ]; then
+        FILE=/etc/modprobe.d/iwlwifi.conf
+        lk_install -m 00644 "$FILE"
+        lk_file_replace "$FILE" <<EOF
+options iwlwifi power_save=0 11n_disable=8
 options iwlmvm power_scheme=1
 EOF
+    fi
 fi
 
 symlink "$_ROOT/autorandr/postadd" /etc/xdg/autorandr/postadd

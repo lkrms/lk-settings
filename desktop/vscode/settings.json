@@ -1,4 +1,7 @@
 {
+    "[hosts]": {
+        "editor.defaultFormatter": "lkrms.inifmt"
+    },
     "[html]": {
         "editor.defaultFormatter": "vscode.html-language-features"
     },
@@ -65,6 +68,10 @@
         120
     ],
     "editor.suggest.localityBonus": true,
+    "emmet.excludeLanguages": [
+        "markdown",
+        "php"
+    ],
     "emmet.triggerExpansionOnTab": true,
     "explorer.confirmDelete": false,
     "explorer.confirmDragAndDrop": false,
@@ -90,7 +97,8 @@
         "*.timer": "properties",
         "*crontab*": "properties",
         ".env{,.*}": "properties",
-        ".{bash_login,bash_profile,bashrc,profile,xsessionrc}": "shellscript"
+        ".{bash_login,bash_profile,bashrc,profile,xsessionrc}": "shellscript",
+        "squid.conf": "properties"
     },
     "files.exclude": {
         "**/*.compiled.*": true,
@@ -229,6 +237,7 @@
         "zlib"
     ],
     "javascript.autoClosingTags": false,
+    "javascript.format.insertSpaceBeforeFunctionParenthesis": true,
     "javascript.validate.enable": false,
     "keyboard.dispatch": "keyCode",
     "material-icon-theme.languages.associations": {
@@ -256,6 +265,7 @@
         "rubocop": true
     },
     "ruby.useLanguageServer": true,
+    "salesforcedx-vscode-core.telemetry.enabled": false,
     "search.exclude": {
         "**/*.log": true,
         "**/log": true,
@@ -307,7 +317,7 @@
     ],
     "shellcheck.executablePath": "shellcheck",
     "shellcheck.run": "onSave",
-    "shellformat.flag": "-i 4 -s",
+    "shellformat.flag": "-s",
     "sqltools.format": {
         "linesBetweenQueries": "preserve",
         "reservedWordCase": "upper"

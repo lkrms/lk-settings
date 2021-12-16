@@ -7,8 +7,8 @@ crtc 0
 mode 1366x768
 pos 0x0
 primary
-prop-broadcast_rgb Full
-prop-colorspace Default
-prop-max_bpc 12
-prop-non_desktop 0
+x-prop-broadcast_rgb Full
+x-prop-colorspace Default
+x-prop-max_bpc 12
+x-prop-non_desktop 0
 rate 60.01

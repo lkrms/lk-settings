@@ -4,6 +4,7 @@ VSCODE_EXTENSIONS=(
     ahmadalli.vscode-nginx-conf
     alefragnani.Bookmarks
     alexcvzz.vscode-sqlite
+    beaglefoot.awk-ide-vscode
     bmewburn.vscode-intelephense-client
     chenxsan.vscode-standardjs
     dakara.transformer
@@ -24,7 +25,6 @@ VSCODE_EXTENSIONS=(
     jq-syntax-highlighting.jq-syntax-highlighting
     jrebocho.vscode-random
     lkrms.inifmt
-    luggage66.AWK
     mads-hartmann.bash-ide-vscode
     mgmcdermott.vscode-language-babel
     Mikael.Angular-BeastCode
@@ -49,6 +49,16 @@ VSCODE_EXTENSIONS=(
     redhat.vscode-xml
     redhat.vscode-yaml
     ryu1kn.partial-diff
+    salesforce.salesforce-vscode-slds
+    salesforce.salesforcedx-vscode
+    salesforce.salesforcedx-vscode-apex
+    salesforce.salesforcedx-vscode-apex-debugger
+    salesforce.salesforcedx-vscode-apex-replay-debugger
+    salesforce.salesforcedx-vscode-core
+    salesforce.salesforcedx-vscode-lightning
+    salesforce.salesforcedx-vscode-lwc
+    salesforce.salesforcedx-vscode-soql
+    salesforce.salesforcedx-vscode-visualforce
     sfodje.perltidy
     shardulm94.trailing-spaces
     stansw.vscode-odata
