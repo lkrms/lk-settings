@@ -28,7 +28,7 @@
             ],
             "options": {
                 "env": {
-                    "PRETTY_NESTED_ARRAYS": "1",
+                    "PRETTY_NESTED_ARRAYS": "0",
                     "PRETTY_REMOVE_EMPTY_LINES": "1"
                 }
             },

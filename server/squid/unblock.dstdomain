@@ -22,3 +22,6 @@ tbs8v877.r.us-east-1.awstrack.me
 
 # kmail-lists.com unsubscribe links
 .klclick.com
+
+# Required for links to work on https://www.target.com.au
+.google-analytics.com

@@ -1,4 +1,5 @@
 {
+    "Lua.telemetry.enable": false,
     "[hosts]": {
         "editor.defaultFormatter": "lkrms.inifmt"
     },
@@ -31,6 +32,9 @@
     },
     "[xml]": {
         "editor.defaultFormatter": "redhat.vscode-xml"
+    },
+    "[yaml]": {
+        "editor.defaultFormatter": "redhat.vscode-yaml"
     },
     "bashIde.highlightParsingErrors": false,
     "beautify.config": {
@@ -159,6 +163,7 @@
     "gitlens.statusBar.format": "${author}, ${date} • ${message}",
     "gitlens.statusBar.reduceFlicker": true,
     "html.autoClosingTags": false,
+    "intelephense.diagnostics.undefinedConstants": false,
     "intelephense.stubs": [
         "apache",
         "bcmath",
@@ -254,6 +259,7 @@
     "powershell.codeFormatting.pipelineIndentationStyle": "IncreaseIndentationForFirstPipeline",
     "powershell.codeFormatting.trimWhitespaceAroundPipe": true,
     "powershell.startAutomatically": false,
+    "python.experiments.enabled": false,
     "python.formatting.autopep8Args": [
         "--aggressive"
     ],

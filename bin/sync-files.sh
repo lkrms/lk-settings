@@ -1,3 +1,3 @@
 #!/bin/sh
 
-/opt/lk-scripts/bin/lk-unison.sh -batch
+/opt/lk-platform/bin/lk-unison.sh -batch

@@ -205,7 +205,7 @@
 		{
 			"data": [
 				"7 Minute Workout",
-				"This workout packs in a full-body exercise routine in a fraction of the time. But as with any excercise, be careful. There are numerous apps to get you started."
+				"This workout packs in a full-body exercise routine in a fraction of the time. But as with any exercise, be careful. There are numerous apps to get you started."
 			],
 			"enabled": true
 		},
@@ -218,7 +218,7 @@
 		},
 		{
 			"data": [
-				"Take the stairs",
+				"Take the stairs ",
 				"Studies have shown that stair climbing, which is considered vigorous-intensity physical activity, burns more calories per minute than jogging."
 			],
 			"enabled": true
@@ -261,7 +261,7 @@
 		{
 			"data": [
 				"Focus change",
-				"Hold one finger close to the eye an focus on it. Slowly move the finger away, focus far into the distance and then back to the finger. Bring the finger back and focus on something far away."
+				"Hold one finger close to the eye and focus on it. Slowly move the finger away, focus far into the distance and then back to the finger. Bring the finger back and focus on something far away."
 			],
 			"enabled": true
 		},
@@ -269,6 +269,20 @@
 			"data": [
 				"Palming",
 				"While seated, brace elbows on the desk and close to the desk edge. Let your weight fall forward and cup hands over eyes. Close your eyes and inhale slowly through nose and hold for few seconds. Continue deep breathing."
+			],
+			"enabled": true
+		},
+		{
+			"data": [
+				"Hand squeezes",
+				"Squeeze a pair of balled-up socks or a soft rubber ball, hold for 5 seconds. Repeat whole process few times."
+			],
+			"enabled": true
+		},
+		{
+			"data": [
+				"Slow Breathing",
+				"Emerging research suggests potential for use of controlled slow breathing techniques as a means of optimising physiological parameters that appear to be associated with health and longevity."
 			],
 			"enabled": true
 		}
@@ -363,7 +377,7 @@
 			"enabled": true
 		},
 		{
-			"data": "One should focus every 20 minutes for 20 seconds on an object that is 20 feet distance.",
+			"data": "Focus every 20 minutes for 20 seconds on an object at 20 feet distance.",
 			"enabled": true
 		},
 		{
@@ -387,11 +401,43 @@
 			"enabled": true
 		},
 		{
-			"data": "With your eyes closed, slowly and gently move eyes up to the ceiling, then slowly down to the floor.",
+			"data": "With your eyes closed, slowly and gently raise your eyes to the ceiling and back down to the floor.",
 			"enabled": true
 		},
 		{
-			"data": "With your eyes closed, slowly and gently move eyes to the left, then slowly to the right.",
+			"data": "With your eyes closed, slowly and gently move your eyes to the left, then slowly to the right.",
+			"enabled": true
+		},
+		{
+			"data": "Shake your hands out to get some relief.",
+			"enabled": true
+		},
+		{
+			"data": "One at a time, touch the tip of each finger to the tip of your thumb so they make an O-shape.",
+			"enabled": true
+		},
+		{
+			"data": "Make a fist and then slide your fingers up until they point toward the ceiling, like you're telling someone to stop.",
+			"enabled": true
+		},
+		{
+			"data": "Make a fist and then fan your fingers out and stretch them as far as you can.",
+			"enabled": true
+		},
+		{
+			"data": "Sit tall, arms hanging at your sides, and slowly rotate neck in one direction in a large circle.",
+			"enabled": true
+		},
+		{
+			"data": "Stand tall and slowly tilt your head toward the shoulder using the same hand until you feel a strech.",
+			"enabled": true
+		},
+		{
+			"data": "Stand tall with your arms by your side. Squeeze your shoulder blades together and hold.",
+			"enabled": true
+		},
+		{
+			"data": "Stand tall with your arms raised along your shoulders. Move hands slightly behind your back, hold for a second and return.",
 			"enabled": true
 		}
 	],
@@ -400,5 +446,7 @@
 	"pauseForSuspendOrLock": true,
 	"pauseBreaksShortcut": "",
 	"resumeBreaksShortcut": "",
-	"screen": "primary"
+	"screen": "primary",
+	"timeToBreakInTray": false,
+	"currentTimeInBreaks": false
 }

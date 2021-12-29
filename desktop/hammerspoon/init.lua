@@ -15,7 +15,7 @@ spoon.ReloadConfiguration:start()
 _app = {
     terminal = {
         bundleID = "com.googlecode.iterm2",
-        menuItem = {"Shell", "New Window"}
+        commandLine = '/usr/bin/pkill -SIGUSR1 -fnu "$EUID" \'/create_window_on_signal.py$\''
     },
     browser = {
         bundleID = "org.mozilla.firefox",
@@ -308,8 +308,10 @@ end
 function openNewWindow(rules)
     local app = hs.application.get(rules.bundleID)
     if app and rules.menuItem then
-        logger.d("Calling selectMenuItem(" .. hs.inspect.inspect(rules.menuItem) .. ") on " .. app:bundleID())
-        app:selectMenuItem(rules.menuItem)
+        if app:mainWindow() or app:activate() then
+            logger.d("Calling selectMenuItem(" .. hs.inspect.inspect(rules.menuItem) .. ") on " .. app:bundleID())
+            app:selectMenuItem(rules.menuItem)
+        end
     elseif app and rules.commandLine then
         local path = hs.application.pathForBundleID(rules.bundleID)
         if path then
@@ -428,7 +430,7 @@ hs.hotkey.bind(
     {"ctrl", "cmd"},
     "n",
     function()
-        run("/opt/lk-scripts/bin/lk-note-open.sh")
+        run("/opt/lk-platform/bin/lk-note-open.sh")
     end
 )
 

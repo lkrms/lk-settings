@@ -153,11 +153,13 @@ else
 fi
 
 lk_console_message "Checking iTerm2"
+symlink "$_ROOT/iterm2/Scripts/" "$_APP_SUPPORT/iTerm2/Scripts"
 defaults write com.googlecode.iterm2 AddNewTabAtEndOfTabs -bool false
 defaults write com.googlecode.iterm2 AlternateMouseScroll -bool true
 defaults write com.googlecode.iterm2 CopyWithStylesByDefault -bool true
 defaults write com.googlecode.iterm2 DisallowCopyEmptyString -bool true
 defaults write com.googlecode.iterm2 DoubleClickPerformsSmartSelection -bool true
+defaults write com.googlecode.iterm2 EnableAPIServer -bool true
 defaults write com.googlecode.iterm2 OptionClickMovesCursor -bool false
 defaults write com.googlecode.iterm2 QuitWhenAllWindowsClosed -bool true
 defaults write com.googlecode.iterm2 SensitiveScrollWheel -bool true
@@ -168,9 +170,9 @@ defaults write com.googlecode.iterm2 StatusBarPosition -int 1
 defaults write com.googlecode.iterm2 StretchTabsToFillBar -bool false
 defaults write com.googlecode.iterm2 SUEnableAutomaticChecks -bool true
 defaults write com.googlecode.iterm2 SwitchTabModifier -int 5
-defaults write com.googlecode.iterm2 TypingClearsSelection -bool false
 defaults write com.googlecode.iterm2 UseBorder -bool true
 defaults write com.googlecode.iterm2 VisualIndicatorForEsc -bool false
+defaults delete com.googlecode.iterm2 TypingClearsSelection &>/dev/null || true
 
 if pgrep -xq iTerm2; then
     lk_warn "cannot apply settings: iTerm2 is running"
@@ -201,18 +203,20 @@ else
         lk_plist_replace ":New Bookmarks:$i:Columns" integer 120
         lk_plist_replace ":New Bookmarks:$i:Custom Directory" string "Advanced"
         lk_plist_replace ":New Bookmarks:$i:Flashing Bell" bool true
+        lk_plist_replace ":New Bookmarks:$i:Left Option Key Changeable" bool false
+        lk_plist_replace ":New Bookmarks:$i:Mouse Reporting allow clicks and drags" bool false
         lk_plist_replace ":New Bookmarks:$i:Normal Font" string "Menlo-Regular 12"
         lk_plist_replace ":New Bookmarks:$i:Option Key Sends" integer 2
         lk_plist_replace ":New Bookmarks:$i:Place Prompt at First Column" bool false
-        lk_plist_replace ":New Bookmarks:$i:Prevent Opening in a Tab" bool true
         lk_plist_replace ":New Bookmarks:$i:Right Option Key Sends" integer 2
         lk_plist_replace ":New Bookmarks:$i:Rows" integer 35
         lk_plist_replace ":New Bookmarks:$i:Screen" integer -2
         lk_plist_replace ":New Bookmarks:$i:Scrollback Lines" integer 0
         lk_plist_replace ":New Bookmarks:$i:Show Mark Indicators" bool false
         lk_plist_replace ":New Bookmarks:$i:Silence Bell" bool true
-        lk_plist_replace ":New Bookmarks:$i:Title Components" integer 512
         lk_plist_replace ":New Bookmarks:$i:Unlimited Scrollback" bool true
+        lk_plist_maybe_delete ":New Bookmarks:$i:Prevent Opening in a Tab"
+        lk_plist_maybe_delete ":New Bookmarks:$i:Title Components"
         lk_plist_maybe_delete ":New Bookmarks:$i:Use libtickit protocol"
         lk_plist_replace_from_file ":New Bookmarks:$i:Keyboard Map" dict \
             "$_ROOT/iterm2/Keyboard Map.plist"

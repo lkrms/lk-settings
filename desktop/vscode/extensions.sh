@@ -63,6 +63,7 @@ VSCODE_EXTENSIONS=(
     shardulm94.trailing-spaces
     stansw.vscode-odata
     stkb.rewrap
+    sumneko.lua
     TaoKlerks.poor-mans-t-sql-formatter-vscode
     teabyii.ayu
     timonwong.shellcheck
