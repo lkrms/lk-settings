@@ -214,6 +214,7 @@ symlink "$_ROOT/plank/" ~/.config/plank
 symlink "$_ROOT/quicktile/quicktile.cfg" ~/.config/quicktile.cfg
 symlink "$_ROOT/remmina/" ~/.config/remmina
 symlink "$_ROOT/rubocop/.rubocop.yml" ~/.rubocop.yml
+symlink "$_ROOT/zeal/Zeal.conf" ~/.config/Zeal/Zeal.conf
 
 unset LK_SYMLINK_NO_CHANGE
 symlink "$_ROOT/systemd/user.control" ~/.config/systemd/user.control
@@ -289,12 +290,15 @@ symlink_if_not_running \
     "$_ROOT/vscode/snippets" ~/.config/VSCodium/User/snippets \
     "VS Code" "pgrep -x codium"
 
-FILE=/usr/share/vscodium-bin/resources/app/product.json
+FILE=/opt/vscodium-bin/resources/app/product.json
 if [ -f "$FILE" ]; then
     VSCODE_PRODUCT_JSON=$(jq \
         '.extensionsGallery = {
     "serviceUrl": "https://marketplace.visualstudio.com/_apis/public/gallery",
-    "itemUrl": "https://marketplace.visualstudio.com/items"
+    "cacheUrl": "https://vscode.blob.core.windows.net/gallery/index",
+    "itemUrl": "https://marketplace.visualstudio.com/items",
+    "controlUrl": "",
+    "recommendationsUrl": ""
 }' <"$FILE")
     diff <(jq <"$FILE") <(echo "$VSCODE_PRODUCT_JSON") >/dev/null ||
         LK_SUDO=1 lk_file_replace "$FILE" "$VSCODE_PRODUCT_JSON"

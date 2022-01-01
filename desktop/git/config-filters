@@ -98,3 +98,7 @@
 [filter "xfpanelswitch"]
 	clean = gnu_tar -jx config.txt -O
 	smudge = d=$(mktemp -d) && cat >\"$d/config.txt\" && gnu_tar -jcC \"$d\" config.txt && rm -R \"$d\"
+
+[filter "zeal"]
+	clean = sed -E '/^(external_link_policy|path|install_id|(splitter|window)_geometry|toc_splitter_state)=/d'
+	smudge = cat

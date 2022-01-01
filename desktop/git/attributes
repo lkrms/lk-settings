@@ -27,3 +27,4 @@ abnerworks.Typora.plist filter=typora-plist
 **/vscode/settings.json filter=vscodesettings
 whiskermenu*.rc filter=whiskermenu
 **/xfce4-panel-profiles/*.tar.bz2 filter=xfpanelswitch
+Zeal.conf filter=zeal
