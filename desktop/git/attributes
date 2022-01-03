@@ -13,7 +13,7 @@
 Clementine.conf filter=clementine
 flameshot.ini filter=flameshot
 geeqierc.xml filter=geeqie
-hosts filter=hosts
+/hosts filter=hosts
 **/*.sublime-* filter=jq
 **/smerge/User/Preferences.sublime-settings filter=sublimemerge
 keepassxc.ini filter=keepassxc

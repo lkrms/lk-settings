@@ -160,6 +160,7 @@ defaults write com.googlecode.iterm2 CopyWithStylesByDefault -bool true
 defaults write com.googlecode.iterm2 DisallowCopyEmptyString -bool true
 defaults write com.googlecode.iterm2 DoubleClickPerformsSmartSelection -bool true
 defaults write com.googlecode.iterm2 EnableAPIServer -bool true
+defaults write com.googlecode.iterm2 NoSyncTipsDisabled -bool true
 defaults write com.googlecode.iterm2 OptionClickMovesCursor -bool false
 defaults write com.googlecode.iterm2 QuitWhenAllWindowsClosed -bool true
 defaults write com.googlecode.iterm2 SensitiveScrollWheel -bool true

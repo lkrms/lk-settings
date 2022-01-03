@@ -79,12 +79,12 @@
 /plugins/plugin-5 'separator'
 /plugins/plugin-5/style uint32 0
 /plugins/plugin-6 'systray'
-/plugins/plugin-6/hidden-items [<'Stretchly1'>, <'Todoist1'>, <'remmina-icon'>, <'blueman'>, <'flameshot'>]
-/plugins/plugin-6/hidden-legacy-items [<'networkmanager applet'>, <'thunar'>, <'system-config-printer'>, <'remmina'>]
+/plugins/plugin-6/hidden-items [<'Todoist1'>, <'remmina-icon'>, <'blueman'>, <'flameshot'>, <'Zeal'>]
+/plugins/plugin-6/hidden-legacy-items [<'networkmanager applet'>, <'thunar'>, <'stretchly'>, <'system-config-printer'>, <'remmina'>]
 /plugins/plugin-6/hide-new-items true
 /plugins/plugin-6/icon-size 28
-/plugins/plugin-6/known-items [<'blueman'>, <'copyq'>, <'flameshot'>, <'Nextcloud'>, <'Todoist1'>, <'RescueTime'>, <'remmina-icon'>, <'Microsoft Teams - Preview1'>, <'Skype1'>, <'Caprine1'>, <'zoom'>, <'Stretchly1'>]
-/plugins/plugin-6/known-legacy-items [<'system-config-printer'>, <'thunar'>, <'networkmanager applet'>, <'bluetooth enabled'>, <'todoist'>, <'remmina'>, <'teams'>, <'skypeforlinux'>, <'electron'>]
+/plugins/plugin-6/known-items [<'blueman'>, <'Stretchly1'>, <'copyq'>, <'flameshot'>, <'RescueTime'>, <'Nextcloud'>, <'Todoist1'>, <'remmina-icon'>, <'Microsoft Teams - Preview1'>, <'Skype1'>, <'Caprine1'>, <'zoom'>, <'Zeal'>]
+/plugins/plugin-6/known-legacy-items [<'system-config-printer'>, <'thunar'>, <'networkmanager applet'>, <'bluetooth enabled'>, <'stretchly'>, <'todoist'>, <'remmina'>, <'teams'>, <'skypeforlinux'>, <'electron'>]
 /plugins/plugin-6/square-icons true
 /plugins/plugin-7 'cpugraph'
 /plugins/plugin-8 'pulseaudio'
