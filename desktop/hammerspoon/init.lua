@@ -343,6 +343,22 @@ initScreens()
 initWindowFilter()
 
 hs.hotkey.bind(
+    {"cmd", "shift"},
+    "9",
+    function()
+        hs.eventtap.keyStroke({"option", "cmd", "shift"}, "4")
+    end
+)
+
+hs.hotkey.bind(
+    {"ctrl", "cmd", "shift"},
+    "9",
+    function()
+        hs.eventtap.keyStroke({"option", "cmd", "shift"}, "4")
+    end
+)
+
+hs.hotkey.bind(
     {"ctrl", "option"},
     "a",
     function()

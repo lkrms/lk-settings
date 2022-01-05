@@ -129,6 +129,10 @@ is_basic || defaults write com.lwouis.alt-tab-macos startAtLogin -string true
         espanso register
 }
 
+symlink_if_not_running \
+    "$_ROOT/flameshot/flameshot.ini" ~/.config/flameshot/flameshot.ini \
+    Flameshot "pgrep -x flameshot"
+
 lk_console_message "Checking Flycut"
 if pgrep -xq Flycut; then
     lk_warn "cannot apply settings: Flycut is running"
@@ -616,6 +620,20 @@ if ! is_basic; then
 
     lk_tty_print "Checking Dock"
     "$_ROOT/../bin/configure-macos-dock.sh"
+
+    FILE=~/Library/Preferences/com.kapeli.dashdoc.plist
+    if [ -e "$FILE" ]; then
+        lk_tty_print "Checking Dash"
+        pkill -xu "$USER" Dash &>/dev/null || true
+        defaults write com.kapeli.dashdoc didShowStatusIconHello -bool true
+        defaults write com.kapeli.dashdoc statusIconHelloSuppressCheckboxState -bool false
+        defaults write com.kapeli.dashdoc syncFolderPath -string "$_ROOT/dash"
+        if defaults read com.kapeli.dashdoc docsets &>/dev/null; then
+            "$LK_BASE/lib/python/plist_sort.py" "$FILE" "$FILE" docsets docsetName
+            killall -u "$USER" cfprefsd
+        fi
+        open -b com.kapeli.dashdoc
+    fi
 fi
 
 killall -u "$USER" cfprefsd
