@@ -622,22 +622,23 @@ if ! is_basic; then
     "$_ROOT/../bin/configure-macos-dock.sh"
 
     FILE=~/Library/Preferences/com.kapeli.dashdoc.plist
+    START_DASH=
     if [ -e "$FILE" ]; then
         lk_tty_print "Checking Dash"
-        pkill -xu "$USER" Dash &>/dev/null || true
+        ! pkill -xu "$USER" Dash &>/dev/null || START_DASH=1
         defaults write com.kapeli.dashdoc didShowStatusIconHello -bool true
         defaults write com.kapeli.dashdoc statusIconHelloSuppressCheckboxState -bool false
         defaults write com.kapeli.dashdoc syncFolderPath -string "$_ROOT/dash"
         if defaults read com.kapeli.dashdoc docsets &>/dev/null; then
             "$LK_BASE/lib/python/plist_sort.py" "$FILE" "$FILE" docsets docsetName
-            killall -u "$USER" cfprefsd
         fi
-        open -b com.kapeli.dashdoc
     fi
 fi
 
 killall -u "$USER" cfprefsd
 ! is_basic || killall Dock
 killall Finder
+
+is_basic || [ -z "${START_DASH-}" ] || open -b com.kapeli.dashdoc
 
 is_basic || vscode_sync_extensions "$_ROOT/vscode/extensions.sh"

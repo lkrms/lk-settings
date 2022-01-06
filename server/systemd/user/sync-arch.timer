@@ -1,9 +1,9 @@
 [Unit]
-Description=Sync package repositories and blocklists every hour
+Description=Sync package repositories and blocklists every day
 
 [Timer]
 OnBootSec=1h
-OnUnitActiveSec=1h
+OnUnitActiveSec=1d
 AccuracySec=5m
 
 [Install]

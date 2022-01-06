@@ -161,6 +161,7 @@ COMMIT
 :LIBVIRT_PRT - [0:0]
 -A PREROUTING -i ppp0 -j MARK --set-xmark 0x1/0xffffffff
 -A PREROUTING -i br0 -m mac --mac-source 1c:98:c1:5c:39:ba -m comment --comment playstation4 -j MARK --set-xmark 0x1/0xffffffff
+-A PREROUTING -i br0 -m mac --mac-source 68:c6:3a:db:36:b1 -m comment --comment kogan-kapra14wfga -j MARK --set-xmark 0x1/0xffffffff
 -A PREROUTING -i br0 -m mac --mac-source 34:7e:5c:90:d0:23 -m comment --comment sonos-beam -j MARK --set-xmark 0x2/0xffffffff
 -A PREROUTING -i br0 -m mac --mac-source 78:28:ca:33:ee:32 -m comment --comment sonos-play1-1 -j MARK --set-xmark 0x2/0xffffffff
 -A PREROUTING -i br0 -m mac --mac-source 78:28:ca:2a:04:e4 -m comment --comment sonos-play1-2 -j MARK --set-xmark 0x2/0xffffffff

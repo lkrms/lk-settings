@@ -37,7 +37,7 @@ function symlink() {
 }
 
 function symlink_private_common() {
-    local FILE
+    local FILE LK_SUDO
     symlink \
         "$1/.bashrc" ~/.bashrc \
         "$1/sfdx/" ~/.sfdx \
@@ -50,6 +50,9 @@ function symlink_private_common() {
         "$1/robo3t/.3T/" ~/.3T \
         "$1/s3cmd/.s3cfg" ~/.s3cfg \
         "$1/ssh/" ~/.ssh
+    LK_SUDO=1
+    symlink "$1/hosts" /etc/hosts
+    LK_SUDO=0
     [ -L ~/.unison ] ||
         symlink "$1/unison/" ~/.unison
     for FILE in "$1"/.*-settings; do
