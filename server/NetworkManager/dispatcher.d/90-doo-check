@@ -6,7 +6,7 @@ LAN_ATTACH=()  # For `ip link set <DEVICE> master <LAN_IFACE>`
 
 LK_TTY_NO_COLOUR=1 \
     . /opt/lk-platform/bin/lk-bash-load.sh || exit
-lk_include linux
+lk_require linux
 
 LK_VERBOSE=1
 lk_log_start

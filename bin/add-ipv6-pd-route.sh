@@ -2,7 +2,7 @@
 
 LK_TTY_NO_COLOUR=1 \
     . /opt/lk-platform/bin/lk-bash-load.sh || exit
-lk_include linux
+lk_require linux
 
 eval "$(lk_get_regex IPV6_REGEX)"
 

@@ -16,6 +16,6 @@ URL=https://raw.githubusercontent.com/lkrms/lk-platform/$LK_PLATFORM_BRANCH/bin/
     bash "$FILE" "$@" || exit
 
 . /opt/lk-platform/lib/bash/common.sh
-lk_include macos
+lk_require macos
 
 lk_macos_setenv HOMEBREW_ARTIFACT_DOMAIN http://brew.mirror

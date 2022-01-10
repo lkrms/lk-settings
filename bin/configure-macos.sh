@@ -6,7 +6,7 @@ BS=${BASH_SOURCE[0]} &&
     lk_die "unable to resolve path to script"
 
 . "$_ROOT/../bin/settings-common.sh"
-lk_include macos
+lk_require macos
 
 lk_assert_not_root
 lk_assert_is_macos

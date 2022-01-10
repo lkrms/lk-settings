@@ -2,7 +2,7 @@
 
 LK_TTY_NO_COLOUR=1 \
     . /opt/lk-platform/bin/lk-bash-load.sh || exit
-lk_include arch
+lk_require arch
 
 function update-notracking() {
     local TEMP_FILE LK_FILE_REPLACE_NO_CHANGE LK_VERBOSE=1 LK_FILE_NO_DIFF=1 \

@@ -23,7 +23,8 @@ END { if (r) print l }")
   add_rule(re_brew "/v2/"       , "https://ghcr.io/v2/"                 )
 
   # LibreOffice mirror selection is terrible
-  add_rule("^https?://download.documentfoundation.org/", "http://mirror.internode.on.net/pub/")
+  #add_rule("^https?://download.documentfoundation.org/", "http://mirror.internode.on.net/pub/")
+  add_rule("^https?://download.documentfoundation.org/", "http://mirrors.dotsrc.org/tdf/")
 
   proxy       = "http_proxy=" quote(proxy) " "
   reverse_go  = quote(reverse) "go/"

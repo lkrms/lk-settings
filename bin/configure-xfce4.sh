@@ -7,7 +7,7 @@ BS=${BASH_SOURCE[0]} &&
 
 # shellcheck source=./settings-common.sh
 . "$_ROOT/../bin/settings-common.sh"
-lk_include linux provision
+lk_require linux provision
 
 lk_assert_command_exists xfconf-query
 

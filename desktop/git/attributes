@@ -1,5 +1,5 @@
-#.bash* filter=bash
-#*.sh filter=bash
+.bash* filter=bash
+*.sh filter=bash
 
 #*.plist filter=plist
 

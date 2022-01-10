@@ -4,7 +4,7 @@ set -euo pipefail
 lk_die() { echo "$BASH_SOURCE: $1" >&2 && exit 1; }
 [ -d "${LK_BASE-}" ] || lk_die "LK_BASE not set"
 . "$LK_BASE/lib/bash/common.sh"
-lk_include misc
+lk_require misc
 
 shopt -s nullglob
 

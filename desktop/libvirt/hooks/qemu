@@ -12,7 +12,7 @@ lk_die() { s=$? && echo "$BASH_SOURCE: $1" >&2 && (exit $s) && false || exit; }
         [ -n "${LK_BASE-}" ]; } || lk_die "LK_BASE not set"
 
 . "$LK_BASE/lib/bash/common.sh"
-lk_include iptables provision
+lk_require iptables provision
 
 LK_VERBOSE=1
 
@@ -32,7 +32,7 @@ SH=$(xq \
     -f "$LK_BASE/lib/jq/xq_get_elements_by_ns.jq" \
     <"$XML" |
     jq '.lk.ip' |
-    lk_jq_get_shell_var \
+    lk_json_sh \
         GUEST_IPS \
         '.address|to_array' \
         FORWARD_PORTS \

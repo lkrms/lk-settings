@@ -8,11 +8,7 @@
 	smudge = cat
 
 [filter "bash"]
-	clean = "bash -c 'F=$(cat);_F=$(echo \"$F\" | shfmt -i 4 2>/dev/null)||_F=$F;echo \"$_F\"'"
-	smudge = cat
-
-[filter "bash2"]
-	clean = "bash -c 'F=$(cat);_F=$(echo \"$F\" | shfmt -i 2 2>/dev/null)||_F=$F;echo \"$_F\"'"
+	clean = "f=$(mktemp)&&cat >\"$f\"&&shfmt -i \"$(awk 'BEGIN{i=4}/^(  )+[^ ]/{sub(\"[^ ].*\",\"\");i=length($0);exit}END{print i}' \"$f\")\" <\"$f\""
 	smudge = cat
 
 [filter "clementine"]
