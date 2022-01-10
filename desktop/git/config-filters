@@ -8,7 +8,7 @@
 	smudge = cat
 
 [filter "bash"]
-	clean = "f=$(mktemp)&&cat >\"$f\"&&shfmt -i \"$(awk 'BEGIN{i=4}/^(  )+[^ ]/{sub(\"[^ ].*\",\"\");i=length($0);exit}END{print i}' \"$f\")\" <\"$f\""
+	clean = "! type -P shfmt >/dev/null&&cat||{ f=$(mktemp)&&cat >\"$f\"&&shfmt -i \"$(awk 'BEGIN{i=4}/^(  )+[^ ]/{sub(\"[^ ].*\",\"\");i=length($0);exit}END{print i}' \"$f\")\" <\"$f\";}"
 	smudge = cat
 
 [filter "clementine"]
