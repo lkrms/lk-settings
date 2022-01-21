@@ -70,7 +70,7 @@ Use rsync to copy files from hub to doo after completing a dry run." || return
 
 function plc-sync-uploads() {
     local ARGS=()
-    while [[ "${1-}" == -* ]]; do
+    while [[ ${1-} == -* ]]; do
         ARGS[${#ARGS[*]}]=$1
         shift
     done
@@ -121,7 +121,7 @@ function rename-tv-episodes() {
         }
         [ "$EXT" != mp4 ] || EXT=m4v
         if [[ $NAME =~ ^$RE$ ]]; then
-            EP=${BASH_REMATCH[1]} || true
+            EP=${BASH_REMATCH[1]#0} || true
             NEW_FILE=${FILE%/*}/$NAME.$EXT
         else
             while ((++EP)); do

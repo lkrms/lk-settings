@@ -61,6 +61,7 @@
     "editor.cursorSurroundingLines": 2,
     "editor.dragAndDrop": false,
     "editor.fontFamily": "'JetBrains Mono', 'Source Code Pro', Menlo, Monaco, 'Courier New', monospace",
+    "editor.hover.delay": 1200,
     "editor.lineHeight": 19,
     "editor.quickSuggestions": {
         "comments": true

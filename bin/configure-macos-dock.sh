@@ -12,6 +12,7 @@
     "/Applications/Skype.app" \
     "/Applications/Messenger.app" \
     "/Applications/Visual Studio Code.app" \
+    "/Applications/Dash.app" \
     "/Applications/DBeaver.app" \
     "/Applications/Sublime Merge.app" \
     "/Applications/KeePassXC.app"

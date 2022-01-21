@@ -371,7 +371,7 @@
 	<key>shouldSyncView</key>
 	<true/>
 	<key>showInDock</key>
-	<false/>
+	<true/>
 	<key>sortDocsetsAlphabetically</key>
 	<false/>
 	<key>versionedDHCheatRepo</key>

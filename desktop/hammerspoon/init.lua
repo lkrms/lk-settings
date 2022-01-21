@@ -346,7 +346,7 @@ hs.hotkey.bind(
     {"cmd", "shift"},
     "9",
     function()
-        hs.eventtap.keyStroke({"option", "cmd", "shift"}, "4")
+        run("/Applications/flameshot.app/Contents/MacOS/flameshot gui")
     end
 )
 
@@ -354,7 +354,7 @@ hs.hotkey.bind(
     {"ctrl", "cmd", "shift"},
     "9",
     function()
-        hs.eventtap.keyStroke({"option", "cmd", "shift"}, "4")
+        run("/Applications/flameshot.app/Contents/MacOS/flameshot gui -p ~/Nextcloud/Inbox/Screenshots")
     end
 )
 
@@ -486,7 +486,7 @@ hs.hotkey.bind(
     {"ctrl", "cmd"},
     "v",
     function()
-        run("/usr/local/bin/virt-manager", true)
+        run("/opt/homebrew/bin/virt-manager", true)
     end
 )
 

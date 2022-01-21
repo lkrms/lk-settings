@@ -102,13 +102,13 @@ is_basic || symlink_if_not_running \
 FILE=~/Library/Containers/fr.handbrake.HandBrake/Data
 FILE="$FILE/Library/Application Support/HandBrake/UserPresets.json"
 is_basic || [ ! -d "${FILE%/*}" ] || {
-    lk_console_message "Checking HandBrake"
+    lk_tty_print "Checking HandBrake"
     pgrep -xq HandBrake &&
         lk_warn "cannot apply settings: HandBrake is running" ||
         lk_file_replace -b -f "$_ROOT/handbrake/presets.json" "$FILE"
 }
 
-lk_console_message "Checking AltTab"
+lk_tty_print "Checking AltTab"
 defaults write com.lwouis.alt-tab-macos hideWindowlessApps -string true
 # Command (⌘)
 defaults write com.lwouis.alt-tab-macos holdShortcut -string $'\xe2\x8c\x98'
@@ -124,7 +124,7 @@ defaults write com.lwouis.alt-tab-macos spacesToShow2 -string 1
 is_basic || defaults write com.lwouis.alt-tab-macos startAtLogin -string true
 
 ! lk_command_exists espanso || {
-    lk_console_message "Checking espanso"
+    lk_tty_print "Checking espanso"
     [ -e ~/Library/LaunchAgents/com.federicoterzi.espanso.plist ] ||
         espanso register
 }
@@ -133,7 +133,7 @@ symlink_if_not_running \
     "$_ROOT/flameshot/flameshot.ini" ~/.config/flameshot/flameshot.ini \
     Flameshot "pgrep -x flameshot"
 
-lk_console_message "Checking Flycut"
+lk_tty_print "Checking Flycut"
 if pgrep -xq Flycut; then
     lk_warn "cannot apply settings: Flycut is running"
 else
@@ -156,7 +156,17 @@ else
     }
 fi
 
-lk_console_message "Checking iTerm2"
+is_basic || {
+    lk_tty_print "Checking Hammerspoon"
+    if ! launchctl list | awk '$3 == "org.hammerspoon.Hammerspoon"' |
+        grep . >/dev/null; then
+        lk_tty_detail "Creating launchd agent"
+        lk_macos_launch_agent_install org.hammerspoon.Hammerspoon \
+            open -b org.hammerspoon.Hammerspoon
+    fi
+}
+
+lk_tty_print "Checking iTerm2"
 symlink "$_ROOT/iterm2/Scripts/" "$_APP_SUPPORT/iTerm2/Scripts"
 defaults write com.googlecode.iterm2 AddNewTabAtEndOfTabs -bool false
 defaults write com.googlecode.iterm2 AlternateMouseScroll -bool true
@@ -165,6 +175,7 @@ defaults write com.googlecode.iterm2 DisallowCopyEmptyString -bool true
 defaults write com.googlecode.iterm2 DoubleClickPerformsSmartSelection -bool true
 defaults write com.googlecode.iterm2 EnableAPIServer -bool true
 defaults write com.googlecode.iterm2 NoSyncTipsDisabled -bool true
+defaults write com.googlecode.iterm2 OpenFileInNewWindows -bool true
 defaults write com.googlecode.iterm2 OptionClickMovesCursor -bool false
 defaults write com.googlecode.iterm2 QuitWhenAllWindowsClosed -bool true
 defaults write com.googlecode.iterm2 SensitiveScrollWheel -bool true
@@ -261,7 +272,7 @@ is_basic || symlink_if_not_running \
     "$_ROOT/keepassxc/keepassxc.ini" "$_APP_SUPPORT/keepassxc/keepassxc.ini" \
     KeePassXC "pgrep -x KeePassXC"
 
-lk_console_message "Checking Magnet"
+lk_tty_print "Checking Magnet"
 lk_plist_set_file "$_PREFS/com.crowdcafe.windowmagnet.plist"
 lk_plist_replace ":appAlreadyLaunchedKey" bool true
 lk_plist_replace ":launchAtLogin" bool true
@@ -305,7 +316,7 @@ lk_plist_replace ":restoreWindowComboKey" dict
 lk_plist_replace ":restoreWindowComboKey:keyCode" integer 101
 lk_plist_replace ":restoreWindowComboKey:modifierFlags" integer 786432
 
-lk_console_message "Checking KeepingYouAwake"
+lk_tty_print "Checking KeepingYouAwake"
 defaults write info.marcel-dierkes.KeepingYouAwake \
     "info.marcel-dierkes.KeepingYouAwake.LaunchAtLogin" -bool true
 
@@ -314,7 +325,7 @@ is_basic || symlink_if_not_running \
     Stretchly "pgrep -x stretchly"
 
 is_basic || {
-    lk_console_message "Checking Todoist"
+    lk_tty_print "Checking Todoist"
     FILE=~/Library/Containers/com.todoist.mac.Todoist/Data
     FILE="$FILE/Library/Application Support/Todoist/config.json"
     [ ! -e "$FILE" ] || {
@@ -332,7 +343,7 @@ is_basic || {
 }
 
 is_basic || {
-    lk_console_message "Checking Harvest"
+    lk_tty_print "Checking Harvest"
     # ^⌘O
     defaults write com.getharvest.harvestxapp kNewTimerShortcut "<data>
 YnBsaXN0MDDUAQIDBAUGBwpYJHZlcnNpb25ZJGFyY2hpdmVyVCR0b3BYJG9iamVjdHMS
@@ -388,7 +399,7 @@ lk_macos_maybe_install_pkg_url \
     "Brother Printer Drivers (Color Laser)"
 
 # use `lpinfo -m` for driver names
-lk_console_message "Checking printers"
+lk_tty_print "Checking printers"
 (
     lk_console_detail "Brother HL-5450DN"
     sudo lpadmin -p HL5450DN -E \
@@ -416,7 +427,7 @@ lk_console_message "Checking printers"
         -o printer-error-policy=abort-job
 ) 2>/dev/null || lk_die "Error configuring printers"
 
-lk_console_message "Checking macOS"
+lk_tty_print "Checking macOS"
 
 if ! nvram StartupMute 2>/dev/null | grep -E "$S%01\$" >/dev/null; then
     lk_console_detail "Disabling startup sound"
@@ -452,6 +463,9 @@ defaults write NSGlobalDomain WebAutomaticSpellingCorrectionEnabled -bool false
 is_basic || defaults write NSGlobalDomain NSAutomaticTextCompletionEnabled -bool false
 is_basic || defaults write com.apple.touchbar.agent PresentationModeGlobal -string functionKeys
 is_basic || defaults write com.apple.touchbar.agent PresentationModeFnModes -dict functionKeys fullControlStrip
+
+# Press Fn to: Do Nothing
+is_basic || defaults write com.apple.HIToolbox AppleFnUsageType -int 0
 
 defaults write com.apple.HIToolbox AppleDictationAutoEnable -int 0
 # Disable Dictation > Shortcut

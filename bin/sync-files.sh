@@ -1,3 +1,3 @@
 #!/bin/sh
 
-/opt/lk-platform/bin/lk-unison.sh -batch
+/bin/bash -ic '/opt/lk-platform/bin/lk-unison.sh -batch || lk_tty_pause'
