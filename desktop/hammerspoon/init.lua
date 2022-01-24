@@ -54,6 +54,9 @@ _criteria = {
     end,
     notPrimary = function(ev)
         return ev.window:screen():getUUID() ~= _screen1:getUUID()
+    end,
+    loading = function()
+        return _loading
     end
 }
 
@@ -74,7 +77,11 @@ _criteria.sticky = {
 _criteria.tacky = {
     _operator.AND,
     _criteria.multihead,
-    _criteria.notPrimary,
+    {
+        _operator.OR,
+        _criteria.notPrimary,
+        _criteria.loading
+    },
     event = {wf.windowCreated, wf.windowFocused, wf.windowUnfocused}
 }
 
@@ -238,9 +245,11 @@ function processEvent(window, appName, event)
 end
 
 function initWindowFilter()
+    _loading = true
     _filter = wf.new(nil)
     _filter:subscribe(wf.windowCreated, processEvent, true)
     _filter:subscribe({wf.windowFocused, wf.windowUnfocused}, processEvent)
+    _loading = false
 end
 
 function quote(string)
