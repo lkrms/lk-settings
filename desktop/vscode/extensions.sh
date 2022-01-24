@@ -12,7 +12,6 @@ VSCODE_EXTENSIONS=(
     DotJoshJohnson.xml
     dracula-theme.theme-dracula
     eamodio.gitlens
-    felixfbecker.php-debug
     foxundermoon.shell-format
     gharveymn.nightswitch-lite
     giovdk21.vscode-sublime-merge
@@ -73,6 +72,7 @@ VSCODE_EXTENSIONS=(
     Tyriar.sort-lines
     wingrunr21.vscode-ruby
     wmaurer.change-case
+    xdebug.php-debug
     yzhang.markdown-all-in-one
     zhuangtongfa.material-theme
 )

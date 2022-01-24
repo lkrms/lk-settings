@@ -1,16 +1,40 @@
-SHELL=/bin/bash
-PATH=~/.local/bin:/usr/bin:/bin
-DISPLAY=:0
-MAILTO=
+# On macOS, environment variables need to be quoted
+SHELL="/bin/bash"
+PATH="/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin"
+DISPLAY=":0"
+MAILTO=""
 
-# reset stretchly at the beginning of each work hour
-0 9,10 * * 1,2,3,4,5 stretchly reset
-15 11,12 * * 1,2,3,4,5 stretchly reset
-55 13 * * 1,2,3,4,5 stretchly reset
-10 15,16 * * 1,2,3,4,5 stretchly reset
+#### Stretchly
 
-# reminders
-20 9,11,15 * * 1,2,3,4,5 stretchly long --noskip -T "Step away NOW." -t "You need 5 minutes away from screens."
-20 10,14 * * 1,2,3,4,5 stretchly reset -T "Take a 20-minute break, starting now." -t "Even if you don't think you've earned it."
-20 12 * * 1,2,3,4,5 stretchly long --noskip -T "Lunchtime starts NOW." -t "Step away from your desk until 1.55pm."
-15 16 * * 1,2,3,4,5 stretchly reset -T "Stop work. NOW." -t "There are many other things worthy of your attention."
+# - 09:00-09:55 + 5m break
+# - 10:00-10:55 + 20m break
+# - 11:15-12:10 + 5m break
+# - 12:15-13:10 + 40m break
+# - 13:50-14:45 + 20m break
+# - 15:05-16:00 + 5m break
+# - 16:05-17:00
+
+# Reset at the beginning of each work hour
+0	9	*	*	mon-fri	stretchly reset
+0	10	*	*	mon-fri	stretchly reset
+15	11	*	*	mon-fri	stretchly reset
+15	12	*	*	mon-fri	stretchly reset
+50	13	*	*	mon-fri	stretchly reset
+5	15	*	*	mon-fri	stretchly reset
+5	16	*	*	mon-fri	stretchly reset
+
+# Set break title and text 1 minute before each break and postponed break
+54,56	9	*	*	mon-fri	stretchly long --noskip -T "Step away NOW." -t "You need 5 minutes away from screens."
+54,56	10	*	*	mon-fri	stretchly long --noskip -T "Take a 20-minute break, starting now." -t "Even if you don't think you've earned it."
+9,11	12	*	*	mon-fri	stretchly long --noskip -T "Step away NOW." -t "You need 5 minutes away from screens."
+9,11	13	*	*	mon-fri	stretchly long --noskip -T "Lunchtime starts NOW." -t "Step away from your desk until 1.50pm."
+44,46	14	*	*	mon-fri	stretchly long --noskip -T "Take a 20-minute break, starting now." -t "Even if you don't think you've earned it."
+59	15	*	*	mon-fri	stretchly long --noskip -T "Step away NOW." -t "You need 5 minutes away from screens."
+1	16	*	*	mon-fri	stretchly long --noskip -T "Step away NOW." -t "You need 5 minutes away from screens."
+59	16	*	*	mon-fri	stretchly long --noskip -T "Stop work. NOW." -t "There are other things more worthy of your attention."
+1	17	*	*	mon-fri	stretchly long --noskip -T "Stop work. NOW." -t "There are other things more worthy of your attention."
+
+# Disable outside of business hours
+9,29,49	0-8	*	*	mon-fri	stretchly pause -d until-morning
+9,29,49	17-23	*	*	mon-fri	stretchly pause -d until-morning
+*/20	*	*	*	sat,sun	stretchly pause -d until-morning

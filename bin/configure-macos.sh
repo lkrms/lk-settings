@@ -22,6 +22,17 @@ _BASIC=
 ! lk_has_arg "--basic" || touch "$_ROOT/../.is_basic"
 [ ! -e "$_ROOT/../.is_basic" ] || _BASIC=1
 
+if lk_command_exists crontab; then
+    lk_mktemp_with CRONTAB awk \
+        -v STRETCHLY="$(lk_double_quote "$_ROOT/stretchly/stretchly.sh")" \
+        '/^DISPLAY=/{next}$6=="stretchly"{$6=STRETCHLY}{print}' \
+        "$_ROOT/cron/crontab"
+    diff <(crontab -l) "$CRONTAB" >/dev/null || {
+        lk_console_message "Updating crontab"
+        crontab <"$CRONTAB"
+    }
+fi
+
 lk_tty_print "Cleaning up legacy settings"
 FILE=~/Library/LaunchAgents/info.deseven.icanhazshortcut.plist
 if [ -e "$FILE" ]; then

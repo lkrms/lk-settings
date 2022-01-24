@@ -20,7 +20,7 @@
 	"microbreakPostponableDurationPercent": 30,
 	"breakPostponesLimit": 1,
 	"breakPostponableDurationPercent": 40,
-	"mainColor": "#567890",
+	"mainColor": "#633738",
 	"transparentMode": true,
 	"opacity": 0.9,
 	"audio": "silence",
