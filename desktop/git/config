@@ -21,6 +21,7 @@
 	unhide-all = update-index --really-refresh
 	hidden = "!f(){ git -C \"$GIT_PREFIX\" ls-files -v \"$@\"|grep '^[[:lower:]]';};f"
 	ignored = "!f(){ git -C \"$GIT_PREFIX\" status --short --ignored \"$@\"|grep '^!!';};f"
+	recheckout = "!f(){ cd \"$GIT_PREFIX\"||return;[ $# -gt 0 ]||set -- .;git ls-files -z \"$@\"|xargs -0r git rm --cached&&git checkout HEAD -- \"$@\";};f"
 	history = reflog --date=iso
 
 [url "github.com:"]
@@ -46,7 +47,9 @@
 [mergetool "sourcetree"]
 	cmd = /Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
 	trustExitCode = true
+
 [init]
 	defaultBranch = main
+
 [core]
 	autocrlf = input
