@@ -31,6 +31,12 @@ if lk_command_exists crontab; then
         lk_console_message "Updating crontab"
         crontab <"$CRONTAB"
     }
+    if ! launchctl list | awk '$3 == "net.hovancik.stretchly.align"' |
+        grep . >/dev/null; then
+        lk_tty_print "Creating launchd agent:" net.hovancik.stretchly.align
+        lk_macos_launch_agent_install net.hovancik.stretchly.align \
+            "$LK_BASE/bin/lk-run-after.sh" 60 "$_ROOT/stretchly/stretchly.sh"
+    fi
 fi
 
 lk_tty_print "Cleaning up legacy settings"

@@ -47,6 +47,7 @@ _PRIV=${1-}
         lk_symlink "$FILE" ~/.config/autostart/"${FILE##*/}" || true
     done
 
+    unset LK_SYMLINK_NO_CHANGE
     for FILE in "$_PRIV/applications"/*.desktop; do
         _FILE=${FILE##*/}
         case "${_FILE%.desktop}" in
@@ -58,6 +59,8 @@ _PRIV=${1-}
             ;;
         esac
     done
+    ! lk_is_false LK_SYMLINK_NO_CHANGE ||
+        lk_tty_run_detail update-desktop-database ~/.local/share/applications
 
 }
 
@@ -112,7 +115,7 @@ symlink \
 
 unset LK_SUDO
 
-! lk_command_exists crontab || {
+if lk_command_exists crontab; then
     CRONTAB=$(awk \
         -v STRETCHLY="$(lk_double_quote "$_ROOT/stretchly/stretchly.sh")" \
         '$6=="stretchly"{$6=STRETCHLY}{print}' \
@@ -121,7 +124,18 @@ unset LK_SUDO
         lk_console_message "Updating crontab"
         crontab <(echo "${CRONTAB%$'\n'}")
     }
-}
+    FILE=~/.config/autostart/net.hovancik.stretchly.align.desktop
+    lk_file_replace "$FILE" <<EOF
+[Desktop Entry]
+Type=Application
+Name=Stretchly startup
+Icon=stretchly
+Exec=lk-run-after.sh 60 $(lk_double_quote "$_ROOT/stretchly/stretchly.sh")
+StartupNotify=false
+Terminal=false
+EOF
+    lk_symlink "$FILE" ~/.local/share/applications/"${FILE##*/}"
+fi
 
 MIMEINFO_FILE=/usr/share/applications/mimeinfo.cache
 MIMEAPPS_FILE=~/.config/mimeapps.list
@@ -277,6 +291,10 @@ symlink_if_not_running \
 symlink_if_not_running \
     "$_ROOT/stretchly/config.json" ~/.config/Stretchly/config.json \
     Stretchly "pgrep -f Stretchly"
+
+symlink_if_not_running \
+    "$_ROOT/todoist/config.json" ~/.config/Todoist/config.json \
+    Todoist "pgrep -x todoist"
 
 symlink_if_not_running \
     "$_ROOT/typora/profile.data" ~/.config/Typora/profile.data \
@@ -457,13 +475,12 @@ EOF
     ! lk_has_arg --reset ||
         set -- --reset
     "$_ROOT/../bin/configure-xfce4.sh" "$@" && {
-        xfconf-query -c xfwm4 -p /general/theme -n -t string -s "Zukitre-dark"
-        xfconf-query -c xfwm4 -p /general/title_font -n -t string -s "Cantarell 9"
+        xfconf-query -c xfwm4 -p /general/theme -n -t string -s "Arc-Dark"
+        xfconf-query -c xfwm4 -p /general/title_font -n -t string -s "Inter Semi-Bold 8"
         xfconf-query -c xsettings -p /Gtk/FontName -n -t string -s "Cantarell 9"
-        xfconf-query -c xsettings -p /Gtk/MonospaceFontName -n -t string -s "Source Code Pro 10"
-        xfconf-query -c xsettings -p /Net/IconThemeName -n -t string -s "elementary-xfce"
-        xfconf-query -c xsettings -p /Net/SoundThemeName -n -t string -s "Smooth"
-        xfconf-query -c xsettings -p /Net/ThemeName -n -t string -s "Zukitre-dark"
+        xfconf-query -c xsettings -p /Gtk/MonospaceFontName -n -t string -s "JetBrains Mono Light 9"
+        xfconf-query -c xsettings -p /Net/IconThemeName -n -t string -s "Papirus-Dark"
+        xfconf-query -c xsettings -p /Net/ThemeName -n -t string -s "Arc-Dark"
     }
 fi
 

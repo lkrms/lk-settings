@@ -1,0 +1,7 @@
+{
+	"stay_in_tray": false,
+	"global_shortcuts": {
+		"activate": "Ctrl+Super+o"
+	},
+	"enable_experimental_features": false
+}

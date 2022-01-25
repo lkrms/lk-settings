@@ -29,13 +29,6 @@
 			"done"
 		]
 	},
-	"array: output": {
-		"scope": "shellscript",
-		"prefix": "lk_console_list",
-		"body": [
-			"lk_echo_array ${1:array_var} | lk_console_list \"${2:message}\" ${3:single} ${4:plural}"
-		]
-	},
 	"arg: flag": {
 		"scope": "shellscript",
 		"prefix": "arg",

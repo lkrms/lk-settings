@@ -93,8 +93,7 @@ function vscode_sync_extensions() {
         <(code --list-extensions | sort -u) \
         <(lk_echo_array VSCODE_EXTENSIONS | sort -u)))
     [ ${#INSTALL[@]} -eq 0 ] ||
-        ! { lk_echo_array INSTALL |
-            lk_console_detail_list "Installing:" extension extensions &&
+        ! { lk_tty_list_detail INSTALL "Installing:" extension extensions &&
             lk_confirm "Proceed?" Y; } ||
         for EXT in "${INSTALL[@]}"; do
             code --install-extension "$EXT"
@@ -104,8 +103,7 @@ function vscode_sync_extensions() {
         <(lk_echo_array VSCODE_EXTENSIONS | sort -u)))
     [ ${#REMOVE[@]} -eq 0 ] || {
         [ ${#INSTALL[@]} -eq 0 ] || lk_console_blank
-        lk_echo_array REMOVE |
-            lk_console_detail_list "Orphaned:" extension extensions
+        lk_tty_list_detail REMOVE "Orphaned:" extension extensions
         ! lk_confirm "Remove the above?" N ||
             for EXT in "${REMOVE[@]}"; do
                 code --uninstall-extension "$EXT" || true

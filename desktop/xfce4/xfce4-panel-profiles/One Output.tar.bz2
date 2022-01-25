@@ -11,7 +11,7 @@
 /panels/panel-1/mode uint32 0
 /panels/panel-1/nrows uint32 1
 /panels/panel-1/output-name 'Primary'
-/panels/panel-1/plugin-ids [<1>, <2>, <3>, <7>, <17>, <4>, <11>, <6>, <9>, <8>, <10>, <16>, <15>, <5>, <14>, <12>]
+/panels/panel-1/plugin-ids [<1>, <2>, <3>, <7>, <17>, <4>, <11>, <6>, <9>, <8>, <10>, <16>, <15>, <5>]
 /panels/panel-1/position 'p=6;x=0;y=0'
 /panels/panel-1/position-locked true
 /panels/panel-1/size 26
@@ -19,11 +19,6 @@
 /plugins/plugin-10 'notification-plugin'
 /plugins/plugin-11 'separator'
 /plugins/plugin-11/style uint32 0
-/plugins/plugin-12 'separator'
-/plugins/plugin-12/style uint32 0
-/plugins/plugin-14 'actions'
-/plugins/plugin-14/appearance uint32 0
-/plugins/plugin-14/items [<'-lock-screen'>, <'-switch-user'>, <'-separator'>, <'-suspend'>, <'-hibernate'>, <'-hybrid-sleep'>, <'-separator'>, <'-shutdown'>, <'-restart'>, <'-separator'>, <'+logout'>, <'-logout-dialog'>]
 /plugins/plugin-15 'clock'
 /plugins/plugin-15/digital-format '%a %-d %b, %-I:%M%P'
 /plugins/plugin-15/tooltip-format 'week %V'
@@ -54,7 +49,7 @@
 /plugins/plugin-6/hide-new-items true
 /plugins/plugin-6/icon-size 20
 /plugins/plugin-6/known-items [<'blueman'>, <'Stretchly1'>, <'copyq'>, <'flameshot'>, <'RescueTime'>, <'Nextcloud'>, <'Todoist1'>, <'remmina-icon'>, <'Microsoft Teams - Preview1'>, <'Skype1'>, <'Caprine1'>, <'zoom'>, <'Zeal'>]
-/plugins/plugin-6/known-legacy-items [<'system-config-printer'>, <'thunar'>, <'networkmanager applet'>, <'bluetooth enabled'>, <'stretchly'>, <'todoist'>, <'remmina'>, <'teams'>, <'skypeforlinux'>, <'electron'>]
+/plugins/plugin-6/known-legacy-items [<'stretchly'>, <'system-config-printer'>, <'thunar'>, <'networkmanager applet'>, <'bluetooth enabled'>, <'todoist'>, <'remmina'>, <'teams'>, <'skypeforlinux'>, <'electron'>]
 /plugins/plugin-6/square-icons true
 /plugins/plugin-7 'cpugraph'
 /plugins/plugin-8 'pulseaudio'
