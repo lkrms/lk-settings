@@ -121,7 +121,7 @@ if lk_command_exists crontab; then
         '$6=="stretchly"{$6=STRETCHLY}{print}' \
         "$_ROOT/cron/crontab")
     diff <(crontab -l) <(echo "${CRONTAB%$'\n'}") >/dev/null || {
-        lk_console_message "Updating crontab"
+        lk_tty_print "Updating crontab"
         crontab <(echo "${CRONTAB%$'\n'}")
     }
     FILE=~/.config/autostart/net.hovancik.stretchly.align.desktop
@@ -323,9 +323,9 @@ if [ -f "$FILE" ]; then
 fi
 
 # use `lpinfo -m` for driver names
-lk_console_message "Checking printers"
+lk_tty_print "Checking printers"
 (
-    lk_console_detail "Brother HL-5450DN"
+    lk_tty_detail "Brother HL-5450DN"
     sudo lpadmin -p HL5450DN -E \
         -D "Brother HL-5450DN" \
         -L "black and white" \
@@ -335,7 +335,7 @@ lk_console_message "Checking printers"
         -o Duplex=None \
         -o printer-error-policy=abort-job || exit
 
-    lk_console_detail "Brother HL-L3230CDW"
+    lk_tty_detail "Brother HL-L3230CDW"
     sudo lpadmin -p HLL3230CDW -E \
         -D "Brother HL-L3230CDW" \
         -L "colour" \
@@ -354,7 +354,7 @@ lk_console_message "Checking printers"
 LK_SUDO=1 lk_file_replace /etc/papersize a4
 
 if [ -n "${DISPLAY-}" ]; then
-    lk_console_message "Setting dconf values"
+    lk_tty_print "Setting dconf values"
     START_PLANK=1
     killall plank 2>/dev/null || START_PLANK=0
     if lk_has_arg --reset; then
@@ -471,7 +471,7 @@ EOF
         sleep 2
     }
 
-    lk_console_message "Checking Xfce4"
+    lk_tty_print "Checking Xfce4"
     ! lk_has_arg --reset ||
         set -- --reset
     "$_ROOT/../bin/configure-xfce4.sh" "$@" && {

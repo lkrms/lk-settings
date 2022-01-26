@@ -16,7 +16,7 @@ function cleanup() {
     local LINK
     for LINK in ~/.gitconfig ~/.gitignore "$@"; do
         [ ! -L "$LINK" ] || [ -e "$LINK" ] ||
-            lk_run_detail rm -f "$LINK" || break
+            lk_tty_run_detail rm -f "$LINK" || break
     done
 }
 
@@ -26,11 +26,11 @@ function symlink() {
     while [ $# -ge 2 ]; do
         if [ -n "$DEV_ONLY" ] && is_basic; then
             [ ! -L "$2" ] || [ ! "$1" -ef "$2" ] ||
-                lk_run_detail rm -f "$2" || break
+                lk_tty_run_detail rm -f "$2" || break
         elif [ -e "$1" ]; then
             lk_symlink "${@:1:2}" || return
         else
-            is_basic || lk_console_warning "Not found:" "$1"
+            is_basic || lk_tty_warning "Not found:" "$1"
         fi
         shift 2
     done
@@ -64,7 +64,7 @@ function symlink_private_common() {
 function symlink_if_not_running() {
     local EVAL=${*: -1} CURRENT PASSED=
     EVAL=${EVAL//pgrep /pgrep -u $USER}
-    ! lk_verbose || lk_console_message "Checking ${*: -2:1}"
+    ! lk_verbose || lk_tty_print "Checking ${*: -2:1}"
     while [ $# -ge 4 ]; do
         if [ -e "$1" ]; then
             if [ ! -L "$2" ] || ! CURRENT=$(readlink "$2") ||
@@ -75,7 +75,7 @@ function symlink_if_not_running() {
                 lk_symlink "${@:1:2}" || return
             fi
         else
-            lk_console_warning "Not found:" "$1"
+            lk_tty_warning "Not found:" "$1"
         fi
         shift 2
     done
@@ -84,7 +84,7 @@ function symlink_if_not_running() {
 function vscode_sync_extensions() {
     local VSCODE_EXTENSIONS INSTALL REMOVE EXT
     lk_command_exists code || return 0
-    lk_console_message "Checking VS Code extensions"
+    lk_tty_print "Checking VS Code extensions"
     . "$1" || exit
     ! lk_in_array bmewburn.vscode-intelephense-client VSCODE_EXTENSIONS ||
         lk_vscode_extension_disable vscode.php-language-features ||
@@ -102,7 +102,7 @@ function vscode_sync_extensions() {
         <(code --list-extensions | sort -u) \
         <(lk_echo_array VSCODE_EXTENSIONS | sort -u)))
     [ ${#REMOVE[@]} -eq 0 ] || {
-        [ ${#INSTALL[@]} -eq 0 ] || lk_console_blank
+        [ ${#INSTALL[@]} -eq 0 ] || lk_tty_print
         lk_tty_list_detail REMOVE "Orphaned:" extension extensions
         ! lk_confirm "Remove the above?" N ||
             for EXT in "${REMOVE[@]}"; do

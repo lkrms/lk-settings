@@ -28,7 +28,7 @@ if lk_command_exists crontab; then
         '/^DISPLAY=/{next}$6=="stretchly"{$6=STRETCHLY}{print}' \
         "$_ROOT/cron/crontab"
     diff <(crontab -l) "$CRONTAB" >/dev/null || {
-        lk_console_message "Updating crontab"
+        lk_tty_print "Updating crontab"
         crontab <"$CRONTAB"
     }
     if ! launchctl list | awk '$3 == "net.hovancik.stretchly.align"' |
@@ -42,10 +42,10 @@ fi
 lk_tty_print "Cleaning up legacy settings"
 FILE=~/Library/LaunchAgents/info.deseven.icanhazshortcut.plist
 if [ -e "$FILE" ]; then
-    lk_run_detail launchctl unload -w "$FILE" || true
-    lk_run_detail rm -f "$FILE"
+    lk_tty_run_detail launchctl unload -w "$FILE" || true
+    lk_tty_run_detail rm -f "$FILE"
 fi
-! pgrep -xq iCanHazShortcut || lk_run_detail pkill -x iCanHazShortcut
+! pgrep -xq iCanHazShortcut || lk_tty_run_detail pkill -x iCanHazShortcut
 
 cleanup ~/.config/iCanHazShortcut
 
@@ -348,7 +348,9 @@ is_basic || {
     [ ! -e "$FILE" ] || {
         TEMP=$(lk_mktemp_file)
         lk_delete_on_exit "$TEMP"
-        jq 'del(.global_shortcuts.quick_add)' "$FILE" >"$TEMP"
+        jq '
+del(.global_shortcuts.quick_add) |
+  .global_shortcuts.activate = "Ctrl+Cmd+o"' "$FILE" >"$TEMP"
         diff <(jq '.' "$FILE") "$TEMP" >/dev/null ||
             if pgrep -x Todoist >/dev/null; then
                 lk_warn "cannot apply settings: Todoist is running"
@@ -418,7 +420,7 @@ lk_macos_maybe_install_pkg_url \
 # use `lpinfo -m` for driver names
 lk_tty_print "Checking printers"
 (
-    lk_console_detail "Brother HL-5450DN"
+    lk_tty_detail "Brother HL-5450DN"
     sudo lpadmin -p HL5450DN -E \
         -D "Brother HL-5450DN" \
         -L "black and white" \
@@ -428,7 +430,7 @@ lk_tty_print "Checking printers"
         -o Duplex=DuplexNoTumble \
         -o printer-error-policy=abort-job
 
-    lk_console_detail "Brother HL-L3230CDW"
+    lk_tty_detail "Brother HL-L3230CDW"
     sudo lpadmin -p HLL3230CDW -E \
         -D "Brother HL-L3230CDW" \
         -L "colour" \
@@ -447,7 +449,7 @@ lk_tty_print "Checking printers"
 lk_tty_print "Checking macOS"
 
 if ! nvram StartupMute 2>/dev/null | grep -E "$S%01\$" >/dev/null; then
-    lk_console_detail "Disabling startup sound"
+    lk_tty_detail "Disabling startup sound"
     sudo nvram StartupMute=%01
 fi
 

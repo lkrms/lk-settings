@@ -26,7 +26,7 @@ function xfce4_apply_setting() {
         xfconf-query -c "$CHANNEL" -p "$PROPERTY" -rR
         ;;
     *)
-        lk_console_warning \
+        lk_tty_warning \
             "Invalid syntax in $FILE at setting #$i: ${XFCONF_SETTING[$i]}"
         ;;
     esac
@@ -156,4 +156,4 @@ rm -Rfv ~/.cache/sessions
 [ ! -x /usr/sbin/hddtemp ] ||
     sudo chmod -c u+s /usr/sbin/hddtemp || true
 
-lk_console_success "Xfce4 settings applied successfully"
+lk_tty_success "Xfce4 settings applied successfully"

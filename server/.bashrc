@@ -25,10 +25,10 @@ function squid-report() {
 
 function pacman-sign() { (
     shopt -s nullglob
-    lk_console_message "Checking package signatures"
+    lk_tty_print "Checking package signatures"
     for FILE in /srv/repo/{aur,lk,quarry}/*.pkg.tar.zst; do
         [ ! -e "$FILE.sig" ] || continue
-        lk_console_detail "Signing" "$FILE"
+        lk_tty_detail "Signing" "$FILE"
         DIR=${FILE%/*}
         REPO=$DIR/${DIR##*/}.db.tar.xz
         gpg --batch --passphrase-file ~/.gpg-"$GPGKEY" \
@@ -39,10 +39,10 @@ function pacman-sign() { (
 ); }
 
 function pacman-clean() {
-    lk_console_message "Cleaning up old packages"
-    lk_run_detail sudo paccache -v \
+    lk_tty_print "Cleaning up old packages"
+    lk_tty_run_detail sudo paccache -v \
         --cachedir=/var/cache/pacman/pkg/ --keep 1 --remove &&
-        lk_run_detail sudo paccache -v \
+        lk_tty_run_detail sudo paccache -v \
             --cachedir=/srv/repo/{aur,lk,quarry}/ --keep 2 --remove
 }
 
@@ -61,7 +61,7 @@ Usage: $FUNCNAME /path/on/hub [/path/on/doo [RSYNC_ARG...]]
 
 Use rsync to copy files from hub to doo after completing a dry run." || return
     for ARG in -n ""; do
-        lk_run rsync ${ARG:+"$ARG"} -vrlpt --delete "${@:3}" \
+        lk_tty_run rsync ${ARG:+"$ARG"} -vrlpt --delete "${@:3}" \
             --password-file="$HOME/.rsync-hub" \
             "doo@hub::root${1%/}/" "${DEST%/}/"
         [ -z "$ARG" ] || lk_confirm "Dry run OK?" Y || break
@@ -76,7 +76,7 @@ function plc-sync-uploads() {
     done
     local DIR=${1:-~/Code/plc/plc-wp-4mation/wp-content/uploads/}
     [ -d "$DIR" ] || lk_warn "directory not found: $DIR" || return
-    lk_run rsync -vrlpt \
+    lk_tty_run rsync -vrlpt \
         --delete \
         --exclude=/gravity_forms/ \
         --exclude=/cache/ \
@@ -109,7 +109,7 @@ function rename-tv-episodes() {
             NAME=${BASH_REMATCH[2]}
             EXT=${BASH_REMATCH[3]}
         else
-            lk_console_warning "Skipping (invalid path):" "$FILE"
+            lk_tty_warning "Skipping (invalid path):" "$FILE"
             continue
         fi
         [ "$LAST" = "$SHOW/$SEASON" ] || {
@@ -200,15 +200,15 @@ function system-update() { (
         DIR=${DIR%/.git}
         _DIR=~/Code/"${DIR##*/}"
         [ ! "$DIR" -ef "$_DIR" ] || { LAST_FAILED=0 && continue; }
-        lk_console_item "Checking for updates:" "$DIR"
+        lk_tty_print "Checking for updates:" "$DIR"
         cd "$DIR" && BRANCH=$(lk_git_branch_current) ||
             lk_warn "detached HEAD: $DIR" || continue
         [ ! -d "$_DIR" ] || { {
             git remote | grep -Fx local >/dev/null ||
-                lk_run_detail git remote add -f local "file://$_DIR"
+                lk_tty_run_detail git remote add -f local "file://$_DIR"
         } && {
             lk_git_branch_upstream | grep -Fx local/"$BRANCH" >/dev/null ||
-                lk_run_detail git branch --set-upstream-to=local/"$BRANCH"
+                lk_tty_run_detail git branch --set-upstream-to=local/"$BRANCH"
         }; } || continue
         REMOTE=$(lk_git_branch_upstream_remote) ||
             lk_warn "no upstream remote: $DIR" || continue
@@ -217,7 +217,7 @@ function system-update() { (
     done
     lk-provision-arch.sh &&
         lk_tty_print &&
-        lk_run /opt/lk-settings/bin/sync-arch.sh
+        lk_tty_run /opt/lk-settings/bin/sync-arch.sh
 ); }
 
 function iptables-persist() {

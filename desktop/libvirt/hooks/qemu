@@ -21,7 +21,7 @@ lk_log_start
 [[ $2 =~ ^(start|release)$ ]] ||
     exit 0
 
-lk_console_log "Processing domain XML"
+lk_tty_log "Processing domain XML"
 
 XML=$(lk_mktemp_file)
 lk_delete_on_exit "$XML"
@@ -120,7 +120,7 @@ function ip() {
 }
 
 lk_tty_print
-lk_console_log "Applying firewall changes"
+lk_tty_log "Applying firewall changes"
 
 _ALLOW_URLS=()
 for GUEST_IP in "${GUEST_IPS[@]}"; do
@@ -201,7 +201,7 @@ s/^.*(.{$((28 - (${#P} + 4)))})\$/\\1/" <<<"$1")
                         LK_VERBOSE= lk_hosts_file_add "$IP" "$HOST"
                     done <<<"$HOSTS"
                     ! lk_is_false LK_FILE_REPLACE_NO_CHANGE ||
-                        lk_run killall -HUP dnsmasq
+                        lk_tty_run killall -HUP dnsmasq
                 fi
             fi
             lk_iptables_flush_chain "$ISOLATE_CHAIN"

@@ -39,6 +39,6 @@ GATEWAY=$(nmcli -g IP6.GATEWAY connection show "$WAN_IFACE") &&
 ROUTE=(default via "${GATEWAY//\\:/:}"
     dev "$WAN_IFACE" protocol static metric 100 src "$WAN_IP")
 lk_require_output -q ip -6 route show "${ROUTE[@]}" || {
-    lk_run ip -6 route replace "${ROUTE[@]}" &&
-        lk_run ip -6 route flush cache
+    lk_tty_run ip -6 route replace "${ROUTE[@]}" &&
+        lk_tty_run ip -6 route flush cache
 }

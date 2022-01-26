@@ -30,8 +30,8 @@ function wan_service_is_starting() {
 
 function maybe_restart_wan_service() {
     wan_service_is_starting || connection_is_up "$WAN_IFACE" || {
-        lk_run systemctl stop "$WAN_SERVICE" || true
-        lk_run systemctl start "$WAN_SERVICE" || true
+        lk_tty_run systemctl stop "$WAN_SERVICE" || true
+        lk_tty_run systemctl start "$WAN_SERVICE" || true
         wan_service_is_running ||
             lk_die "unable to restart service: $WAN_SERVICE"
     }
@@ -52,7 +52,7 @@ case "$1,$2" in
         i=0
         ! service_is_active squid.service ||
             while ((i++ < 2)); do
-                lk_run squidclient mgr:offline_toggle |
+                lk_tty_run squidclient mgr:offline_toggle |
                     grep -E '^offline_mode\>.*\<ON$' || continue
                 break
             done
@@ -88,7 +88,7 @@ case "$1,$2" in
     ); do
         [ -d "/sys/class/net/$IFACE" ] || continue
         [ "/sys/class/net/$LAN_IFACE" -ef "/sys/class/net/$IFACE/master" ] ||
-            lk_run ip link set "$IFACE" master "$LAN_IFACE" || true
+            lk_tty_run ip link set "$IFACE" master "$LAN_IFACE" || true
     done
     ;;
 "$PPPOE_IFACE",up)
@@ -132,6 +132,6 @@ UNIT=add-ipv6-pd-route.service
 # down whenever there's a WAN_IFACE outage
 [ "$CURRENT_METHOD" = "$LAN_METHOD" ] ||
     { [ "$CURRENT_METHOD" = shared ] && wan_service_is_running; } || {
-    lk_run nmcli conn modify --temporary "$LAN_IFACE" ipv6.method "$LAN_METHOD"
-    lk_run nmcli conn up "$LAN_IFACE"
+    lk_tty_run nmcli conn modify --temporary "$LAN_IFACE" ipv6.method "$LAN_METHOD"
+    lk_tty_run nmcli conn up "$LAN_IFACE"
 }
