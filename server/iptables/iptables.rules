@@ -115,6 +115,7 @@ COMMIT
 :z_from_wan - [0:0]
 :z_to_lan - [0:0]
 :z_to_wan - [0:0]
+-A PREROUTING -s 10.10.0.0/16 -d 220.233.122.8/32 -m comment --comment hairpinning -j DNAT --to-destination 10.10.0.1
 -A PREROUTING -i br0 -j z_from_lan
 -A PREROUTING -i en0 -j z_from_lan
 -A PREROUTING -i ppp0 -j z_from_wan

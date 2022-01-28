@@ -164,6 +164,7 @@ else
         lk_plist_maybe_add ":displayNum" real 20
         lk_plist_replace ":removeDuplicates" bool true
         lk_plist_replace ":pasteMovesToTop" bool true
+        # Control-Shift-Command-V
         is_basic || {
             lk_plist_replace ":ShortcutRecorder mainHotkey" dict
             lk_plist_replace ":ShortcutRecorder mainHotkey:keyCode" integer 9
@@ -658,7 +659,9 @@ if ! is_basic; then
     START_DASH=
     if [ -e "$FILE" ]; then
         lk_tty_print "Checking Dash"
-        ! pkill -xu "$USER" Dash &>/dev/null || START_DASH=1
+        if lk_has_arg "--reset"; then
+            ! pkill -xu "$USER" Dash &>/dev/null || START_DASH=1
+        fi
         defaults write com.kapeli.dashdoc didShowStatusIconHello -bool true
         defaults write com.kapeli.dashdoc statusIconHelloSuppressCheckboxState -bool false
         defaults write com.kapeli.dashdoc syncFolderPath -string "$_ROOT/dash"
