@@ -23,6 +23,7 @@
 	ignored = "!f(){ git -C \"$GIT_PREFIX\" status --short --ignored \"$@\"|grep '^!!';};f"
 	recheckout = "!f(){ cd \"$GIT_PREFIX\"||return;[ $# -gt 0 ]||set -- .;git ls-files -z \"$@\"|xargs -0r git rm --cached&&git checkout HEAD -- \"$@\";};f"
 	history = reflog --date=iso
+	cleanup-aggressive = gc --aggressive --prune=now --keep-largest-pack
 
 [url "github.com:"]
 	pushInsteadOf = https://github.com/

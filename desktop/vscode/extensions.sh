@@ -9,6 +9,7 @@ VSCODE_EXTENSIONS=(
     chenxsan.vscode-standardjs
     dakara.transformer
     dbaeumer.vscode-eslint
+    deerawan.vscode-dash
     DotJoshJohnson.xml
     dracula-theme.theme-dracula
     eamodio.gitlens

@@ -28,7 +28,7 @@
 	smudge = cat
 
 [filter "flameshot"]
-	clean = sed -E '/^(drawFontSize|drawThickness|save(AfterCopy)?Path)=/d'
+	clean = sed -E '/^(drawFontSize|drawThickness|save(AfterCopy)?Path|disabledTrayIcon)=/d'
 	smudge = cat
 
 [filter "geeqie"]

@@ -392,6 +392,14 @@ hs.hotkey.bind(
 )
 
 hs.hotkey.bind(
+    {"ctrl", "cmd", "shift"},
+    "b",
+    function()
+        runInTerminal(scriptPath("build-lk-platform.sh"))
+    end
+)
+
+hs.hotkey.bind(
     {"ctrl", "cmd"},
     "c",
     function()

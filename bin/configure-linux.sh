@@ -88,7 +88,7 @@ EOF
         FILE=/etc/modprobe.d/iwlwifi.conf
         lk_install -m 00644 "$FILE"
         lk_file_replace "$FILE" <<EOF
-options iwlwifi power_save=0 11n_disable=8
+options iwlwifi 11n_disable=8
 options iwlmvm power_scheme=1
 EOF
     fi
@@ -402,7 +402,7 @@ palette-name='Elio'
 
 [net/launchpad/plank/docks/dock1]
 current-workspace-only=true
-dock-items=['thunderbird.dockitem', 'todoist.dockitem', 'teams.dockitem', 'skypeforlinux.dockitem', 'caprine.dockitem', 'org.keepassxc.KeePassXC.dockitem']
+dock-items=['thunderbird.dockitem', 'todoist.dockitem', 'harvest.dockitem', 'teams.dockitem', 'skypeforlinux.dockitem', 'caprine.dockitem', 'org.keepassxc.KeePassXC.dockitem']
 lock-items=true
 theme='Transparent'
 

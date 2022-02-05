@@ -80,6 +80,14 @@ _criteria.dev = {
     }
 }
 
+_criteria.undecorated = {
+    class_instance_name = {
+        "linacreative.harvestapp.com__time",
+        "spotify",
+        "todoist"
+    }
+}
+
 _actions.sticky = {
     pin_on
 }
@@ -124,6 +132,16 @@ rules = {
     {
         criteria = {
             operator.AND,
+            event = "open",
+            _criteria.undecorated
+        },
+        actions = {
+            decorate_off
+        }
+    },
+    {
+        criteria = {
+            operator.AND,
             class_instance_name = "Mail",
             window_role = "3pane"
         },
@@ -151,7 +169,6 @@ rules = {
             _criteria.sticky
         },
         actions = {
-            decorate_off,
             {to_workspace, {1}},
             {to_place, {_places.d2_bottom3_2}}
         }
@@ -206,12 +223,12 @@ rules = {
         criteria = {
             operator.AND,
             class_instance_name = {
-                "teams.microsoft.com"
+                "linacreative.harvestapp.com__time"
             },
             _criteria.sticky
         },
         actions = append(
-            _actions.sticky,
+            _actions.undecorated_sticky,
             {
                 {to_place, {_places.d2_bottom3_3}}
             }

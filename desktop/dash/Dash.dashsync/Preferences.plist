@@ -326,6 +326,8 @@
 	</dict>
 	<key>isPinned</key>
 	<true/>
+	<key>menuIconBehavior</key>
+	<integer>1</integer>
 	<key>placeholderDelimiter</key>
 	<string>__</string>
 	<key>profiles</key>
@@ -371,7 +373,7 @@
 	<key>shouldSyncView</key>
 	<true/>
 	<key>showInDock</key>
-	<true/>
+	<false/>
 	<key>sortDocsetsAlphabetically</key>
 	<false/>
 	<key>versionedDHCheatRepo</key>
