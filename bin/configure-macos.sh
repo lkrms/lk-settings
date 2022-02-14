@@ -669,6 +669,8 @@ if ! is_basic; then
             "$LK_BASE/lib/python/plist_sort.py" "$FILE" "$FILE" docsets docsetName
         fi
     fi
+
+    lk_macos_setenv GOOGLE_API_KEY ""
 fi
 
 killall -u "$USER" cfprefsd

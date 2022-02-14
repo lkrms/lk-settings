@@ -16,6 +16,9 @@
                 "reveal": "never",
                 "panel": "new",
                 "close": true
+            },
+            "linux": {
+                "command": "/usr/bin/php7"
             }
         },
         {
@@ -37,6 +40,9 @@
                 "reveal": "never",
                 "panel": "new",
                 "close": true
+            },
+            "linux": {
+                "command": "/usr/bin/php7"
             }
         }
     ]

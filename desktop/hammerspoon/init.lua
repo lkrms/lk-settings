@@ -411,11 +411,7 @@ hs.hotkey.bind(
     {"ctrl", "cmd", "shift"},
     "c",
     function()
-        local workspace = homePath("/Code/lk-platform/lk-platform.code-workspace")
-        if not fileExists(workspace) then
-            workspace = homePath("/Nextcloud/Settings/settings.code-workspace")
-        end
-        open("com.microsoft.VSCode", workspace)
+        run("/opt/lk-settings/bin/open-project.sh", true)
     end
 )
 

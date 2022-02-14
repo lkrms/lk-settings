@@ -135,7 +135,7 @@ xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>apostrophe,string,libr
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>b,string,galculator
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>b,string,exo-open --launch TerminalEmulator bash -ic '~/Code/lk-platform/src/build-all.sh || lk_tty_pause',
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>c,string,code
-xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>c,string,sh -c 'f=~/Code/lk-platform/lk-platform.code-workspace;[ -f \"\$f\" ]||f=~/Nextcloud/Settings/settings.code-workspace;code \"\$f\"'
+xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>c,string,/opt/lk-settings/bin/open-project.sh
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>d,string,dbeaver
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>g,string,smerge
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>g,string,git-cola
@@ -174,6 +174,7 @@ xfce4-keyboard-shortcuts,/xfwm4/custom/<Primary><Alt><Super>6,string,move_window
 xfce4-keyboard-shortcuts,/xfwm4/custom/<Primary><Alt><Super>7,string,move_window_workspace_7_key
 xfce4-keyboard-shortcuts,/xfwm4/custom/<Primary><Alt><Super>8,string,move_window_workspace_8_key
 xfce4-keyboard-shortcuts,/xfwm4/custom/<Primary><Alt><Super>9,string,move_window_workspace_9_key
+xfce4-keyboard-shortcuts,/xfwm4/custom/<Primary><Alt>BackSpace,string,show_desktop_key
 xfce4-keyboard-shortcuts,/xfwm4/custom/<Primary><Alt>Return,string,maximize_window_key
 xfce4-keyboard-shortcuts,/xfwm4/custom/<Primary><Super>1,string,workspace_1_key
 xfce4-keyboard-shortcuts,/xfwm4/custom/<Primary><Super>2,string,workspace_2_key
@@ -185,7 +186,6 @@ xfce4-keyboard-shortcuts,/xfwm4/custom/<Primary><Super>7,string,workspace_7_key
 xfce4-keyboard-shortcuts,/xfwm4/custom/<Primary><Super>8,string,workspace_8_key
 xfce4-keyboard-shortcuts,/xfwm4/custom/<Primary><Super>9,string,workspace_9_key
 xfce4-keyboard-shortcuts,/xfwm4/custom/<Primary><Super>f,string,fullscreen_key
-xfce4-keyboard-shortcuts,/xfwm4/custom/<Primary><Super>h,string,show_desktop_key
 xfce4-keyboard-shortcuts,/xfwm4/custom/<Primary><Super>Insert,string,add_workspace_key
 xfce4-keyboard-shortcuts,/xfwm4/custom/<Primary><Super>Left,string,prev_workspace_key
 xfce4-keyboard-shortcuts,/xfwm4/custom/<Primary><Super>Right,string,next_workspace_key

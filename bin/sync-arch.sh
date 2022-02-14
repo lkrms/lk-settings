@@ -1,8 +1,19 @@
 #!/bin/bash
 
-LK_TTY_NO_COLOUR=1 \
-    . /opt/lk-platform/bin/lk-bash-load.sh || exit
+. /opt/lk-platform/bin/lk-bash-load.sh || exit
 lk_require arch
+
+_DIR=/opt/lk-settings/server
+
+(
+    declare LK_SUDO=1 LK_VERBOSE=${LK_VERBOSE-1}
+    lk_file_replace -f "$_DIR/NetworkManager/dispatcher.d/90-doo-check" \
+        /etc/NetworkManager/dispatcher.d/90-doo-check
+    lk_file_replace -f "$_DIR/NetworkManager/conf.d/lk-server.conf" \
+        /etc/NetworkManager/conf.d/lk-server.conf
+    lk_file_replace -f "$_DIR/dnsmasq/logrotate.d/dnsmasq" \
+        /etc/logrotate.d/dnsmasq
+)
 
 function update-notracking() {
     local TEMP_FILE LK_FILE_REPLACE_NO_CHANGE LK_VERBOSE=1 LK_FILE_NO_DIFF=1 \

@@ -1,7 +1,7 @@
 function matchesNoProxyRule (url, host, resolve) {
   //alert("matchesNoProxyRule: " + host + " -> " + resolve(host) + " for " + url);
-  //return /(\.|^)cottonon\.com$/.test(host);
-  return false;
+  // needed for watchOS updates to verify
+  return /^gs\.apple\.com$/.test(host);
 }
 
 function FindProxyForURL (url, host) {

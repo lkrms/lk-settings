@@ -51,6 +51,11 @@
         "space_before_conditional": true,
         "wrap_line_length": 80
     },
+    "dash.languageIdToDocsetMap": {
+        "php": [
+            "php"
+        ]
+    },
     "debug.saveBeforeStart": "none",
     "editor.autoClosingBrackets": "never",
     "editor.autoClosingQuotes": "never",
@@ -61,7 +66,6 @@
     "editor.cursorSurroundingLines": 2,
     "editor.dragAndDrop": false,
     "editor.fontFamily": "'JetBrains Mono', 'Source Code Pro', Menlo, Monaco, 'Courier New', monospace",
-    "editor.hover.delay": 1200,
     "editor.lineHeight": 19,
     "editor.quickSuggestions": {
         "comments": true

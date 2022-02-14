@@ -363,7 +363,6 @@ if [ -n "${DISPLAY-}" ]; then
         dconf reset -f /org/gnome/meld/
         dconf reset -f /org/gtk/settings/file-chooser/
     fi
-    LK_SCREENSHOT_DIR=${LK_SCREENSHOT_DIR:-~/Desktop}
     dconf load / <<"EOF"
 [apps/guake/general]
 infinite-history=true
@@ -400,16 +399,19 @@ show-hide='F1'
 palette='#303030303030:#E1E132321A1A:#6A6AB0B01717:#FFFFC0C00505:#72729F9FCFCF:#ECEC00004848:#2A2AA7A7E7E7:#F2F2F2F2F2F2:#5D5D5D5D5D5D:#FFFF36361E1E:#7B7BC9C91F1F:#FFFFD0D00A0A:#00007171FFFF:#FFFF1D1D6262:#4B4BB8B8FDFD:#A0A02020F0F0:#F2F2F2F2F2F2:#04041A1A3B3B'
 palette-name='Elio'
 
+[ca/desrt/dconf-editor]
+show-warning=false
+
 [net/launchpad/plank/docks/dock1]
 current-workspace-only=true
 dock-items=['thunderbird.dockitem', 'todoist.dockitem', 'harvest.dockitem', 'teams.dockitem', 'skypeforlinux.dockitem', 'caprine.dockitem', 'org.keepassxc.KeePassXC.dockitem']
 lock-items=true
-theme='Transparent'
+theme='Matte'
 
 [org/gnome/desktop/interface]
 document-font-name='Cantarell 9'
 font-name='Cantarell 9'
-monospace-font-name='Source Code Pro 10'
+monospace-font-name='JetBrains Mono Light 9'
 
 [org/gnome/meld]
 custom-editor-command='code -g {file}:{line}'
@@ -448,9 +450,6 @@ add-spice-usbredir='no'
 cpu-default='hv-default'
 graphics-type='system'
 
-[org/virt-manager/virt-manager/paths]
-screenshot-default='$LK_SCREENSHOT_DIR'
-
 [org/virt-manager/virt-manager/stats]
 enable-cpu-poll=true
 enable-disk-poll=true
@@ -465,6 +464,9 @@ host-cpu-usage=true
 memory-usage=true
 network-traffic=true
 EOF
+    LK_SCREENSHOT_DIR=${LK_SCREENSHOT_DIR:-~/Desktop}
+    dconf write /org/virt-manager/virt-manager/paths/screenshot-default \
+        "'$LK_SCREENSHOT_DIR'"
     lk_is_false START_PLANK || {
         nohup plank </dev/null &>/dev/null &
         disown
