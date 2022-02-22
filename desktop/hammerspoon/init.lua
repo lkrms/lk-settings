@@ -292,7 +292,10 @@ function run(command, detach)
             logger.e("Output:\n" .. output)
         end
     end
-    return status
+    -- status: true or nil
+    -- type: "exit" or "signal"
+    -- rc: exit code or signal number
+    return status, type, rc
 end
 
 function open(bundleID, file, background)
@@ -315,20 +318,22 @@ function runInTerminal(path)
 end
 
 function openNewWindow(rules)
-    local app = hs.application.get(rules.bundleID)
+    local app, path = hs.application.get(rules.bundleID), hs.application.pathForBundleID(rules.bundleID)
     if app and rules.menuItem then
         if app:mainWindow() or app:activate() then
             logger.d("Calling selectMenuItem(" .. hs.inspect.inspect(rules.menuItem) .. ") on " .. app:bundleID())
-            app:selectMenuItem(rules.menuItem)
+            if app:selectMenuItem(rules.menuItem) then
+                return
+            end
         end
-    elseif app and rules.commandLine then
-        local path = hs.application.pathForBundleID(rules.bundleID)
-        if path then
-            run(rules.commandLine:gsub("{{app}}", quote(path)))
-        end
-    else
-        open(rules.bundleID)
     end
+    if app and path and rules.commandLine then
+        local command = rules.commandLine:gsub("{{app}}", quote(path))
+        if run(command) then
+            return
+        end
+    end
+    open(rules.bundleID)
 end
 
 function dumpWindows()
@@ -435,7 +440,7 @@ hs.hotkey.bind(
     {"ctrl", "cmd"},
     "g",
     function()
-        open("com.sublimemerge")
+        run("/opt/lk-settings/bin/open-repo.sh", true)
     end
 )
 
@@ -443,7 +448,7 @@ hs.hotkey.bind(
     {"ctrl", "cmd", "shift"},
     "g",
     function()
-        run("/opt/homebrew/bin/git-cola --prompt", true)
+        run("/opt/lk-settings/bin/open-repo.sh git -C {} cola", true)
     end
 )
 

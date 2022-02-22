@@ -170,7 +170,7 @@ rules = {
         },
         actions = {
             {to_workspace, {1}},
-            {to_place, {_places.d2_bottom3_2}}
+            {to_place, {_places.d2_bottom3_3}}
         }
     },
     {
@@ -184,7 +184,7 @@ rules = {
         actions = append(
             _actions.sticky,
             {
-                {to_place, {_places.d2_bottom3_1}}
+                {to_place, {_places.d2_bottom3_2}}
             }
         ),
         set_position = set_window_position
@@ -230,7 +230,7 @@ rules = {
         actions = append(
             _actions.undecorated_sticky,
             {
-                {to_place, {_places.d2_bottom3_3}}
+                {to_place, {_places.d2_bottom3_1}}
             }
         )
     },

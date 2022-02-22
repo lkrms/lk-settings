@@ -18,6 +18,9 @@
     "[jsonc]": {
         "editor.defaultFormatter": "vscode.json-language-features"
     },
+    "[lua]": {
+        "editor.defaultFormatter": "trixnz.vscode-lua"
+    },
     "[nginx]": {
         "editor.defaultFormatter": "ahmadalli.vscode-nginx-conf"
     },
@@ -258,6 +261,9 @@
     "nightswitch.themeDay": "Quiet Light",
     "nightswitch.themeNight": "Dracula Soft",
     "partialDiff.enableTelemetry": false,
+    "perltidy.additionalArguments": [
+        "--indent-columns=2"
+    ],
     "poor-mans-t-sql-formatter.std.indent": "    ",
     "poor-mans-t-sql-formatter.std.trailingCommas": false,
     "powershell.codeFormatting.newLineAfterCloseBrace": false,
@@ -389,11 +395,7 @@
     "window.restoreFullscreen": true,
     "window.title": "${dirty}${rootName}${separator}${activeEditorShort}${separator}${appName}",
     "window.titleBarStyle": "custom",
-    "workbench.editor.closeEmptyGroups": false,
-    "workbench.editor.closeOnFileDelete": true,
     "workbench.editor.highlightModifiedTabs": true,
-    "workbench.editor.limit.enabled": true,
-    "workbench.editor.limit.perEditorGroup": true,
     "workbench.editor.revealIfOpen": true,
     "workbench.editor.untitled.hint": "hidden",
     "workbench.enableExperiments": false,

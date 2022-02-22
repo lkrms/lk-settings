@@ -116,6 +116,25 @@ is_basic || symlink_if_not_running \
     "$_ROOT/smerge/Default/" "$_APP_SUPPORT/Sublime Merge/Packages/Default" \
     "Sublime Merge" "pgrep -x sublime_merge"
 
+if lk_macos_bundle_is_installed io.github.hluk.CopyQ; then
+    lk_tty_print "Checking CopyQ"
+    if pgrep -xq CopyQ; then
+        lk_warn "cannot apply settings: CopyQ is running"
+    else
+        symlink -d "$_ROOT/copyq/copyq-commands.ini" \
+            ~/.config/copyq/copyq-commands.ini
+        defaults write com.copyq.copyq Options.confirm_exit -bool false
+        defaults write com.copyq.copyq Options.native_tray_menu -bool true
+        defaults write com.copyq.copyq Options.tray_item_paste -bool false
+        defaults write com.copyq.copyq Options.tray_items -int 20
+        is_basic || {
+            defaults write com.copyq.copyq Options.activate_pastes -bool false
+            defaults write com.copyq.copyq \
+                Options.show_advanced_command_settings -bool true
+        }
+    fi
+fi
+
 FILE=~/Library/Containers/fr.handbrake.HandBrake/Data
 FILE="$FILE/Library/Application Support/HandBrake/UserPresets.json"
 is_basic || [ ! -d "${FILE%/*}" ] || {
@@ -150,13 +169,13 @@ symlink_if_not_running \
     "$_ROOT/flameshot/flameshot.ini" ~/.config/flameshot/flameshot.ini \
     Flameshot "pgrep -x flameshot"
 
-lk_tty_print "Checking Flycut"
-if pgrep -xq Flycut; then
-    lk_warn "cannot apply settings: Flycut is running"
-else
-    FILE=~/Library/Containers/com.generalarcade.flycut/Data
-    FILE=$FILE/Library/Preferences/com.generalarcade.flycut.plist
-    [ ! -d "${FILE%/*}" ] || {
+FILE=com.generalarcade.flycut
+FILE=~/Library/Containers/$FILE/Data/Library/Preferences/$FILE.plist
+if [[ -d ${FILE%/*} ]]; then
+    lk_tty_print "Checking Flycut"
+    if pgrep -xq Flycut; then
+        lk_warn "cannot apply settings: Flycut is running"
+    else
         lk_plist_set_file "$FILE"
         lk_plist_replace ":menuSelectionPastes" bool false
         lk_plist_replace ":savePreference" integer 2
@@ -171,7 +190,7 @@ else
             lk_plist_replace ":ShortcutRecorder mainHotkey:modifierFlags" integer 1441792
         }
         lk_plist_replace ":menuIcon" integer 2
-    }
+    fi
 fi
 
 is_basic || {

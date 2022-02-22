@@ -164,6 +164,16 @@
         "when": "editorTextFocus && !editorReadonly && !editorTabMovesFocus && !hasOtherSuggestions && !hasSnippetCompletions && !inSnippetMode && !suggestWidgetVisible && editorLangId == 'markdown'"
     },
     {
+        "key": "ctrl+k shift+f",
+        "command": "-poor-mans-t-sql-formatter.formatSql",
+        "when": "editorTextFocus"
+    },
+    {
+        "key": "shift+alt+cmd+f",
+        "command": "poor-mans-t-sql-formatter.formatSql",
+        "when": "editorTextFocus && !editorReadonly && editorLangId == 'sql'"
+    },
+    {
         "command": "-sortLines.sortLines",
         "key": "f9",
         "when": "editorTextFocus"

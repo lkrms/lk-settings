@@ -51,8 +51,10 @@ function symlink_private_common() {
         "$1/s3cmd/.s3cfg" ~/.s3cfg \
         "$1/ssh/" ~/.ssh
     LK_SUDO=1
-    symlink "$1/hosts" /etc/hosts
+    lk_file_keep_original /etc/hosts
     LK_SUDO=0
+    [ /etc/hosts -ef "$1/hosts" ] ||
+        sudo ln -f "$1/hosts" /etc/hosts
     [ -L ~/.unison ] ||
         symlink "$1/unison/" ~/.unison
     for FILE in "$1"/.*-settings; do

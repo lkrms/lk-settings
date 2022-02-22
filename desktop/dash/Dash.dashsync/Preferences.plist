@@ -325,7 +325,7 @@
 		<dict/>
 	</dict>
 	<key>isPinned</key>
-	<true/>
+	<false/>
 	<key>menuIconBehavior</key>
 	<integer>1</integer>
 	<key>placeholderDelimiter</key>
@@ -359,9 +359,9 @@
 		<integer>4352</integer>
 	</dict>
 	<key>shouldRestoreTabs</key>
-	<true/>
+	<false/>
 	<key>shouldShowStatusIcon</key>
-	<true/>
+	<false/>
 	<key>shouldStartAtLogin</key>
 	<true/>
 	<key>shouldSyncBookmarks</key>
@@ -373,7 +373,7 @@
 	<key>shouldSyncView</key>
 	<true/>
 	<key>showInDock</key>
-	<false/>
+	<true/>
 	<key>sortDocsetsAlphabetically</key>
 	<false/>
 	<key>versionedDHCheatRepo</key>
