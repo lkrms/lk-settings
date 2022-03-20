@@ -26,6 +26,7 @@ VSCODE_EXTENSIONS=(
     jrebocho.vscode-random
     lkrms.inifmt
     mads-hartmann.bash-ide-vscode
+    maelvalais.autoconf
     mgmcdermott.vscode-language-babel
     Mikael.Angular-BeastCode
     mitchdenny.ecdc

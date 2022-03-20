@@ -3,12 +3,9 @@ Thumbs.db
 
 *.code-workspace
 .vscode/
-bin/test.*
 
 *.sublime-project
 *.sublime-workspace
-
-/wp-content/plugins/wp-mail-smtp/
 
 .git-ftp.log
 php_errors.log
@@ -22,3 +19,6 @@ php_errors.log
 *.tar.xz*
 *.tar.zst*
 *.tgz
+
+/test.php
+/bin/test.php

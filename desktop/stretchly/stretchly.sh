@@ -16,7 +16,7 @@ done
     exit 1
 }
 
-REGEX="/electron[0-9]*[[:blank:]].*/[sS]tretchly/resources/app.asar"
+REGEX="/electron[0-9]*[[:blank:]].*/[sS]tretchly\>"
 { pgrep -x "[sS]tretchly" || pgrep -f "$REGEX"; } >/dev/null || exit 0
 
 function minutes() {

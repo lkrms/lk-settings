@@ -387,6 +387,14 @@
         "key": "shift+alt+["
     },
     {
+        "key": "ctrl+-",
+        "command": "workbench.action.navigateBack"
+    },
+    {
+        "key": "ctrl+alt+-",
+        "command": "-workbench.action.navigateBack"
+    },
+    {
         "command": "-workbench.action.openRecent",
         "key": "ctrl+r"
     },

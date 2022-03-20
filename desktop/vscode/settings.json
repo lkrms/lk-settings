@@ -27,11 +27,15 @@
     "[php]": {
         "editor.autoClosingBrackets": "languageDefined",
         "editor.rulers": [
+            80,
             120
         ]
     },
     "[properties]": {
         "editor.defaultFormatter": "lkrms.inifmt"
+    },
+    "[sql]": {
+        "editor.defaultFormatter": "mtxr.sqltools"
     },
     "[xml]": {
         "editor.defaultFormatter": "redhat.vscode-xml"
@@ -59,7 +63,9 @@
             "php"
         ]
     },
+    "debug.internalConsoleOptions": "openOnSessionStart",
     "debug.saveBeforeStart": "none",
+    "debug.toolBarLocation": "docked",
     "editor.autoClosingBrackets": "never",
     "editor.autoClosingQuotes": "never",
     "editor.autoIndent": "advanced",
@@ -276,7 +282,6 @@
     ],
     "python.showStartPage": false,
     "redhat.telemetry.enabled": false,
-    "rewrap.wrappingColumn": 80,
     "ruby.format": "rubocop",
     "ruby.lint": {
         "rubocop": true

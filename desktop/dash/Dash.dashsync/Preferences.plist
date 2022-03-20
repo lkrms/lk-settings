@@ -5,7 +5,359 @@
 	<key>DHCheatRepo</key>
 	<dict>
 		<key>installed</key>
-		<dict/>
+		<dict>
+			<key>ASCII_Tables</key>
+			<dict>
+				<key>date</key>
+				<date>2022-03-17T03:25:19Z</date>
+				<key>entry</key>
+				<dict>
+					<key>aliases</key>
+					<array/>
+					<key>name</key>
+					<string>ASCII Tables</string>
+					<key>platform</key>
+					<string>cheatsheet</string>
+					<key>uniqueIdentifier</key>
+					<string>ASCII_Tables</string>
+				</dict>
+			</dict>
+			<key>Bash_Shortcuts</key>
+			<dict>
+				<key>date</key>
+				<date>2022-03-17T03:25:19Z</date>
+				<key>entry</key>
+				<dict>
+					<key>aliases</key>
+					<array>
+						<string>terminal shell bash</string>
+					</array>
+					<key>name</key>
+					<string>Bash Shortcuts</string>
+					<key>platform</key>
+					<string>cheatsheet</string>
+					<key>uniqueIdentifier</key>
+					<string>Bash_Shortcuts</string>
+				</dict>
+			</dict>
+			<key>Conventional_Commits</key>
+			<dict>
+				<key>date</key>
+				<date>2022-03-17T03:25:20Z</date>
+				<key>entry</key>
+				<dict>
+					<key>aliases</key>
+					<array/>
+					<key>name</key>
+					<string>Conventional Commits</string>
+					<key>platform</key>
+					<string>cheatsheet</string>
+					<key>uniqueIdentifier</key>
+					<string>Conventional_Commits</string>
+				</dict>
+			</dict>
+			<key>Crontab</key>
+			<dict>
+				<key>date</key>
+				<date>2022-03-17T03:25:19Z</date>
+				<key>entry</key>
+				<dict>
+					<key>aliases</key>
+					<array/>
+					<key>name</key>
+					<string>Crontab</string>
+					<key>platform</key>
+					<string>cheatsheet</string>
+					<key>uniqueIdentifier</key>
+					<string>Crontab</string>
+				</dict>
+			</dict>
+			<key>Docker</key>
+			<dict>
+				<key>date</key>
+				<date>2022-03-17T03:25:19Z</date>
+				<key>entry</key>
+				<dict>
+					<key>aliases</key>
+					<array/>
+					<key>name</key>
+					<string>Docker</string>
+					<key>platform</key>
+					<string>cheatsheet</string>
+					<key>uniqueIdentifier</key>
+					<string>Docker</string>
+				</dict>
+			</dict>
+			<key>Dockerfile</key>
+			<dict>
+				<key>date</key>
+				<date>2022-03-17T03:25:19Z</date>
+				<key>entry</key>
+				<dict>
+					<key>aliases</key>
+					<array/>
+					<key>name</key>
+					<string>Dockerfile</string>
+					<key>platform</key>
+					<string>cheatsheet</string>
+					<key>uniqueIdentifier</key>
+					<string>Dockerfile</string>
+				</dict>
+			</dict>
+			<key>Font_Awesome</key>
+			<dict>
+				<key>date</key>
+				<date>2022-03-17T03:25:19Z</date>
+				<key>entry</key>
+				<dict>
+					<key>aliases</key>
+					<array/>
+					<key>name</key>
+					<string>Font Awesome</string>
+					<key>platform</key>
+					<string>cheatsheet</string>
+					<key>uniqueIdentifier</key>
+					<string>Font_Awesome</string>
+				</dict>
+			</dict>
+			<key>Git</key>
+			<dict>
+				<key>date</key>
+				<date>2022-03-17T03:25:19Z</date>
+				<key>entry</key>
+				<dict>
+					<key>aliases</key>
+					<array>
+						<string>terminal</string>
+						<string>shell</string>
+						<string>bash</string>
+						<string>zsh</string>
+					</array>
+					<key>name</key>
+					<string>Git</string>
+					<key>platform</key>
+					<string>cheatsheet</string>
+					<key>uniqueIdentifier</key>
+					<string>Git</string>
+				</dict>
+			</dict>
+			<key>HTML_Entities</key>
+			<dict>
+				<key>date</key>
+				<date>2022-03-17T03:25:20Z</date>
+				<key>entry</key>
+				<dict>
+					<key>aliases</key>
+					<array/>
+					<key>name</key>
+					<string>HTML Entities</string>
+					<key>platform</key>
+					<string>cheatsheet</string>
+					<key>uniqueIdentifier</key>
+					<string>HTML_Entities</string>
+				</dict>
+			</dict>
+			<key>HTTP_Header_Fields</key>
+			<dict>
+				<key>date</key>
+				<date>2022-03-17T03:25:19Z</date>
+				<key>entry</key>
+				<dict>
+					<key>aliases</key>
+					<array/>
+					<key>name</key>
+					<string>HTTP Header Fields</string>
+					<key>platform</key>
+					<string>cheatsheet</string>
+					<key>uniqueIdentifier</key>
+					<string>HTTP_Header_Fields</string>
+				</dict>
+			</dict>
+			<key>HTTP_Status_Codes</key>
+			<dict>
+				<key>date</key>
+				<date>2022-03-17T03:25:20Z</date>
+				<key>entry</key>
+				<dict>
+					<key>aliases</key>
+					<array/>
+					<key>name</key>
+					<string>HTTP Status Codes</string>
+					<key>platform</key>
+					<string>cheatsheet</string>
+					<key>uniqueIdentifier</key>
+					<string>HTTP_Status_Codes</string>
+				</dict>
+			</dict>
+			<key>Licenses</key>
+			<dict>
+				<key>date</key>
+				<date>2022-03-17T03:25:19Z</date>
+				<key>entry</key>
+				<dict>
+					<key>aliases</key>
+					<array/>
+					<key>name</key>
+					<string>Licenses</string>
+					<key>platform</key>
+					<string>cheatsheet</string>
+					<key>uniqueIdentifier</key>
+					<string>Licenses</string>
+				</dict>
+			</dict>
+			<key>Python_Format_Strings</key>
+			<dict>
+				<key>date</key>
+				<date>2022-03-17T03:25:19Z</date>
+				<key>entry</key>
+				<dict>
+					<key>aliases</key>
+					<array/>
+					<key>name</key>
+					<string>Python Format Strings</string>
+					<key>platform</key>
+					<string>cheatsheet</string>
+					<key>uniqueIdentifier</key>
+					<string>Python_Format_Strings</string>
+				</dict>
+			</dict>
+			<key>Regular_Expressions</key>
+			<dict>
+				<key>date</key>
+				<date>2022-03-17T03:25:19Z</date>
+				<key>entry</key>
+				<dict>
+					<key>aliases</key>
+					<array>
+						<string>RegEx</string>
+						<string>reg ex</string>
+					</array>
+					<key>name</key>
+					<string>Regular Expressions</string>
+					<key>platform</key>
+					<string>cheatsheet</string>
+					<key>uniqueIdentifier</key>
+					<string>Regular_Expressions</string>
+				</dict>
+			</dict>
+			<key>SQLite</key>
+			<dict>
+				<key>date</key>
+				<date>2022-03-17T03:25:19Z</date>
+				<key>entry</key>
+				<dict>
+					<key>aliases</key>
+					<array/>
+					<key>name</key>
+					<string>SQLite</string>
+					<key>platform</key>
+					<string>cheatsheet</string>
+					<key>uniqueIdentifier</key>
+					<string>SQLite</string>
+				</dict>
+			</dict>
+			<key>Vim</key>
+			<dict>
+				<key>date</key>
+				<date>2022-03-17T03:25:19Z</date>
+				<key>entry</key>
+				<dict>
+					<key>aliases</key>
+					<array/>
+					<key>name</key>
+					<string>Vim</string>
+					<key>platform</key>
+					<string>cheatsheet</string>
+					<key>uniqueIdentifier</key>
+					<string>Vim</string>
+				</dict>
+			</dict>
+			<key>Visual_Studio_Code</key>
+			<dict>
+				<key>date</key>
+				<date>2022-03-17T03:25:20Z</date>
+				<key>entry</key>
+				<dict>
+					<key>aliases</key>
+					<array/>
+					<key>name</key>
+					<string>Visual Studio Code</string>
+					<key>platform</key>
+					<string>cheatsheet</string>
+					<key>uniqueIdentifier</key>
+					<string>Visual_Studio_Code</string>
+				</dict>
+			</dict>
+			<key>YAML</key>
+			<dict>
+				<key>date</key>
+				<date>2022-03-17T03:25:19Z</date>
+				<key>entry</key>
+				<dict>
+					<key>aliases</key>
+					<array/>
+					<key>name</key>
+					<string>YAML</string>
+					<key>platform</key>
+					<string>cheatsheet</string>
+					<key>uniqueIdentifier</key>
+					<string>YAML</string>
+				</dict>
+			</dict>
+			<key>You_Might_Not_Need_jQuery</key>
+			<dict>
+				<key>date</key>
+				<date>2022-03-17T03:25:20Z</date>
+				<key>entry</key>
+				<dict>
+					<key>aliases</key>
+					<array/>
+					<key>name</key>
+					<string>You Might Not Need jQuery</string>
+					<key>platform</key>
+					<string>cheatsheet</string>
+					<key>uniqueIdentifier</key>
+					<string>You_Might_Not_Need_jQuery</string>
+				</dict>
+			</dict>
+			<key>strftime_Format_Codes</key>
+			<dict>
+				<key>date</key>
+				<date>2022-03-17T03:25:20Z</date>
+				<key>entry</key>
+				<dict>
+					<key>aliases</key>
+					<array/>
+					<key>name</key>
+					<string>strftime Format Codes</string>
+					<key>platform</key>
+					<string>cheatsheet</string>
+					<key>uniqueIdentifier</key>
+					<string>strftime_Format_Codes</string>
+				</dict>
+			</dict>
+			<key>tmux</key>
+			<dict>
+				<key>date</key>
+				<date>2022-03-17T03:25:19Z</date>
+				<key>entry</key>
+				<dict>
+					<key>aliases</key>
+					<array>
+						<string>terminal</string>
+						<string>shell</string>
+						<string>bash</string>
+						<string>zsh</string>
+					</array>
+					<key>name</key>
+					<string>tmux</string>
+					<key>platform</key>
+					<string>cheatsheet</string>
+					<key>uniqueIdentifier</key>
+					<string>tmux</string>
+				</dict>
+			</dict>
+		</dict>
 		<key>uninstalled</key>
 		<dict/>
 	</dict>
@@ -130,6 +482,11 @@
 				<key>date</key>
 				<date>2022-01-05T15:58:53Z</date>
 			</dict>
+			<key>http://kapeli.com/feeds/Apple_API_Reference.xml</key>
+			<dict>
+				<key>date</key>
+				<date>2022-03-18T11:31:00Z</date>
+			</dict>
 			<key>http://kapeli.com/feeds/Bash.xml</key>
 			<dict>
 				<key>date</key>
@@ -190,6 +547,11 @@
 				<key>date</key>
 				<date>2022-01-05T16:01:22Z</date>
 			</dict>
+			<key>http://kapeli.com/feeds/Handlebars.xml</key>
+			<dict>
+				<key>date</key>
+				<date>2022-03-18T11:30:28Z</date>
+			</dict>
 			<key>http://kapeli.com/feeds/Ionic.xml</key>
 			<dict>
 				<key>date</key>
@@ -220,6 +582,11 @@
 				<key>date</key>
 				<date>2022-01-05T16:00:56Z</date>
 			</dict>
+			<key>http://kapeli.com/feeds/MomentJS.xml</key>
+			<dict>
+				<key>date</key>
+				<date>2022-03-18T11:30:30Z</date>
+			</dict>
 			<key>http://kapeli.com/feeds/MongoDB.xml</key>
 			<dict>
 				<key>date</key>
@@ -229,6 +596,11 @@
 			<dict>
 				<key>date</key>
 				<date>2022-01-05T16:01:57Z</date>
+			</dict>
+			<key>http://kapeli.com/feeds/NET_Framework.xml</key>
+			<dict>
+				<key>date</key>
+				<date>2022-03-18T11:34:50Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/Nginx.xml</key>
 			<dict>
@@ -300,20 +672,40 @@
 				<key>date</key>
 				<date>2022-01-05T16:01:52Z</date>
 			</dict>
+			<key>http://kapeli.com/feeds/Symfony.xml</key>
+			<dict>
+				<key>date</key>
+				<date>2022-03-18T11:30:26Z</date>
+			</dict>
 			<key>http://kapeli.com/feeds/TypeScript.xml</key>
 			<dict>
 				<key>date</key>
 				<date>2022-01-05T16:02:19Z</date>
+			</dict>
+			<key>http://kapeli.com/feeds/Vagrant.xml</key>
+			<dict>
+				<key>date</key>
+				<date>2022-03-18T11:31:18Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/Vim.xml</key>
 			<dict>
 				<key>date</key>
 				<date>2022-01-05T16:02:07Z</date>
 			</dict>
+			<key>http://kapeli.com/feeds/VueJS.xml</key>
+			<dict>
+				<key>date</key>
+				<date>2022-03-18T11:31:11Z</date>
+			</dict>
 			<key>http://kapeli.com/feeds/WordPress.xml</key>
 			<dict>
 				<key>date</key>
 				<date>2022-01-05T16:03:22Z</date>
+			</dict>
+			<key>http://kapeli.com/feeds/Xamarin.xml</key>
+			<dict>
+				<key>date</key>
+				<date>2022-03-18T11:40:08Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/jQuery.xml</key>
 			<dict>
@@ -325,7 +717,7 @@
 		<dict/>
 	</dict>
 	<key>isPinned</key>
-	<false/>
+	<true/>
 	<key>menuIconBehavior</key>
 	<integer>1</integer>
 	<key>placeholderDelimiter</key>
@@ -359,7 +751,7 @@
 		<integer>4352</integer>
 	</dict>
 	<key>shouldRestoreTabs</key>
-	<false/>
+	<true/>
 	<key>shouldShowStatusIcon</key>
 	<false/>
 	<key>shouldStartAtLogin</key>

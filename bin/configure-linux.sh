@@ -222,6 +222,7 @@ symlink "$_ROOT/.tidyrc" ~/.tidyrc
 symlink "$_ROOT/autorandr/" ~/.config/autorandr
 symlink "$_ROOT/.byoburc" ~/.byoburc
 symlink "$_ROOT/byobu/" ~/.byobu
+symlink "$_ROOT/composer/config.json" ~/.config/composer/config.json
 symlink "$_ROOT/devilspie2/" ~/.config/devilspie2
 symlink "$_ROOT/git" ~/.config/git
 symlink "$_ROOT/plank/" ~/.config/plank
@@ -310,14 +311,16 @@ symlink_if_not_running \
 
 FILE=/opt/vscodium-bin/resources/app/product.json
 if [ -f "$FILE" ]; then
-    VSCODE_PRODUCT_JSON=$(jq \
-        '.extensionsGallery = {
+    VSCODE_PRODUCT_JSON=$(jq '
+.nameShort = "Visual Studio Code" |
+  .nameLong = "Visual Studio Code" |
+  .extensionsGallery = {
     "serviceUrl": "https://marketplace.visualstudio.com/_apis/public/gallery",
     "cacheUrl": "https://vscode.blob.core.windows.net/gallery/index",
     "itemUrl": "https://marketplace.visualstudio.com/items",
     "controlUrl": "",
     "recommendationsUrl": ""
-}' <"$FILE")
+  }' <"$FILE")
     diff <(jq <"$FILE") <(echo "$VSCODE_PRODUCT_JSON") >/dev/null ||
         LK_SUDO=1 lk_file_replace "$FILE" "$VSCODE_PRODUCT_JSON"
 fi
@@ -404,7 +407,7 @@ show-warning=false
 
 [net/launchpad/plank/docks/dock1]
 current-workspace-only=true
-dock-items=['thunderbird.dockitem', 'todoist.dockitem', 'harvest.dockitem', 'teams.dockitem', 'skypeforlinux.dockitem', 'caprine.dockitem', 'org.keepassxc.KeePassXC.dockitem']
+dock-items=['thunderbird.dockitem', 'todoist.dockitem', 'clockify.dockitem', 'teams.dockitem', 'skypeforlinux.dockitem', 'caprine.dockitem', 'org.keepassxc.KeePassXC.dockitem']
 lock-items=true
 theme='Matte'
 
@@ -467,11 +470,11 @@ EOF
     LK_SCREENSHOT_DIR=${LK_SCREENSHOT_DIR:-~/Desktop}
     dconf write /org/virt-manager/virt-manager/paths/screenshot-default \
         "'$LK_SCREENSHOT_DIR'"
-    lk_is_false START_PLANK || {
-        nohup plank </dev/null &>/dev/null &
+    lk_is_false START_PLANK || (
+        eval exec "$(_lk_log_close_fd)"
+        nohup plank &>/dev/null &
         disown
-        sleep 2
-    }
+    )
 
     lk_tty_print "Checking Xfce4"
     ! lk_has_arg --reset ||

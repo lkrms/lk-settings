@@ -223,12 +223,12 @@ rules = {
         criteria = {
             operator.AND,
             class_instance_name = {
-                "linacreative.harvestapp.com__time"
+                "clockify"
             },
             _criteria.sticky
         },
         actions = append(
-            _actions.undecorated_sticky,
+            _actions.sticky,
             {
                 {to_place, {_places.d2_bottom3_1}}
             }

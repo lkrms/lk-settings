@@ -96,6 +96,7 @@ symlink "$_ROOT/.vimrc" ~/.vimrc
 symlink "$_ROOT/.tidyrc" ~/.tidyrc
 symlink "$_ROOT/.byoburc" ~/.byoburc
 symlink "$_ROOT/byobu/" ~/.byobu
+symlink -d "$_ROOT/composer/config.json" ~/.composer/config.json
 symlink -d "$_ROOT/git" ~/.config/git
 symlink -d "$_ROOT/rubocop/.rubocop.yml" ~/.rubocop.yml
 symlink -d "$_ROOT/displays/ColorSync/Profiles/" ~/Library/ColorSync/Profiles

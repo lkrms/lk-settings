@@ -1,0 +1,12 @@
+{
+    "repositories": [
+        {
+            "type": "path",
+            "url": "~/Code/plc/packages/composer/sync"
+        },
+        {
+            "type": "path",
+            "url": "~/Code/util-php"
+        }
+    ]
+}

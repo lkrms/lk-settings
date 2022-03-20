@@ -8,12 +8,12 @@ reset:xfwm4,/general/easy_click,string,Mod3
 xfwm4,/general/activate_action,string,switch
 xfwm4,/general/borderless_maximize,bool,true
 xfwm4,/general/button_layout,string,OT|HSMC
-xfwm4,/general/cycle_draw_frame,bool,false
+xfwm4,/general/cycle_draw_frame,bool,true
 xfwm4,/general/cycle_hidden,bool,true
 xfwm4,/general/cycle_minimum,bool,false
 xfwm4,/general/cycle_preview,reset
-xfwm4,/general/cycle_raise,bool,true
-xfwm4,/general/cycle_tabwin_mode,int,1
+xfwm4,/general/cycle_raise,bool,false
+xfwm4,/general/cycle_tabwin_mode,int,0
 xfwm4,/general/cycle_workspaces,bool,false
 xfwm4,/general/mousewheel_rollup,bool,true
 xfwm4,/general/placement_mode,string,mouse
@@ -74,7 +74,7 @@ xfce4-desktop,/windowlist-menu/show-sticky-once,bool,true
 xfce4-panel,/plugins/pager/workspace-scrolling,bool,true
 xfce4-panel,/plugins/systray/show-frame,bool,false
 xfce4-panel,/plugins/tasklist/flat-buttons,reset
-xfce4-panel,/plugins/tasklist/grouping,uint,0
+#xfce4-panel,/plugins/tasklist/grouping,uint,0
 xfce4-panel,/plugins/tasklist/middle-click,uint,0
 xfce4-panel,/plugins/tasklist/show-handle,bool,false
 xfce4-panel,/plugins/tasklist/show-wireframes,bool,true
@@ -137,14 +137,15 @@ xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>b,string,exo-op
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>c,string,code
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>c,string,/opt/lk-settings/bin/open-project.sh
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>d,string,dbeaver
-xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>g,string,smerge
-xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>g,string,git-cola
+xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>g,string,/opt/lk-settings/bin/open-repo.sh
+xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>g,string,/opt/lk-settings/bin/open-repo.sh git -C '{}' cola
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>i,string,nomacs
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>k,string,keepassxc
+xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>l,string,sh -c 'killall devilspie2 -u \"\$(id -un)\"; exec devilspie2'
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>n,string,lk-note-open.sh
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>n,string,code \"${LK_NOTE_DIR:-$HOME/Desktop}\"
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>o,string,todoist
-xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>p,string,sh -c 'killall devilspie2 -u \"\$(id -un)\"; exec devilspie2'
+xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>p,string,clockify
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>s,string,exo-open --launch TerminalEmulator bash -ic 'lk-unison.sh -batch || lk_tty_pause'
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>semicolon,string,libreoffice --calc
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>v,string,virt-manager

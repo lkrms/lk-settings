@@ -13,7 +13,7 @@
 	"breakStrictMode": false,
 	"morningHour": 9,
 	"microbreakPostpone": false,
-	"breakPostpone": true,
+	"breakPostpone": false,
 	"microbreakPostponeTime": 120000,
 	"breakPostponeTime": 120000,
 	"microbreakPostponesLimit": 1,
