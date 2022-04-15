@@ -1,6 +1,9 @@
 [include]
 	path = config-filters
 
+[includeIf "gitdir:/Users/"]
+	path = config-macos
+
 [user]
 	name = Luke Arms
 	useConfigOnly = true

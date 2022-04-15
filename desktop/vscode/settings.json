@@ -21,6 +21,17 @@
     "[lua]": {
         "editor.defaultFormatter": "trixnz.vscode-lua"
     },
+    "[markdown]": {
+        "editor.quickSuggestions": false,
+        "editor.rulers": [
+            72,
+            80,
+            120
+        ],
+        "editor.unicodeHighlight.ambiguousCharacters": false,
+        "editor.unicodeHighlight.invisibleCharacters": false,
+        "editor.wordWrap": "off"
+    },
     "[nginx]": {
         "editor.defaultFormatter": "ahmadalli.vscode-nginx-conf"
     },
@@ -58,6 +69,8 @@
         "space_before_conditional": true,
         "wrap_line_length": 80
     },
+    "css.format.newlineBetweenRules": false,
+    "css.format.newlineBetweenSelectors": false,
     "dash.languageIdToDocsetMap": {
         "php": [
             "php"
@@ -390,6 +403,7 @@
             "path": "/opt/homebrew/bin/bash"
         }
     },
+    "terminal.integrated.rightClickBehavior": "nothing",
     "terminal.integrated.scrollback": 10000,
     "terminal.integrated.sendKeybindingsToShell": true,
     "terminal.integrated.showExitAlert": false,

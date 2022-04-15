@@ -62,6 +62,7 @@ VSCODE_EXTENSIONS=(
     salesforce.salesforcedx-vscode-visualforce
     sfodje.perltidy
     shardulm94.trailing-spaces
+    spadin.memento-inputs
     stansw.vscode-odata
     stkb.rewrap
     sumneko.lua

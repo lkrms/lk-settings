@@ -1,0 +1,11 @@
+{
+    "PHPDoc: @deprecated": {
+        "scope": "php",
+        "prefix": "@deprecated",
+        "body": [
+            "/**",
+            " * @deprecated Use {@see $0} instead",
+            " */"
+        ]
+    }
+}

@@ -11,7 +11,7 @@
             "port": 9003
         },
         {
-            "name": "PHP: Current File",
+            "name": "PHP: Current file",
             "type": "php",
             "request": "launch",
             "program": "${file}",
@@ -28,18 +28,34 @@
                 "max_children": 10000,
                 "show_hidden": 1,
                 "max_data": 10000000
-            },
-            "args": [],
-            "osx": {
-                "name": "PHP: Current File",
-                "type": "php",
-                "request": "launch",
-                "runtimeExecutable": "/usr/local/bin/php",
-                "env": {
-                    "XDEBUG_MODE": "debug,develop",
-                    "XDEBUG_CONFIG": "client_port=${port}"
-                }
             }
+        },
+        {
+            "name": "PHP: Current file (with args)",
+            "type": "php",
+            "request": "launch",
+            "program": "${file}",
+            "cwd": "${fileDirname}",
+            "port": 0,
+            "runtimeExecutable": "bash",
+            "runtimeArgs": [
+                "-c",
+                "eval \"args=(${*: -1})\" && php \"${@:1:$#-1}\" \"${args[@]}\"",
+                "bash",
+                "-dxdebug.start_with_request=yes"
+            ],
+            "env": {
+                "XDEBUG_MODE": "debug,develop",
+                "XDEBUG_CONFIG": "client_port=${port}"
+            },
+            "xdebugSettings": {
+                "max_children": 10000,
+                "show_hidden": 1,
+                "max_data": 10000000
+            },
+            "args": [
+                "${input:debugArgs}"
+            ]
         },
         {
             "name": "Python: Current File",
@@ -47,7 +63,18 @@
             "request": "launch",
             "program": "${file}",
             "console": "integratedTerminal",
-            "args": []
+            "justMyCode": true
+        }
+    ],
+    "inputs": [
+        {
+            "id": "debugArgs",
+            "type": "command",
+            "command": "memento.promptString",
+            "args": {
+                "id": "debugArgs",
+                "description": "Command line arguments"
+            }
         }
     ]
 }

@@ -223,6 +223,7 @@ symlink "$_ROOT/autorandr/" ~/.config/autorandr
 symlink "$_ROOT/.byoburc" ~/.byoburc
 symlink "$_ROOT/byobu/" ~/.byobu
 symlink "$_ROOT/composer/config.json" ~/.config/composer/config.json
+symlink "$_ROOT/composer/config-dev.json" ~/.config/composer-dev/config.json
 symlink "$_ROOT/devilspie2/" ~/.config/devilspie2
 symlink "$_ROOT/git" ~/.config/git
 symlink "$_ROOT/plank/" ~/.config/plank

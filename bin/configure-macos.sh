@@ -97,6 +97,7 @@ symlink "$_ROOT/.tidyrc" ~/.tidyrc
 symlink "$_ROOT/.byoburc" ~/.byoburc
 symlink "$_ROOT/byobu/" ~/.byobu
 symlink -d "$_ROOT/composer/config.json" ~/.composer/config.json
+symlink -d "$_ROOT/composer/config-dev.json" ~/.composer-dev/config.json
 symlink -d "$_ROOT/git" ~/.config/git
 symlink -d "$_ROOT/rubocop/.rubocop.yml" ~/.rubocop.yml
 symlink -d "$_ROOT/displays/ColorSync/Profiles/" ~/Library/ColorSync/Profiles
@@ -163,7 +164,7 @@ is_basic || defaults write com.lwouis.alt-tab-macos startAtLogin -string true
 ! lk_command_exists espanso || {
     lk_tty_print "Checking espanso"
     [ -e ~/Library/LaunchAgents/com.federicoterzi.espanso.plist ] ||
-        espanso register
+        espanso service register
 }
 
 symlink_if_not_running \
@@ -380,29 +381,6 @@ del(.global_shortcuts.quick_add) |
                 lk_file_replace -f "$TEMP" "$FILE"
             fi
     }
-}
-
-is_basic || {
-    lk_tty_print "Checking Harvest"
-    # ^⌘O
-    defaults write com.getharvest.harvestxapp kNewTimerShortcut "<data>
-YnBsaXN0MDDUAQIDBAUGBwpYJHZlcnNpb25ZJGFyY2hpdmVyVCR0b3BYJG9iamVjdHMS
-AAGGoF8QD05TS2V5ZWRBcmNoaXZlctEICVRyb290gAGjCwwTVSRudWxs0w0ODxAREldL
-ZXlDb2RlViRjbGFzc11Nb2RpZmllckZsYWdzEASAAhIAFAAA0hQVFhdaJGNsYXNzbmFt
-ZVgkY2xhc3Nlc1tNQVNTaG9ydGN1dKIYGVtNQVNTaG9ydGN1dFhOU09iamVjdAgRGiQp
-MjdJTFFTV11kbHOBg4WKj5qjr7K+AAAAAAAAAQEAAAAAAAAAGgAAAAAAAAAAAAAAAAAA
-AMc=
-</data>"
-    for KEY in kShowFavoritesShortcut \
-        kShowTimeSummaryShortcut \
-        kShowTimesheetShortcut; do
-        # Disabled
-        defaults write com.getharvest.harvestxapp "$KEY" "<data>
-YnBsaXN0MDDUAQIDBAUGBwpYJHZlcnNpb25ZJGFyY2hpdmVyVCR0b3BYJG9iamVjdHMS
-AAGGoF8QD05TS2V5ZWRBcmNoaXZlctEICVRyb290gAChC1UkbnVsbAgRGiQpMjdJTFFT
-VQAAAAAAAAEBAAAAAAAAAAwAAAAAAAAAAAAAAAAAAABb
-</data>"
-    done
 }
 
 # TODO: configure Typora via `defaults` in lieu of symlinking

@@ -183,6 +183,10 @@
         "when": "editorLangId == 'markdown'"
     },
     {
+        "key": "ctrl+shift+o",
+        "command": "outline.focus"
+    },
+    {
         "key": "ctrl+k shift+f",
         "command": "-poor-mans-t-sql-formatter.formatSql",
         "when": "editorTextFocus"

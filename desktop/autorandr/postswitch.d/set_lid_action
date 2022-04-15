@@ -1,0 +1,18 @@
+#!/bin/bash
+
+set -euo pipefail
+
+case "${XDG_CURRENT_DESKTOP-}:${HOSTNAME-}::${AUTORANDR_MONITORS-}:" in
+XFCE:roxy:*:DP-1:*)
+    # "Switch off display"
+    xfconf-query -c xfce4-power-manager -p /xfce4-power-manager/lid-action-on-ac -n -t uint -s 0
+    xfconf-query -c xfce4-power-manager -p /xfce4-power-manager/lid-action-on-battery -n -t uint -s 0
+    xfconf-query -c xfce4-power-manager -p /xfce4-power-manager/logind-handle-lid-switch -n -t bool -s false
+    ;;
+XFCE:roxy::*)
+    # "Suspend"
+    xfconf-query -c xfce4-power-manager -p /xfce4-power-manager/lid-action-on-ac -n -t uint -s 1
+    xfconf-query -c xfce4-power-manager -p /xfce4-power-manager/lid-action-on-battery -n -t uint -s 1
+    xfconf-query -c xfce4-power-manager -p /xfce4-power-manager/logind-handle-lid-switch -n -t bool -s false
+    ;;
+esac

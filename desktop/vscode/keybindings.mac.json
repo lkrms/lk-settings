@@ -164,6 +164,10 @@
         "when": "editorTextFocus && !editorReadonly && !editorTabMovesFocus && !hasOtherSuggestions && !hasSnippetCompletions && !inSnippetMode && !suggestWidgetVisible && editorLangId == 'markdown'"
     },
     {
+        "key": "shift+cmd+o",
+        "command": "outline.focus"
+    },
+    {
         "key": "ctrl+k shift+f",
         "command": "-poor-mans-t-sql-formatter.formatSql",
         "when": "editorTextFocus"

@@ -454,6 +454,14 @@ hs.hotkey.bind(
 
 hs.hotkey.bind(
     {"ctrl", "cmd"},
+    "h",
+    function()
+        open("com.microsoft.VSCode", "/etc/hosts")
+    end
+)
+
+hs.hotkey.bind(
+    {"ctrl", "cmd"},
     "m",
     function()
         open("com.apple.mail")

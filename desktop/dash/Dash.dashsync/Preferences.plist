@@ -597,11 +597,6 @@
 				<key>date</key>
 				<date>2022-01-05T16:01:57Z</date>
 			</dict>
-			<key>http://kapeli.com/feeds/NET_Framework.xml</key>
-			<dict>
-				<key>date</key>
-				<date>2022-03-18T11:34:50Z</date>
-			</dict>
 			<key>http://kapeli.com/feeds/Nginx.xml</key>
 			<dict>
 				<key>date</key>
@@ -657,6 +652,11 @@
 				<key>date</key>
 				<date>2022-01-05T16:02:02Z</date>
 			</dict>
+			<key>http://kapeli.com/feeds/Ruby_2.xml</key>
+			<dict>
+				<key>date</key>
+				<date>2022-03-27T22:32:41Z</date>
+			</dict>
 			<key>http://kapeli.com/feeds/Rust.xml</key>
 			<dict>
 				<key>date</key>
@@ -702,11 +702,6 @@
 				<key>date</key>
 				<date>2022-01-05T16:03:22Z</date>
 			</dict>
-			<key>http://kapeli.com/feeds/Xamarin.xml</key>
-			<dict>
-				<key>date</key>
-				<date>2022-03-18T11:40:08Z</date>
-			</dict>
 			<key>http://kapeli.com/feeds/jQuery.xml</key>
 			<dict>
 				<key>date</key>
@@ -714,7 +709,18 @@
 			</dict>
 		</dict>
 		<key>uninstalled</key>
-		<dict/>
+		<dict>
+			<key>http://kapeli.com/feeds/NET_Framework.xml</key>
+			<dict>
+				<key>date</key>
+				<date>2022-03-27T22:32:28Z</date>
+			</dict>
+			<key>http://kapeli.com/feeds/Xamarin.xml</key>
+			<dict>
+				<key>date</key>
+				<date>2022-03-27T22:32:28Z</date>
+			</dict>
+		</dict>
 	</dict>
 	<key>isPinned</key>
 	<true/>

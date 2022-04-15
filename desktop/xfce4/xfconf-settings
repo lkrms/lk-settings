@@ -139,6 +139,7 @@ xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>c,string,/opt/l
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>d,string,dbeaver
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>g,string,/opt/lk-settings/bin/open-repo.sh
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>g,string,/opt/lk-settings/bin/open-repo.sh git -C '{}' cola
+xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>h,string,code /etc/hosts
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>i,string,nomacs
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>k,string,keepassxc
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>l,string,sh -c 'killall devilspie2 -u \"\$(id -un)\"; exec devilspie2'

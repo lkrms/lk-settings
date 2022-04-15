@@ -3,6 +3,10 @@
         {
             "type": "path",
             "url": "~/Code/plc/packages/composer/sync"
+        },
+        {
+            "type": "path",
+            "url": "~/Code/lk/util-php"
         }
     ],
     "config": {

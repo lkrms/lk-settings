@@ -38,7 +38,7 @@ IFS=$'\n'
 OPEN=($(
     { IFS= && lk_arr LIST &&
         { [ ! -e "$HIST_FILE" ] ||
-            grep -Fxf <(lk_arr LIST) "$HIST_FILE" | tail -n50 ||
+            grep -Fxf <(lk_arr LIST) "$HIST_FILE" | tail -n24 ||
             [[ ${PIPESTATUS[*]} == 10 ]]; }; } |
         sort | uniq -c | sort -k1,1nr -k2,2 | awk '{print $2}' |
         gnu_sed -E 'p; s/\.code-workspace$//; s/([^/]+)\/\1$/\1/' |
