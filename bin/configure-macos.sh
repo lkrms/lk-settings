@@ -22,7 +22,7 @@ _BASIC=
 ! lk_has_arg "--basic" || touch "$_ROOT/../.is_basic"
 [ ! -e "$_ROOT/../.is_basic" ] || _BASIC=1
 
-if lk_command_exists crontab; then
+is_basic || if lk_command_exists crontab; then
     lk_mktemp_with CRONTAB awk \
         -v STRETCHLY="$(lk_double_quote "$_ROOT/stretchly/stretchly.sh")" \
         '/^DISPLAY=/{next}$6=="stretchly"{$6=STRETCHLY}{print}' \
@@ -167,7 +167,7 @@ is_basic || defaults write com.lwouis.alt-tab-macos startAtLogin -string true
         espanso service register
 }
 
-symlink_if_not_running \
+is_basic || symlink_if_not_running \
     "$_ROOT/flameshot/flameshot.ini" ~/.config/flameshot/flameshot.ini \
     Flameshot "pgrep -x flameshot"
 
