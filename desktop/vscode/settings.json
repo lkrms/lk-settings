@@ -190,7 +190,7 @@
     "gitlens.statusBar.format": "${author}, ${date} • ${message}",
     "gitlens.statusBar.reduceFlicker": true,
     "html.autoClosingTags": false,
-    "intelephense.diagnostics.undefinedConstants": false,
+    "intelephense.rename.exclude": [],
     "intelephense.stubs": [
         "apache",
         "bcmath",
@@ -283,6 +283,10 @@
     "perltidy.additionalArguments": [
         "--indent-columns=2"
     ],
+    "phpunit.files": "{test,tests}/**/*Test.php",
+    "phpunit.logpanel": true,
+    "phpunit.php": "/usr/bin/env php -dxdebug.start_with_request=yes",
+    "phpunit.shell": "/bin/bash",
     "poor-mans-t-sql-formatter.std.indent": "    ",
     "poor-mans-t-sql-formatter.std.trailingCommas": false,
     "powershell.codeFormatting.newLineAfterCloseBrace": false,
@@ -407,6 +411,7 @@
     "terminal.integrated.scrollback": 10000,
     "terminal.integrated.sendKeybindingsToShell": true,
     "terminal.integrated.showExitAlert": false,
+    "testExplorer.useNativeTesting": true,
     "trailing-spaces.highlightCurrentLine": false,
     "typescript.autoClosingTags": false,
     "update.showReleaseNotes": false,

@@ -16,6 +16,7 @@ VSCODE_EXTENSIONS=(
     foxundermoon.shell-format
     gharveymn.nightswitch-lite
     giovdk21.vscode-sublime-merge
+    hbenl.vscode-test-explorer
     henriiik.vscode-sort
     HookyQR.beautify
     humao.rest-client
@@ -39,12 +40,14 @@ VSCODE_EXTENSIONS=(
     ms-vscode.azure-account
     ms-vscode.cpptools
     ms-vscode.powershell
+    ms-vscode.test-adapter-converter
     mtxr.sqltools
     piotrpalarz.vscode-gitignore-generator
     PKief.material-icon-theme
     pthorsson.vscode-jsp
     rangav.vscode-thunder-client
     rebornix.ruby
+    recca0120.vscode-phpunit
     redhat.java
     redhat.vscode-commons
     redhat.vscode-xml

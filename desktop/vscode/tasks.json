@@ -9,16 +9,13 @@
             "command": "php",
             "args": [
                 "${env:HOME}/Code/dev-tools/pretty-php/pretty.php",
-                "${file}",
+                "${file}"
             ],
             "problemMatcher": [],
             "presentation": {
                 "reveal": "never",
                 "panel": "new",
                 "close": true
-            },
-            "linux": {
-                "command": "/usr/bin/php7"
             }
         },
         {
@@ -27,7 +24,7 @@
             "command": "php",
             "args": [
                 "${env:HOME}/Code/dev-tools/pretty-php/pretty.php",
-                "${file}",
+                "${file}"
             ],
             "options": {
                 "env": {
@@ -40,9 +37,6 @@
                 "reveal": "never",
                 "panel": "new",
                 "close": true
-            },
-            "linux": {
-                "command": "/usr/bin/php7"
             }
         }
     ]
