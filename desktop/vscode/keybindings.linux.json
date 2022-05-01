@@ -197,6 +197,10 @@
         "when": "editorTextFocus && !editorReadonly && editorLangId == 'sql'"
     },
     {
+        "key": "ctrl+alt+h",
+        "command": "-rest-client.history"
+    },
+    {
         "command": "-sortLines.sortLines",
         "key": "f9",
         "when": "editorTextFocus"

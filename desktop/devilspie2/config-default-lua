@@ -239,7 +239,8 @@ rules = {
             operator.AND,
             class_instance_name = {
                 "microsoft teams",
-                "microsoft teams - preview"
+                "microsoft teams - preview",
+                "microsoft teams - insiders"
             },
             _criteria.tacky
             --function(state)

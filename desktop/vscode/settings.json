@@ -69,6 +69,7 @@
         "space_before_conditional": true,
         "wrap_line_length": 80
     },
+    "bookmarks.saveBookmarksInProject": true,
     "css.format.newlineBetweenRules": false,
     "css.format.newlineBetweenSelectors": false,
     "dash.languageIdToDocsetMap": {
@@ -126,6 +127,7 @@
         "*.sublime-{commands,keymap,settings}": "json",
         "*.target": "properties",
         "*.timer": "properties",
+        "*.xml.dist": "xml",
         "*crontab*": "properties",
         ".env{,.*}": "properties",
         ".{bash_login,bash_profile,bashrc,profile,xsessionrc}": "shellscript",
@@ -285,7 +287,7 @@
     ],
     "phpunit.files": "{test,tests}/**/*Test.php",
     "phpunit.logpanel": true,
-    "phpunit.php": "/usr/bin/env php -dxdebug.start_with_request=yes",
+    "phpunit.php": "/usr/bin/env php -dxdebug.start_with_request=yes -dxdebug.mode=debug,develop",
     "phpunit.shell": "/bin/bash",
     "poor-mans-t-sql-formatter.std.indent": "    ",
     "poor-mans-t-sql-formatter.std.trailingCommas": false,
@@ -420,6 +422,7 @@
     "window.title": "${dirty}${rootName}${separator}${activeEditorShort}${separator}${appName}",
     "window.titleBarStyle": "custom",
     "workbench.editor.highlightModifiedTabs": true,
+    "workbench.editor.restoreViewState": false,
     "workbench.editor.revealIfOpen": true,
     "workbench.editor.untitled.hint": "hidden",
     "workbench.enableExperiments": false,
@@ -428,7 +431,5 @@
     "workbench.startupEditor": "newUntitledFile",
     "xml.format.emptyElements": "collapse",
     "xml.format.enforceQuoteStyle": "preferred",
-    "xml.format.preserveAttributeLineBreaks": true,
-    "xml.format.preservedNewlines": 0,
-    "xml.format.splitAttributes": true
+    "xml.format.preservedNewlines": 0
 }

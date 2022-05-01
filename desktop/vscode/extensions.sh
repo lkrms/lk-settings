@@ -25,6 +25,7 @@ VSCODE_EXTENSIONS=(
     jprestidge.theme-material-theme
     jq-syntax-highlighting.jq-syntax-highlighting
     jrebocho.vscode-random
+    Kasik96.latte
     lkrms.inifmt
     mads-hartmann.bash-ide-vscode
     maelvalais.autoconf

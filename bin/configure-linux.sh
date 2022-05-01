@@ -408,7 +408,7 @@ show-warning=false
 
 [net/launchpad/plank/docks/dock1]
 current-workspace-only=true
-dock-items=['thunderbird.dockitem', 'todoist.dockitem', 'clockify.dockitem', 'teams.dockitem', 'skypeforlinux.dockitem', 'caprine.dockitem', 'org.keepassxc.KeePassXC.dockitem']
+dock-items=['thunderbird.dockitem', 'todoist.dockitem', 'clockify.dockitem', 'teams-insiders.dockitem', 'skypeforlinux.dockitem', 'caprine.dockitem', 'org.keepassxc.KeePassXC.dockitem']
 lock-items=true
 theme='Matte'
 

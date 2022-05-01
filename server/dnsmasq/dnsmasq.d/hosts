@@ -1,18 +1,23 @@
 127.0.0.1 localhost
 ::1 localhost
 
+10.10.0.1 doo.linacreative.com doo
+2406:3400:217:e030::1 doo.linacreative.com doo
+
 10.10.0.1 lk.lan proxy.lan
 10.10.0.1 aur.repo lk.repo quarry.repo
 10.10.0.1 arch.mirror cloud-images.ubuntu.mirror ports.ubuntu.mirror sublimetext.mirror ubuntu.mirror
 10.10.0.1 brew.mirror
 
-10.10.0.1 doo doo.linacreative.com ntp.linacreative.com wpad wpad.linacreative.com
-2406:3400:217:e030::1 doo doo.linacreative.com ntp.linacreative.com wpad wpad.linacreative.com
+10.10.0.1 ntp.linacreative.com wpad wpad.linacreative.com
+2406:3400:217:e030::1 ntp.linacreative.com wpad wpad.linacreative.com
 
-10.10.10.21 bamm-bamm bamm-bamm.linacreative.com
-2406:3400:217:e030:d76b:e6f2:d7e3:8da bamm-bamm bamm-bamm.linacreative.com
+10.10.10.1 nas1.linacreative.com nas1
+10.10.10.2 nas2.linacreative.com nas2
+2406:3400:217:e030:eafc:afff:fee5:968c nas2.linacreative.com nas2
 
-10.10.10.23 slab slab.linacreative.com
-2406:3400:217:e030:46f:e16:e5c7:a403 slab slab.linacreative.com
+10.10.10.21 bamm-bamm.linacreative.com bamm-bamm
+2406:3400:217:e030:d76b:e6f2:d7e3:8da bamm-bamm.linacreative.com bamm-bamm
 
-10.10.10.2 hub hub.linacreative.com
+10.10.10.23 slab.linacreative.com slab
+2406:3400:217:e030:46f:e16:e5c7:a403 slab.linacreative.com slab
