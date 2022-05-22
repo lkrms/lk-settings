@@ -22,7 +22,6 @@ VSCODE_EXTENSIONS=(
     humao.rest-client
     idleberg.applescript
     jkjustjoshing.vscode-text-pastry
-    jprestidge.theme-material-theme
     jq-syntax-highlighting.jq-syntax-highlighting
     jrebocho.vscode-random
     Kasik96.latte
@@ -71,7 +70,6 @@ VSCODE_EXTENSIONS=(
     stkb.rewrap
     sumneko.lua
     TaoKlerks.poor-mans-t-sql-formatter-vscode
-    teabyii.ayu
     timonwong.shellcheck
     trixnz.vscode-lua
     twxs.cmake
@@ -81,5 +79,4 @@ VSCODE_EXTENSIONS=(
     wmaurer.change-case
     xdebug.php-debug
     yzhang.markdown-all-in-one
-    zhuangtongfa.material-theme
 )

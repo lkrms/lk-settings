@@ -7,6 +7,6 @@
   "hide_menu": true,
   "render_commit_dialog_message_at_top": true,
   "side_bar_layout": "commit_graph_as_column",
-  "tab_size": 8,
+  "tab_size": 4,
   "theme": "Merge Dark.sublime-theme"
 }

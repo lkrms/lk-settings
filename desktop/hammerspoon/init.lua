@@ -453,7 +453,7 @@ hs.hotkey.bind(
 )
 
 hs.hotkey.bind(
-    {"ctrl", "cmd"},
+    {"ctrl", "cmd", "shift"},
     "h",
     function()
         open("com.microsoft.VSCode", "/etc/hosts")
@@ -481,6 +481,14 @@ hs.hotkey.bind(
     "n",
     function()
         open("com.microsoft.VSCode", homePath("/Nextcloud/Notes"))
+    end
+)
+
+hs.hotkey.bind(
+    {"ctrl", "cmd", "shift"},
+    "r",
+    function()
+        open("com.microsoft.VSCode", homePath("/.bashrc"))
     end
 )
 

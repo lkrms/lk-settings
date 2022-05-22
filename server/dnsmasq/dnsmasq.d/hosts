@@ -6,7 +6,7 @@
 
 10.10.0.1 lk.lan proxy.lan
 10.10.0.1 aur.repo lk.repo quarry.repo
-10.10.0.1 arch.mirror cloud-images.ubuntu.mirror ports.ubuntu.mirror sublimetext.mirror ubuntu.mirror
+10.10.0.1 arch.mirror cloud-images.ubuntu.mirror ports.ubuntu.mirror ppa.mirror sublimetext.mirror ubuntu.mirror
 10.10.0.1 brew.mirror
 
 10.10.0.1 ntp.linacreative.com wpad wpad.linacreative.com

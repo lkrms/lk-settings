@@ -23,6 +23,55 @@ function squid-report() {
     squidclient "mgr:$1"
 }
 
+function squid-analyse-store-log() {
+    (($#)) || set -- /var/log/squid/store.log*
+    lk_cat_log "$@" | awk '
+NR == 1 {
+    last_ts = $1
+}
+function get_diff(_diff) {
+    _diff = sprintf("+ %-9.2f ", $1 - last_ts)
+    last_ts = $1
+    return _diff
+}
+$2 == "SWAPOUT" {
+    _key = $5
+    _uri = $13
+    _size = $11
+    sub(".*/", "", _size)
+    # Cache key not seen before?
+    if (!key_uri[_key]) {
+        key_uri[_key] = _uri
+        uri_key[_uri, uri_keys[_uri]++] = _key
+    }
+    count_in[_uri]++
+    last[_uri] = "IN"
+    size[_uri] = _size
+    ts[_uri] = $1
+    print get_diff() sprintf("%11d", _size) " bytes IN: " _uri >"/dev/stderr"
+}
+$2 == "RELEASE" && $3 != -1 {
+    _key = $5
+    _uri = key_uri[_key]
+    if (_uri && last[_uri] == "IN") {
+        count_out[_uri]++
+        last[_uri] = "OUT"
+        seconds_in = int($1 - ts[_uri])
+        ttl[_uri] += seconds_in
+        print get_diff() sprintf("%11d", size[_uri]) " bytes OUT after " seconds_in " sec: " _uri >"/dev/stderr"
+    }
+}
+END {
+    OFS = "\t"
+    for (_uri in count_in) {
+        for (i = 0; i < uri_keys[_uri]; i++) {
+            keys = (i ? keys "," : "") uri_key[_uri, i]
+        }
+        print size[_uri], ttl[_uri] + (last[_uri] == "IN" ? int($1 - ts[_uri]) : 0), count_in[_uri], int(count_out[_uri]), last[_uri], keys, _uri
+    }
+}'
+}
+
 function pacman-sign() { (
     shopt -s nullglob
     lk_tty_print "Checking package signatures"
@@ -231,6 +280,28 @@ function iptables-reload() {
     sudo systemctl reload iptables.service ip6tables.service &&
         sudo systemctl restart fail2ban.service
 }
+
+function wake-nas2() {
+    wol -i 10.10.255.255 -p 9 -v e8:fc:af:e5:96:8c
+}
+
+function _rebuild-ub() {
+    local LK_UBUNTU_MIRROR LK_UBUNTU_CLOUDIMG_HOST LK_UBUNTU_CLOUDIMG_SHA_URL
+    export LK_UBUNTU_MIRROR=http://ubuntu.mirror/ \
+        LK_UBUNTU_CLOUDIMG_HOST=cloud-images.ubuntu.mirror \
+        LK_UBUNTU_CLOUDIMG_SHA_URL=http://cloud-images.ubuntu.mirror
+    lk_tty_run lk-cloud-image-boot.sh \
+        -i "$1" \
+        -c 2 -m 2048 -s 20G \
+        -n bridge=br0 -M "$2" -I "$3" \
+        -H \
+        "${@:5}" \
+        "$4"
+}
+
+function rebuild-ub22() { _rebuild-ub ubuntu-22.04 52:54:00:1b:ea:89 10.10.122.22/16 ub22 "$@"; }
+function rebuild-ub20() { _rebuild-ub ubuntu-20.04 52:54:00:76:c6:3e 10.10.122.20/16 ub20 "$@"; }
+function rebuild-ub18() { _rebuild-ub ubuntu-18.04 52:54:00:5e:ca:ba 10.10.122.18/16 ub18 "$@"; }
 
 alias disable-proxy='unset http{,s}_proxy'
 alias gpg-cache-check='gpg-connect-agent "keyinfo --list" /bye'

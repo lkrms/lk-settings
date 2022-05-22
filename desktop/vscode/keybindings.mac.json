@@ -253,6 +253,36 @@
         "when": "searchViewletFocus && !fileMatchOrFolderMatchFocus"
     },
     {
+        "key": "alt+cmd+c",
+        "command": "-toggleSearchEditorCaseSensitive",
+        "when": "inSearchEditor && searchInputBoxFocus"
+    },
+    {
+        "key": "ctrl+alt+c",
+        "command": "toggleSearchEditorCaseSensitive",
+        "when": "inSearchEditor && searchInputBoxFocus"
+    },
+    {
+        "key": "alt+cmd+r",
+        "command": "-toggleSearchEditorRegex",
+        "when": "inSearchEditor && searchInputBoxFocus"
+    },
+    {
+        "key": "ctrl+alt+r",
+        "command": "toggleSearchEditorRegex",
+        "when": "inSearchEditor && searchInputBoxFocus"
+    },
+    {
+        "key": "alt+cmd+w",
+        "command": "-toggleSearchEditorWholeWord",
+        "when": "inSearchEditor && searchInputBoxFocus"
+    },
+    {
+        "key": "ctrl+alt+w",
+        "command": "toggleSearchEditorWholeWord",
+        "when": "inSearchEditor && searchInputBoxFocus"
+    },
+    {
         "key": "alt+cmd+r",
         "command": "-toggleSearchRegex",
         "when": "searchViewletFocus"
@@ -275,6 +305,28 @@
     {
         "key": "ctrl+cmd+u",
         "command": "vscsm.openInSublimeMerge"
+    },
+    {
+        "key": "cmd+k f",
+        "command": "-workbench.action.closeFolder",
+        "when": "emptyWorkspaceSupport && workbenchState != 'empty'"
+    },
+    {
+        "key": "shift+cmd+w",
+        "command": "workbench.action.closeFolder",
+        "when": "emptyWorkspaceSupport && workbenchState != 'empty'"
+    },
+    {
+        "key": "alt+w",
+        "command": "workbench.action.closeUnmodifiedEditors"
+    },
+    {
+        "key": "cmd+k u",
+        "command": "-workbench.action.closeUnmodifiedEditors"
+    },
+    {
+        "key": "shift+cmd+w",
+        "command": "-workbench.action.closeWindow"
     },
     {
         "command": "workbench.action.compareEditor.nextChange",
@@ -399,9 +451,19 @@
         "when": "terminalFindFocused || terminalFocus"
     },
     {
+        "key": "alt+cmd+c",
+        "command": "-workbench.action.terminal.toggleFindCaseSensitive",
+        "when": "terminalFindFocused && terminalHasBeenCreated || terminalFindFocused && terminalProcessSupported || terminalFocus && terminalHasBeenCreated || terminalFocus && terminalProcessSupported"
+    },
+    {
         "command": "workbench.action.terminal.toggleFindCaseSensitive",
         "key": "ctrl+alt+c",
         "when": "terminalFindFocused || terminalFocus"
+    },
+    {
+        "key": "ctrl+alt+c",
+        "command": "workbench.action.terminal.toggleFindCaseSensitive",
+        "when": "terminalFindFocused && terminalHasBeenCreated || terminalFindFocused && terminalProcessSupported || terminalFocus && terminalHasBeenCreated || terminalFocus && terminalProcessSupported"
     },
     {
         "command": "-workbench.action.terminal.toggleFindRegex",
@@ -409,9 +471,19 @@
         "when": "terminalFindFocused || terminalFocus"
     },
     {
+        "key": "alt+cmd+r",
+        "command": "-workbench.action.terminal.toggleFindRegex",
+        "when": "terminalFindFocused && terminalHasBeenCreated || terminalFindFocused && terminalProcessSupported || terminalFocus && terminalHasBeenCreated || terminalFocus && terminalProcessSupported"
+    },
+    {
         "command": "workbench.action.terminal.toggleFindRegex",
         "key": "ctrl+alt+r",
         "when": "terminalFindFocused || terminalFocus"
+    },
+    {
+        "key": "ctrl+alt+r",
+        "command": "workbench.action.terminal.toggleFindRegex",
+        "when": "terminalFindFocused && terminalHasBeenCreated || terminalFindFocused && terminalProcessSupported || terminalFocus && terminalHasBeenCreated || terminalFocus && terminalProcessSupported"
     },
     {
         "command": "-workbench.action.terminal.toggleFindWholeWord",
@@ -419,9 +491,19 @@
         "when": "terminalFindFocused || terminalFocus"
     },
     {
+        "key": "alt+cmd+w",
+        "command": "-workbench.action.terminal.toggleFindWholeWord",
+        "when": "terminalFindFocused && terminalHasBeenCreated || terminalFindFocused && terminalProcessSupported || terminalFocus && terminalHasBeenCreated || terminalFocus && terminalProcessSupported"
+    },
+    {
         "command": "workbench.action.terminal.toggleFindWholeWord",
         "key": "ctrl+alt+w",
         "when": "terminalFindFocused || terminalFocus"
+    },
+    {
+        "key": "ctrl+alt+w",
+        "command": "workbench.action.terminal.toggleFindWholeWord",
+        "when": "terminalFindFocused && terminalHasBeenCreated || terminalFindFocused && terminalProcessSupported || terminalFocus && terminalHasBeenCreated || terminalFocus && terminalProcessSupported"
     },
     {
         "command": "-workbench.action.toggleSidebarVisibility",

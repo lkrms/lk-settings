@@ -62,7 +62,7 @@ xfce4-desktop,/desktop-icons/file-icons/show-network-removable,bool,false
 xfce4-desktop,/desktop-icons/file-icons/show-removable,bool,false
 xfce4-desktop,/desktop-icons/file-icons/show-trash,bool,false
 xfce4-desktop,/desktop-icons/file-icons/show-unknown-removable,bool,false
-xfce4-desktop,/desktop-icons/gravity,int,2
+xfce4-desktop,/desktop-icons/gravity,int,3
 xfce4-desktop,/desktop-icons/primary,bool,true
 xfce4-desktop,/desktop-icons/style,int,2
 xfce4-desktop,/windowlist-menu/show-add-remove-workspaces,bool,false
@@ -133,13 +133,13 @@ xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>parenleft,strin
 
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>apostrophe,string,libreoffice --writer
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>b,string,galculator
-xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>b,string,exo-open --launch TerminalEmulator bash -ic '~/Code/lk-platform/src/build-all.sh || lk_tty_pause',
+xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>b,string,exo-open --launch TerminalEmulator bash -ic '~/Code/lk/lk-platform/src/build-all.sh || lk_tty_pause',
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>c,string,code
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>c,string,/opt/lk-settings/bin/open-project.sh
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>d,string,dbeaver
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>g,string,/opt/lk-settings/bin/open-repo.sh
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>g,string,/opt/lk-settings/bin/open-repo.sh git -C '{}' cola
-xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>h,string,code /etc/hosts
+xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>h,string,code /etc/hosts
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>i,string,nomacs
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>k,string,keepassxc
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>l,string,sh -c 'killall devilspie2 -u \"\$(id -un)\"; exec devilspie2'
@@ -147,7 +147,8 @@ xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>n,string,lk-note-open.
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>n,string,code \"${LK_NOTE_DIR:-$HOME/Desktop}\"
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>o,string,todoist
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>p,string,clockify
-xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>s,string,exo-open --launch TerminalEmulator bash -ic 'lk-unison.sh -batch || lk_tty_pause'
+xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>r,string,code \"$HOME/.bashrc\"
+xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>s,string,exo-open --launch TerminalEmulator bash -ic 'lk-unison.sh || lk_tty_pause'
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>semicolon,string,libreoffice --calc
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>v,string,virt-manager
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>x,string,autorandr --change --force

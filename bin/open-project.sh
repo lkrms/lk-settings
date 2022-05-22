@@ -12,7 +12,7 @@ LIST_FILE=$DIR/code-workspace.list
 HIST_FILE=$DIR/code-workspace.history
 
 function generate_list() {
-    printf '%s\n' */{,*/,*/*/,*/*/*/}*.code-workspace >"$LIST_FILE"
+    printf '%s\n' {,*/,*/*/,*/*/*/,*/*/*/*/}*.code-workspace >"$LIST_FILE"
 }
 
 COMMAND=(zenity)

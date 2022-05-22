@@ -15,6 +15,7 @@ flameshot.ini filter=flameshot
 geeqierc.xml filter=geeqie
 /hosts filter=hosts
 **/*.sublime-* filter=jq
+**/smerge/User/Diff.sublime-settings filter=sublimediff
 **/smerge/User/Preferences.sublime-settings filter=sublimemerge
 keepassxc.ini filter=keepassxc
 **/nomacs/*.conf filter=nomacs

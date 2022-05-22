@@ -104,12 +104,12 @@ unset LK_SYMLINK_NO_CHANGE
 # Fix weird Calibri rendering in Thunderbird
 symlink \
     "$_ROOT/fonts/ms-no-bitmaps.conf" /etc/fonts/conf.d/99-ms-no-bitmaps.conf
-# Remove emoji from all fonts other than Twemoji
-FILE=/etc/fonts/conf.d/99-emoji-fix.conf
+# Fix weird Nimbus Mono PS ligatures
 symlink \
-    "$_ROOT/fonts/emoji-fix.conf" "$FILE"
-#[ ! -L "$FILE" ] || { LK_SYMLINK_NO_CHANGE=0 &&
-#    lk_elevate rm -f "$FILE"; }
+    "$_ROOT/fonts/no-nimbus-mono-ps.conf" /etc/fonts/conf.d/99-no-nimbus-mono-ps.conf
+# Remove emoji from all fonts other than Twemoji
+symlink \
+    "$_ROOT/fonts/emoji-fix.conf" /etc/fonts/conf.d/99-emoji-fix.conf
 ! lk_is_false LK_SYMLINK_NO_CHANGE ||
     { sudo -H fc-cache --force --verbose && fc-cache --force --verbose; }
 
@@ -408,7 +408,7 @@ show-warning=false
 
 [net/launchpad/plank/docks/dock1]
 current-workspace-only=true
-dock-items=['thunderbird.dockitem', 'todoist.dockitem', 'clockify.dockitem', 'teams-insiders.dockitem', 'skypeforlinux.dockitem', 'caprine.dockitem', 'org.keepassxc.KeePassXC.dockitem']
+dock-items=['thunderbird.dockitem', 'todoist.dockitem', 'clockify.dockitem', 'teams.dockitem', 'skypeforlinux.dockitem', 'caprine.dockitem', 'org.keepassxc.KeePassXC.dockitem']
 lock-items=true
 theme='Matte'
 
