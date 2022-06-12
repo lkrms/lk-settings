@@ -6,11 +6,16 @@
         {
             "label": "Pretty PHP",
             "type": "process",
-            "command": "php",
+            "command": "php7",
             "args": [
                 "${env:HOME}/Code/dev-tools/pretty-php/pretty.php",
                 "${file}"
             ],
+            "options": {
+                "env": {
+                    "PRETTY_ALIGN_RANGE": "12"
+                }
+            },
             "problemMatcher": [],
             "presentation": {
                 "reveal": "never",
@@ -21,7 +26,7 @@
         {
             "label": "Pretty PHP (remove empty lines)",
             "type": "process",
-            "command": "php",
+            "command": "php7",
             "args": [
                 "${env:HOME}/Code/dev-tools/pretty-php/pretty.php",
                 "${file}"
@@ -29,7 +34,8 @@
             "options": {
                 "env": {
                     "PRETTY_NESTED_ARRAYS": "0",
-                    "PRETTY_REMOVE_EMPTY_LINES": "1"
+                    "PRETTY_REMOVE_EMPTY_LINES": "1",
+                    "PRETTY_IGNORE_LINE_BREAKS": "1"
                 }
             },
             "problemMatcher": [],

@@ -492,7 +492,7 @@
                     "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [],
-                    "Default": true,
+                    "Default": false,
                     "FileFormat": "av_mp4",
                     "Folder": false,
                     "FolderOpen": false,
@@ -1971,6 +1971,7 @@
                     "x264UseAdvancedOptions": false
                 }
             ],
+            "Default": false,
             "Folder": true,
             "FolderOpen": true,
             "PresetName": "General",
@@ -3487,6 +3488,7 @@
                     "x264UseAdvancedOptions": false
                 }
             ],
+            "Default": false,
             "Folder": true,
             "PresetName": "Web",
             "Type": 0
@@ -6621,6 +6623,7 @@
                     "x264UseAdvancedOptions": false
                 }
             ],
+            "Default": false,
             "Folder": true,
             "PresetName": "Devices",
             "Type": 0
@@ -8814,6 +8817,7 @@
                     "x264UseAdvancedOptions": false
                 }
             ],
+            "Default": false,
             "Folder": true,
             "PresetName": "Matroska",
             "Type": 0
@@ -9749,6 +9753,7 @@
                     "x264UseAdvancedOptions": false
                 }
             ],
+            "Default": false,
             "Folder": true,
             "PresetName": "Hardware",
             "Type": 0
@@ -10220,6 +10225,7 @@
                     "x264UseAdvancedOptions": false
                 }
             ],
+            "Default": false,
             "Folder": true,
             "PresetName": "Production",
             "Type": 0
@@ -10234,22 +10240,10 @@
                     ],
                     "AudioEncoderFallback": "fdk_aac",
                     "AudioLanguageList": [
-                        "eng"
+                        "eng",
+                        "deu"
                     ],
                     "AudioList": [
-                        {
-                            "AudioBitrate": 160,
-                            "AudioCompressionLevel": -1.0,
-                            "AudioDitherMethod": "auto",
-                            "AudioEncoder": "copy",
-                            "AudioMixdown": "stereo",
-                            "AudioNormalizeMixLevel": false,
-                            "AudioSamplerate": "auto",
-                            "AudioTrackDRCSlider": 0.0,
-                            "AudioTrackGainSlider": 0.0,
-                            "AudioTrackQuality": 5.0,
-                            "AudioTrackQualityEnable": false
-                        },
                         {
                             "AudioBitrate": 160,
                             "AudioCompressionLevel": -1.0,
@@ -10260,15 +10254,28 @@
                             "AudioSamplerate": "auto",
                             "AudioTrackDRCSlider": 0.0,
                             "AudioTrackGainSlider": 0.0,
-                            "AudioTrackQuality": 5.0,
+                            "AudioTrackQuality": -1.0,
+                            "AudioTrackQualityEnable": false
+                        },
+                        {
+                            "AudioBitrate": 640,
+                            "AudioCompressionLevel": -1.0,
+                            "AudioDitherMethod": "auto",
+                            "AudioEncoder": "copy:ac3",
+                            "AudioMixdown": "none",
+                            "AudioNormalizeMixLevel": false,
+                            "AudioSamplerate": "auto",
+                            "AudioTrackDRCSlider": 0.0,
+                            "AudioTrackGainSlider": 0.0,
+                            "AudioTrackQuality": -1.0,
                             "AudioTrackQualityEnable": false
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
-                    "AudioTrackSelectionBehavior": "all",
+                    "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [],
-                    "Default": false,
+                    "Default": true,
                     "FileFormat": "av_mp4",
                     "Folder": false,
                     "FolderOpen": false,
@@ -10286,7 +10293,7 @@
                     "PictureColorspacePreset": "off",
                     "PictureCombDetectCustom": "",
                     "PictureCombDetectPreset": "default",
-                    "PictureDARWidth": 0,
+                    "PictureDARWidth": 720,
                     "PictureDeblockCustom": "strength=strong:thresh=20",
                     "PictureDeblockPreset": "off",
                     "PictureDeblockTune": "medium",
@@ -10304,12 +10311,12 @@
                     "PictureHeight": 576,
                     "PictureItuPAR": false,
                     "PictureKeepRatio": true,
-                    "PictureLeftCrop": 2,
+                    "PictureLeftCrop": 0,
                     "PictureLooseCrop": false,
                     "PictureModulus": 2,
                     "PicturePAR": "auto",
-                    "PicturePARHeight": 45,
-                    "PicturePARWidth": 64,
+                    "PicturePARHeight": 1,
+                    "PicturePARWidth": 1,
                     "PicturePadBottom": 0,
                     "PicturePadColor": "black",
                     "PicturePadLeft": 0,
@@ -10317,7 +10324,7 @@
                     "PicturePadRight": 0,
                     "PicturePadTop": 0,
                     "PictureRightCrop": 0,
-                    "PictureRotate": "disable=1",
+                    "PictureRotate": "angle=0:hflip=0",
                     "PictureSharpenCustom": "",
                     "PictureSharpenFilter": "off",
                     "PictureSharpenPreset": "",
@@ -10369,22 +10376,10 @@
                     ],
                     "AudioEncoderFallback": "fdk_aac",
                     "AudioLanguageList": [
-                        "eng"
+                        "eng",
+                        "deu"
                     ],
                     "AudioList": [
-                        {
-                            "AudioBitrate": 160,
-                            "AudioCompressionLevel": -1.0,
-                            "AudioDitherMethod": "auto",
-                            "AudioEncoder": "copy",
-                            "AudioMixdown": "stereo",
-                            "AudioNormalizeMixLevel": false,
-                            "AudioSamplerate": "auto",
-                            "AudioTrackDRCSlider": 0.0,
-                            "AudioTrackGainSlider": 0.0,
-                            "AudioTrackQuality": 5.0,
-                            "AudioTrackQualityEnable": false
-                        },
                         {
                             "AudioBitrate": 160,
                             "AudioCompressionLevel": -1.0,
@@ -10395,12 +10390,25 @@
                             "AudioSamplerate": "auto",
                             "AudioTrackDRCSlider": 0.0,
                             "AudioTrackGainSlider": 0.0,
-                            "AudioTrackQuality": 5.0,
+                            "AudioTrackQuality": -1.0,
+                            "AudioTrackQualityEnable": false
+                        },
+                        {
+                            "AudioBitrate": 640,
+                            "AudioCompressionLevel": -1.0,
+                            "AudioDitherMethod": "auto",
+                            "AudioEncoder": "copy:ac3",
+                            "AudioMixdown": "none",
+                            "AudioNormalizeMixLevel": false,
+                            "AudioSamplerate": "auto",
+                            "AudioTrackDRCSlider": 0.0,
+                            "AudioTrackGainSlider": 0.0,
+                            "AudioTrackQuality": -1.0,
                             "AudioTrackQualityEnable": false
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
-                    "AudioTrackSelectionBehavior": "all",
+                    "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [],
                     "Default": false,
@@ -10413,7 +10421,7 @@
                     "Mp4iPodCompatible": false,
                     "PictureAllowUpscaling": false,
                     "PictureAutoCrop": true,
-                    "PictureBottomCrop": 138,
+                    "PictureBottomCrop": 0,
                     "PictureChromaSmoothCustom": "",
                     "PictureChromaSmoothPreset": "off",
                     "PictureChromaSmoothTune": "none",
@@ -10421,7 +10429,7 @@
                     "PictureColorspacePreset": "off",
                     "PictureCombDetectCustom": "",
                     "PictureCombDetectPreset": "default",
-                    "PictureDARWidth": 0,
+                    "PictureDARWidth": 1920,
                     "PictureDeblockCustom": "strength=strong:thresh=20",
                     "PictureDeblockPreset": "off",
                     "PictureDeblockTune": "medium",
@@ -10452,12 +10460,12 @@
                     "PicturePadRight": 0,
                     "PicturePadTop": 0,
                     "PictureRightCrop": 0,
-                    "PictureRotate": "disable=1",
+                    "PictureRotate": "angle=0:hflip=0",
                     "PictureSharpenCustom": "",
                     "PictureSharpenFilter": "off",
                     "PictureSharpenPreset": "",
                     "PictureSharpenTune": "",
-                    "PictureTopCrop": 138,
+                    "PictureTopCrop": 0,
                     "PictureUseMaximumSize": true,
                     "PictureWidth": 1920,
                     "PresetDescription": "",
@@ -10504,22 +10512,10 @@
                     ],
                     "AudioEncoderFallback": "fdk_aac",
                     "AudioLanguageList": [
-                        "eng"
+                        "eng",
+                        "deu"
                     ],
                     "AudioList": [
-                        {
-                            "AudioBitrate": 160,
-                            "AudioCompressionLevel": -1.0,
-                            "AudioDitherMethod": "auto",
-                            "AudioEncoder": "copy",
-                            "AudioMixdown": "stereo",
-                            "AudioNormalizeMixLevel": false,
-                            "AudioSamplerate": "auto",
-                            "AudioTrackDRCSlider": 0.0,
-                            "AudioTrackGainSlider": 0.0,
-                            "AudioTrackQuality": 5.0,
-                            "AudioTrackQualityEnable": false
-                        },
                         {
                             "AudioBitrate": 160,
                             "AudioCompressionLevel": -1.0,
@@ -10530,12 +10526,25 @@
                             "AudioSamplerate": "auto",
                             "AudioTrackDRCSlider": 0.0,
                             "AudioTrackGainSlider": 0.0,
-                            "AudioTrackQuality": 5.0,
+                            "AudioTrackQuality": -1.0,
+                            "AudioTrackQualityEnable": false
+                        },
+                        {
+                            "AudioBitrate": 640,
+                            "AudioCompressionLevel": -1.0,
+                            "AudioDitherMethod": "auto",
+                            "AudioEncoder": "copy:ac3",
+                            "AudioMixdown": "none",
+                            "AudioNormalizeMixLevel": false,
+                            "AudioSamplerate": "auto",
+                            "AudioTrackDRCSlider": 0.0,
+                            "AudioTrackGainSlider": 0.0,
+                            "AudioTrackQuality": -1.0,
                             "AudioTrackQualityEnable": false
                         }
                     ],
                     "AudioSecondaryEncoderMode": true,
-                    "AudioTrackSelectionBehavior": "all",
+                    "AudioTrackSelectionBehavior": "first",
                     "ChapterMarkers": true,
                     "ChildrenArray": [],
                     "Default": false,
@@ -10548,7 +10557,7 @@
                     "Mp4iPodCompatible": false,
                     "PictureAllowUpscaling": false,
                     "PictureAutoCrop": true,
-                    "PictureBottomCrop": 138,
+                    "PictureBottomCrop": 0,
                     "PictureChromaSmoothCustom": "",
                     "PictureChromaSmoothPreset": "off",
                     "PictureChromaSmoothTune": "none",
@@ -10556,7 +10565,7 @@
                     "PictureColorspacePreset": "off",
                     "PictureCombDetectCustom": "",
                     "PictureCombDetectPreset": "default",
-                    "PictureDARWidth": 0,
+                    "PictureDARWidth": 1920,
                     "PictureDeblockCustom": "strength=strong:thresh=20",
                     "PictureDeblockPreset": "off",
                     "PictureDeblockTune": "medium",
@@ -10587,12 +10596,12 @@
                     "PicturePadRight": 0,
                     "PicturePadTop": 0,
                     "PictureRightCrop": 0,
-                    "PictureRotate": "disable=1",
+                    "PictureRotate": "angle=0:hflip=0",
                     "PictureSharpenCustom": "",
                     "PictureSharpenFilter": "off",
                     "PictureSharpenPreset": "",
                     "PictureSharpenTune": "",
-                    "PictureTopCrop": 138,
+                    "PictureTopCrop": 0,
                     "PictureUseMaximumSize": true,
                     "PictureWidth": 1920,
                     "PresetDescription": "",

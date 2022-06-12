@@ -137,6 +137,7 @@ xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>b,string,exo-op
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>c,string,code
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>c,string,/opt/lk-settings/bin/open-project.sh
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>d,string,dbeaver
+xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>d,string,code /opt/lk-settings/server/.bashrc
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>g,string,/opt/lk-settings/bin/open-repo.sh
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>g,string,/opt/lk-settings/bin/open-repo.sh git -C '{}' cola
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>h,string,code /etc/hosts
@@ -147,7 +148,7 @@ xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>n,string,lk-note-open.
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>n,string,code \"${LK_NOTE_DIR:-$HOME/Desktop}\"
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>o,string,todoist
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>p,string,clockify
-xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>r,string,code \"$HOME/.bashrc\"
+xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>r,string,code \"$(realpath "$HOME/.bashrc")\"
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>s,string,exo-open --launch TerminalEmulator bash -ic 'lk-unison.sh || lk_tty_pause'
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>semicolon,string,libreoffice --calc
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>v,string,virt-manager

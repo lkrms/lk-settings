@@ -136,67 +136,105 @@ function plc-sync-uploads() {
         "${DIR%/}"
 }
 
+function mkvmerge-mkv-ac3-aac() {
+    local IFS=$'\n' IN AC3 AAC OUT MOVE=()
+    set -- $(lk_args "$@" | sed -E '/^\./d; s/\.[^.]+$//' | sort -u)
+    unset IFS
+    while (($#)); do
+        IN=$1.mkv
+        AC3=$1.ac3
+        AAC=$1.aac
+        OUT=$1.new.mkv
+        lk_files_exist "$IN" "$AC3" "$AAC" ||
+            lk_warn "missing file(s): $1" || { shift && continue; }
+        [[ ! -e $OUT ]] ||
+            lk_warn "already merged: $1" || { MOVE[${#MOVE[@]}]=$1 && shift && continue; }
+        lk_tty_run mkvmerge --output "$OUT" \
+            --no-audio "$IN" \
+            --language 0:en --track-name "0:Surround 5.1" "$AC3" \
+            --language 0:en --track-name "0:Stereo" --default-track-flag 0:0 "$AAC" ||
+            lk_pass rm -f "$OUT" || return
+        MOVE[${#MOVE[@]}]=$1
+        shift
+    done
+    set -- ${MOVE+"${MOVE[@]}"}
+    while (($#)); do
+        OUT=$1
+        [[ $OUT == */* ]] || OUT=./$1
+        OUT=${OUT%/*}/.${OUT##*/}
+        mv -vn "$1.mkv" "$OUT.mkv" &&
+            mv -vn "$1.ac3" "$OUT.ac3" &&
+            mv -vn "$1.aac" "$OUT.aac" &&
+            mv -vn "$1.new.mkv" "$1.mkv" || return
+        shift
+    done
+}
+
 function _do-rename-media() {
+    [[ -n ${MV+1} ]] || return 0
     lk_confirm "Proceed?" Y || lk_warn "cancelled by user" || return 0
+    local FILE
     for FILE in "${MV[@]}"; do
         eval "mv -vn $FILE"
     done
 }
 
 function rename-tv-episodes() {
-    local FILE SHOW SEASON NAME EXT RE LAST= EP PRINTED NEW_FILE MV=() \
+    local EXT_RE FILE SHOW SEASON NAME EXT RE LAST= EP PRINTED NEW_FILE MV=() \
     SEASON_RE='/([^/]+)/(([0-9]+\>)[^/]+|[^/]+(\<[0-9]+))/([^/]+)\.([^.]+)$'
-    while read -rd '' FILE; do
-        if [[ $FILE =~ $SEASON_RE ]]; then
-            SHOW=${BASH_REMATCH[1]}
-            SEASON=${BASH_REMATCH[3]}${BASH_REMATCH[4]}
-            NAME=${BASH_REMATCH[5]}
-            EXT=${BASH_REMATCH[6]}
-        elif [[ $FILE =~ /([^/]+)/([^/]+)\.([^.]+)$ ]]; then
-            SHOW=${BASH_REMATCH[1]}
-            SEASON=
-            NAME=${BASH_REMATCH[2]}
-            EXT=${BASH_REMATCH[3]}
-        else
-            lk_tty_warning "Skipping (invalid path):" "$FILE"
-            continue
-        fi
-        [ "$LAST" = "$SHOW/$SEASON" ] || {
-            ! lk_verbose || lk_tty_print "Checking" "${FILE%/*}"
-            RE=$(lk_ere_escape "$SHOW")${SEASON:+"_S0*$SEASON"}"_E([0-9]{2,})"
-            LAST=$SHOW/$SEASON
-            EP=0
-            PRINTED=
-        }
-        [ "$EXT" != mp4 ] || EXT=m4v
-        if [[ $NAME =~ ^$RE$ ]]; then
-            EP=${BASH_REMATCH[1]#0} || true
-            NEW_FILE=${FILE%/*}/$NAME.$EXT
-        else
-            while ((++EP)); do
-                NEW_FILE=${FILE%/*}/$(printf \
-                    '%s_S%d_E%02d' "$SHOW" "$SEASON" "$EP").$EXT
-                [ -e "$NEW_FILE" ] || break
-            done
-        fi
-        [ "$FILE" != "$NEW_FILE" ] || {
-            ! lk_verbose ||
-                lk_tty_detail "Skipping (already renamed):" "${FILE##*/}"
-            continue
-        }
-        # e.g. if an episode has the wrong extension but a file with the correct
-        # extension already exists
-        [ ! -e "$NEW_FILE" ] ||
-            lk_warn "target already exists: $NEW_FILE" || return
-        lk_verbose || [ -n "$PRINTED" ] || {
-            lk_tty_print "In" "${FILE%/*}"
-            PRINTED=1
-        }
-        lk_tty_detail "${FILE##*/} -> $LK_BOLD${NEW_FILE##*/}$LK_RESET"
-        MV[${#MV[@]}]=$(printf '%q %q' "$FILE" "$NEW_FILE")
-    done < <(find "${@:-.}" -type f -regextype posix-egrep \
-        -regex '.*/[^/.][^/]*\.(m4v|mkv|mp4)' -print0 |
-        xargs -0 realpath -z | sort -zV)
+    for EXT_RE in "m4v|mkv|mp4" ac3 aac; do
+        while read -rd '' FILE; do
+            if [[ $FILE =~ $SEASON_RE ]]; then
+                SHOW=${BASH_REMATCH[1]}
+                SEASON=${BASH_REMATCH[3]}${BASH_REMATCH[4]}
+                NAME=${BASH_REMATCH[5]}
+                EXT=${BASH_REMATCH[6]}
+            elif [[ $FILE =~ /([^/]+)/([^/]+)\.([^.]+)$ ]]; then
+                SHOW=${BASH_REMATCH[1]}
+                SEASON=
+                NAME=${BASH_REMATCH[2]}
+                EXT=${BASH_REMATCH[3]}
+            else
+                lk_tty_warning "Skipping (invalid path):" "$FILE"
+                continue
+            fi
+            [ "$LAST" = "$SHOW/$SEASON" ] || {
+                ! lk_verbose || lk_tty_print "Checking" "${FILE%/*}"
+                RE=$(lk_ere_escape "$SHOW")${SEASON:+"_S0*$SEASON"}"_E([0-9]{2,})"
+                LAST=$SHOW/$SEASON
+                EP=0
+                PRINTED=
+            }
+            [ "$EXT" != mp4 ] || EXT=m4v
+            if [[ $NAME =~ ^$RE$ ]]; then
+                EP=${BASH_REMATCH[1]#0} || true
+                NEW_FILE=${FILE%/*}/$NAME.$EXT
+            else
+                while ((++EP)); do
+                    NEW_FILE=${FILE%/*}/$(printf \
+                        '%s_S%d_E%02d' "$SHOW" "$SEASON" "$EP").$EXT
+                    [ -e "$NEW_FILE" ] || break
+                done
+            fi
+            [ "$FILE" != "$NEW_FILE" ] || {
+                ! lk_verbose ||
+                    lk_tty_detail "Skipping (already renamed):" "${FILE##*/}"
+                continue
+            }
+            # e.g. if an episode has the wrong extension but a file with the correct
+            # extension already exists
+            [ ! -e "$NEW_FILE" ] ||
+                lk_warn "target already exists: $NEW_FILE" || return
+            lk_verbose || [ -n "$PRINTED" ] || {
+                lk_tty_print "In" "${FILE%/*}"
+                PRINTED=1
+            }
+            lk_tty_detail "${FILE##*/} -> $LK_BOLD${NEW_FILE##*/}$LK_RESET"
+            MV[${#MV[@]}]=$(printf '%q %q' "$FILE" "$NEW_FILE")
+        done < <(find "${@:-.}" -type f -regextype posix-egrep \
+            -regex ".*/[^/.][^/]*\.($EXT_RE)" -print0 |
+            xargs -0 realpath -z | sort -zV)
+    done
     _do-rename-media
 }
 

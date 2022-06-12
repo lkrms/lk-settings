@@ -122,6 +122,10 @@
         "key": "cmd+k cmd+u"
     },
     {
+        "key": "shift+cmd+f9",
+        "command": "editor.debug.action.runToCursor"
+    },
+    {
         "command": "-extension.convertSelection",
         "key": "alt+cmd+c",
         "when": "editorTextFocus"
@@ -307,26 +311,12 @@
         "command": "vscsm.openInSublimeMerge"
     },
     {
-        "key": "cmd+k f",
-        "command": "-workbench.action.closeFolder",
-        "when": "emptyWorkspaceSupport && workbenchState != 'empty'"
-    },
-    {
-        "key": "shift+cmd+w",
-        "command": "workbench.action.closeFolder",
-        "when": "emptyWorkspaceSupport && workbenchState != 'empty'"
-    },
-    {
         "key": "alt+w",
         "command": "workbench.action.closeUnmodifiedEditors"
     },
     {
         "key": "cmd+k u",
         "command": "-workbench.action.closeUnmodifiedEditors"
-    },
-    {
-        "key": "shift+cmd+w",
-        "command": "-workbench.action.closeWindow"
     },
     {
         "command": "workbench.action.compareEditor.nextChange",

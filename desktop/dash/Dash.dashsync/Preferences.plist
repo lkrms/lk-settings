@@ -451,6 +451,14 @@
 	<array>
 		<dict>
 			<key>path</key>
+			<string>file://~/Library/Application%20Support/Dash/DocSets/PHP/PHP.docset/Contents/Resources/Documents/www.php.net/manual/en/language.oop5.magic.html</string>
+			<key>platformImagePath</key>
+			<string>php</string>
+			<key>title</key>
+			<string>Magic Methods</string>
+		</dict>
+		<dict>
+			<key>path</key>
 			<string>file://~/Library/Application%20Support/Dash/DocSets/Python_3/Python%203.docset/Contents/Resources/Documents/doc/library/stdtypes.html</string>
 			<key>platformImagePath</key>
 			<string>python</string>

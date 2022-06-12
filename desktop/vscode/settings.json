@@ -22,11 +22,22 @@
         "editor.defaultFormatter": "trixnz.vscode-lua"
     },
     "[markdown]": {
-        "editor.quickSuggestions": false,
+        "editor.quickSuggestions": {
+            "comments": "off",
+            "other": "off",
+            "strings": "off"
+        },
         "editor.rulers": [
-            72,
-            80,
-            120
+            {
+                "color": "#6662",
+                "column": 72
+            },
+            {
+                "color": "#6662",
+                "column": 80
+            },
+            120,
+            0
         ],
         "editor.unicodeHighlight.ambiguousCharacters": false,
         "editor.unicodeHighlight.invisibleCharacters": false,
@@ -37,10 +48,7 @@
     },
     "[php]": {
         "editor.autoClosingBrackets": "languageDefined",
-        "editor.rulers": [
-            80,
-            120
-        ]
+        "rewrap.wrappingColumn": 80
     },
     "[properties]": {
         "editor.defaultFormatter": "lkrms.inifmt"
@@ -96,8 +104,12 @@
     "editor.renderControlCharacters": false,
     "editor.renderWhitespace": "selection",
     "editor.rulers": [
-        80,
-        120
+        {
+            "color": "#6662",
+            "column": 80
+        },
+        120,
+        0
     ],
     "editor.suggest.localityBonus": true,
     "emmet.excludeLanguages": [
@@ -105,6 +117,7 @@
         "php"
     ],
     "emmet.triggerExpansionOnTab": true,
+    "explorer.autoReveal": "focusNoScroll",
     "explorer.confirmDelete": false,
     "explorer.confirmDragAndDrop": false,
     "explorer.decorations.badges": false,
@@ -123,6 +136,7 @@
         "*-lua": "lua",
         "*.desktop": "properties",
         "*.neon.dist": "neon",
+        "*.php.stub": "php",
         "*.service": "properties",
         "*.socket": "properties",
         "*.sublime-{commands,keymap,settings}": "json",
@@ -193,6 +207,20 @@
     "gitlens.statusBar.format": "${author}, ${date} • ${message}",
     "gitlens.statusBar.reduceFlicker": true,
     "html.autoClosingTags": false,
+    "intelephense.phpdoc.classTemplate": {
+        "summary": "$1",
+        "tags": [
+            ""
+        ]
+    },
+    "intelephense.phpdoc.functionTemplate": {
+        "summary": "$1",
+        "tags": [
+            "@param ${1:$SYMBOL_TYPE} $SYMBOL_NAME $2",
+            "@return ${1:$SYMBOL_TYPE} $2"
+        ]
+    },
+    "intelephense.phpdoc.returnVoid": false,
     "intelephense.rename.exclude": [],
     "intelephense.stubs": [
         "apache",
@@ -320,46 +348,25 @@
     ],
     "shellcheck.disableVersionCheck": true,
     "shellcheck.exclude": [
-        "SC1004",
         "SC1007",
         "SC1090",
         "SC1091",
-        "SC2001",
-        "SC2002",
-        "SC2010",
-        "SC2012",
         "SC2015",
         "SC2016",
-        "SC2027",
-        "SC2029",
-        "SC2030",
-        "SC2031",
-        "SC2033",
         "SC2034",
         "SC2046",
         "SC2054",
-        "SC2059",
-        "SC2064",
         "SC2086",
-        "SC2094",
-        "SC2097",
-        "SC2098",
         "SC2119",
         "SC2120",
         "SC2128",
         "SC2148",
         "SC2153",
         "SC2154",
-        "SC2164",
-        "SC2178",
-        "SC2197",
         "SC2206",
-        "SC2207",
-        "SC2261",
-        "SC3013"
+        "SC2207"
     ],
     "shellcheck.executablePath": "shellcheck",
-    "shellcheck.run": "onSave",
     "shellformat.flag": "-s",
     "sqltools.format": {
         "linesBetweenQueries": "preserve",

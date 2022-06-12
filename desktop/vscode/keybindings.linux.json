@@ -131,6 +131,10 @@
         "key": "ctrl+k ctrl+u"
     },
     {
+        "key": "ctrl+shift+f9",
+        "command": "editor.debug.action.runToCursor"
+    },
+    {
         "command": "extension.toggleTheme",
         "key": "ctrl+alt+d"
     },
@@ -350,35 +354,12 @@
         "command": "vscsm.openInSublimeMerge"
     },
     {
-        "key": "ctrl+k f",
-        "command": "-workbench.action.closeFolder",
-        "when": "emptyWorkspaceSupport && workbenchState != 'empty'"
-    },
-    {
-        "key": "ctrl+shift+w",
-        "command": "workbench.action.closeFolder",
-        "when": "emptyWorkspaceSupport && workbenchState != 'empty'"
-    },
-    {
         "key": "alt+w",
         "command": "workbench.action.closeUnmodifiedEditors"
     },
     {
         "key": "ctrl+k u",
         "command": "-workbench.action.closeUnmodifiedEditors"
-    },
-    {
-        "key": "alt+f4",
-        "command": "-workbench.action.closeWindow"
-    },
-    {
-        "key": "ctrl+shift+w",
-        "command": "-workbench.action.closeWindow"
-    },
-    {
-        "key": "ctrl+w",
-        "command": "workbench.action.closeWindow",
-        "when": "!editorIsOpen && !multipleEditorGroups"
     },
     {
         "command": "workbench.action.compareEditor.nextChange",
