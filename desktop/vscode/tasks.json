@@ -21,6 +21,9 @@
                 "reveal": "never",
                 "panel": "new",
                 "close": true
+            },
+            "osx": {
+                "command": "php"
             }
         },
         {
@@ -43,6 +46,9 @@
                 "reveal": "never",
                 "panel": "new",
                 "close": true
+            },
+            "osx": {
+                "command": "php"
             }
         }
     ]

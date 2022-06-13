@@ -126,7 +126,7 @@ _rule = {
         action = {{_action.moveTo, 2, _place.top3_1}}
     },
     {
-        criteria = {_criteria.sticky, appName = {"Messenger"}},
+        criteria = {_criteria.sticky, appName = {"Messenger", "Messages"}},
         action = {{_action.moveTo, 2, _place.top3_2}}
     },
     {
@@ -134,7 +134,7 @@ _rule = {
         action = {{_action.moveTo, 2, _place.top3_3}}
     },
     {
-        criteria = {_criteria.sticky, appName = {"KeePassXC"}},
+        criteria = {_criteria.sticky, appName = {"Clockify Desktop"}},
         action = {{_action.moveTo, 2, _place.bottom3_1}}
     },
     {
@@ -142,7 +142,7 @@ _rule = {
         action = {{_action.moveTo, 2, _place.bottom3_2}}
     },
     {
-        criteria = {_criteria.sticky, appName = {"Messages"}},
+        criteria = {_criteria.sticky, appName = {"KeePassXC"}},
         action = {{_action.moveTo, 2, _place.bottom3_3}}
     }
 }

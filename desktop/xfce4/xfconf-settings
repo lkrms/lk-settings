@@ -23,7 +23,8 @@ xfwm4,/general/show_dock_shadow,bool,false
 xfwm4,/general/snap_to_windows,bool,true
 xfwm4,/general/titleless_maximize,bool,true
 xfwm4,/general/toggle_workspaces,bool,true
-xfwm4,/general/use_compositing,bool,true
+host=roxy:xfwm4,/general/use_compositing,bool,false
+host<>roxy:xfwm4,/general/use_compositing,bool,true
 xfwm4,/general/workspace_count,int,${WORKSPACE_COUNT:-3}
 xfwm4,/general/workspace_names,array,$(xfce4_string_array ${WORKSPACE_NAMES:-linaC PLC HW})
 xfwm4,/general/wrap_cycle,bool,true
@@ -226,6 +227,8 @@ laptop:xfce4-power-manager,/xfce4-power-manager/dpms-on-ac-off,uint,15
 laptop:xfce4-power-manager,/xfce4-power-manager/dpms-on-ac-sleep,uint,10
 laptop:xfce4-power-manager,/xfce4-power-manager/dpms-on-battery-off,uint,6
 laptop:xfce4-power-manager,/xfce4-power-manager/dpms-on-battery-sleep,uint,5
+host=roxy:xfce4-power-manager,/xfce4-power-manager/dpms-on-ac-off,uint,0
+host=roxy:xfce4-power-manager,/xfce4-power-manager/dpms-on-ac-sleep,uint,0
 
 laptop:xfce4-power-manager,/xfce4-power-manager/brightness-on-ac,uint,9
 laptop:xfce4-power-manager,/xfce4-power-manager/brightness-on-battery,uint,9

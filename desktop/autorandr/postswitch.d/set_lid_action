@@ -8,11 +8,15 @@ XFCE:roxy:*:DP-1:*)
     xfconf-query -c xfce4-power-manager -p /xfce4-power-manager/lid-action-on-ac -n -t uint -s 0
     xfconf-query -c xfce4-power-manager -p /xfce4-power-manager/lid-action-on-battery -n -t uint -s 0
     xfconf-query -c xfce4-power-manager -p /xfce4-power-manager/logind-handle-lid-switch -n -t bool -s false
+    # Window grouping: "Never"
+    xfconf-query -c xfce4-panel -p /plugins/plugin-2/grouping -n -t uint -s 0
     ;;
 XFCE:roxy::*)
     # "Suspend"
     xfconf-query -c xfce4-power-manager -p /xfce4-power-manager/lid-action-on-ac -n -t uint -s 1
     xfconf-query -c xfce4-power-manager -p /xfce4-power-manager/lid-action-on-battery -n -t uint -s 1
     xfconf-query -c xfce4-power-manager -p /xfce4-power-manager/logind-handle-lid-switch -n -t bool -s false
+    # Window grouping: "Always"
+    xfconf-query -c xfce4-panel -p /plugins/plugin-2/grouping -n -t uint -s 1
     ;;
 esac

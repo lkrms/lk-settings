@@ -39,44 +39,45 @@ function xfce4_string_array() {
     done
 }
 
-PLUGINS=()
-while read -r PLUGIN_ID PLUGIN_NAME; do
-    PLUGINS[$PLUGIN_ID]=$PLUGIN_NAME
-done < <(xfconf-query -c xfce4-panel -p /plugins -lv |
-    grep -Po "(?<=^/plugins/plugin-)[0-9]+$S+$NS+\$" | sort -n)
+lk_mktemp_with PLUGINS lk_xfce4_panel_list_plugins
 
 FILE=$_ROOT/xfce4/xfconf-settings
 lk_mapfile XFCONF_SETTING <(sed -E "/^($S*\$|#)/d" "$FILE")
 
 for i in "${!XFCONF_SETTING[@]}"; do
-    IFS=',' read -r CHANNEL PROPERTY VALUE_TYPE VALUE \
-        <<<"${XFCONF_SETTING[$i]}"
+    IFS=, read -r CHANNEL PROPERTY VALUE_TYPE VALUE <<<"${XFCONF_SETTING[$i]}"
 
-    if [[ $CHANNEL =~ ^.+:.+ ]]; then
-        CUSTOM_TYPE=${CHANNEL%%:*}
-        CHANNEL=${CHANNEL#*:}
-        case "$CUSTOM_TYPE" in
-        *desktop*)
+    if [[ $CHANNEL == *:* ]]; then
+        case "${CHANNEL%%:*}" in
+        host="$(lk_hostname)") ;;
+        host=* | "host<>$(lk_hostname)") continue ;;
+        "host<>"*) ;;
+        desktop)
             ! lk_is_portable || continue
-            ;;&
-        *laptop*)
+            ;;
+        laptop)
             lk_is_portable || continue
-            ;;&
-        *reset*)
+            ;;
+        reset)
             lk_has_arg "--reset" || continue
             ;;
+        *)
+            lk_tty_warning "Invalid selector in $FILE at setting #$i"
+            continue
+            ;;
         esac
+        CHANNEL=${CHANNEL#*:}
     fi
 
-    if [ "$CHANNEL" = xfce4-panel ] && [[ $PROPERTY == /plugins/* ]]; then
-        PLUGIN_NAME=${PROPERTY#/plugins/}
-        PLUGIN_NAME=${PLUGIN_NAME%%/*}
-        PLUGIN_PROPERTY=${PROPERTY#/plugins/$PLUGIN_NAME/}
-        for j in "${!PLUGINS[@]}"; do
-            if [ "${PLUGINS[$j]}" = "$PLUGIN_NAME" ]; then
-                PROPERTY=/plugins/plugin-$j/$PLUGIN_PROPERTY
-                xfce4_apply_setting
-            fi
+    if [[ $CHANNEL == xfce4-panel ]] &&
+        [[ $PROPERTY =~ ^/plugins/([^/]+)/(.+) ]]; then
+        PLUGIN_NAME=${BASH_REMATCH[1]}
+        PLUGIN_PROPERTY=${BASH_REMATCH[2]}
+        for PLUGIN_ID in $(
+            awk -v name="$PLUGIN_NAME" '$2 == name {print $1}' "$PLUGINS"
+        ); do
+            PROPERTY=/plugins/plugin-$PLUGIN_ID/$PLUGIN_PROPERTY
+            xfce4_apply_setting
         done
         continue
     fi

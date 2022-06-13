@@ -14,18 +14,18 @@ default_grid = {6, 2}
 _criteria = {}
 _actions = {}
 _places = {
-    d1_top3_1 = {display = 1, xy = {1, 1}, wh = {2, 1}},
-    d1_top3_2 = {display = 1, xy = {3, 1}, wh = {2, 1}},
-    d1_top3_3 = {display = 1, xy = {5, 1}, wh = {2, 1}},
-    d1_bottom3_1 = {display = 1, xy = {1, 2}, wh = {2, 1}},
-    d1_bottom3_2 = {display = 1, xy = {3, 2}, wh = {2, 1}},
-    d1_bottom3_3 = {display = 1, xy = {5, 2}, wh = {2, 1}},
-    d2_top3_1 = {display = 2, xy = {1, 1}, wh = {2, 1}},
-    d2_top3_2 = {display = 2, xy = {3, 1}, wh = {2, 1}},
-    d2_top3_3 = {display = 2, xy = {5, 1}, wh = {2, 1}},
-    d2_bottom3_1 = {display = 2, xy = {1, 2}, wh = {2, 1}},
-    d2_bottom3_2 = {display = 2, xy = {3, 2}, wh = {2, 1}},
-    d2_bottom3_3 = {display = 2, xy = {5, 2}, wh = {2, 1}}
+    d1_top3_1 = {display = 1, xy = {1, 1}, wh = {2, 1}}, -- Teams
+    d1_top3_2 = {display = 1, xy = {3, 1}, wh = {2, 1}}, -- Skype
+    d1_top3_3 = {display = 1, xy = {5, 1}, wh = {2, 1}}, -- Clockify
+    d1_bottom3_1 = {display = 1, xy = {1, 2}, wh = {2, 1}}, -- Caprine
+    d1_bottom3_2 = {display = 1, xy = {3, 2}, wh = {2, 1}}, -- KeePassXC, Spotify
+    d1_bottom3_3 = {display = 1, xy = {5, 2}, wh = {2, 1}}, -- Todoist
+    d2_top3_1 = {display = 2, xy = {1, 1}, wh = {2, 1}}, -- Teams
+    d2_top3_2 = {display = 2, xy = {3, 1}, wh = {2, 1}}, -- Caprine
+    d2_top3_3 = {display = 2, xy = {5, 1}, wh = {2, 1}}, -- Skype
+    d2_bottom3_1 = {display = 2, xy = {1, 2}, wh = {2, 1}}, -- Clockify
+    d2_bottom3_2 = {display = 2, xy = {3, 2}, wh = {2, 1}}, -- Todoist
+    d2_bottom3_3 = {display = 2, xy = {5, 2}, wh = {2, 1}} -- KeePassXC, Spotify
 }
 
 _criteria.one_4k = {
@@ -140,17 +140,7 @@ rules = {
         },
         actions = {
             maximize_off,
-            shade_on
-        }
-    },
-    {
-        criteria = {
-            operator.AND,
-            event = "focus",
-            _criteria.private
-        },
-        actions = {
-            shade_off
+            minimize_on
         }
     },
     {
@@ -197,26 +187,25 @@ rules = {
         criteria = {
             operator.AND,
             class_instance_name = {
-                "todoist",
-                "spotify"
+                "todoist"
             },
             _criteria.sticky
         },
         actions = {
             {to_workspace, {1}},
-            {to_place, {_places.d2_bottom3_3}}
+            {to_place, {_places.d2_bottom3_2}}
         }
     },
     {
         criteria = {
             operator.AND,
             class_instance_name = {
-                "todoist",
-                "spotify"
+                "todoist"
             },
             _criteria.sticky1
         },
         actions = {
+            maximize_off,
             {to_place, {_places.d1_bottom3_3}}
         }
     },
@@ -224,14 +213,15 @@ rules = {
         criteria = {
             operator.AND,
             class_instance_name = {
-                "keepassxc"
+                "keepassxc",
+                "spotify"
             },
             _criteria.sticky
         },
         actions = append(
             _actions.sticky,
             {
-                {to_place, {_places.d2_bottom3_2}}
+                {to_place, {_places.d2_bottom3_3}}
             }
         ),
         set_position = set_window_position
@@ -240,7 +230,8 @@ rules = {
         criteria = {
             operator.AND,
             class_instance_name = {
-                "keepassxc"
+                "keepassxc",
+                "spotify"
             },
             _criteria.sticky1
         },
@@ -278,7 +269,7 @@ rules = {
         actions = append(
             _actions.sticky,
             {
-                {to_place, {_places.d1_top3_2}}
+                {to_place, {_places.d1_bottom3_1}}
             }
         )
     },
@@ -308,7 +299,7 @@ rules = {
         actions = append(
             _actions.sticky,
             {
-                {to_place, {_places.d1_top3_3}}
+                {to_place, {_places.d1_top3_2}}
             }
         )
     },
@@ -340,7 +331,7 @@ rules = {
         actions = append(
             _actions.sticky,
             {
-                {to_place, {_places.d1_bottom3_1}}
+                {to_place, {_places.d1_top3_3}}
             }
         )
     },

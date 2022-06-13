@@ -292,6 +292,16 @@ function maximize_off(state)
     end
 end
 
+function minimize_on(state)
+    log.info("Calling minimize() on " .. state.class_instance_name)
+    minimize()
+end
+
+function minimize_off(state)
+    log.info("Calling unminimize() on " .. state.class_instance_name)
+    unminimize()
+end
+
 function _to_place(display, grid_columns, grid_rows, column1, row1, columns, rows, state)
     local d_x, d_y, d_w, d_h, col_w, row_h, x, y, w, h
     local display_geometry = get_display_geometry(display)
