@@ -209,7 +209,7 @@ xfce4-notifyd,/log-level,uint,1
 xfce4-notifyd,/notification-log,bool,true
 xfce4-notifyd,/notify-location,uint,2
 xfce4-notifyd,/primary-monitor,uint,1
-xfce4-notifyd,/theme,string,Greybird
+xfce4-notifyd,/theme,string,Bright
 
 reset:xfce4-power-manager,/,reset
 

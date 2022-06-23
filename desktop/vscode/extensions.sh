@@ -13,9 +13,11 @@ VSCODE_EXTENSIONS=(
     DotJoshJohnson.xml
     dracula-theme.theme-dracula
     eamodio.gitlens
+    fabiospampinato.vscode-open-in-github
     foxundermoon.shell-format
     gharveymn.nightswitch-lite
     giovdk21.vscode-sublime-merge
+    GitHub.github-vscode-theme
     hbenl.vscode-test-explorer
     henriiik.vscode-sort
     HookyQR.beautify

@@ -1,0 +1,2 @@
+*.sh filter=bash
+.bash* filter=bash

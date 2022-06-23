@@ -37,7 +37,20 @@ _place = {
     top3_3 = {x = 2 / 3, y = 0, w = 1 / 3, h = 0.5},
     bottom3_1 = {x = 0, y = 0.5, w = 1 / 3, h = 0.5},
     bottom3_2 = {x = 1 / 3, y = 0.5, w = 1 / 3, h = 0.5},
-    bottom3_3 = {x = 2 / 3, y = 0.5, w = 1 / 3, h = 0.5}
+    bottom3_3 = {x = 2 / 3, y = 0.5, w = 1 / 3, h = 0.5},
+    top6_1 = {x = 0, y = 0, w = 1 / 6, h = 0.5},
+    top6_2 = {x = 1 / 6, y = 0, w = 1 / 6, h = 0.5},
+    top6_3 = {x = 2 / 6, y = 0, w = 1 / 6, h = 0.5},
+    top6_4 = {x = 3 / 6, y = 0, w = 1 / 6, h = 0.5},
+    top6_5 = {x = 4 / 6, y = 0, w = 1 / 6, h = 0.5},
+    top6_6 = {x = 5 / 6, y = 0, w = 1 / 6, h = 0.5},
+    bottom6_1 = {x = 0, y = 0.5, w = 1 / 6, h = 0.5},
+    bottom6_2 = {x = 1 / 6, y = 0.5, w = 1 / 6, h = 0.5},
+    bottom6_3 = {x = 2 / 6, y = 0.5, w = 1 / 6, h = 0.5},
+    bottom6_4 = {x = 3 / 6, y = 0.5, w = 1 / 6, h = 0.5},
+    bottom6_5 = {x = 4 / 6, y = 0.5, w = 1 / 6, h = 0.5},
+    bottom6_6 = {x = 5 / 6, y = 0.5, w = 1 / 6, h = 0.5},
+    top6_2_3 = {x = 1 / 6, y = 0, w = 3 / 6, h = 0.5}
 }
 
 _operator = {
@@ -122,27 +135,31 @@ _rule = {
         action = {{_action.moveTo, 1, hs.layout.left50}}
     },
     {
-        criteria = {_criteria.tacky, appName = {"Microsoft Teams"}},
-        action = {{_action.moveTo, 2, _place.top3_1}}
-    },
-    {
-        criteria = {_criteria.sticky, appName = {"Messenger", "Messages"}},
-        action = {{_action.moveTo, 2, _place.top3_2}}
-    },
-    {
-        criteria = {_criteria.sticky, appName = {"Calendar", "Skype"}},
-        action = {{_action.moveTo, 2, _place.top3_3}}
+        criteria = {_criteria.multihead, appName = {"Calendar"}},
+        action = {{_action.moveTo, 1, hs.layout.right50}}
     },
     {
         criteria = {_criteria.sticky, appName = {"Clockify Desktop"}},
-        action = {{_action.moveTo, 2, _place.bottom3_1}}
+        action = {{_action.moveTo, 2, _place.top6_1}}
+    },
+    {
+        criteria = {_criteria.tacky, appName = {"Microsoft Teams"}},
+        action = {{_action.moveTo, 2, _place.top6_2_3}}
+    },
+    {
+        criteria = {_criteria.sticky, appName = {"Messenger", "Messages"}},
+        action = {{_action.moveTo, 2, _place.top3_3}}
     },
     {
         criteria = {_criteria.sticky, appName = {"Todoist"}},
-        action = {{_action.moveTo, 2, _place.bottom3_2}}
+        action = {{_action.moveTo, 2, _place.bottom3_1}}
     },
     {
         criteria = {_criteria.sticky, appName = {"KeePassXC"}},
+        action = {{_action.moveTo, 2, _place.bottom3_2}}
+    },
+    {
+        criteria = {_criteria.sticky, appName = {"Skype"}},
         action = {{_action.moveTo, 2, _place.bottom3_3}}
     }
 }
@@ -553,7 +570,18 @@ hs.hotkey.bind(
     {"cmd", "alt"},
     "v",
     function()
-        hs.eventtap.keyStrokes(hs.pasteboard.getContents())
+        local paste = hs.pasteboard.getContents()
+        if #paste > 128 then
+            hs.notify.new(
+                {
+                    title = "Hammerspoon",
+                    informativeText = "Clipboard text too long",
+                    withdrawAfter = 2
+                }
+            ):send()
+            return
+        end
+        hs.eventtap.keyStrokes(paste)
     end
 )
 

@@ -410,7 +410,7 @@ show-warning=false
 current-workspace-only=true
 dock-items=['thunderbird.dockitem', 'todoist.dockitem', 'clockify.dockitem', 'teams.dockitem', 'skypeforlinux.dockitem', 'caprine.dockitem', 'org.keepassxc.KeePassXC.dockitem']
 lock-items=true
-theme='Matte'
+theme='Gtk+'
 
 [org/gnome/desktop/interface]
 document-font-name='Cantarell 9'

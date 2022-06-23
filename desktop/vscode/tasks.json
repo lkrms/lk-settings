@@ -6,7 +6,7 @@
         {
             "label": "Pretty PHP",
             "type": "process",
-            "command": "php7",
+            "command": "php",
             "args": [
                 "${env:HOME}/Code/dev-tools/pretty-php/pretty.php",
                 "${file}"
@@ -21,15 +21,12 @@
                 "reveal": "never",
                 "panel": "new",
                 "close": true
-            },
-            "osx": {
-                "command": "php"
             }
         },
         {
             "label": "Pretty PHP (remove empty lines)",
             "type": "process",
-            "command": "php7",
+            "command": "php",
             "args": [
                 "${env:HOME}/Code/dev-tools/pretty-php/pretty.php",
                 "${file}"
@@ -46,9 +43,6 @@
                 "reveal": "never",
                 "panel": "new",
                 "close": true
-            },
-            "osx": {
-                "command": "php"
             }
         }
     ]

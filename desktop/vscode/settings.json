@@ -47,8 +47,7 @@
         "editor.defaultFormatter": "ahmadalli.vscode-nginx-conf"
     },
     "[php]": {
-        "editor.autoClosingBrackets": "languageDefined",
-        "rewrap.wrappingColumn": 80
+        "editor.autoClosingBrackets": "languageDefined"
     },
     "[properties]": {
         "editor.defaultFormatter": "lkrms.inifmt"
@@ -207,6 +206,7 @@
     "gitlens.statusBar.format": "${author}, ${date} • ${message}",
     "gitlens.statusBar.reduceFlicker": true,
     "html.autoClosingTags": false,
+    "intelephense.environment.phpVersion": "7.4.0",
     "intelephense.phpdoc.classTemplate": {
         "summary": "$1",
         "tags": [
@@ -354,6 +354,7 @@
         "SC2013",
         "SC2015",
         "SC2016",
+        "SC2033",
         "SC2034",
         "SC2046",
         "SC2054",
