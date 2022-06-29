@@ -15,20 +15,20 @@ spoon.ReloadConfiguration:start()
 _app = {
     terminal = {
         bundleID = "com.googlecode.iterm2",
-        commandLine = '/usr/bin/pkill -SIGUSR1 -fnu "$EUID" \'/create_window_on_signal.py$\''
+        commandLine = '/usr/bin/pkill -SIGUSR1 -fnu "$EUID" \'/create_window_on_signal.py$\'',
     },
     browser = {
         bundleID = "org.mozilla.firefox",
-        commandLine = "{{app}}/Contents/MacOS/firefox --browser"
+        commandLine = "{{app}}/Contents/MacOS/firefox --browser",
     },
     textEditor = {
         bundleID = "com.microsoft.VSCode",
-        menuItem = {"File", "New Window"}
+        menuItem = {"File", "New Window"},
     },
     fileManager = {
         bundleID = "com.apple.finder",
-        menuItem = {"File", "New Finder Window"}
-    }
+        menuItem = {"File", "New Finder Window"},
+    },
 }
 
 _place = {
@@ -50,12 +50,12 @@ _place = {
     bottom6_4 = {x = 3 / 6, y = 0.5, w = 1 / 6, h = 0.5},
     bottom6_5 = {x = 4 / 6, y = 0.5, w = 1 / 6, h = 0.5},
     bottom6_6 = {x = 5 / 6, y = 0.5, w = 1 / 6, h = 0.5},
-    top6_2_3 = {x = 1 / 6, y = 0, w = 3 / 6, h = 0.5}
+    top6_2_3 = {x = 1 / 6, y = 0, w = 3 / 6, h = 0.5},
 }
 
 _operator = {
     AND = "and",
-    OR = "or"
+    OR = "or",
 }
 
 _criteria = {
@@ -70,7 +70,7 @@ _criteria = {
     end,
     loading = function()
         return _loading
-    end
+    end,
 }
 
 _criteria.sticky = {
@@ -82,9 +82,9 @@ _criteria.sticky = {
         {
             _operator.AND,
             event = {wf.windowFocused, wf.windowUnfocused},
-            _criteria.notPrimary
-        }
-    }
+            _criteria.notPrimary,
+        },
+    },
 }
 
 _criteria.tacky = {
@@ -93,17 +93,17 @@ _criteria.tacky = {
     {
         _operator.OR,
         _criteria.notPrimary,
-        _criteria.loading
+        _criteria.loading,
     },
-    event = {wf.windowCreated, wf.windowFocused, wf.windowUnfocused}
+    event = {wf.windowCreated, wf.windowFocused, wf.windowUnfocused},
 }
 
 _criteria.dev = {
     appBundleId = {
         "com.microsoft.VSCode",
         "com.sublimemerge",
-        "org.jkiss.dbeaver.core.product"
-    }
+        "org.jkiss.dbeaver.core.product",
+    },
 }
 
 _action = {
@@ -116,7 +116,7 @@ _action = {
             logger.d("Moving " .. ev.appName .. " to " .. hs.inspect.inspect(rect))
             ev.window:moveToUnit(rect)
         end
-    end
+    end,
 }
 
 _rule = {
@@ -126,42 +126,42 @@ _rule = {
             _criteria.multihead,
             _criteria.notPrimary,
             _criteria.dev,
-            event = wf.windowCreated
+            event = wf.windowCreated,
         },
-        action = {{_action.moveTo, 1}}
+        action = {{_action.moveTo, 1}},
     },
     {
         criteria = {_criteria.multihead, appName = {"Mail"}},
-        action = {{_action.moveTo, 1, hs.layout.left50}}
+        action = {{_action.moveTo, 1, hs.layout.left50}},
     },
     {
         criteria = {_criteria.multihead, appName = {"Calendar"}},
-        action = {{_action.moveTo, 1, hs.layout.right50}}
+        action = {{_action.moveTo, 1, hs.layout.right50}},
     },
     {
         criteria = {_criteria.sticky, appName = {"Clockify Desktop"}},
-        action = {{_action.moveTo, 2, _place.top6_1}}
+        action = {{_action.moveTo, 2, _place.top6_1}},
     },
     {
         criteria = {_criteria.tacky, appName = {"Microsoft Teams"}},
-        action = {{_action.moveTo, 2, _place.top6_2_3}}
+        action = {{_action.moveTo, 2, _place.top6_2_3}},
     },
     {
         criteria = {_criteria.sticky, appName = {"Messenger", "Messages"}},
-        action = {{_action.moveTo, 2, _place.top3_3}}
+        action = {{_action.moveTo, 2, _place.top3_3}},
     },
     {
         criteria = {_criteria.sticky, appName = {"Todoist"}},
-        action = {{_action.moveTo, 2, _place.bottom3_1}}
+        action = {{_action.moveTo, 2, _place.bottom3_1}},
     },
     {
         criteria = {_criteria.sticky, appName = {"KeePassXC"}},
-        action = {{_action.moveTo, 2, _place.bottom3_2}}
+        action = {{_action.moveTo, 2, _place.bottom3_2}},
     },
     {
         criteria = {_criteria.sticky, appName = {"Skype"}},
-        action = {{_action.moveTo, 2, _place.bottom3_3}}
-    }
+        action = {{_action.moveTo, 2, _place.bottom3_3}},
+    },
 }
 
 function initScreens()
@@ -222,7 +222,7 @@ actionMap = {
         local args = hs.fnutils.copy(t)
         args[1] = ev
         t[1](table.unpack(args))
-    end
+    end,
 }
 
 function processEvent(window, appName, event)
@@ -239,7 +239,7 @@ function processEvent(window, appName, event)
         windowTitle = window:title(),
         isStandard = window:isStandard(),
         role = window:role(),
-        subrole = window:subrole()
+        subrole = window:subrole(),
     }
     for i, rule in ipairs(_rule) do
         if rule.criteria ~= nil and not processCriteria(rule.criteria, ev) then
@@ -363,7 +363,7 @@ function dumpWindows()
                 windowTitle = w:title(),
                 isStandard = w:isStandard(),
                 role = w:role(),
-                subrole = w:subrole()
+                subrole = w:subrole(),
             }
             logger.i(hs.inspect.inspect(window))
         end
@@ -576,7 +576,7 @@ hs.hotkey.bind(
                 {
                     title = "Hammerspoon",
                     informativeText = "Clipboard text too long",
-                    withdrawAfter = 2
+                    withdrawAfter = 2,
                 }
             ):send()
             return
@@ -589,6 +589,6 @@ hs.notify.new(
     {
         title = "Hammerspoon",
         informativeText = "Config reloaded",
-        withdrawAfter = 2
+        withdrawAfter = 2,
     }
 ):send()

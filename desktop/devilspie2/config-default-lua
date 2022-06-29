@@ -24,13 +24,13 @@ _criteria = {}
 _criteria.has_multiple_displays = {
     function(state)
         return #state.displays > 1
-    end
+    end,
 }
 
 _criteria.on_secondary_display = {
     function(state)
         return state.display ~= 1
-    end
+    end,
 }
 
 _criteria.can_fill_target = {
@@ -43,15 +43,15 @@ _criteria.can_fill_target = {
         end
         log.trace("Geometry does not match grid: " .. table.concat(state.window_geometry, ","))
         return true
-    end
+    end,
 }
 
 _criteria.private = {
     class_instance_name = {
         "caprine",
         "skype",
-        "keepassxc"
-    }
+        "keepassxc",
+    },
 }
 
 _criteria.pinnable = {
@@ -63,18 +63,18 @@ _criteria.pinnable = {
         {
             operator.AND,
             event = {"focus", "blur"},
-            display = 2
-        }
-    }
+            display = 2,
+        },
+    },
 }
 
 _groups = {
     mail = {
         ["Mail"] = {
             criteria = {
-                window_role = "3pane"
-            }
-        }
+                window_role = "3pane",
+            },
+        },
     },
     teams = {
         ["microsoft teams"] = {},
@@ -85,42 +85,42 @@ _groups = {
                     state.hints = state.hints or get_size_hints()
                     return state.hints and
                         state.hints.min_width >= (state.displays[1][3] >= 3840 and 1080 or 720)
-                end
-            }
+                end,
+            },
         },
-        ["microsoft teams - insiders"] = {}
+        ["microsoft teams - insiders"] = {},
     },
     messenger = {
-        ["caprine"] = {}
+        ["caprine"] = {},
     },
     skype = {
-        ["skype"] = {}
+        ["skype"] = {},
     },
     time = {
         ["clockify"] = {
             criteria = {
-                window_name = "Clockify"
-            }
+                window_name = "Clockify",
+            },
         },
         ["app.clockify.me__tracker"] = {},
-        ["linacreative.harvestapp.com__time"] = {}
+        ["linacreative.harvestapp.com__time"] = {},
     },
     todo = {
-        ["todoist"] = {}
+        ["todoist"] = {},
     },
     util = {
         ["keepassxc"] = {
             add_to_state = {
-                set_position = set_window_position
-            }
+                set_position = set_window_position,
+            },
         },
-        ["spotify"] = {}
+        ["spotify"] = {},
     },
     dev = {
         ["vscodium"] = {},
         ["sublime_merge"] = {},
-        ["DBeaver"] = {}
-    }
+        ["DBeaver"] = {},
+    },
 }
 
 _apps = {}
@@ -156,7 +156,7 @@ _layouts = {
             time = {xy = {5, 1}},
             todo = {xy = {5, 2}},
             util = {xy = {3, 2}},
-        }
+        },
     },
 
     -- 2x4K
@@ -164,7 +164,7 @@ _layouts = {
         group_places = {
             mail = {workspace = 1, display = 1, xy = {2, 1}, wh = {4, 2}},
             dev = {display = 1},
-        }
+        },
     },
     -- Apps pinned to secondary display
     ["*@7680.0x2160.0"] = {
@@ -176,8 +176,8 @@ _layouts = {
             skype = {xy = {5, 1}},
             time = {xy = {1, 2}},
             todo = {xy = {3, 2}},
-            util = {xy = {5, 2}}
-        }
+            util = {xy = {5, 2}},
+        },
     },
 
     -- Ultrawide
@@ -198,8 +198,8 @@ _layouts = {
             skype = {workspace = 0, xy = {1, 2}},
             time = {workspace = 0, xy = {4, 1}},
             todo = {workspace = 0, xy = {4, 2}},
-            util = {workspace = 0, xy = {4, 2}}
-        }
+            util = {workspace = 0, xy = {4, 2}},
+        },
     },
     -- 2. <-- 25% --> <-- ** 37.5% ** --> <-- ** 37.5% ** -->
     ["2@3440.0x1440.0"] = {
@@ -217,8 +217,8 @@ _layouts = {
             skype = {workspace = 0, xy = {1, 1}},
             time = {workspace = 0, xy = {1, 2}},
             todo = {workspace = 0, xy = {1, 2}},
-            util = {workspace = 0, xy = {1, 2}}
-        }
+            util = {workspace = 0, xy = {1, 2}},
+        },
     },
     -- 3. <-- 33.33% --> <-- ** 33.33% ** --> <-- ** 33.33% ** -->
     ["3@3440.0x1440.0"] = {
@@ -236,8 +236,8 @@ _layouts = {
             skype = {workspace = 0, xy = {1, 2}},
             time = {workspace = 0, xy = {3, 1}},
             todo = {workspace = 0, xy = {3, 2}},
-            util = {workspace = 0, xy = {3, 2}}
-        }
+            util = {workspace = 0, xy = {3, 2}},
+        },
     },
     -- 4. <-- 25% --> <-- ** 75% ** -->
     ["4@3440.0x1440.0"] = {
@@ -254,9 +254,9 @@ _layouts = {
             skype = {workspace = 0, xy = {1, 1}},
             time = {workspace = 0, xy = {1, 2}},
             todo = {workspace = 0, xy = {1, 2}},
-            util = {workspace = 0, xy = {1, 2}}
-        }
-    }
+            util = {workspace = 0, xy = {1, 2}},
+        },
+    },
 }
 
 function get_place(state)
@@ -276,7 +276,7 @@ function get_place(state)
         "*@" .. geometry,
         geometry,
         "*@*:*",
-        "*"
+        "*",
     }) do
         layout = _layouts[layout_id]
         if layout and check_criteria(layout.criteria, state) then
@@ -325,11 +325,11 @@ _criteria.undecorated = {
             "app.clockify.me__tracker",
             "linacreative.harvestapp.com__time",
             "spotify",
-            "todoist"
+            "todoist",
         }
         return check_criteria({class_instance_name = undecorated}, state) or
             (tablex.find(undecorated, get_process_name()) ~= nil)
-    end
+    end,
 }
 
 rules = {
@@ -340,31 +340,31 @@ rules = {
             function(state)
                 return #state.displays == 1 and state.displays[1][3] > 1920
             end,
-            _criteria.private
+            _criteria.private,
         },
         actions = {
-            shade_on
-        }
+            shade_on,
+        },
     },
     {
         criteria = {
             operator.AND,
             event = "focus",
-            _criteria.private
+            _criteria.private,
         },
         actions = {
-            shade_off
-        }
+            shade_off,
+        },
     },
     {
         criteria = {
             operator.AND,
             event = "open",
-            _criteria.undecorated
+            _criteria.undecorated,
         },
         actions = {
-            decorate_off
-        }
+            decorate_off,
+        },
     },
     {
         criteria = {
@@ -375,12 +375,12 @@ rules = {
             function(state)
                 state.place = get_place(state)
                 return state.place ~= nil
-            end
+            end,
         },
         actions = {
             function(state)
                 to_place(state.place, state)
-            end
-        }
-    }
+            end,
+        },
+    },
 }

@@ -38,12 +38,12 @@ log = {
         if log._trace_enabled then
             log._print(log.DEBUG, message)
         end
-    end
+    end,
 }
 
 operator = {
     AND = 1,
-    OR = 2
+    OR = 2,
 }
 
 function extend(copy_table, update_table)
@@ -174,7 +174,7 @@ xprop -id ]] .. window_xid .. [[ \
             max_aspect_y = hints[15],
             base_width = hints[16],
             base_height = hints[17],
-            gravity = hints[18]
+            gravity = hints[18],
         }
         log.debug("hints = " .. pretty.write(hints, ""))
     end
@@ -266,7 +266,7 @@ function get_state(event)
         window_role = get_window_role(),
         window_xid = get_window_xid(),
         screen_geometry = {get_screen_geometry()},
-        just_opened = event == "focus" and opened_window_xid and opened_window_xid == get_window_xid() or false
+        just_opened = event == "focus" and opened_window_xid and opened_window_xid == get_window_xid() or false,
     }
 end
 
@@ -412,7 +412,7 @@ function normalise_place(place, state)
         display = place.display or state.display,
         grid = place.grid or default_grid or {3, 1},
         xy = place.xy or {place.column1 or 0, place.row1 or 0},
-        wh = place.wh or {place.columns or 0, place.rows or 0}
+        wh = place.wh or {place.columns or 0, place.rows or 0},
     }
     p.grid[1] = math.max(p.grid[1], p.xy[1] + p.wh[1] - 1)
     p.grid[2] = math.max(p.grid[2], p.xy[2] + p.wh[2] - 1)
@@ -532,7 +532,7 @@ function process_event(event)
             local args = tablex.copy(t[2])
             table.insert(args, state)
             t[1](table.unpack(args))
-        end
+        end,
     }
     for i, rule in ipairs(rules) do
         log.trace("rules[" .. i .. "].criteria = " .. pretty.write(rule.criteria, ""))
@@ -593,7 +593,7 @@ function log_window_full(event)
         xywh = table.concat({xywh()}, ","),
         --
         get_size_hints = pretty.write(get_size_hints() or {}, ""),
-        get_current_workspace = get_current_workspace()
+        get_current_workspace = get_current_workspace(),
     }
     debug_print("On " .. event .. ":")
     for fn, result in pairs(output) do
@@ -634,7 +634,7 @@ function log_window_full(event)
         "_NET_WM_USER_TIME_WINDOW",
         "_NET_FRAME_EXTENTS",
         "_NET_WM_OPAQUE_REGION",
-        "_NET_WM_BYPASS_COMPOSITOR"
+        "_NET_WM_BYPASS_COMPOSITOR",
     }
     local empty, no_result = {}, {}
     debug_print("  get_window_property:")
@@ -667,7 +667,7 @@ function log_window(event)
         table.concat({get_display() or -1, get_window_geometry()}, ","),
         " [",
         get_window_type(),
-        "]"
+        "]",
     }
     debug_print(table.concat(summary))
 end

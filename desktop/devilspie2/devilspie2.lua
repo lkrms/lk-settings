@@ -1,15 +1,15 @@
 path = require "pl.path"
 
 scripts_window_close = {
-    "on-close.lua"
+    "on-close.lua",
 }
 
 scripts_window_focus = {
-    "on-focus.lua"
+    "on-focus.lua",
 }
 
 scripts_window_blur = {
-    "on-blur.lua"
+    "on-blur.lua",
 }
 
 -- Code below this line runs once per open window at startup, then each time a
