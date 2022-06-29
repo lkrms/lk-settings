@@ -25,8 +25,8 @@ xfwm4,/general/titleless_maximize,bool,true
 xfwm4,/general/toggle_workspaces,bool,true
 host=roxy:xfwm4,/general/use_compositing,bool,false
 host<>roxy:xfwm4,/general/use_compositing,bool,true
-xfwm4,/general/workspace_count,int,${WORKSPACE_COUNT:-3}
-xfwm4,/general/workspace_names,array,$(xfce4_string_array ${WORKSPACE_NAMES:-linaC PLC HW})
+xfwm4,/general/workspace_count,int,${WORKSPACE_COUNT:-4}
+xfwm4,/general/workspace_names,array,$(xfce4_string_array ${WORKSPACE_NAMES:-1 2 3 4})
 xfwm4,/general/wrap_cycle,bool,true
 xfwm4,/general/wrap_layout,bool,true
 xfwm4,/general/wrap_windows,bool,false
@@ -155,7 +155,6 @@ xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>semicolon,string,libre
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>v,string,virt-manager
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>x,string,autorandr --change --force
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Alt>x,string,autorandr --change --force
-xfce4-keyboard-shortcuts,/commands/custom/<Primary><Alt>backslash,string,sh -c 'sh=\$(xdotool getactivewindow getwindowgeometry --shell) && eval \"\$sh\" && X=\$((X + WIDTH / 2)) && Y=\$((Y + HEIGHT / 2)) && xdotool mousemove \$X \$Y'
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>x,string,sh -c 'for a in remove add; do env ACTION=\$a autorandr --change --force; done'
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Alt>x,string,sh -c 'for a in remove add; do env ACTION=\$a autorandr --change --force; done'
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>y,string,spotify
@@ -166,6 +165,7 @@ xfce4-keyboard-shortcuts,/commands/custom/<Primary><Alt>i,string,xrandr-invert-c
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Alt>q,string,sh -c 'xfconf-query -c xfce4-notifyd -p /do-not-disturb -T || xfconf-query -c xfce4-notifyd -p /do-not-disturb -n -t bool -s true'
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Alt>a,string,xfconf-query -c xfce4-power-manager -p /xfce4-power-manager/presentation-mode -n -t bool -s true
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Alt>s,string,xfconf-query -c xfce4-power-manager -p /xfce4-power-manager/presentation-mode -n -t bool -s false
+xfce4-keyboard-shortcuts,/commands/custom/<Primary><Alt>slash,string,sh -c 'sh=\$(xdotool getactivewindow getwindowgeometry --shell) && eval \"\$sh\" && X=\$((X + WIDTH / 2)) && Y=\$((Y + HEIGHT / 2)) && xdotool mousemove \$X \$Y'
 
 xfce4-keyboard-shortcuts,/xfwm4/custom/<Alt>F1,string,stick_window_key
 xfce4-keyboard-shortcuts,/xfwm4/custom/<Alt>F7,string,move_window_key
@@ -179,6 +179,7 @@ xfce4-keyboard-shortcuts,/xfwm4/custom/<Primary><Alt><Super>6,string,move_window
 xfce4-keyboard-shortcuts,/xfwm4/custom/<Primary><Alt><Super>7,string,move_window_workspace_7_key
 xfce4-keyboard-shortcuts,/xfwm4/custom/<Primary><Alt><Super>8,string,move_window_workspace_8_key
 xfce4-keyboard-shortcuts,/xfwm4/custom/<Primary><Alt><Super>9,string,move_window_workspace_9_key
+xfce4-keyboard-shortcuts,/xfwm4/custom/<Primary><Alt>backslash,string,maximize_vert_key
 xfce4-keyboard-shortcuts,/xfwm4/custom/<Primary><Alt>BackSpace,string,show_desktop_key
 xfce4-keyboard-shortcuts,/xfwm4/custom/<Primary><Alt>Return,string,maximize_window_key
 xfce4-keyboard-shortcuts,/xfwm4/custom/<Primary><Super>1,string,workspace_1_key

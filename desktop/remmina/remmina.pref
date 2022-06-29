@@ -55,7 +55,6 @@ rdp_desktopScaleFactor=0
 rdp_desktopOrientation=0
 remmina_file_name=%G_%P_%N_%h
 deny_screenshot_clipboard=true
-use_master_password=false
 unlock_timeout=0
 unlock_password=
 hide_searchbar=false
@@ -75,6 +74,15 @@ vte_shortcutkey_select_all=97
 vte_shortcutkey_increase_font=65365
 vte_shortcutkey_decrease_font=65366
 vte_shortcutkey_search_text=103
+confirm_close=true
+use_primary_password=false
+lock_connect=false
+lock_edit=false
+enc_mode=1
+audit=false
+rdp_disable_smooth_scrolling=0
+rdp_reconnect_attempts=
+rdp_kbd_remap=
 
 [ssh_colors]
 background=rgb(213,204,186)

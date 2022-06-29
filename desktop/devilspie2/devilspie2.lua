@@ -1,4 +1,4 @@
-require "pl"
+path = require "pl.path"
 
 scripts_window_close = {
     "on-close.lua"

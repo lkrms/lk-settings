@@ -1,9 +1,13 @@
+pretty = require("pl.pretty")
+tablex = require("pl.tablex")
+
 log = {
     CRITICAL = 2,
     ERROR = 3,
     WARNING = 4,
     INFO = 6,
     DEBUG = 7,
+    _trace_enabled = false,
     _print = function(level, message)
         if log_level == nil then
             log_level = log.INFO
@@ -11,6 +15,9 @@ log = {
         if level <= log_level then
             debug_print(message and "==> " .. message or "")
         end
+    end,
+    enable_trace = function()
+        log._trace_enabled = true
     end,
     critical = function(message)
         log._print(log.CRITICAL, message)
@@ -26,6 +33,11 @@ log = {
     end,
     debug = function(message)
         log._print(log.DEBUG, message)
+    end,
+    trace = function(message)
+        if log._trace_enabled then
+            log._print(log.DEBUG, message)
+        end
     end
 }
 
@@ -65,9 +77,8 @@ end
 --     {{0, 0, 3840, 2160, 0, 0, 37, 0}, {3840, 0, 3840, 2160, 0, 0, 37, 0}}
 function get_displays()
     if displays == nil then
-        log.info("Getting screen geometry from xrandr")
-        local f =
-            io.popen(
+        log.debug("Getting screen geometry from xrandr")
+        local f = assert(io.popen(
             [[
 xrandr | awk 'function o(p, g, _) {
   split(g, _, /[x+]/)
@@ -82,7 +93,7 @@ $2 == "connected" && $3 ~ r { o(0, $3) }
 $2 == "connected" && $3 == "primary" && $4 ~ r { o(1, $4) }
 END { close(s); print "}" }'
 ]]
-        )
+        ))
         local output = f:read("*a")
         assert(f:close())
         displays = load(output)()
@@ -106,9 +117,8 @@ END { close(s); print "}" }'
 end
 
 function get_struts()
-    log.info("Getting strut geometry from xprop")
-    local f =
-        io.popen(
+    log.debug("Getting strut geometry from xprop")
+    local f = assert(io.popen(
         [[
 echo "return {"
 xprop -root 32x '\n$0+\n' _NET_CLIENT_LIST |
@@ -122,7 +132,7 @@ xprop -root 32x '\n$0+\n' _NET_CLIENT_LIST |
     sed -E '/^\t\{/!d'
 echo "}"
 ]]
-    )
+    ))
     local output = f:read("*a")
     assert(f:close())
     return load(output)()
@@ -133,18 +143,15 @@ function get_size_hints()
     if window_xid == 0 then
         return
     end
-    log.info("Getting size hints from xprop")
-    local f =
-        io.popen(
+    log.debug("Getting size hints from xprop")
+    local f = assert(io.popen(
         [[
 printf "return "
-xprop -id ]] ..
-            window_xid ..
-                [[ \
+xprop -id ]] .. window_xid .. [[ \
     32i "\\n{\$0$(printf ', $%s' {1..17}))}" WM_NORMAL_HINTS |
     sed -E '/^\{([0-9]+(, )?)*\}$/!d'
 ]]
-    )
+    ))
     local output = f:read("*a")
     assert(f:close())
     local hints = load(output)() or nil
@@ -174,7 +181,9 @@ xprop -id ]] ..
     return hints
 end
 
-function get_display_at(displays, x, y)
+function get_display_at(displays, x, y, screen_w, screen_h)
+    x, y = math.max(0, x), math.max(0, y)
+    x, y = math.min((screen_w or x + 1) - 1, x), math.min((screen_h or y + 1) - 1, y)
     for display, display_geometry in ipairs(displays) do
         local dx, dy, dw, dh = table.unpack(display_geometry)
         if x >= dx and y >= dy and x < dx + dw and y < dy + dh then
@@ -184,7 +193,27 @@ function get_display_at(displays, x, y)
 end
 
 function get_display()
-    return get_display_at(get_displays(), get_window_geometry())
+    local x, y = get_window_geometry()
+    return get_display_at(get_displays(), x, y, get_screen_geometry())
+end
+
+function get_snap_target(targets, state)
+    local x, y, w, h = table.unpack(state.window_geometry)
+    x, y = math.max(0, math.floor(x + w / 2)), math.max(0, math.floor(y + h / 2))
+    x, y = math.min(state.screen_geometry[1] - 1, x), math.min(state.screen_geometry[2] - 1, y)
+    for i, target in ipairs(targets) do
+        target.grid = target.grid or state.target_grid
+        local t     = normalise_place(target, state)
+        local xywh  = _get_xywh(t.display, t.grid[1], t.grid[2], t.xy[1], t.xy[2], t.wh[1], t.wh[2])
+        if xywh == nil then
+            return
+        end
+        local tx, ty, tw, th = table.unpack(xywh)
+        if tx > -1 and ty > -1 and tw > 0 and th > 0 and
+            x >= tx and y >= ty and x < tx + tw and y < ty + th then
+            return target
+        end
+    end
 end
 
 function get_display_geometry(display)
@@ -201,37 +230,63 @@ function get_display_geometry(display)
 end
 
 function get_current_workspace()
-    log.info("Getting current workspace from xprop")
-    local f = io.popen([[
+    log.debug("Getting current workspace from xprop")
+    local f = assert(io.popen(
+        [[
 xprop -root 32c '\n$0+\n' _NET_CURRENT_DESKTOP | sed '2!d'
-]])
+]]
+    ))
     local workspace = f:read("*a")
     assert(f:close())
     return workspace + 1
 end
 
 function get_state(event)
+    local display, window_geometry = get_display(), {get_window_geometry()}
+    local display_geometry = display and get_display_geometry(display) or nil
     return {
         event = event,
         workspace = get_current_workspace(),
         displays = get_displays(),
-        display = get_display(),
+        display = display,
+        display_geometry = display_geometry,
         window_name = get_window_name(),
         application_name = event == "close" and "" or (get_application_name() or ""),
-        window_geometry = {get_window_geometry()},
+        window_geometry = window_geometry,
         window_client_geometry = {get_window_client_geometry()},
-        window_is_maximized = get_window_is_maximized(),
+        window_is_maximized = get_window_is_maximized() or
+            (window_geometry and display_geometry and
+                window_geometry[3] == display_geometry[3] and
+                window_geometry[4] == display_geometry[4]),
+        window_is_maximized_vertically = get_window_is_maximized_vertically() or
+            (window_geometry and display_geometry and
+                window_geometry[4] == display_geometry[4]),
         window_type = get_window_type(),
-        class_instance_name = get_class_instance_name() or "",
+        class_instance_name = get_class_instance_name() or get_process_name() or "",
         window_role = get_window_role(),
         window_xid = get_window_xid(),
-        screen_geometry = {get_screen_geometry()}
+        screen_geometry = {get_screen_geometry()},
+        just_opened = event == "focus" and opened_window_xid and opened_window_xid == get_window_xid() or false
     }
 end
 
 function to_workspace(workspace, state)
+    if workspace == 0 then
+        pin_on(state)
+        return
+    end
     log.info("Calling set_window_workspace(" .. workspace .. ") on " .. state.class_instance_name)
     set_window_workspace(workspace)
+end
+
+function to_back(state)
+    log.info("Calling set_on_bottom() on " .. state.class_instance_name)
+    set_on_bottom()
+end
+
+function to_opacity(value, state)
+    log.info("Calling set_opacity() on " .. state.class_instance_name)
+    set_opacity(value)
 end
 
 function pin_on(state)
@@ -302,8 +357,8 @@ function minimize_off(state)
     unminimize()
 end
 
-function _to_place(display, grid_columns, grid_rows, column1, row1, columns, rows, state)
-    local d_x, d_y, d_w, d_h, col_w, row_h, x, y, w, h
+function _get_xywh(display, grid_columns, grid_rows, column1, row1, columns, rows)
+    local x, y, w, h, d_x, d_y, d_w, d_h, col_w, row_h = -1, -1, 0, 0
     local display_geometry = get_display_geometry(display)
     if display_geometry == nil then
         log.warning("Invalid display: " .. display)
@@ -312,11 +367,24 @@ function _to_place(display, grid_columns, grid_rows, column1, row1, columns, row
     d_x, d_y, d_w, d_h = table.unpack(display_geometry)
     col_w = math.floor(d_w / grid_columns)
     row_h = math.floor(d_h / grid_rows)
-    x = d_x + (column1 - 1) * col_w
-    w = columns * col_w
-    y = d_y + (row1 - 1) * row_h
-    h = rows * row_h
-    if state.just_undecorated then
+    if column1 > 0 and row1 > 0 then
+        x = d_x + (column1 - 1) * col_w
+        y = d_y + (row1 - 1) * row_h
+    end
+    if columns > 0 and rows > 0 then
+        w = columns < grid_columns and columns * col_w or d_w
+        h = rows < grid_rows and rows * row_h or d_h
+    end
+    return {x, y, w, h}
+end
+
+function _to_place(display, grid_columns, grid_rows, column1, row1, columns, rows, state)
+    local xywh = _get_xywh(display, grid_columns, grid_rows, column1, row1, columns, rows)
+    if xywh == nil then
+        return
+    end
+    local x, y, w, h = table.unpack(xywh)
+    if state.just_undecorated and w > 0 and h > 0 then
         local f_w = state.window_geometry[3] - state.window_client_geometry[3]
         local f_h = state.window_geometry[4] - state.window_client_geometry[4]
         decoration_width = math.max(decoration_width or 0, f_w)
@@ -324,25 +392,42 @@ function _to_place(display, grid_columns, grid_rows, column1, row1, columns, row
         w = w + f_w
         h = h + f_h
     end
-    local set_size, set_position =
-        state.rule.set_size or set_window_size,
-        state.rule.set_position or set_window_position2
-    log.info("Calling set_window_size(" .. table.concat({w, h}, ", ") .. ") on " .. state.class_instance_name)
-    set_size(w, h)
-    log.info("Calling set_window_position2(" .. table.concat({x, y}, ", ") .. ") on " .. state.class_instance_name)
-    set_position(x, y)
+    local set_size, set_position = state.set_size or state.rule.set_size or set_window_size,
+        state.set_position or state.rule.set_position or set_window_position2
+    if w > 0 and h > 0 then
+        maximize_off(state)
+        log.info("Calling <set_size>(" .. table.concat({w, h}, ", ") .. ") on " .. state.class_instance_name)
+        set_size(w, h)
+    end
+    if x > -1 and y > -1 then
+        maximize_off(state)
+        log.info("Calling <set_position>(" .. table.concat({x, y}, ", ") .. ") on " .. state.class_instance_name)
+        set_position(x, y)
+        state.display = display
+    end
 end
 
-function to_place(place, state)
+function normalise_place(place, state)
     local p = {
         display = place.display or state.display,
         grid = place.grid or default_grid or {3, 1},
-        xy = place.xy or {place.column1 or 1, place.row1 or 1},
-        wh = place.wh or {place.columns or 1, place.rows or 1}
+        xy = place.xy or {place.column1 or 0, place.row1 or 0},
+        wh = place.wh or {place.columns or 0, place.rows or 0}
     }
     p.grid[1] = math.max(p.grid[1], p.xy[1] + p.wh[1] - 1)
     p.grid[2] = math.max(p.grid[2], p.xy[2] + p.wh[2] - 1)
+    return p
+end
+
+function to_place(place, state)
+    local p = normalise_place(place, state)
     _to_place(p.display, p.grid[1], p.grid[2], p.xy[1], p.xy[2], p.wh[1], p.wh[2], state)
+    if place.workspace ~= nil then
+        to_workspace(place.workspace, state)
+    end
+    if place.display ~= nil and place.display ~= state.display then
+        to_display(place.display, state)
+    end
 end
 
 function to_display(display, state)
@@ -357,7 +442,7 @@ function to_display(display, state)
         log.warning("Invalid display: " .. display)
         return
     end
-    local set_position = state.rule.set_position or set_window_position2
+    local set_position = state.set_position or state.rule.set_position or set_window_position2
     if state.window_is_maximized then
         maximize_off(state)
         set_position(to[1], to[2])
@@ -366,12 +451,57 @@ function to_display(display, state)
         local x, y = table.unpack(state.window_geometry)
         x = x + to[1] - from[1]
         y = y + to[2] - from[2]
-        log.info("Calling set_window_position2(" .. table.concat({x, y}, ", ") .. ") on " .. state.class_instance_name)
+        log.info("Calling <set_position>(" .. table.concat({x, y}, ", ") .. ") on " .. state.class_instance_name)
         set_position(x, y)
     end
 end
 
+function check_criteria(criteria, state)
+    if criteria == nil then
+        return true
+    end
+    local and_result, or_result, op = true, false
+    for k, v in pairs(criteria) do
+        local result
+        if type(k) == "number" then
+            if v == "AND" or v == operator.AND then
+                if and_result == false then
+                    return false
+                end
+                op = operator.AND
+            elseif v == "OR" or v == operator.OR then
+                if or_result == true then
+                    return true
+                end
+                op = operator.OR
+            elseif type(v) == "function" then
+                result = v(state)
+            elseif type(v) == "table" then
+                result = check_criteria(v, state)
+            end
+        elseif type(v) == "table" then
+            result = tablex.find(v, state[k]) ~= nil
+        else
+            result = state[k] == v
+        end
+        if result ~= nil then
+            and_result = and_result and result
+            or_result = or_result or result
+            if op == operator.AND and and_result == false then
+                return false
+            elseif op == operator.OR and or_result == true then
+                return true
+            end
+        end
+    end
+    return and_result
+end
+
 function process_event(event)
+    if get_window_type() == "WINDOW_ERROR" then
+        log.debug("Skipping WINDOW_ERROR")
+        return
+    end
     if event == "close" then
         closed_window_xid = get_window_xid()
     elseif event == "blur" then
@@ -389,42 +519,10 @@ function process_event(event)
         return
     end
     local state = get_state(event)
-    local function process_criteria(criteria)
-        local and_result, or_result, op = true, false
-        for k, v in pairs(criteria) do
-            local result
-            if type(k) == "number" then
-                if v == "AND" or v == operator.AND then
-                    if and_result == false then
-                        return false
-                    end
-                    op = operator.AND
-                elseif v == "OR" or v == operator.OR then
-                    if or_result == true then
-                        return true
-                    end
-                    op = operator.OR
-                elseif type(v) == "function" then
-                    result = v(state)
-                elseif type(v) == "table" then
-                    result = process_criteria(v)
-                end
-            elseif type(v) == "table" then
-                result = tablex.find(v, state[k]) ~= nil
-            else
-                result = state[k] == v
-            end
-            if result ~= nil then
-                and_result = and_result and result
-                or_result = or_result or result
-                if op == operator.AND and and_result == false then
-                    return false
-                elseif op == operator.OR and or_result == true then
-                    return true
-                end
-            end
-        end
-        return and_result
+    if event == "open" then
+        opened_window_xid = get_window_xid()
+    elseif event == "focus" then
+        opened_window_xid = nil
     end
     local type_action = {
         ["function"] = function(fn, state)
@@ -437,15 +535,15 @@ function process_event(event)
         end
     }
     for i, rule in ipairs(rules) do
-        log.debug("rules[" .. i .. "].criteria = " .. pretty.write(rule.criteria, ""))
-        if rule.criteria ~= nil and not process_criteria(rule.criteria) then
-            log.debug("Criteria not met")
+        log.trace("rules[" .. i .. "].criteria = " .. pretty.write(rule.criteria, ""))
+        if rule.criteria ~= nil and not check_criteria(rule.criteria, state) then
+            log.trace("Criteria not met")
             goto next_rule
         end
-        log.debug("Criteria met")
+        log.trace("Criteria met")
         state.rule = rule
         for j, action in ipairs(rule.actions) do
-            log.debug("rules[" .. i .. "].actions[" .. j .. "] = " .. pretty.write(action, ""))
+            log.trace("rules[" .. i .. "].actions[" .. j .. "] = " .. pretty.write(action, ""))
             _action = type_action[type(action)]
             if _action ~= nil then
                 state.action = action
@@ -458,17 +556,32 @@ function process_event(event)
     end
 end
 
+function width_matches_grid(state, columns)
+    local col_w = math.floor(state.display_geometry[3] / columns)
+    return state.window_geometry[3] % col_w == 0
+end
+
+function position_matches_grid(state, columns, rows)
+    local d_x, d_y, d_w, d_h = table.unpack(state.display_geometry)
+    local col_w, row_h = math.floor(d_w / columns), math.floor(d_h / rows)
+    local x, y, w, h = table.unpack(state.window_geometry)
+    return x >= d_x and x + w <= d_x + d_w and (x - d_x) % col_w == 0 and
+        y >= d_y and y + h <= d_y + d_h and (y - d_y) % row_h == 0
+end
+
 function log_window_full(event)
     debug_print()
     local output = {
         get_window_name = get_window_name(),
         get_window_has_name = (get_window_has_name() and "true" or "false"),
         get_application_name = event == "close" and "" or (get_application_name() or ""),
+        get_process_name = get_process_name(),
         get_window_geometry = table.concat({get_window_geometry()}, ","),
         get_window_client_geometry = table.concat({get_window_client_geometry()}, ","),
         get_window_is_maximized = (get_window_is_maximized() and "true" or "false"),
         get_window_is_maximized_vertically = (get_window_is_maximized_vertically() and "true" or "false"),
         get_window_is_maximized_horizontally = (get_window_is_maximized_horizontally() and "true" or "false"),
+        get_window_is_decorated = get_window_is_decorated(),
         get_window_type = get_window_type(),
         get_class_instance_name = (get_class_instance_name() or ""),
         get_window_role = get_window_role(),
@@ -542,15 +655,15 @@ end
 
 function log_window(event)
     local summary = {
-        "(",
+        "[",
+        event,
+        "] (",
         table.concat({get_screen_geometry()}, "x"),
         ") ",
         get_class_instance_name() or "",
         ".",
         event == "close" and "" or (get_window_class() or ""),
-        " geometry on ",
-        event,
-        ": ",
+        " @ ",
         table.concat({get_display() or -1, get_window_geometry()}, ","),
         " [",
         get_window_type(),
