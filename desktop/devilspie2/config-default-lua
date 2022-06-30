@@ -38,10 +38,12 @@ _criteria.can_fill_target = {
         local columns = (state.target_grid or default_grid or {3})[1]
         if width_matches_grid(state, columns) and
             position_matches_grid(state, columns, 1) then
-            log.trace("Geometry matches grid: " .. table.concat(state.window_geometry, ","))
+            log.trace("Geometry matches " .. columns .. "-column grid: "
+                .. table.concat(state.window_geometry, ","))
             return false
         end
-        log.trace("Geometry does not match grid: " .. table.concat(state.window_geometry, ","))
+        log.trace("Geometry does not match " .. columns .. "-column grid: "
+            .. table.concat(state.window_geometry, ","))
         return true
     end,
 }
@@ -131,36 +133,18 @@ for group, apps in pairs(_groups) do
 end
 log.debug("_apps = " .. pretty.write(_apps))
 
--- e.g. for a window on display 1 of workspace 2, the following layouts will be
--- tried until a matching group_place is found and applied to the window:
--- 1.  2@1:7680.0x2160.0
--- 2.  *@1:7680.0x2160.0
--- 3.  1:7680.0x2160.0
--- 4.  2@*:7680.0x2160.0
--- 5.  2@7680.0x2160.0
--- 6.  *@*:7680.0x2160.0
--- 7.  *:7680.0x2160.0
--- 8.  *@7680.0x2160.0
--- 9.  7680.0x2160.0
--- 10. *@*:*
--- 11. *
+-- See README.md for an explanation
 _layouts = {
-    -- 1x4K
-    ["3840.0x2160.0"] = {
-        place = {workspace = 1, display = 1, wh = {2, 1}},
-        group_places = {
-            mail = {xy = {2, 1}, wh = {4, 2}},
-            teams = {xy = {1, 1}},
-            messenger = {xy = {1, 2}},
-            skype = {xy = {3, 1}},
-            time = {xy = {5, 1}},
-            todo = {xy = {5, 2}},
-            util = {xy = {3, 2}},
-        },
-    },
-
     -- 2x4K
     ["7680.0x2160.0"] = {
+        -- <-- 25% --> <-- ** 50% ** --> <-- 25% -->
+        targets = {
+            grid = {4, 2},
+            criteria = _criteria.can_fill_target,
+            {display = 1, xy = {1, 1}, wh = {1, 2}},
+            {display = 1, xy = {2, 1}, wh = {2, 2}},
+            {display = 1, xy = {4, 1}, wh = {1, 2}},
+        },
         group_places = {
             mail = {workspace = 1, display = 1, xy = {2, 1}, wh = {4, 2}},
             dev = {display = 1},
@@ -203,14 +187,14 @@ _layouts = {
     },
     -- 2. <-- 25% --> <-- ** 37.5% ** --> <-- ** 37.5% ** -->
     ["2@3440.0x1440.0"] = {
-        grid = {4, 2},
+        grid = {8, 2},
         targets = {
             criteria = _criteria.can_fill_target,
-            {display = 1, xy = {1, 1}, wh = {1, 2}},
-            {display = 1, xy = {2, 1}, wh = {1.5, 2}},
-            {display = 1, xy = {3.5, 1}, wh = {1.5, 2}},
+            {display = 1, xy = {1, 1}, wh = {2, 2}},
+            {display = 1, xy = {3, 1}, wh = {3, 2}},
+            {display = 1, xy = {6, 1}, wh = {3, 2}},
         },
-        place = {display = 1, wh = {1, 1}},
+        place = {display = 1, wh = {2, 1}},
         group_places = {
             teams = {workspace = 0, xy = {1, 1}},
             messenger = {workspace = 0, xy = {1, 1}},
@@ -285,7 +269,7 @@ function get_place(state)
             if not targets and layout.targets then
                 targets = layout.targets
                 log.trace("targets = " .. pretty.write(targets))
-                state.target_grid = layout.grid
+                state.target_grid = targets.grid or layout.grid
             end
             if app then
                 place = layout.group_places and layout.group_places[app.group]
@@ -300,7 +284,7 @@ function get_place(state)
             end
         end
     end
-    if not place and
+    if (not place or (not place.xy and not place.wh)) and
         targets and
         check_criteria(targets.criteria, state) and
         state.window_is_maximized_vertically and
@@ -323,6 +307,7 @@ _criteria.undecorated = {
     function(state)
         local undecorated = {
             "app.clockify.me__tracker",
+            "caprine",
             "linacreative.harvestapp.com__time",
             "spotify",
             "todoist",

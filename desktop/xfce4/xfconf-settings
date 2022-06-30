@@ -16,14 +16,16 @@ xfwm4,/general/cycle_raise,bool,false
 xfwm4,/general/cycle_tabwin_mode,int,0
 xfwm4,/general/cycle_workspaces,bool,false
 xfwm4,/general/mousewheel_rollup,bool,true
-xfwm4,/general/placement_mode,string,mouse
+xfwm4,/general/move_opacity,int,50
+xfwm4,/general/placement_mode,string,center
 xfwm4,/general/raise_with_any_button,bool,false
 xfwm4,/general/scroll_workspaces,bool,false
 xfwm4,/general/show_dock_shadow,bool,false
+xfwm4,/general/show_popup_shadow,bool,true
 xfwm4,/general/snap_to_windows,bool,true
 xfwm4,/general/titleless_maximize,bool,true
 xfwm4,/general/toggle_workspaces,bool,true
-host=roxy:xfwm4,/general/use_compositing,bool,false
+host=roxy:xfwm4,/general/use_compositing,bool,true
 host<>roxy:xfwm4,/general/use_compositing,bool,true
 xfwm4,/general/workspace_count,int,${WORKSPACE_COUNT:-4}
 xfwm4,/general/workspace_names,array,$(xfce4_string_array ${WORKSPACE_NAMES:-1 2 3 4})
@@ -228,8 +230,6 @@ laptop:xfce4-power-manager,/xfce4-power-manager/dpms-on-ac-off,uint,15
 laptop:xfce4-power-manager,/xfce4-power-manager/dpms-on-ac-sleep,uint,10
 laptop:xfce4-power-manager,/xfce4-power-manager/dpms-on-battery-off,uint,6
 laptop:xfce4-power-manager,/xfce4-power-manager/dpms-on-battery-sleep,uint,5
-host=roxy:xfce4-power-manager,/xfce4-power-manager/dpms-on-ac-off,uint,0
-host=roxy:xfce4-power-manager,/xfce4-power-manager/dpms-on-ac-sleep,uint,0
 
 laptop:xfce4-power-manager,/xfce4-power-manager/brightness-on-ac,uint,9
 laptop:xfce4-power-manager,/xfce4-power-manager/brightness-on-battery,uint,9

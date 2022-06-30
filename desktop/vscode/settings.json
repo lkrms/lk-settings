@@ -104,9 +104,9 @@
     "editor.autoClosingBrackets": "never",
     "editor.autoClosingQuotes": "never",
     "editor.autoIndent": "advanced",
+    "editor.bracketPairColorization.independentColorPoolPerBracketType": true,
     "editor.comments.ignoreEmptyLines": false,
     "editor.comments.insertSpace": false,
-    "editor.cursorBlinking": "solid",
     "editor.cursorSurroundingLines": 2,
     "editor.dragAndDrop": false,
     "editor.fontFamily": "'JetBrains Mono', 'Source Code Pro', Menlo, Monaco, 'Courier New', monospace",
@@ -125,6 +125,7 @@
         0
     ],
     "editor.suggest.localityBonus": true,
+    "editor.wordBasedSuggestions": false,
     "emmet.excludeLanguages": [
         "markdown",
         "php"
@@ -132,9 +133,8 @@
     "emmet.triggerExpansionOnTab": true,
     "explorer.autoReveal": "focusNoScroll",
     "explorer.confirmDelete": false,
-    "explorer.confirmDragAndDrop": false,
     "explorer.decorations.badges": false,
-    "explorer.incrementalNaming": "smart",
+    "explorer.openEditors.sortOrder": "fullPath",
     "extensions.ignoreRecommendations": true,
     "files.associations": {
         "**/.git/info/attributes": "properties",
@@ -451,10 +451,15 @@
     "workbench.editor.highlightModifiedTabs": true,
     "workbench.editor.revealIfOpen": true,
     "workbench.editor.untitled.hint": "hidden",
+    "workbench.editor.wrapTabs": true,
     "workbench.enableExperiments": false,
     "workbench.iconTheme": "material-icon-theme",
+    "workbench.preferredDarkColorTheme": "GitHub Dark Dimmed",
+    "workbench.preferredLightColorTheme": "Quiet Light",
+    "workbench.quickOpen.preserveInput": true,
     "workbench.settings.enableNaturalLanguageSearch": false,
     "workbench.startupEditor": "newUntitledFile",
+    "workbench.tips.enabled": false,
     "xml.format.emptyElements": "collapse",
     "xml.format.enforceQuoteStyle": "preferred",
     "xml.format.preservedNewlines": 0
