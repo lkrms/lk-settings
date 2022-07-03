@@ -256,11 +256,12 @@ function get_state(event)
         window_client_geometry = {get_window_client_geometry()},
         window_is_maximized = get_window_is_maximized() or
             (window_geometry and display_geometry and
-                window_geometry[3] == display_geometry[3] and
-                window_geometry[4] == display_geometry[4]),
+                -- Use `>=` because decorations may be added
+                window_geometry[3] >= display_geometry[3] and
+                window_geometry[4] >= display_geometry[4]),
         window_is_maximized_vertically = get_window_is_maximized_vertically() or
             (window_geometry and display_geometry and
-                window_geometry[4] == display_geometry[4]),
+                window_geometry[4] >= display_geometry[4]),
         window_type = get_window_type(),
         class_instance_name = get_class_instance_name() or get_process_name() or "",
         window_role = get_window_role(),

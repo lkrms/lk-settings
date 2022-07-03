@@ -147,18 +147,26 @@ is_basic || [ ! -d "${FILE%/*}" ] || {
 }
 
 lk_tty_print "Checking AltTab"
-defaults write com.lwouis.alt-tab-macos cursorFollowFocusEnabled -string true
-#defaults write com.lwouis.alt-tab-macos hideWindowlessApps -string true
-defaults delete com.lwouis.alt-tab-macos hideWindowlessApps &>/dev/null || true
+#defaults write com.lwouis.alt-tab-macos cursorFollowFocusEnabled -string true
+defaults delete com.lwouis.alt-tab-macos cursorFollowFocusEnabled &>/dev/null || true
+defaults write com.lwouis.alt-tab-macos hideWindowlessApps -string true
+#defaults delete com.lwouis.alt-tab-macos hideWindowlessApps &>/dev/null || true
 # Command (⌘)
 defaults write com.lwouis.alt-tab-macos holdShortcut -string $'\xe2\x8c\x98'
 # Option (⌥)
 defaults write com.lwouis.alt-tab-macos holdShortcut2 -string $'\xe2\x8c\xa5'
+# Tab (⇥)
+defaults write com.lwouis.alt-tab-macos nextWindowShortcut2 -string $'\xe2\x87\xa5'
 # Shift-Tab (⇧⇥)
 defaults write com.lwouis.alt-tab-macos previousWindowShortcut -string $'\xe2\x87\xa7\xe2\x87\xa5'
-defaults write com.lwouis.alt-tab-macos menubarIcon -string 3
+#defaults write com.lwouis.alt-tab-macos menubarIcon -string 3
+defaults delete com.lwouis.alt-tab-macos menubarIcon &>/dev/null || true
 defaults write com.lwouis.alt-tab-macos mouseHoverEnabled -string false
-defaults write com.lwouis.alt-tab-macos showOnScreen -string 1
+# "Active screen"
+defaults write com.lwouis.alt-tab-macos showOnScreen -string 0
+# "Screen including mouse"
+#defaults write com.lwouis.alt-tab-macos showOnScreen -string 1
+# "Visible Spaces"
 defaults write com.lwouis.alt-tab-macos spacesToShow -string 1
 defaults write com.lwouis.alt-tab-macos spacesToShow2 -string 1
 is_basic || defaults write com.lwouis.alt-tab-macos startAtLogin -string true

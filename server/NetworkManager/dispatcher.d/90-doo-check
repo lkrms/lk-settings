@@ -111,7 +111,7 @@ CURRENT_METHOD=$(nmcli -g ipv6.method conn show "$LAN_IFACE") ||
     CURRENT_METHOD=
 
 ! lk_verbose || {
-    lk_tty_print "$LAN_IFACE ipv6.method (current/required):" \
+    lk_tty_print "$LAN_IFACE ipv6.method (current/expected):" \
         "${CURRENT_METHOD:-<unknown>}/$LAN_METHOD"
     lk_log_tty_on
 }
@@ -130,8 +130,8 @@ UNIT=add-ipv6-pd-route.service
 
 # Leave `ipv6.method` alone if it's already `shared` to avoid taking LAN_IFACE
 # down whenever there's a WAN_IFACE outage
-[ "$CURRENT_METHOD" = "$LAN_METHOD" ] ||
-    { [ "$CURRENT_METHOD" = shared ] && wan_service_is_running; } || {
-    lk_tty_run nmcli conn modify --temporary "$LAN_IFACE" ipv6.method "$LAN_METHOD"
-    lk_tty_run nmcli conn up "$LAN_IFACE"
-}
+#[ "$CURRENT_METHOD" = "$LAN_METHOD" ] ||
+#    { [ "$CURRENT_METHOD" = shared ] && wan_service_is_running; } || {
+#    lk_tty_run nmcli conn modify --temporary "$LAN_IFACE" ipv6.method "$LAN_METHOD"
+#    lk_tty_run nmcli conn up "$LAN_IFACE"
+#}

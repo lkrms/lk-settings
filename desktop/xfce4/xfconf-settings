@@ -146,7 +146,7 @@ xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>g,string,/opt/l
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>h,string,code /etc/hosts
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>i,string,nomacs
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>k,string,keepassxc
-xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>l,string,sh -c 'killall devilspie2 -u \"\$(id -un)\"; exec devilspie2'
+xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>l,string,gtk-launch devilspie2
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>n,string,lk-note-open.sh
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>n,string,code \"${LK_NOTE_DIR:-$HOME/Desktop}\"
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>o,string,todoist
@@ -167,6 +167,7 @@ xfce4-keyboard-shortcuts,/commands/custom/<Primary><Alt>i,string,xrandr-invert-c
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Alt>q,string,sh -c 'xfconf-query -c xfce4-notifyd -p /do-not-disturb -T || xfconf-query -c xfce4-notifyd -p /do-not-disturb -n -t bool -s true'
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Alt>a,string,xfconf-query -c xfce4-power-manager -p /xfce4-power-manager/presentation-mode -n -t bool -s true
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Alt>s,string,xfconf-query -c xfce4-power-manager -p /xfce4-power-manager/presentation-mode -n -t bool -s false
+xfce4-keyboard-shortcuts,/commands/custom/<Primary><Alt>d,string,gtk-launch devilspie2
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Alt>slash,string,sh -c 'sh=\$(xdotool getactivewindow getwindowgeometry --shell) && eval \"\$sh\" && X=\$((X + WIDTH / 2)) && Y=\$((Y + HEIGHT / 2)) && xdotool mousemove \$X \$Y'
 
 xfce4-keyboard-shortcuts,/xfwm4/custom/<Alt>F1,string,stick_window_key

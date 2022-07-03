@@ -16,49 +16,49 @@ _DIR=/opt/lk-settings/server
 )
 
 function update-notracking() {
-    local TEMP_FILE LK_FILE_REPLACE_NO_CHANGE LK_VERBOSE=1 LK_FILE_NO_DIFF=1 \
-        FILE=/opt/lk-settings/server/dnsmasq/dnsmasq.d/notracking.conf \
+    local TEMP_FILE LK_FILE_REPLACE_NO_CHANGE LK_VERBOSE=1 \
+        FILE=$_DIR/dnsmasq/dnsmasq.d/notracking.conf \
         URL=https://github.com/notracking/hosts-blocklists/raw/master/dnsmasq/dnsmasq.blacklist.txt \
-        UNBLOCKED=/opt/lk-settings/server/squid/unblock.dstdomain
+        UNBLOCKED=$_DIR/squid/unblock.dstdomain
     lk_tty_print "Checking notracking blocklists"
-    [ ! /etc/dnsmasq.d -ef /opt/lk-settings/server/dnsmasq/dnsmasq.d ] || {
+    [[ ! /etc/dnsmasq.d -ef $_DIR/dnsmasq/dnsmasq.d ]] || {
         lk_tty_detail "$FILE"
-        TEMP_FILE=$(lk_mktemp_file) &&
-            lk_delete_on_exit "$TEMP_FILE" &&
+        lk_mktemp_with TEMP_FILE &&
             curl -fsSL "$URL" |
-            awk -v "unblocked=$UNBLOCKED" -v "verbose=${LK_VERBOSE-0}" '
-function print_err(str) {
-  if (verbose) {
-    print str > "/dev/stderr"
-  }
-}
-BEGIN {
-  while (getline l < unblocked) {
-    if (l ~ /^[[:blank:]]*(#|$)/) {
-      continue
-    }
-    d[++i] = l
-    gsub(/\./, "\\.", l)
-    sub(/^\\\./, "(.+\\.)?", l)
-    r[i] = "/" l "/"
-    print_err("Added regex " r[i] " for unblock entry " d[i])
-  }
-  close(unblocked)
-  FS="/"
-}
-/^address=\// {
-  for (i = 1; i <= length(r); i++) {
-    if ($0 ~ r[i] || substr(d[i], length(d[i]) - length($2)) == "." $2) {
-      print_err("Removing " $2 " (" d[i] " is unblocked)")
-      next
-    }
-  }
-}
-{ print }' >"$TEMP_FILE" &&
+            sed -E "$(
+                cat <<"EOF"
+# Copy to hold space
+h
+# Reduce to domain
+s/^[^/]*\/([^/]+)\/.*/\1/
+# Delete unblocked
+EOF
+                # Convert unblocked domain list to something like:
+                #
+                #     /^(tags\.|^)(news\.|^)(com\.|^)au$/d
+                #     /^(.+\.)?(amazon-adsystem\.|^)com$/d
+                #     /^(tbs8v877\.|^)(r\.|^)(us-east-1\.|^)(awstrack\.|^)me$/d
+                sed -E "$(
+                    cat <<"EOF"
+# Delete comments and empty lines
+/^(#|[ \t]*$)/d
+# Replace each domain part '<part>.' with '(<part>\.|^)'
+s/([^.]+)\./(\1\\.|^)/g
+# Replace leading '.' with '(.+\.)?'
+s/^\./(.+\\.)?/
+# Enclose each line between '/^' and '$/d'
+s/.*/\/^&$\/d/
+EOF
+                )" "$UNBLOCKED"
+                cat <<"EOF"
+# Restore from hold space
+g
+EOF
+            )" >"$TEMP_FILE" &&
             lk_file_replace -f "$TEMP_FILE" "$FILE" || return
     }
-    [ ! /etc/squid/squid.conf -ef /opt/lk-settings/server/squid/squid.conf ] || {
-        FILE=/opt/lk-settings/server/squid/notracking.dstdomain
+    [[ ! /etc/squid/squid.conf -ef $_DIR/squid/squid.conf ]] || {
+        FILE=$_DIR/squid/notracking.dstdomain
         URL=https://github.com/notracking/hosts-blocklists/raw/master/dnscrypt-proxy/dnscrypt-proxy.blacklist.txt
         lk_tty_detail "$FILE"
         curl -fsSL "$URL" | sed -E 's/^[^#[:blank:]]/.&/' >"$TEMP_FILE" &&
@@ -76,7 +76,7 @@ lk_log_start
 
 STATUS=0
 
-update-notracking || STATUS=$?
+time update-notracking || STATUS=$?
 
 export PACKAGER="Luke Arms <luke@arms.to>"
 export GPGKEY=B7304A7EB769E24D
