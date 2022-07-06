@@ -6,7 +6,7 @@
   "hardware_acceleration": "opengl",
   "hide_menu": true,
   "render_commit_dialog_message_at_top": true,
-  "side_bar_layout": "commit_graph_as_column",
+  "side_bar_layout": "locations_as_column",
   "tab_size": 4,
   "theme": "Merge Dark.sublime-theme"
 }

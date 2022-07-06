@@ -76,7 +76,7 @@
 	smudge = cat
 
 [filter "sublimemerge"]
-	clean = jsonlint -Sf --sort preserve | jq -S '.+={hide_menu:true,side_bar_layout:\"commit_graph_as_column\",theme:\"Merge Dark.sublime-theme\"}'
+	clean = jsonlint -Sf --sort preserve | jq -S '.+={hide_menu:true,side_bar_layout:\"locations_as_column\",theme:\"Merge Dark.sublime-theme\"}'
 	smudge = cat
 
 [filter "typora-plist"]

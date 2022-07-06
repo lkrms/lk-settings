@@ -2,9 +2,10 @@
 Description=Sync package repositories and blocklists every day
 
 [Timer]
-OnBootSec=1h
-OnUnitActiveSec=1d
-AccuracySec=5m
+#OnBootSec=1h
+#OnUnitActiveSec=1d
+OnCalendar=*-*-* 06:10:00
+AccuracySec=10m
 
 [Install]
 WantedBy=timers.target

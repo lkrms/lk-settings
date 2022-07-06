@@ -43,7 +43,7 @@ LAN_METHOD=
 
 case "$1,$2" in
 *,connectivity-change)
-    case "$CONNECTIVITY_STATE" in
+    case "${CONNECTIVITY_STATE-}" in
     FULL)
         lk_systemctl_reload_or_restart squid.service || true
         lk_systemctl_reload_or_restart lighttpd.service || true
