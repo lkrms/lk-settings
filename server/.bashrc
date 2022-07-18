@@ -323,11 +323,25 @@ function wake-nas2() {
     wol -i 10.10.255.255 -p 9 -v e8:fc:af:e5:96:8c
 }
 
-function _rebuild-ub() {
-    local LK_UBUNTU_MIRROR LK_UBUNTU_CLOUDIMG_HOST LK_UBUNTU_CLOUDIMG_SHA_URL
+function _prepare_cloudimg() {
     export LK_UBUNTU_MIRROR=http://ubuntu.mirror/ \
         LK_UBUNTU_CLOUDIMG_HOST=cloud-images.ubuntu.mirror \
         LK_UBUNTU_CLOUDIMG_SHA_URL=http://cloud-images.ubuntu.mirror
+}
+
+function rebuild-cpanel() {
+    _prepare_cloudimg
+    lk_tty_run lk-cloud-image-boot.sh \
+        -i ubuntu-20.04-minimal \
+        -c 2 -m 4096 -s 40G \
+        -n bridge=br0 -M 52:54:00:f2:c0:63 -I 10.10.122.87/16 \
+        -H \
+        "$@" \
+        cpanel-test && sleep 2 && sudo virsh start cpanel-test
+}
+
+function _rebuild-ub() {
+    _prepare_cloudimg
     lk_tty_run lk-cloud-image-boot.sh \
         -i "$1" \
         -c 2 -m 2048 -s 20G \

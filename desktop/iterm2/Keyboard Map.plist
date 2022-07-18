@@ -307,8 +307,12 @@
 	<dict>
 		<key>Action</key>
 		<integer>10</integer>
+		<key>Label</key>
+		<string></string>
 		<key>Text</key>
-		<string>[1;3D</string>
+		<string>b</string>
+		<key>Version</key>
+		<integer>1</integer>
 	</dict>
 	<key>0xf702-0x2a0000-0x7b</key>
 	<dict>
@@ -363,8 +367,12 @@
 	<dict>
 		<key>Action</key>
 		<integer>10</integer>
+		<key>Label</key>
+		<string></string>
 		<key>Text</key>
-		<string>[1;3C</string>
+		<string>f</string>
+		<key>Version</key>
+		<integer>1</integer>
 	</dict>
 	<key>0xf703-0x2a0000-0x7c</key>
 	<dict>

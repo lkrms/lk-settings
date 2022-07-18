@@ -2,5 +2,5 @@ Command=awk 'function p(v,u){v=int(v);if(i)u=substr(u,1,1);else{if(v!=1)u=u"s";u
 UseLabel=0
 Text=
 UpdatePeriod=60000
-Font=Cantarell 9
+Font=Source Sans Pro 9
 

@@ -18,6 +18,7 @@ xfwm4,/general/cycle_workspaces,bool,false
 xfwm4,/general/mousewheel_rollup,bool,true
 xfwm4,/general/move_opacity,int,50
 xfwm4,/general/placement_mode,string,center
+xfwm4,/general/placement_ratio,int,10
 xfwm4,/general/raise_with_any_button,bool,false
 xfwm4,/general/scroll_workspaces,bool,false
 xfwm4,/general/show_dock_shadow,bool,false
@@ -167,7 +168,6 @@ xfce4-keyboard-shortcuts,/commands/custom/<Primary><Alt>i,string,xrandr-invert-c
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Alt>q,string,sh -c 'xfconf-query -c xfce4-notifyd -p /do-not-disturb -T || xfconf-query -c xfce4-notifyd -p /do-not-disturb -n -t bool -s true'
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Alt>a,string,xfconf-query -c xfce4-power-manager -p /xfce4-power-manager/presentation-mode -n -t bool -s true
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Alt>s,string,xfconf-query -c xfce4-power-manager -p /xfce4-power-manager/presentation-mode -n -t bool -s false
-xfce4-keyboard-shortcuts,/commands/custom/<Primary><Alt>d,string,gtk-launch devilspie2
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Alt>slash,string,sh -c 'sh=\$(xdotool getactivewindow getwindowgeometry --shell) && eval \"\$sh\" && X=\$((X + WIDTH / 2)) && Y=\$((Y + HEIGHT / 2)) && xdotool mousemove \$X \$Y'
 
 xfce4-keyboard-shortcuts,/xfwm4/custom/<Alt>F1,string,stick_window_key

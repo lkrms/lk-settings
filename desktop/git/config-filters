@@ -16,7 +16,7 @@
 	smudge = cat
 
 [filter "dbeaver-credentials"]
-	clean = openssl aes-128-cbc -d -K babb4a9f774ab853c96c2d653dfe544a -iv 00000000000000000000000000000000 | cut -b17- | sed -E 's/([^\\])(\\\\[^\\\"])/\\1\\\\\\2/g' | jq 'to_entries|sort_by(.key)|from_entries'
+	clean = openssl aes-128-cbc -d -K babb4a9f774ab853c96c2d653dfe544a -iv 00000000000000000000000000000000 | dd bs=16 skip=1 status=none | sed -E 's/([^\\])(\\\\[^\\\"])/\\1\\\\\\2/g' | jq 'to_entries|sort_by(.key)|from_entries'
 	smudge = echo \"0123456789abcdef$(jq -c)\" | openssl aes-128-cbc -K babb4a9f774ab853c96c2d653dfe544a -iv 00000000000000000000000000000000
 
 [filter "dbeaver-sources"]
@@ -44,7 +44,7 @@
 	smudge = cat
 
 [filter "keepassxc"]
-	clean = "awk '/^\\[PasswordGenerator\\]/{skip=1;next}/^\\[/{skip=0}/^(UseTouchID|HidePasswords|TrayIconAppearance|MinimizeAfterUnlock)=/{next}!skip{print}'"
+	clean = "awk '/^\\[(KeeShare|PasswordGenerator)\\]/{skip=1;next}/^\\[/{skip=0}/^(UseTouchID|HidePasswords|TrayIconAppearance|MinimizeAfterUnlock)=/{next}!skip{print}'"
 	smudge = cat
 
 [filter "nomacs"]
@@ -96,8 +96,8 @@
 	smudge = cat
 
 [filter "xfpanelswitch"]
-	clean = gnu_tar -jx config.txt -O
-	smudge = d=$(mktemp -d) && cat >\"$d/config.txt\" && gnu_tar -jcC \"$d\" config.txt && rm -R \"$d\"
+	clean = tar -jxO config.txt
+	smudge = d=$(mktemp -d) && cat >\"$d/config.txt\" && tar -jcC \"$d\" config.txt && rm -R \"$d\"
 
 [filter "zeal"]
 	clean = sed -E '/^(external_link_policy|path|install_id|(splitter|window)_geometry|toc_splitter_state)=/d'

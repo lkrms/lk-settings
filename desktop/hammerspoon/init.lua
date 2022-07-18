@@ -4,8 +4,18 @@ logger = hs.logger.new("init")
 wf = hs.window.filter
 hs.window.animationDuration = 0
 
+defaultGrid = {6, 2}
+
 hs.loadSpoon("ReloadConfiguration")
 spoon.ReloadConfiguration:start()
+
+function extend(copyTable, updateTable)
+    local copy = hs.fnutils.copy(copyTable)
+    for k, v in pairs(updateTable) do
+        copy[k] = v
+    end
+    return copy
+end
 
 -- Configure your preferred apps with:
 -- - `bundleID` (required): string
@@ -59,43 +69,29 @@ _operator = {
 }
 
 _criteria = {
-    multihead = function()
+    has_multiple_displays = function()
         return _screen2 and true or false
     end,
-    primary = function(ev)
-        return ev.window:screen():getUUID() == _screen1:getUUID()
+    on_secondary_display = function(ev)
+        return ev.screen:getUUID() ~= _screen1:getUUID()
     end,
-    notPrimary = function(ev)
-        return ev.window:screen():getUUID() ~= _screen1:getUUID()
-    end,
-    loading = function()
-        return _loading
+    is_initialising = function()
+        return _initialising
     end,
 }
 
-_criteria.sticky = {
+_criteria.pinnable = {
     _operator.AND,
-    _criteria.multihead,
+    _criteria.has_multiple_displays,
     {
         _operator.OR,
         event = wf.windowCreated,
         {
             _operator.AND,
             event = {wf.windowFocused, wf.windowUnfocused},
-            _criteria.notPrimary,
+            _criteria.on_secondary_display,
         },
     },
-}
-
-_criteria.tacky = {
-    _operator.AND,
-    _criteria.multihead,
-    {
-        _operator.OR,
-        _criteria.notPrimary,
-        _criteria.loading,
-    },
-    event = {wf.windowCreated, wf.windowFocused, wf.windowUnfocused},
 }
 
 _criteria.dev = {
@@ -119,48 +115,176 @@ _action = {
     end,
 }
 
+_groups = {
+    mail = {
+        ["Mail"] = {},
+        ["Calendar"] = {},
+    },
+    teams = {
+        ["Microsoft Teams"] = {}
+    },
+    messenger = {
+        ["Messenger"] = {},
+        ["Messages"] = {},
+    },
+    skype = {
+        ["Skype"] = {},
+    },
+    time = {
+        ["Clockify Desktop"] = {},
+    },
+    todo = {
+        ["Todoist"] = {},
+    },
+    util = {
+        ["KeePassXC"] = {},
+    },
+    dev = {
+        ["com.microsoft.VSCode"] = {},
+        ["com.sublimemerge"] = {},
+        ["org.jkiss.dbeaver.core.product"] = {},
+    },
+}
+
+_apps = {}
+for group, apps in pairs(_groups) do
+    for app, settings in pairs(apps) do
+        _apps[app] = extend(settings, {group = group})
+    end
+end
+logger.d("_apps = " .. hs.inspect.inspect(_apps))
+
+_layouts = {
+    -- Ultrawide
+    -- 1. <-- 25% --> <-- ** 50% ** --> <-- 25% -->
+    ["1,1:3440.0x1440.0"] = {
+        grid = {4, 2},
+        place = {display = 1, wh = {1, 1}},
+        group_places = {
+            mail = {xy = {2, 1}, wh = {2, 2}},
+            teams = {xy = {1, 1}},
+            messenger = {xy = {1, 2}},
+            skype = {xy = {1, 2}},
+            time = {xy = {4, 1}},
+            todo = {xy = {4, 2}},
+            util = {xy = {4, 2}},
+            dev = {xy = {2, 1}, wh = {2, 2}},
+        },
+    },
+    ["*"] = {
+        grid = {4, 2},
+        place = {display = 1, wh = {2, 2}},
+        group_places = {
+            mail = {xy = {1, 1}, wh = {4, 2}},
+            teams = {xy = {1, 1}},
+            messenger = {xy = {3, 1}},
+            skype = {xy = {1, 1}},
+            time = {xy = {3, 1}},
+            todo = {xy = {3, 1}},
+            util = {xy = {3, 1}},
+            dev = {xy = {1, 1}, wh = {4, 2}},
+        },
+    },
+}
+
+function normalisePlace(place, ev)
+    local p = {
+        display = place.display or ev.display,
+        grid = place.grid or defaultGrid or {3, 1},
+        xy = place.xy or {place.column1 or 0, place.row1 or 0},
+        wh = place.wh or {place.columns or 0, place.rows or 0},
+    }
+    p.grid[1] = math.max(p.grid[1], p.xy[1] + p.wh[1] - 1)
+    p.grid[2] = math.max(p.grid[2], p.xy[2] + p.wh[2] - 1)
+    return p
+end
+
+function toPlace(place, ev)
+    local p = normalisePlace(place, ev)
+    if p.display ~= nil and p.display ~= ev.display then
+        logger.d("Moving " .. ev.appName .. " to display " .. p.display)
+        ev.window:moveToScreen(_screen[p.display])
+    end
+    local x, y = table.unpack(p.xy)
+    local w, h = table.unpack(p.wh)
+    local rect = hs.geometry(
+        x > 0 and ((x - 1) / p.grid[1]) or nil,
+        y > 0 and ((y - 1) / p.grid[2]) or nil,
+        w > 0 and (w / p.grid[1]) or nil,
+        h > 0 and (h / p.grid[2]) or nil
+    )
+    logger.d("Moving " .. ev.appName .. " to " .. hs.inspect.inspect(rect))
+    ev.window:moveToUnit(rect)
+end
+
+function getPlace(ev)
+    local app = _apps[ev.appName] or _apps[ev.appBundleId]
+    if app ~= nil then
+        logger.v("app = " .. hs.inspect.inspect(app))
+    end
+    local geometry, layout, place = table.concat({ev.screenGeometry.w, ev.screenGeometry.h}, "x")
+    for i, layout_id in ipairs({
+        #_screen .. "," .. ev.display .. ":" .. geometry,
+        "*," .. ev.display .. ":" .. geometry,
+        ev.display .. ":" .. geometry,
+        #_screen .. ",*:" .. geometry,
+        #_screen .. "," .. geometry,
+        "*,*:" .. geometry,
+        "*:" .. geometry,
+        "*," .. geometry,
+        geometry,
+        "*,*:*",
+        "*",
+    }) do
+        logger.v("Checking layout_id = " .. layout_id)
+        layout = _layouts[layout_id]
+        if layout and checkCriteria(layout.criteria, ev) then
+            logger.v("layout_id = " .. layout_id)
+            if app then
+                place = layout.group_places and layout.group_places[app.group]
+                if place and checkCriteria(layout.group_places.criteria, ev) and
+                    checkCriteria(app.criteria, ev) then
+                    if layout.place then
+                        place = extend(layout.place, place)
+                    end
+                    break
+                end
+                place = nil
+            end
+        end
+    end
+    if place then
+        place.grid = place.grid or layout.grid
+        logger.v("place = " .. hs.inspect.inspect(place))
+        return place
+    end
+end
+
 _rule = {
     -- Move dev apps to the primary display
     {
         criteria = {
-            _criteria.multihead,
-            _criteria.notPrimary,
+            _criteria.has_multiple_displays,
+            _criteria.on_secondary_display,
             _criteria.dev,
             event = wf.windowCreated,
         },
         action = {{_action.moveTo, 1}},
     },
     {
-        criteria = {_criteria.multihead, appName = {"Mail"}},
-        action = {{_action.moveTo, 1, hs.layout.left50}},
-    },
-    {
-        criteria = {_criteria.multihead, appName = {"Calendar"}},
-        action = {{_action.moveTo, 1, hs.layout.right50}},
-    },
-    {
-        criteria = {_criteria.sticky, appName = {"Clockify Desktop"}},
-        action = {{_action.moveTo, 2, _place.top6_1}},
-    },
-    {
-        criteria = {_criteria.tacky, appName = {"Microsoft Teams"}},
-        action = {{_action.moveTo, 2, _place.top6_2_3}},
-    },
-    {
-        criteria = {_criteria.sticky, appName = {"Messenger", "Messages"}},
-        action = {{_action.moveTo, 2, _place.top3_3}},
-    },
-    {
-        criteria = {_criteria.sticky, appName = {"Todoist"}},
-        action = {{_action.moveTo, 2, _place.bottom3_1}},
-    },
-    {
-        criteria = {_criteria.sticky, appName = {"KeePassXC"}},
-        action = {{_action.moveTo, 2, _place.bottom3_2}},
-    },
-    {
-        criteria = {_criteria.sticky, appName = {"Skype"}},
-        action = {{_action.moveTo, 2, _place.bottom3_3}},
+        criteria = {
+            isMain = true,
+            event = {wf.windowCreated, wf.windowFocused},
+            function(ev)
+                ev.place = getPlace(ev)
+                return ev.place ~= nil
+            end,
+        },
+        action = {
+            function(ev)
+                toPlace(ev.place, ev)
+            end,
+        },
     },
 }
 
@@ -173,6 +297,10 @@ function initScreens()
             _screen[#_screen + 1] = screen
         end
     end
+end
+
+function checkCriteria(criteria, ev)
+    return true
 end
 
 function processCriteria(criteria, ev)
@@ -230,16 +358,21 @@ function processEvent(window, appName, event)
     if _rule == nil then
         return
     end
+    local screen, app = window:screen(), window:application()
     local ev = {
         window = window,
+        screen = screen,
         appName = appName,
         event = event,
-        appTitle = window:application():title(),
-        appBundleId = window:application():bundleID(),
+        appTitle = app and app:title() or nil,
+        appBundleId = app and app:bundleID() or nil,
         windowTitle = window:title(),
         isStandard = window:isStandard(),
+        isMain = (app and app:mainWindow() == window) or nil,
         role = window:role(),
         subrole = window:subrole(),
+        screenGeometry = screen and screen:fullFrame() or nil,
+        display = screen and (screen:getUUID() == _screen1:getUUID()) and 1 or 2,
     }
     for i, rule in ipairs(_rule) do
         if rule.criteria ~= nil and not processCriteria(rule.criteria, ev) then
@@ -262,11 +395,11 @@ function processEvent(window, appName, event)
 end
 
 function initWindowFilter()
-    _loading = true
+    _initialising = true
     _filter = wf.new(nil)
     _filter:subscribe(wf.windowCreated, processEvent, true)
     _filter:subscribe({wf.windowFocused, wf.windowUnfocused}, processEvent)
-    _loading = false
+    _initialising = false
 end
 
 function quote(string)
@@ -362,6 +495,7 @@ function dumpWindows()
                 appBundleId = w:application():bundleID(),
                 windowTitle = w:title(),
                 isStandard = w:isStandard(),
+                isMain = w:application():mainWindow() == w,
                 role = w:role(),
                 subrole = w:subrole(),
             }

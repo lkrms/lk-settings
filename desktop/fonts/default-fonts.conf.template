@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!DOCTYPE fontconfig SYSTEM "/usr/share/xml/fontconfig/fonts.dtd">
+<fontconfig>
+    <alias>
+        <family>serif</family>
+        <prefer>
+            <family>{{DEFAULT_FONT}}</family>
+        </prefer>
+    </alias>
+    <alias>
+        <family>sans-serif</family>
+        <prefer>
+            <family>{{DEFAULT_FONT}}</family>
+        </prefer>
+    </alias>
+    <alias>
+        <family>sans</family>
+        <prefer>
+            <family>{{DEFAULT_FONT}}</family>
+        </prefer>
+    </alias>
+    <alias>
+        <family>monospace</family>
+        <prefer>
+            <family>{{DEFAULT_MONOSPACE_FONT}}</family>
+        </prefer>
+    </alias>
+</fontconfig>

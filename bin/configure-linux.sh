@@ -11,6 +11,9 @@ lk_require linux provision
 lk_assert_not_root
 lk_assert_is_linux
 
+DEFAULT_FONT="Source Sans Pro"
+DEFAULT_MONOSPACE_FONT="JetBrains Mono NL"
+
 while [ $# -gt 0 ] && [[ $1 == -* ]]; do
     shift
 done
@@ -100,7 +103,7 @@ symlink "$_ROOT/iptables/iptables.rules" /etc/iptables/iptables.rules
 symlink "$_ROOT/iptables/ip6tables.rules" /etc/iptables/ip6tables.rules
 symlink "$_ROOT/libvirt/hooks/qemu" /etc/libvirt/hooks/qemu
 
-unset LK_SYMLINK_NO_CHANGE
+unset LK_SYMLINK_NO_CHANGE LK_FILE_REPLACE_NO_CHANGE
 # Fix weird Calibri rendering in Thunderbird
 symlink \
     "$_ROOT/fonts/ms-no-bitmaps.conf" /etc/fonts/conf.d/99-ms-no-bitmaps.conf
@@ -110,10 +113,19 @@ symlink \
 # Remove emoji from all fonts other than Twemoji
 symlink \
     "$_ROOT/fonts/emoji-fix.conf" /etc/fonts/conf.d/99-emoji-fix.conf
-! lk_is_false LK_SYMLINK_NO_CHANGE ||
-    { sudo -H fc-cache --force --verbose && fc-cache --force --verbose; }
 
 unset LK_SUDO
+
+mkdir -p ~/.config/fontconfig/conf.d
+lk_file_replace -f "$_ROOT/fonts/fonts.conf" ~/.config/fontconfig/fonts.conf
+lk_file_replace ~/.config/fontconfig/conf.d/99-default-fonts.conf < <(
+    lk_expand_template "$_ROOT/fonts/default-fonts.conf.template"
+)
+
+! lk_is_false LK_SYMLINK_NO_CHANGE &&
+    ! lk_is_false LK_FILE_REPLACE_NO_CHANGE ||
+    { sudo -H fc-cache --really-force --verbose &&
+        fc-cache --really-force --verbose; }
 
 if lk_command_exists crontab; then
     CRONTAB=$(awk \
@@ -410,12 +422,12 @@ show-warning=false
 current-workspace-only=true
 dock-items=['thunderbird.dockitem', 'todoist.dockitem', 'clockify.dockitem', 'teams.dockitem', 'skypeforlinux.dockitem', 'caprine.dockitem', 'org.keepassxc.KeePassXC.dockitem']
 lock-items=true
-theme='Gtk+'
+theme='Transparent'
 
 [org/gnome/desktop/interface]
-document-font-name='Cantarell 9'
-font-name='Cantarell 9'
-monospace-font-name='JetBrains Mono Light 9'
+document-font-name='Source Sans Pro 9'
+font-name='Source Sans Pro 9'
+monospace-font-name='JetBrains Mono NL 9'
 
 [org/gnome/meld]
 custom-editor-command='code -g {file}:{line}'
@@ -481,12 +493,15 @@ EOF
     ! lk_has_arg --reset ||
         set -- --reset
     "$_ROOT/../bin/configure-xfce4.sh" "$@" && {
-        xfconf-query -c xfwm4 -p /general/theme -n -t string -s "Arc-Dark"
-        xfconf-query -c xfwm4 -p /general/title_font -n -t string -s "Inter Semi-Bold 8"
-        xfconf-query -c xsettings -p /Gtk/FontName -n -t string -s "Cantarell 9"
-        xfconf-query -c xsettings -p /Gtk/MonospaceFontName -n -t string -s "JetBrains Mono Light 9"
-        xfconf-query -c xsettings -p /Net/IconThemeName -n -t string -s "Papirus-Dark"
-        xfconf-query -c xsettings -p /Net/ThemeName -n -t string -s "Arc-Dark"
+        xfconf-query -c xfwm4 -p /general/theme -n -t string -s "Qogir-Dark"
+        xfconf-query -c xfwm4 -p /general/title_font -n -t string -s "Source Sans Pro Semi-Bold 8"
+        xfconf-query -c xsettings -p /Gtk/CursorThemeName -n -t string -s "Qogir-dark"
+        xfconf-query -c xsettings -p /Gtk/FontName -n -t string -s "$DEFAULT_FONT 9"
+        xfconf-query -c xsettings -p /Gtk/ButtonImages -n -t bool -s false
+        xfconf-query -c xsettings -p /Gtk/MenuImages -n -t bool -s false
+        xfconf-query -c xsettings -p /Gtk/MonospaceFontName -n -t string -s "$DEFAULT_MONOSPACE_FONT 9"
+        xfconf-query -c xsettings -p /Net/IconThemeName -n -t string -s "Tela-dark"
+        xfconf-query -c xsettings -p /Net/ThemeName -n -t string -s "Qogir-Dark"
     }
 fi
 

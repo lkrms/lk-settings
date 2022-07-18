@@ -1,11 +1,12 @@
 function matchesNoProxyRule (url, host, resolve) {
-  //alert("matchesNoProxyRule: " + host + " -> " + resolve(host) + " for " + url);
-  // needed for watchOS updates to verify
-  return /^gs\.apple\.com$/.test(host);
+  return false
+    // Needed for watchOS updates to verify
+    || /^gs\.apple\.com$/.test(host)
+    // Otherwise Messenger fails to send and receive after changing network
+    || /\.facebook\.com|\.fbcdn\.net$/.test(host)
 }
 
 function FindProxyForURL (url, host) {
-  //alert("FindProxyForURL: " + host + " (" + url + ")");
   if (isPlainHostName(host)
     || shExpMatch(host, "*.(local|lan|mirror|repo)")
     || isInNet(host, "10.0.0.0", "255.0.0.0")
@@ -13,12 +14,11 @@ function FindProxyForURL (url, host) {
     || isInNet(host, "192.168.0.0", "255.255.0.0")
     || isInNet(host, "127.0.0.0", "255.0.0.0")
     || matchesNoProxyRule(url, host, dnsResolve))
-    return "DIRECT";
+    return "DIRECT"
   return "PROXY proxy.lan:3128; DIRECT"
 }
 
 function FindProxyForURLEx (url, host) {
-  //alert("FindProxyForURLEx: " + host + " (" + url + ")");
   if (isPlainHostName(host)
     || shExpMatch(host, "*.(local|lan|mirror|repo)")
     || isInNetEx(host, "10.0.0.0/8")
@@ -29,6 +29,6 @@ function FindProxyForURLEx (url, host) {
     || isInNetEx(host, "fe80::/10")
     || isInNetEx(host, "::1/128")
     || matchesNoProxyRule(url, host, dnsResolveEx))
-    return "DIRECT";
+    return "DIRECT"
   return "PROXY proxy.lan:3128; DIRECT"
 }

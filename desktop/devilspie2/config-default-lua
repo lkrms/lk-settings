@@ -328,7 +328,7 @@ rules = {
             _criteria.private,
         },
         actions = {
-            shade_on,
+            --shade_on,
         },
     },
     {

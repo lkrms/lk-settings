@@ -245,6 +245,7 @@ else
     lk_plist_set_file "$_PREFS/com.googlecode.iterm2.plist"
     lk_plist_replace ":NoSyncConfirmRunOpenFile" bool true
     lk_plist_replace ":NoSyncConfirmRunOpenFile_selection" integer 0
+    lk_plist_replace ":AllowClipboardAccess" bool true
     #lk_plist_maybe_add ":Window Arrangements" dict
     #lk_plist_replace ":Window Arrangements:No windows" array
     #lk_plist_replace ":Default Arrangement Name" string "No windows"
@@ -269,7 +270,7 @@ else
         lk_plist_replace ":New Bookmarks:$i:Custom Directory" string "Advanced"
         lk_plist_replace ":New Bookmarks:$i:Flashing Bell" bool true
         lk_plist_replace ":New Bookmarks:$i:Left Option Key Changeable" bool false
-        lk_plist_replace ":New Bookmarks:$i:Mouse Reporting allow clicks and drags" bool false
+        lk_plist_replace ":New Bookmarks:$i:Mouse Reporting allow clicks and drags" bool true
         lk_plist_replace ":New Bookmarks:$i:Normal Font" string "Menlo-Regular 12"
         lk_plist_replace ":New Bookmarks:$i:Option Key Sends" integer 2
         lk_plist_replace ":New Bookmarks:$i:Place Prompt at First Column" bool false
@@ -294,8 +295,8 @@ else
             ;;
         1)
             NAME="Bash 3.2"
-            CUSTOM_COMMAND="No"
-            COMMAND=""
+            CUSTOM_COMMAND="Custom Shell"
+            COMMAND=/bin/bash
             COLOR_PRESET=Broadcast
             ;;
         *)
@@ -321,6 +322,7 @@ is_basic || symlink_if_not_running \
     "$_ROOT/keepassxc/keepassxc.ini" "$_APP_SUPPORT/keepassxc/keepassxc.ini" \
     KeePassXC "pgrep -x KeePassXC"
 
+: <<"EOF"
 lk_tty_print "Checking Magnet"
 lk_plist_set_file "$_PREFS/com.crowdcafe.windowmagnet.plist"
 lk_plist_replace ":appAlreadyLaunchedKey" bool true
@@ -364,6 +366,7 @@ lk_plist_replace ":centerWindowComboKey:modifierFlags" integer 786432
 lk_plist_replace ":restoreWindowComboKey" dict
 lk_plist_replace ":restoreWindowComboKey:keyCode" integer 101
 lk_plist_replace ":restoreWindowComboKey:modifierFlags" integer 786432
+EOF
 
 lk_tty_print "Checking KeepingYouAwake"
 defaults write info.marcel-dierkes.KeepingYouAwake \

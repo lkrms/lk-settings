@@ -9,7 +9,7 @@
 			<key>ASCII_Tables</key>
 			<dict>
 				<key>date</key>
-				<date>2022-03-17T03:25:19Z</date>
+				<date>2022-07-11T16:31:36Z</date>
 				<key>entry</key>
 				<dict>
 					<key>aliases</key>
@@ -25,7 +25,7 @@
 			<key>Bash_Shortcuts</key>
 			<dict>
 				<key>date</key>
-				<date>2022-03-17T03:25:19Z</date>
+				<date>2022-07-11T16:31:35Z</date>
 				<key>entry</key>
 				<dict>
 					<key>aliases</key>
@@ -43,7 +43,7 @@
 			<key>Conventional_Commits</key>
 			<dict>
 				<key>date</key>
-				<date>2022-03-17T03:25:20Z</date>
+				<date>2022-07-11T16:31:37Z</date>
 				<key>entry</key>
 				<dict>
 					<key>aliases</key>
@@ -59,7 +59,7 @@
 			<key>Crontab</key>
 			<dict>
 				<key>date</key>
-				<date>2022-03-17T03:25:19Z</date>
+				<date>2022-07-11T16:31:36Z</date>
 				<key>entry</key>
 				<dict>
 					<key>aliases</key>
@@ -75,7 +75,7 @@
 			<key>Docker</key>
 			<dict>
 				<key>date</key>
-				<date>2022-03-17T03:25:19Z</date>
+				<date>2022-07-11T16:31:36Z</date>
 				<key>entry</key>
 				<dict>
 					<key>aliases</key>
@@ -91,7 +91,7 @@
 			<key>Dockerfile</key>
 			<dict>
 				<key>date</key>
-				<date>2022-03-17T03:25:19Z</date>
+				<date>2022-07-11T16:31:35Z</date>
 				<key>entry</key>
 				<dict>
 					<key>aliases</key>
@@ -107,7 +107,7 @@
 			<key>Font_Awesome</key>
 			<dict>
 				<key>date</key>
-				<date>2022-03-17T03:25:19Z</date>
+				<date>2022-07-11T16:31:36Z</date>
 				<key>entry</key>
 				<dict>
 					<key>aliases</key>
@@ -123,7 +123,7 @@
 			<key>Git</key>
 			<dict>
 				<key>date</key>
-				<date>2022-03-17T03:25:19Z</date>
+				<date>2022-07-11T16:31:35Z</date>
 				<key>entry</key>
 				<dict>
 					<key>aliases</key>
@@ -144,7 +144,7 @@
 			<key>HTML_Entities</key>
 			<dict>
 				<key>date</key>
-				<date>2022-03-17T03:25:20Z</date>
+				<date>2022-07-11T16:31:37Z</date>
 				<key>entry</key>
 				<dict>
 					<key>aliases</key>
@@ -160,7 +160,7 @@
 			<key>HTTP_Header_Fields</key>
 			<dict>
 				<key>date</key>
-				<date>2022-03-17T03:25:19Z</date>
+				<date>2022-07-11T16:31:35Z</date>
 				<key>entry</key>
 				<dict>
 					<key>aliases</key>
@@ -176,7 +176,7 @@
 			<key>HTTP_Status_Codes</key>
 			<dict>
 				<key>date</key>
-				<date>2022-03-17T03:25:20Z</date>
+				<date>2022-07-11T16:31:36Z</date>
 				<key>entry</key>
 				<dict>
 					<key>aliases</key>
@@ -192,7 +192,7 @@
 			<key>Licenses</key>
 			<dict>
 				<key>date</key>
-				<date>2022-03-17T03:25:19Z</date>
+				<date>2022-07-11T16:31:36Z</date>
 				<key>entry</key>
 				<dict>
 					<key>aliases</key>
@@ -208,7 +208,7 @@
 			<key>Python_Format_Strings</key>
 			<dict>
 				<key>date</key>
-				<date>2022-03-17T03:25:19Z</date>
+				<date>2022-07-11T16:31:35Z</date>
 				<key>entry</key>
 				<dict>
 					<key>aliases</key>
@@ -224,7 +224,7 @@
 			<key>Regular_Expressions</key>
 			<dict>
 				<key>date</key>
-				<date>2022-03-17T03:25:19Z</date>
+				<date>2022-07-11T16:31:35Z</date>
 				<key>entry</key>
 				<dict>
 					<key>aliases</key>
@@ -243,7 +243,7 @@
 			<key>SQLite</key>
 			<dict>
 				<key>date</key>
-				<date>2022-03-17T03:25:19Z</date>
+				<date>2022-07-11T16:31:36Z</date>
 				<key>entry</key>
 				<dict>
 					<key>aliases</key>
@@ -259,7 +259,7 @@
 			<key>Vim</key>
 			<dict>
 				<key>date</key>
-				<date>2022-03-17T03:25:19Z</date>
+				<date>2022-07-11T16:31:36Z</date>
 				<key>entry</key>
 				<dict>
 					<key>aliases</key>
@@ -275,7 +275,7 @@
 			<key>Visual_Studio_Code</key>
 			<dict>
 				<key>date</key>
-				<date>2022-03-17T03:25:20Z</date>
+				<date>2022-07-11T16:31:36Z</date>
 				<key>entry</key>
 				<dict>
 					<key>aliases</key>
@@ -291,7 +291,7 @@
 			<key>YAML</key>
 			<dict>
 				<key>date</key>
-				<date>2022-03-17T03:25:19Z</date>
+				<date>2022-07-11T16:31:35Z</date>
 				<key>entry</key>
 				<dict>
 					<key>aliases</key>
@@ -307,7 +307,7 @@
 			<key>You_Might_Not_Need_jQuery</key>
 			<dict>
 				<key>date</key>
-				<date>2022-03-17T03:25:20Z</date>
+				<date>2022-07-11T16:31:37Z</date>
 				<key>entry</key>
 				<dict>
 					<key>aliases</key>
@@ -323,7 +323,7 @@
 			<key>strftime_Format_Codes</key>
 			<dict>
 				<key>date</key>
-				<date>2022-03-17T03:25:20Z</date>
+				<date>2022-07-11T16:31:36Z</date>
 				<key>entry</key>
 				<dict>
 					<key>aliases</key>
@@ -339,7 +339,7 @@
 			<key>tmux</key>
 			<dict>
 				<key>date</key>
-				<date>2022-03-17T03:25:19Z</date>
+				<date>2022-07-11T16:31:35Z</date>
 				<key>entry</key>
 				<dict>
 					<key>aliases</key>
@@ -441,7 +441,28 @@
 	<key>DHUserRepo</key>
 	<dict>
 		<key>installed</key>
-		<dict/>
+		<dict>
+			<key>Hammerspoon</key>
+			<dict>
+				<key>date</key>
+				<date>2022-07-11T16:31:39Z</date>
+				<key>entry</key>
+				<dict>
+					<key>aliases</key>
+					<array/>
+					<key>authorLinkHref</key>
+					<string>https://github.com/Kapeli/Dash-User-Contributions/tree/master/docsets/Hammerspoon#readme</string>
+					<key>authorLinkText</key>
+					<string>Hammerspoon Team</string>
+					<key>name</key>
+					<string>Hammerspoon</string>
+					<key>platform</key>
+					<string>usercontribHammerspoon</string>
+					<key>uniqueIdentifier</key>
+					<string>Hammerspoon</string>
+				</dict>
+			</dict>
+		</dict>
 		<key>uninstalled</key>
 		<dict/>
 	</dict>
@@ -478,242 +499,242 @@
 			<key>http://kapeli.com/feeds/ActionScript.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2022-01-05T15:59:44Z</date>
+				<date>2022-07-11T16:32:14Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/Apache_HTTP_Server.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2022-01-05T15:58:40Z</date>
+				<date>2022-07-11T16:31:41Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/AppleScript.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2022-01-05T15:58:53Z</date>
+				<date>2022-07-11T16:32:19Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/Apple_API_Reference.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2022-03-18T11:31:00Z</date>
+				<date>2022-07-11T16:32:04Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/Bash.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2022-01-05T15:58:39Z</date>
+				<date>2022-07-11T16:31:48Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/C++.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2022-01-05T16:01:43Z</date>
+				<date>2022-07-11T16:33:31Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/C.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2022-01-05T16:00:15Z</date>
+				<date>2022-07-11T16:33:16Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/CSS.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2022-01-05T15:59:27Z</date>
+				<date>2022-07-11T16:32:10Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/CoffeeScript.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2022-01-05T15:59:00Z</date>
+				<date>2022-07-11T16:31:43Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/Cordova.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2022-01-05T15:58:57Z</date>
+				<date>2022-07-11T16:32:17Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/Docker.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2022-01-05T16:00:37Z</date>
+				<date>2022-07-11T16:32:55Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/Emmet.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2022-01-05T16:01:23Z</date>
+				<date>2022-07-11T16:32:47Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/Font_Awesome.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2022-01-05T15:59:51Z</date>
+				<date>2022-07-11T16:31:47Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/GLib.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2022-01-05T15:59:02Z</date>
+				<date>2022-07-11T16:32:20Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/Go.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2022-01-05T15:59:54Z</date>
+				<date>2022-07-11T16:32:15Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/HTML.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2022-01-05T16:01:22Z</date>
+				<date>2022-07-11T16:33:44Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/Handlebars.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2022-03-18T11:30:28Z</date>
+				<date>2022-07-11T16:32:57Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/Ionic.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2022-01-05T16:01:42Z</date>
+				<date>2022-07-11T16:32:34Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/JavaScript.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2022-01-05T16:00:57Z</date>
+				<date>2022-07-11T16:34:02Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/Laravel.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2022-01-05T16:01:38Z</date>
+				<date>2022-07-11T16:33:44Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/Lua_5.3.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2022-01-05T16:01:30Z</date>
+				<date>2022-07-11T16:33:49Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/Man_Pages.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2022-01-05T16:01:46Z</date>
+				<date>2022-07-11T16:32:43Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/Markdown.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2022-01-05T16:00:56Z</date>
+				<date>2022-07-11T16:33:17Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/MomentJS.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2022-03-18T11:30:30Z</date>
+				<date>2022-07-11T16:32:28Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/MongoDB.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2022-01-05T16:00:52Z</date>
+				<date>2022-07-11T16:34:59Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/MySQL.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2022-01-05T16:01:57Z</date>
+				<date>2022-07-11T16:34:47Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/Nginx.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2022-01-05T16:01:45Z</date>
+				<date>2022-07-11T16:34:03Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/NodeJS.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2022-01-05T16:02:00Z</date>
+				<date>2022-07-11T16:33:21Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/PHP.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2022-01-05T16:02:13Z</date>
+				<date>2022-07-11T16:35:12Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/PHPUnit.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2022-01-05T16:01:53Z</date>
+				<date>2022-07-11T16:34:53Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/Perl.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2022-01-05T16:01:28Z</date>
+				<date>2022-07-11T16:32:33Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/PhoneGap.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2022-01-05T16:01:22Z</date>
+				<date>2022-07-11T16:34:36Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/PostgreSQL.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2022-01-05T16:02:03Z</date>
+				<date>2022-07-11T16:33:34Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/Python_2.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2022-01-05T16:01:50Z</date>
+				<date>2022-07-11T16:32:39Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/Python_3.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2022-01-05T16:01:29Z</date>
+				<date>2022-07-11T16:34:37Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/React.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2022-01-05T16:02:06Z</date>
+				<date>2022-07-11T16:34:57Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/RequireJS.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2022-01-05T16:02:02Z</date>
+				<date>2022-07-11T16:34:54Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/Ruby_2.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2022-03-27T22:32:41Z</date>
+				<date>2022-07-11T16:34:09Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/Rust.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2022-01-05T16:02:58Z</date>
+				<date>2022-07-11T16:34:30Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/SQLite.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2022-01-05T16:01:47Z</date>
+				<date>2022-07-11T16:35:04Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/Sass.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2022-01-05T16:01:52Z</date>
+				<date>2022-07-11T16:34:39Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/Symfony.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2022-03-18T11:30:26Z</date>
+				<date>2022-07-11T16:35:01Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/TypeScript.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2022-01-05T16:02:19Z</date>
+				<date>2022-07-11T16:34:52Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/Vagrant.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2022-03-18T11:31:18Z</date>
+				<date>2022-07-11T16:34:12Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/Vim.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2022-01-05T16:02:07Z</date>
+				<date>2022-07-11T16:34:40Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/VueJS.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2022-03-18T11:31:11Z</date>
+				<date>2022-07-11T16:35:08Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/WordPress.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2022-01-05T16:03:22Z</date>
+				<date>2022-07-11T16:36:09Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/jQuery.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2022-01-05T15:59:48Z</date>
+				<date>2022-07-11T16:32:27Z</date>
 			</dict>
 		</dict>
 		<key>uninstalled</key>

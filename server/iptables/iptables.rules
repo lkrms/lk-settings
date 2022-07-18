@@ -14,6 +14,8 @@
 :lk_reject - [0:0]
 :lk_related - [0:0]
 :lk_trusted - [0:0]
+:z_any_to_cpanel - [0:0]
+:z_lan_to_lan - [0:0]
 :z_lan_to_node - [0:0]
 :z_lan_to_wan - [0:0]
 :z_wan_to_lan - [0:0]
@@ -48,6 +50,10 @@
 -A lk_forward -i br0 -o en1 -j z_lan_to_wan
 -A lk_forward -i en0 -o ppp0 -j z_lan_to_wan
 -A lk_forward -i en0 -o en1 -j z_lan_to_wan
+-A lk_forward -i br0 -o br0 -j z_lan_to_lan
+-A lk_forward -i br0 -o en0 -j z_lan_to_lan
+-A lk_forward -i en0 -o br0 -j z_lan_to_lan
+-A lk_forward -i en0 -o en0 -j z_lan_to_lan
 -A lk_forward -i ppp0 -o br0 -j z_wan_to_lan
 -A lk_forward -i ppp0 -o en0 -j z_wan_to_lan
 -A lk_forward -i en1 -o br0 -j z_wan_to_lan
@@ -74,6 +80,8 @@
 -A lk_related -m limit --limit 12/min -j LOG --log-prefix "RELATED not expected: "
 -A lk_related -j ACCEPT
 -A lk_trusted -j ACCEPT
+-A z_any_to_cpanel -p tcp -m tcp -m multiport --dports 2082,2083,2086,2087,2096 -j ACCEPT
+-A z_lan_to_lan -d 10.10.122.87/32 -j z_any_to_cpanel
 -A z_lan_to_node -p tcp -m tcp --dport 25 -j ACCEPT
 -A z_lan_to_node -p tcp -m tcp --dport 53 -j ACCEPT
 -A z_lan_to_node -p tcp -m tcp --dport 80 -j ACCEPT
@@ -92,6 +100,7 @@
 -A z_lan_to_node -p udp -m udp --dport 5201 -j ACCEPT
 -A z_lan_to_wan -m mark --mark 0x4/0x4 -j DROP
 -A z_lan_to_wan -j ACCEPT
+-A z_wan_to_lan -d 10.10.122.87/32 -j z_any_to_cpanel
 -A z_wan_to_node -p tcp -m tcp --dport 25 -j ACCEPT
 -A z_wan_to_node -p tcp -m tcp --dport 80 -j ACCEPT
 -A z_wan_to_node -p udp -m udp --dport 123 -j ACCEPT
@@ -104,10 +113,12 @@ COMMIT
 :POSTROUTING ACCEPT [0:0]
 :LIBVIRT_PRT - [0:0]
 :transparent_proxy - [0:0]
+:z_from_cpanel - [0:0]
 :z_from_lan - [0:0]
 :z_from_wan - [0:0]
 :z_to_lan - [0:0]
 :z_to_wan - [0:0]
+-A PREROUTING -d 220.233.122.8/32 -p tcp -m tcp -m multiport --dports 2082,2083,2086,2087,2096 -j DNAT --to-destination 10.10.122.87
 -A PREROUTING -s 10.10.0.0/16 -d 220.233.122.8/32 -m comment --comment hairpinning -j DNAT --to-destination 10.10.0.1
 -A PREROUTING -i br0 -j z_from_lan
 -A PREROUTING -i en0 -j z_from_lan
@@ -120,6 +131,7 @@ COMMIT
 -A POSTROUTING -o ppp0 -j SNAT --to-source 220.233.122.8
 -A POSTROUTING -o en1 -j z_to_wan
 -A POSTROUTING -o en1 -j SNAT --to-source 192.168.20.2
+-A POSTROUTING -s 10.10.0.0/16 -d 10.10.122.0/24 -m comment --comment hairpinning -j SNAT --to-source 10.10.0.1
 -A transparent_proxy -d 10.10.0.0/16 -j RETURN
 -A transparent_proxy -d 192.168.0.0/16 -j RETURN
 -A transparent_proxy -m mark --mark 0x2/0x2 -j RETURN
@@ -132,8 +144,13 @@ COMMIT
 -A transparent_proxy -d 17.253.85.207/32 -m comment --comment "safebrowsing-proxy.g.aaplimg.com" -j RETURN
 -A transparent_proxy -d 17.253.85.208/32 -m comment --comment "safebrowsing-proxy.g.aaplimg.com" -j RETURN
 -A transparent_proxy -p tcp -j REDIRECT --to-ports 3129
+-A z_from_cpanel -d 1.1.1.1/32 -p udp -m udp --dport 53 -j REDIRECT
+-A z_from_cpanel -d 8.8.8.8/32 -p udp -m udp --dport 53 -j REDIRECT
+-A z_from_cpanel -d 1.1.1.1/32 -p tcp -m tcp --dport 53 -j REDIRECT
+-A z_from_cpanel -d 8.8.8.8/32 -p tcp -m tcp --dport 53 -j REDIRECT
 -A z_from_lan -p tcp -m tcp --dport 80 -j transparent_proxy
 -A z_from_lan -p udp -m udp --dport 123 -j REDIRECT
+-A z_from_lan -s 10.10.122.87/32 -j z_from_cpanel
 COMMIT
 *mangle
 :PREROUTING ACCEPT [0:0]

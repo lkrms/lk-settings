@@ -368,6 +368,7 @@
         "SC1007",
         "SC1090",
         "SC1091",
+        "SC2012",
         "SC2013",
         "SC2015",
         "SC2016",
@@ -386,6 +387,7 @@
         "SC2148",
         "SC2153",
         "SC2154",
+        "SC2164",
         "SC2206",
         "SC2207"
     ],
@@ -396,11 +398,11 @@
         "reservedWordCase": "upper"
     },
     "sqltools.highlightQuery": false,
-    "standard.enable": false,
     "telemetry.telemetryLevel": "off",
     "terminal.external.osxExec": "iTerm.app",
     "terminal.integrated.copyOnSelection": true,
     "terminal.integrated.cwd": "${fileDirname}",
+    "terminal.integrated.detectLocale": "off",
     "terminal.integrated.enableFileLinks": false,
     "terminal.integrated.env.linux": {
         "LC_BYOBU": "0"

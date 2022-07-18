@@ -19,6 +19,7 @@ COMMAND=(zenity)
 ! lk_is_macos || COMMAND=(bash -c "$(
     function run() {
         zenity "$@" &
+        sleep 0.2
         "$LK_BASE/lib/macos/process-focus.js" $! >>"/tmp/open-project.log" 2>&1
         wait
     }

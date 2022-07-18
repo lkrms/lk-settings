@@ -6,7 +6,6 @@ VSCODE_EXTENSIONS=(
     alexcvzz.vscode-sqlite
     beaglefoot.awk-ide-vscode
     bmewburn.vscode-intelephense-client
-    chenxsan.vscode-standardjs
     dakara.transformer
     dbaeumer.vscode-eslint
     deerawan.vscode-dash
@@ -68,6 +67,7 @@ VSCODE_EXTENSIONS=(
     sfodje.perltidy
     shardulm94.trailing-spaces
     spadin.memento-inputs
+    standard.vscode-standard
     stansw.vscode-odata
     stkb.rewrap
     sumneko.lua

@@ -29,7 +29,6 @@ BackgroundDarkness=1.000000
 MiscSearchDialogOpacity=100
 MiscShowUnsafePasteDialog=TRUE
 FontUseSystem=TRUE
-ScrollingOnOutput=FALSE
 ShortcutsNoHelpkey=TRUE
 ShortcutsNoMenukey=TRUE
 ShortcutsNoMnemonics=TRUE
@@ -39,4 +38,5 @@ ColorForeground=#f2f2f2
 ColorBackground=#041a3b
 ColorCursor=#f2f2f2
 ColorCursorUseDefault=FALSE
+OverlayScrolling=TRUE
 

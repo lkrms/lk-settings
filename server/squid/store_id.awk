@@ -27,6 +27,11 @@ $1 ~ "^https://(objects|pkg-containers)\\.githubusercontent\\.com/" {
   rewrite(strip_query_terms($1))
 }
 
+$1 ~ "^http://[^/]+/cpanelsync/" {
+  sub("^http://[^/]+", "http://cpanelsync.mirror", $1)
+  rewrite($1)
+}
+
 {
   print "OK"
 }
