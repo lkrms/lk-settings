@@ -21,6 +21,10 @@
 :z_wan_to_lan - [0:0]
 :z_wan_to_node - [0:0]
 -A INPUT -j LIBVIRT_INP
+-A INPUT -d 2406:3400:217:e030::1/128 -i br0 -p tcp -m tcp --dport 3127 -j ACCEPT
+-A INPUT -d 2406:3400:217:e030::1/128 -i en0 -p tcp -m tcp --dport 3127 -j ACCEPT
+-A INPUT -d 2406:3400:217:e030::1/128 -i br0 -p tcp -m tcp --dport 3128 -j ACCEPT
+-A INPUT -d 2406:3400:217:e030::1/128 -i en0 -p tcp -m tcp --dport 3128 -j ACCEPT
 -A INPUT -j lk_check
 -A INPUT -j lk_check_local
 -A INPUT -m conntrack --ctstate NEW -j lk_input

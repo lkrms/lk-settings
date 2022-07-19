@@ -4,13 +4,15 @@
 10.10.0.1 doo.linacreative.com doo
 2406:3400:217:e030::1 doo.linacreative.com doo
 
-# cPanel expects its hostname to resolve to its real-world IPv4 address
-220.233.122.8 cpanel.dev.linacreative.com
-
 10.10.0.1 lk.lan proxy.lan
 10.10.0.1 aur.repo lk.repo quarry.repo
 10.10.0.1 arch.mirror cloud-images.ubuntu.mirror ports.ubuntu.mirror ppa.mirror sublimetext.mirror ubuntu.mirror
 10.10.0.1 brew.mirror
+
+2406:3400:217:e030::1 lk.lan proxy.lan
+2406:3400:217:e030::1 aur.repo lk.repo quarry.repo
+2406:3400:217:e030::1 arch.mirror cloud-images.ubuntu.mirror ports.ubuntu.mirror ppa.mirror sublimetext.mirror ubuntu.mirror
+2406:3400:217:e030::1 brew.mirror
 
 10.10.0.1 ntp.linacreative.com wpad wpad.linacreative.com
 2406:3400:217:e030::1 ntp.linacreative.com wpad wpad.linacreative.com
