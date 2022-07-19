@@ -16,15 +16,16 @@ _DIR=/opt/lk-settings/server
 )
 
 function update-notracking() {
-    local TEMP_FILE LK_FILE_REPLACE_NO_CHANGE LK_VERBOSE=1 \
+    local TEMP TEMP2 LK_FILE_REPLACE_NO_CHANGE LK_VERBOSE=1 LK_FILE_NO_DIFF=1 \
         FILE=$_DIR/dnsmasq/dnsmasq.d/notracking.conf \
         URL=https://github.com/notracking/hosts-blocklists/raw/master/dnsmasq/dnsmasq.blacklist.txt \
         UNBLOCKED=$_DIR/squid/unblock.dstdomain
     lk_tty_print "Checking notracking blocklists"
     [[ ! /etc/dnsmasq.d -ef $_DIR/dnsmasq/dnsmasq.d ]] || {
         lk_tty_detail "$FILE"
-        lk_mktemp_with TEMP_FILE &&
-            curl -fsSL "$URL" |
+        lk_mktemp_with TEMP &&
+            lk_mktemp_with TEMP2 &&
+            curl -fsSL "$URL" | tee "$TEMP2" |
             sed -E "$(
                 cat <<"EOF"
 # Copy to hold space
@@ -54,15 +55,16 @@ EOF
 # Restore from hold space
 g
 EOF
-            )" >"$TEMP_FILE" &&
-            lk_file_replace -f "$TEMP_FILE" "$FILE" || return
+            )" >"$TEMP" &&
+            lk_file_replace -f "$TEMP" "$FILE" || return
+        lk_tty_diff "$TEMP2" "$TEMP"
     }
     [[ ! /etc/squid/squid.conf -ef $_DIR/squid/squid.conf ]] || {
         FILE=$_DIR/squid/notracking.dstdomain
         URL=https://github.com/notracking/hosts-blocklists/raw/master/dnscrypt-proxy/dnscrypt-proxy.blacklist.txt
         lk_tty_detail "$FILE"
-        curl -fsSL "$URL" | sed -E 's/^[^#[:blank:]]/.&/' >"$TEMP_FILE" &&
-            lk_file_replace -f "$TEMP_FILE" "$FILE" || return
+        curl -fsSL "$URL" | sed -E 's/^[^#[:blank:]]/.&/' >"$TEMP" &&
+            lk_file_replace -f "$TEMP" "$FILE" || return
     }
     ! lk_is_false LK_FILE_REPLACE_NO_CHANGE || {
         ! lk_systemctl_running dnsmasq || lk_systemctl_restart dnsmasq

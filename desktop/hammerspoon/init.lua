@@ -17,7 +17,7 @@ function extend(copyTable, updateTable)
     return copy
 end
 
--- Configure your preferred apps with:
+-- Configure preferred apps with:
 -- - `bundleID` (required): string
 -- - `commandLine` (optional): string, "{{app}}" is replaced with path to .app
 -- - `menuItem` (optional): passed to hs.application:selectMenuItem(), overrides
@@ -39,28 +39,6 @@ _app = {
         bundleID = "com.apple.finder",
         menuItem = {"File", "New Finder Window"},
     },
-}
-
-_place = {
-    top3_1 = {x = 0, y = 0, w = 1 / 3, h = 0.5},
-    top3_2 = {x = 1 / 3, y = 0, w = 1 / 3, h = 0.5},
-    top3_3 = {x = 2 / 3, y = 0, w = 1 / 3, h = 0.5},
-    bottom3_1 = {x = 0, y = 0.5, w = 1 / 3, h = 0.5},
-    bottom3_2 = {x = 1 / 3, y = 0.5, w = 1 / 3, h = 0.5},
-    bottom3_3 = {x = 2 / 3, y = 0.5, w = 1 / 3, h = 0.5},
-    top6_1 = {x = 0, y = 0, w = 1 / 6, h = 0.5},
-    top6_2 = {x = 1 / 6, y = 0, w = 1 / 6, h = 0.5},
-    top6_3 = {x = 2 / 6, y = 0, w = 1 / 6, h = 0.5},
-    top6_4 = {x = 3 / 6, y = 0, w = 1 / 6, h = 0.5},
-    top6_5 = {x = 4 / 6, y = 0, w = 1 / 6, h = 0.5},
-    top6_6 = {x = 5 / 6, y = 0, w = 1 / 6, h = 0.5},
-    bottom6_1 = {x = 0, y = 0.5, w = 1 / 6, h = 0.5},
-    bottom6_2 = {x = 1 / 6, y = 0.5, w = 1 / 6, h = 0.5},
-    bottom6_3 = {x = 2 / 6, y = 0.5, w = 1 / 6, h = 0.5},
-    bottom6_4 = {x = 3 / 6, y = 0.5, w = 1 / 6, h = 0.5},
-    bottom6_5 = {x = 4 / 6, y = 0.5, w = 1 / 6, h = 0.5},
-    bottom6_6 = {x = 5 / 6, y = 0.5, w = 1 / 6, h = 0.5},
-    top6_2_3 = {x = 1 / 6, y = 0, w = 3 / 6, h = 0.5},
 }
 
 _operator = {
@@ -92,27 +70,6 @@ _criteria.pinnable = {
             _criteria.on_secondary_display,
         },
     },
-}
-
-_criteria.dev = {
-    appBundleId = {
-        "com.microsoft.VSCode",
-        "com.sublimemerge",
-        "org.jkiss.dbeaver.core.product",
-    },
-}
-
-_action = {
-    moveTo = function(ev, screen, rect)
-        if screen and _screen[screen] ~= nil then
-            logger.d("Moving " .. ev.appName .. " to screen " .. screen)
-            ev.window:moveToScreen(_screen[screen])
-        end
-        if rect then
-            logger.d("Moving " .. ev.appName .. " to " .. hs.inspect.inspect(rect))
-            ev.window:moveToUnit(rect)
-        end
-    end,
 }
 
 _groups = {
@@ -213,6 +170,16 @@ function toPlace(place, ev)
         w > 0 and (w / p.grid[1]) or nil,
         h > 0 and (h / p.grid[2]) or nil
     )
+    local unitRect, windowFrame = _screen[p.display or ev.display]:fromUnitRect(rect), ev.window:frame()
+    logger.v("unitRect = " .. hs.inspect.inspect(unitRect))
+    logger.v("windowFrame = " .. hs.inspect.inspect(windowFrame))
+    for i, f in ipairs({"x", "y", "w", "h"}) do
+        if math.floor(unitRect[f]) ~= math.floor(windowFrame[f]) then
+            goto move
+        end
+    end
+    do return end
+    ::move::
     logger.d("Moving " .. ev.appName .. " to " .. hs.inspect.inspect(rect))
     ev.window:moveToUnit(rect)
 end
@@ -261,16 +228,6 @@ function getPlace(ev)
 end
 
 _rule = {
-    -- Move dev apps to the primary display
-    {
-        criteria = {
-            _criteria.has_multiple_displays,
-            _criteria.on_secondary_display,
-            _criteria.dev,
-            event = wf.windowCreated,
-        },
-        action = {{_action.moveTo, 1}},
-    },
     {
         criteria = {
             isMain = true,
@@ -300,21 +257,20 @@ function initScreens()
 end
 
 function checkCriteria(criteria, ev)
-    return true
-end
-
-function processCriteria(criteria, ev)
+    if criteria == nil then
+        return true
+    end
     logger.v("Checking criteria " .. hs.inspect.inspect(criteria) .. " against ev " .. hs.inspect.inspect(ev))
     local andResult, orResult, op = true, false
     for k, v in pairs(criteria) do
         local result
         if type(k) == "number" then
-            if v == _operator.AND then
+            if v == "AND" or v == _operator.AND then
                 if andResult == false then
                     return false
                 end
                 op = _operator.AND
-            elseif v == _operator.OR then
+            elseif v == "OR" or v == _operator.OR then
                 if orResult == true then
                     return true
                 end
@@ -322,7 +278,7 @@ function processCriteria(criteria, ev)
             elseif type(v) == "function" then
                 result = v(ev)
             elseif type(v) == "table" then
-                result = processCriteria(v, ev)
+                result = checkCriteria(v, ev)
             end
         elseif type(v) == "table" then
             result = hs.fnutils.contains(v, ev[k])
@@ -375,7 +331,7 @@ function processEvent(window, appName, event)
         display = screen and (screen:getUUID() == _screen1:getUUID()) and 1 or 2,
     }
     for i, rule in ipairs(_rule) do
-        if rule.criteria ~= nil and not processCriteria(rule.criteria, ev) then
+        if rule.criteria ~= nil and not checkCriteria(rule.criteria, ev) then
             logger.v("_rule[" .. i .. "] criteria not met: " .. hs.inspect.inspect(rule.criteria))
         else
             logger.d("_rule[" .. i .. "] criteria met: " .. hs.inspect.inspect(rule.criteria))

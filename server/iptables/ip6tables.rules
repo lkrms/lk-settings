@@ -15,6 +15,7 @@
 :lk_reject - [0:0]
 :lk_related - [0:0]
 :lk_trusted - [0:0]
+:z_lan_to_lan - [0:0]
 :z_lan_to_node - [0:0]
 :z_lan_to_wan - [0:0]
 :z_wan_to_lan - [0:0]
@@ -68,6 +69,10 @@
 -A lk_forward -i br0 -o en1 -j z_lan_to_wan
 -A lk_forward -i en0 -o ppp0 -j z_lan_to_wan
 -A lk_forward -i en0 -o en1 -j z_lan_to_wan
+-A lk_forward -i br0 -o br0 -j z_lan_to_lan
+-A lk_forward -i br0 -o en0 -j z_lan_to_lan
+-A lk_forward -i en0 -o br0 -j z_lan_to_lan
+-A lk_forward -i en0 -o en0 -j z_lan_to_lan
 -A lk_forward -i ppp0 -o br0 -j z_wan_to_lan
 -A lk_forward -i ppp0 -o en0 -j z_wan_to_lan
 -A lk_forward -i en1 -o br0 -j z_wan_to_lan
