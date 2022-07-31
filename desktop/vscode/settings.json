@@ -66,6 +66,9 @@
     "[properties]": {
         "editor.defaultFormatter": "lkrms.inifmt"
     },
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.python"
+    },
     "[sql]": {
         "editor.defaultFormatter": "mtxr.sqltools"
     },
@@ -75,6 +78,7 @@
     "[yaml]": {
         "editor.defaultFormatter": "redhat.vscode-yaml"
     },
+    "azureFunctions.showCoreToolsWarning": false,
     "bashIde.highlightParsingErrors": false,
     "beautify.config": {
         "break_chained_methods": true,
@@ -392,7 +396,6 @@
         "SC2207"
     ],
     "shellcheck.executablePath": "shellcheck",
-    "shellformat.flag": "-s",
     "sqltools.format": {
         "linesBetweenQueries": "preserve",
         "reservedWordCase": "upper"

@@ -229,6 +229,25 @@ EOF
     unset LK_SUDO
 }
 
+DIR=~/.thunderbird
+[[ ! -f $DIR/installs.ini ]] ||
+    ! PROFILE=$DIR/$(awk \
+        '/^Default=/ { sub(/^Default=/, ""); print; exit }' \
+        "$DIR/installs.ini" | grep .) ||
+    [[ ! -d $PROFILE ]] || {
+    [[ -d $PROFILE/chrome ]] || install -d "$PROFILE/chrome"
+    FILE=$PROFILE/chrome/userChrome.css
+    lk_file_replace "$FILE" <<"EOF"
+/**
+ * The following rules only apply if 'toolkit.legacyUserProfileCustomizations.stylesheets' is set
+ */
+#tabbar-toolbar #task-tab-button,
+#status-bar #tbsync\.status[value*='idle'i] {
+  display: none;
+}
+EOF
+}
+
 symlink "$_ROOT/.vimrc" ~/.vimrc
 symlink "$_ROOT/.tidyrc" ~/.tidyrc
 symlink "$_ROOT/autorandr/" ~/.config/autorandr

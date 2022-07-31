@@ -6,10 +6,23 @@ shopt -s nullglob
 
 cd ~/Code
 
-DIR=~/.lk-platform/cache
+OLD_DIR=~/.lk-platform/cache
+DIR=~/.cache/lk-platform
+[[ ! -d $OLD_DIR ]] ||
+    if [[ -d $DIR ]]; then
+        MOVE=("$OLD_DIR"/git-repo.*)
+        if [[ -n ${MOVE+1} ]]; then
+            mv -nv "${MOVE[@]}" "$DIR/"
+            rm -f "${MOVE[@]}"
+        fi
+    else
+        install -d "${DIR%/*}"
+        gnu_mv -T "$OLD_DIR" "$DIR"
+    fi
 [ -d "$DIR" ] || install -d "$DIR"
 LIST_FILE=$DIR/git-repo.list
 HIST_FILE=$DIR/git-repo.history
+HIST_FILE2=$DIR/code-workspace.history
 
 function generate_list() {
     find -H ./* -maxdepth 3 \
@@ -43,9 +56,13 @@ OPEN=($(
     { IFS= && lk_arr LIST &&
         { [ ! -e "$HIST_FILE" ] ||
             grep -Fxf <(lk_arr LIST) "$HIST_FILE" | tail -n24 ||
+            [[ ${PIPESTATUS[*]} == 10 ]]; } &&
+        { [ ! -e "$HIST_FILE2" ] ||
+            grep -Eof <(sed 's/^/^/' "$LIST_FILE") "$HIST_FILE2" | tail -n24 ||
             [[ ${PIPESTATUS[*]} == 10 ]]; }; } |
-        sort | uniq -c | sort -k1,1nr -k2,2 |
-        awk '{ printf("%s\0%s\0", $2, $2); }' |
+        #sort | uniq -c | sort -k1,1nr -k2,2 |
+        #awk '{ printf("%s\0%s\0", $2, $2); }' |
+        tac | lk_uniq | awk '{ printf("%s\0%s\0", $1, $1); }' |
         { IFS=' ' && xargs -0r "${COMMAND[@]}" --list \
             --title "Open repository with $*" \
             --text "Select one or more repositories:" \

@@ -325,8 +325,7 @@ function wake-nas2() {
 
 function _prepare_cloudimg() {
     export LK_UBUNTU_MIRROR=http://ubuntu.mirror/ \
-        LK_UBUNTU_CLOUDIMG_HOST=cloud-images.ubuntu.mirror \
-        LK_UBUNTU_CLOUDIMG_SHA_URL=http://cloud-images.ubuntu.mirror
+        LK_UBUNTU_CLOUDIMG_HOST=cloud-images.ubuntu.mirror
 }
 
 function rebuild-cpanel() {
@@ -370,6 +369,7 @@ export PACKAGER="Luke Arms <luke@arms.to>"
 export GPGKEY=B7304A7EB769E24D
 GPGKEYGRIP=056A5FE1D4AE65E25C0E8037DD3B221BD1C7F3B1
 gpg-cache-passphrase
-export CHROOT=~/chroot
+export CCACHE_DIR=~/.cache/ccache
 
 eval export http{,s}_proxy=http://localhost:3127
+#export BYOBU_NO_TITLE=1

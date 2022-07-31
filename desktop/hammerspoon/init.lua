@@ -1,5 +1,5 @@
 -- One of: "nothing", "error", "warning", "info", "debug", "verbose"
-hs.logger.defaultLogLevel = "debug"
+hs.logger.defaultLogLevel = "info"
 logger = hs.logger.new("init")
 wf = hs.window.filter
 hs.window.animationDuration = 0
@@ -113,19 +113,22 @@ logger.d("_apps = " .. hs.inspect.inspect(_apps))
 
 _layouts = {
     -- Ultrawide
-    -- 1. <-- 25% --> <-- ** 50% ** --> <-- 25% -->
+    -- 1. <-- 23% --> <-- ** 54% ** --> <-- 23% -->
+    --    - 3440px / 43 = 80px
+    --    - 10x = 800px
+    --    - 23x = 1840px
     ["1,1:3440.0x1440.0"] = {
-        grid = {4, 2},
-        place = {display = 1, wh = {1, 1}},
+        grid = {43, 2},
+        place = {display = 1, wh = {10, 1}},
         group_places = {
-            mail = {xy = {2, 1}, wh = {2, 2}},
+            mail = {xy = {11, 1}, wh = {23, 2}},
             teams = {xy = {1, 1}},
             messenger = {xy = {1, 2}},
             skype = {xy = {1, 2}},
-            time = {xy = {4, 1}},
-            todo = {xy = {4, 2}},
-            util = {xy = {4, 2}},
-            dev = {xy = {2, 1}, wh = {2, 2}},
+            time = {xy = {34, 1}},
+            todo = {xy = {34, 2}},
+            util = {xy = {34, 2}},
+            dev = {xy = {11, 1}, wh = {23, 2}},
         },
     },
     ["*"] = {

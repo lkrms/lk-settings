@@ -80,8 +80,11 @@
 -A lk_related -m limit --limit 12/min -j LOG --log-prefix "RELATED not expected: "
 -A lk_related -j ACCEPT
 -A lk_trusted -j ACCEPT
--A z_any_to_cpanel -p tcp -m tcp -m multiport --dports 53,2082,2083,2086,2087,2096 -j ACCEPT
+-A z_any_to_cpanel -p tcp -m tcp --dport 443 -j ACCEPT
+-A z_any_to_cpanel -p tcp -m tcp --dport 80 -j ACCEPT
 -A z_any_to_cpanel -p udp -m udp --dport 53 -j ACCEPT
+-A z_any_to_cpanel -p tcp -m tcp -m multiport --dports 2082,2083,2086,2087,2096 -j ACCEPT
+-A z_any_to_cpanel -p tcp -m tcp --dport 53 -j ACCEPT
 -A z_lan_to_lan -d 10.10.122.87/32 -j z_any_to_cpanel
 -A z_lan_to_node -p tcp -m tcp --dport 25 -j ACCEPT
 -A z_lan_to_node -p tcp -m tcp --dport 53 -j ACCEPT
@@ -120,15 +123,20 @@ COMMIT
 :z_to_cpanel - [0:0]
 :z_to_lan - [0:0]
 :z_to_wan - [0:0]
--A PREROUTING -d 220.233.122.8/32 -p tcp -m tcp -m multiport --dports 53,2082,2083,2086,2087,2096 -j z_to_cpanel
+-A PREROUTING -d 220.233.122.8/32 -p tcp -m tcp --dport 443 -j z_to_cpanel
 -A PREROUTING -d 220.233.122.8/32 -p udp -m udp --dport 53 -j z_to_cpanel
+-A PREROUTING -d 220.233.122.8/32 -p tcp -m tcp -m multiport --dports 2082,2083,2086,2087,2096 -j z_to_cpanel
+-A PREROUTING -d 220.233.122.8/32 -p tcp -m tcp --dport 53 -j z_to_cpanel
 -A PREROUTING -s 10.10.0.0/16 -d 220.233.122.8/32 -m comment --comment hairpinning -j DNAT --to-destination 10.10.0.1
 -A PREROUTING -i br0 -j z_from_lan
 -A PREROUTING -i en0 -j z_from_lan
 -A PREROUTING -i ppp0 -j z_from_wan
 -A PREROUTING -i en1 -j z_from_wan
--A OUTPUT -d 220.233.122.8/32 -p tcp -m tcp -m multiport --dports 53,2082,2083,2086,2087,2096 -j z_to_cpanel
+-A OUTPUT -d 220.233.122.8/32 -p tcp -m tcp --dport 443 -j z_to_cpanel
+-A OUTPUT -d 220.233.122.8/32 -p tcp -m tcp --dport 80 -j z_to_cpanel
 -A OUTPUT -d 220.233.122.8/32 -p udp -m udp --dport 53 -j z_to_cpanel
+-A OUTPUT -d 220.233.122.8/32 -p tcp -m tcp -m multiport --dports 2082,2083,2086,2087,2096 -j z_to_cpanel
+-A OUTPUT -d 220.233.122.8/32 -p tcp -m tcp --dport 53 -j z_to_cpanel
 -A POSTROUTING -j LIBVIRT_PRT
 -A POSTROUTING -o br0 -j z_to_lan
 -A POSTROUTING -o en0 -j z_to_lan

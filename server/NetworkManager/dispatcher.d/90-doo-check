@@ -38,8 +38,10 @@ function maybe_restart_wan_service() {
 }
 
 WAN_SERVICE=NetworkManager-connect@$WAN_IFACE.service
+DHCP6_PD_SERVICE=dhcp6c@$WAN_IFACE.service
+IP6_RA_SERVICE=radvd.service
 PPPOE_IFACE=$(nmcli -g pppoe.parent conn show "$WAN_IFACE")
-LAN_METHOD=
+#LAN_METHOD=
 
 case "$1,$2" in
 *,connectivity-change)
@@ -60,21 +62,27 @@ case "$1,$2" in
     esac
     ;;
 "$WAN_IFACE",up)
-    LAN_METHOD=shared
+    lk_systemctl_reload_or_restart "$DHCP6_PD_SERVICE" &&
+        if service_is_active "$IP6_RA_SERVICE"; then
+            lk_tty_run systemctl kill --signal=HUP "$IP6_RA_SERVICE"
+        else
+            lk_tty_run systemctl start "$IP6_RA_SERVICE"
+        fi
+    #LAN_METHOD=shared
     ;;
 "$WAN_IFACE",down)
     if wan_service_is_running; then
         maybe_restart_wan_service
-        LAN_METHOD=shared
-    else
-        LAN_METHOD=auto
+        #LAN_METHOD=shared
+    #else
+    #    LAN_METHOD=auto
     fi
     ;;
-"$LAN_IFACE",*)
-    connection_is_up "$WAN_IFACE" &&
-        LAN_METHOD=shared ||
-        LAN_METHOD=auto
-    ;;&
+    #"$LAN_IFACE",*)
+    #    connection_is_up "$WAN_IFACE" &&
+    #        LAN_METHOD=shared ||
+    #        LAN_METHOD=auto
+    #    ;;&
 "$LAN_IFACE",up)
     ! lk_systemctl_running smb.service ||
         lk_systemctl_restart smb.service || true
@@ -86,8 +94,8 @@ case "$1,$2" in
                     '$2 == "bridge" && $3 == source {print $1}'
         done
     ); do
-        [ -d "/sys/class/net/$IFACE" ] || continue
-        [ "/sys/class/net/$LAN_IFACE" -ef "/sys/class/net/$IFACE/master" ] ||
+        [[ -d /sys/class/net/$IFACE ]] || continue
+        [[ /sys/class/net/$LAN_IFACE -ef /sys/class/net/$IFACE/master ]] ||
             lk_tty_run ip link set "$IFACE" master "$LAN_IFACE" || true
     done
     ;;
@@ -105,7 +113,9 @@ esac
         sort)"
 }
 
-[ -n "$LAN_METHOD" ] || exit 0
+exit
+
+[[ -n ${LAN_METHOD-} ]] || exit 0
 
 CURRENT_METHOD=$(nmcli -g ipv6.method conn show "$LAN_IFACE") ||
     CURRENT_METHOD=
@@ -117,7 +127,7 @@ CURRENT_METHOD=$(nmcli -g ipv6.method conn show "$LAN_IFACE") ||
 }
 
 UNIT=add-ipv6-pd-route.service
-[ "$LAN_METHOD" != shared ] ||
+[[ $LAN_METHOD != shared ]] ||
     { lk_systemctl_exists "$UNIT" && ! lk_systemctl_failed "$UNIT"; } || {
     systemctl reset-failed "$UNIT" 2>/dev/null || true
     systemd-run --no-block \

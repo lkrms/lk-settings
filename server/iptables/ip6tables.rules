@@ -104,9 +104,11 @@
 -A lk_related -m limit --limit 12/min -j LOG --log-prefix "RELATED not expected: "
 -A lk_related -j ACCEPT
 -A lk_trusted -j ACCEPT
--A z_any_to_cpanel -p tcp -m tcp -m multiport --dports 80,443 -j ACCEPT
--A z_any_to_cpanel -p tcp -m tcp -m multiport --dports 53,2082,2083,2086,2087,2096 -j ACCEPT
+-A z_any_to_cpanel -p tcp -m tcp --dport 443 -j ACCEPT
+-A z_any_to_cpanel -p tcp -m tcp --dport 80 -j ACCEPT
 -A z_any_to_cpanel -p udp -m udp --dport 53 -j ACCEPT
+-A z_any_to_cpanel -p tcp -m tcp -m multiport --dports 2082,2083,2086,2087,2096 -j ACCEPT
+-A z_any_to_cpanel -p tcp -m tcp --dport 53 -j ACCEPT
 -A z_lan_to_node -p tcp -m tcp --dport 25 -j ACCEPT
 -A z_lan_to_node -p tcp -m tcp --dport 53 -j ACCEPT
 -A z_lan_to_node -p tcp -m tcp --dport 80 -j ACCEPT

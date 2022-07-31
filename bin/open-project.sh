@@ -6,7 +6,19 @@ shopt -s nullglob
 
 cd ~/Code
 
-DIR=~/.lk-platform/cache
+OLD_DIR=~/.lk-platform/cache
+DIR=~/.cache/lk-platform
+[[ ! -d $OLD_DIR ]] ||
+    if [[ -d $DIR ]]; then
+        MOVE=("$OLD_DIR"/code-workspace.*)
+        if [[ -n ${MOVE+1} ]]; then
+            mv -nv "${MOVE[@]}" "$DIR/"
+            rm -f "${MOVE[@]}"
+        fi
+    else
+        install -d "${DIR%/*}"
+        gnu_mv -T "$OLD_DIR" "$DIR"
+    fi
 [ -d "$DIR" ] || install -d "$DIR"
 LIST_FILE=$DIR/code-workspace.list
 HIST_FILE=$DIR/code-workspace.history
@@ -41,7 +53,8 @@ OPEN=($(
         { [ ! -e "$HIST_FILE" ] ||
             grep -Fxf <(lk_arr LIST) "$HIST_FILE" | tail -n24 ||
             [[ ${PIPESTATUS[*]} == 10 ]]; }; } |
-        sort | uniq -c | sort -k1,1nr -k2,2 | awk '{print $2}' |
+        #sort | uniq -c | sort -k1,1nr -k2,2 | awk '{print $2}' |
+        tac | lk_uniq |
         gnu_sed -E 'p; s/\.code-workspace$//; s/([^/]+)\/\1$/\1/' |
         tr '\n' '\0' |
         xargs -0r "${COMMAND[@]}" --list \
