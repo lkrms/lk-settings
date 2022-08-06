@@ -8,11 +8,13 @@
 10.10.0.1 aur.repo lk.repo quarry.repo
 10.10.0.1 arch.mirror cloud-images.ubuntu.mirror ports.ubuntu.mirror ppa.mirror sublimetext.mirror ubuntu.mirror
 10.10.0.1 brew.mirror
+10.10.0.1 znc.arms.to
 
 2406:3400:217:e030::1 lk.lan proxy.lan
 2406:3400:217:e030::1 aur.repo lk.repo quarry.repo
 2406:3400:217:e030::1 arch.mirror cloud-images.ubuntu.mirror ports.ubuntu.mirror ppa.mirror sublimetext.mirror ubuntu.mirror
 2406:3400:217:e030::1 brew.mirror
+2406:3400:217:e030::1 znc.arms.to
 
 10.10.0.1 ntp.linacreative.com wpad wpad.linacreative.com
 2406:3400:217:e030::1 ntp.linacreative.com wpad wpad.linacreative.com

@@ -119,6 +119,7 @@
 -A z_lan_to_node -p tcp -m tcp --dport 3128 -j ACCEPT
 -A z_lan_to_node -p tcp -m tcp --dport 3129 -j ACCEPT
 -A z_lan_to_node -p tcp -m tcp --dport 5201 -j ACCEPT
+-A z_lan_to_node -p tcp -m tcp --dport 6660 -j ACCEPT
 -A z_lan_to_node -p udp -m udp --dport 53 -j ACCEPT
 -A z_lan_to_node -p udp -m udp --dport 123 -j ACCEPT
 -A z_lan_to_node -p udp -m udp --dport 137 -j ACCEPT

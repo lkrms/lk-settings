@@ -65,6 +65,7 @@ VSCODE_EXTENSIONS=(
     salesforce.salesforcedx-vscode-soql
     salesforce.salesforcedx-vscode-visualforce
     sfodje.perltidy
+    Shan.code-settings-sync
     shardulm94.trailing-spaces
     spadin.memento-inputs
     standard.vscode-standard

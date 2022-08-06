@@ -14,6 +14,9 @@
     "Lua.workspace.library": [
         "/usr/share/lua/5.4"
     ],
+    "[css]": {
+        "editor.defaultFormatter": "HookyQR.beautify"
+    },
     "[hosts]": {
         "editor.defaultFormatter": "lkrms.inifmt"
     },
@@ -376,6 +379,7 @@
         "SC2013",
         "SC2015",
         "SC2016",
+        "SC2024",
         "SC2029",
         "SC2030",
         "SC2031",
@@ -392,10 +396,12 @@
         "SC2153",
         "SC2154",
         "SC2164",
+        "SC2178",
         "SC2206",
         "SC2207"
     ],
     "shellcheck.executablePath": "shellcheck",
+    "shellformat.flag": "-s",
     "sqltools.format": {
         "linesBetweenQueries": "preserve",
         "reservedWordCase": "upper"

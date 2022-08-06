@@ -37,6 +37,13 @@
 [url "github.com:"]
 	pushInsteadOf = https://github.com/
 
+[url "https://aur.archlinux.org/"]
+	insteadOf = aur:
+
+[url "aur:"]
+	pushInsteadOf = https://aur.archlinux.org/
+	pushInsteadOf = aur:
+
 [cola]
 	spellcheck = false
 	tabwidth = 4

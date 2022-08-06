@@ -2,11 +2,11 @@
     "repositories": [
         {
             "type": "path",
-            "url": "~/Code/plc/packages/composer/sync"
+            "url": "~/Code/plc/lib/php-sync"
         },
         {
             "type": "path",
-            "url": "~/Code/lk/util-php"
+            "url": "~/Code/lk/php-util"
         }
     ],
     "config": {

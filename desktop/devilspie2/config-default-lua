@@ -78,6 +78,9 @@ _groups = {
             },
         },
     },
+    irc = {
+        ["hexchat"] = {}
+    },
     teams = {
         ["microsoft teams"] = {},
         ["microsoft teams - preview"] = {
@@ -135,6 +138,29 @@ log.debug("_apps = " .. pretty.write(_apps))
 
 -- See README.md for an explanation
 _layouts = {
+    -- 1x4K
+    ["3840.0x2160.0"] = {
+        -- <-- 31% --> <-- ** 50% ** --> <-- 19% -->
+        grid = {16, 2},
+        targets = {
+            criteria = _criteria.can_fill_target,
+            {display = 1, xy = {1, 1}, wh = {5, 2}},
+            {display = 1, xy = {6, 1}, wh = {8, 2}},
+            {display = 1, xy = {14, 1}, wh = {3, 2}},
+        },
+        place = {display = 1, wh = {1, 1}},
+        group_places = {
+            mail = {workspace = 1, xy = {6, 1}, wh = {8, 2}},
+            teams = {workspace = 0, xy = {1, 1}, wh = {5, 1}},
+            irc = {workspace = 0, xy = {1, 1}, wh = {5, 1}},
+            messenger = {workspace = 0, xy = {1, 2}, wh = {5, 1}},
+            skype = {workspace = 0, xy = {1, 1}, wh = {5, 1}},
+            time = {workspace = 0, xy = {14, 1}, wh = {3, 1}},
+            todo = {workspace = 0, xy = {14, 2}, wh = {3, 1}},
+            util = {workspace = 0, xy = {1, 2}, wh = {5, 1}},
+        },
+    },
+
     -- 2x4K
     ["7680.0x2160.0"] = {
         -- <-- 25% --> <-- ** 50% ** --> <-- 25% -->
@@ -156,6 +182,7 @@ _layouts = {
         place = {workspace = 0, display = 2, wh = {2, 1}},
         group_places = {
             teams = {xy = {1, 1}},
+            irc = {xy = {1, 1}},
             messenger = {xy = {3, 1}},
             skype = {xy = {5, 1}},
             time = {xy = {1, 2}},
@@ -178,6 +205,7 @@ _layouts = {
         group_places = {
             mail = {workspace = 1, xy = {2, 1}, wh = {2, 2}},
             teams = {workspace = 0, xy = {1, 1}},
+            irc = {workspace = 0, xy = {1, 1}},
             messenger = {workspace = 0, xy = {1, 2}},
             skype = {workspace = 0, xy = {1, 2}},
             time = {workspace = 0, xy = {4, 1}},
@@ -197,6 +225,7 @@ _layouts = {
         place = {display = 1, wh = {2, 1}},
         group_places = {
             teams = {workspace = 0, xy = {1, 1}},
+            irc = {workspace = 0, xy = {1, 1}},
             messenger = {workspace = 0, xy = {1, 1}},
             skype = {workspace = 0, xy = {1, 1}},
             time = {workspace = 0, xy = {1, 2}},
@@ -216,6 +245,7 @@ _layouts = {
         place = {display = 1, wh = {1, 1}},
         group_places = {
             teams = {workspace = 0, xy = {1, 1}},
+            irc = {workspace = 0, xy = {1, 1}},
             messenger = {workspace = 0, xy = {1, 2}},
             skype = {workspace = 0, xy = {1, 2}},
             time = {workspace = 0, xy = {3, 1}},
@@ -234,6 +264,7 @@ _layouts = {
         place = {display = 1, wh = {1, 1}},
         group_places = {
             teams = {workspace = 0, xy = {1, 1}},
+            irc = {workspace = 0, xy = {1, 1}},
             messenger = {workspace = 0, xy = {1, 1}},
             skype = {workspace = 0, xy = {1, 1}},
             time = {workspace = 0, xy = {1, 2}},

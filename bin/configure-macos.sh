@@ -322,6 +322,19 @@ is_basic || symlink_if_not_running \
     "$_ROOT/keepassxc/keepassxc.ini" "$_APP_SUPPORT/keepassxc/keepassxc.ini" \
     KeePassXC "pgrep -x KeePassXC"
 
+lk_tty_print "Checking BetterSnapTool"
+if pgrep -xq BetterSnapTool; then
+    lk_warn "cannot apply settings: BetterSnapTool is running"
+else
+    lk_mktemp_with TEMP
+    cp "$_ROOT/bettersnaptool/com.hegenberg.BetterSnapTool.plist" "$TEMP"
+    lk_plist_set_file "$TEMP"
+    FILE=$_PREFS/com.hegenberg.BetterSnapTool.plist
+    [[ ! -e $FILE ]] ||
+        lk_plist_merge_from_file "" "$FILE" >/dev/null
+    cp "$TEMP" "$FILE"
+fi
+
 : <<"EOF"
 lk_tty_print "Checking Magnet"
 lk_plist_set_file "$_PREFS/com.crowdcafe.windowmagnet.plist"

@@ -14,11 +14,11 @@ php_errors.log
 *.deb
 *.log
 *.rpm
-*.tar.bz2*
-*.tar.gz*
-*.tar.xz*
-*.tar.zst*
-*.tgz
+#*.tar.bz2*
+#*.tar.gz*
+#*.tar.xz*
+#*.tar.zst*
+#*.tgz
 
 /test.php
 /bin/test.php
