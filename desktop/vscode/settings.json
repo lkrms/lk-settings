@@ -454,6 +454,7 @@
     "terminal.integrated.rightClickBehavior": "nothing",
     "terminal.integrated.scrollback": 10000,
     "terminal.integrated.sendKeybindingsToShell": true,
+    "terminal.integrated.shellIntegration.enabled": false,
     "terminal.integrated.showExitAlert": false,
     "testExplorer.useNativeTesting": true,
     "trailing-spaces.highlightCurrentLine": false,

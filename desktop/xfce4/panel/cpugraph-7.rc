@@ -1,7 +1,5 @@
-UpdateInterval=2
 TimeScale=0
-Size=96
-Mode=0
+Size=72
 Frame=0
 Border=0
 Bars=0
@@ -12,4 +10,6 @@ StartupNotification=1
 ColorMode=1
 Background=rgb(0,0,0)
 PerCore=0
+Mode=1
+Foreground3=rgb(0,0,0)
 

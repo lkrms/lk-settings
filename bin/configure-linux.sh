@@ -95,6 +95,12 @@ options iwlwifi 11n_disable=8
 options iwlmvm power_scheme=1
 EOF
     fi
+else
+    if lk_command_exists synclient; then
+        FILE=/etc/X11/xorg.conf.d/99-synaptics.conf
+        lk_install -m 00644 "$FILE"
+        lk_file_replace -f "$_ROOT/X11/xorg.conf.d/synaptics.conf" "$FILE"
+    fi
 fi
 
 symlink "$_ROOT/autorandr/postadd" /etc/xdg/autorandr/postadd
@@ -224,6 +230,7 @@ EOF
     lk_install -m 00644 "$FILE"
     lk_file_replace "$FILE" <<"EOF"
 // the first line is ignored
+defaultPref("mousewheel.system_scroll_override.enabled", false);
 defaultPref("services.sync.prefs.dangerously_allow_arbitrary", true);
 EOF
     unset LK_SUDO
