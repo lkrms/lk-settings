@@ -49,12 +49,16 @@ fi
 
 cleanup ~/.config/iCanHazShortcut
 
+rm -Rfv ~/.config/composer{,-dev}
+
 [ ! -d "$_PRIV" ] || {
 
     _PRIV=$(lk_realpath "$_PRIV")
 
     symlink_private_common "$_PRIV"
     symlink \
+        "$_PRIV/composer/auth.json" ~/.composer/auth.json \
+        "$_PRIV/composer/auth.json" ~/.composer-dev/auth.json \
         "$_PRIV/espanso/" "$_PREFS/espanso"
 
     symlink_if_not_running \

@@ -35,8 +35,10 @@ VSCODE_EXTENSIONS=(
     mrmlnc.vscode-apache
     ms-azuretools.vscode-azurefunctions
     ms-azuretools.vscode-azureresourcegroups
+    ms-azuretools.vscode-docker
     ms-python.python
     ms-python.vscode-pylance
+    ms-vscode-remote.remote-containers
     ms-vscode-remote.remote-ssh-edit
     ms-vscode.azure-account
     ms-vscode.cpptools
@@ -65,7 +67,6 @@ VSCODE_EXTENSIONS=(
     salesforce.salesforcedx-vscode-soql
     salesforce.salesforcedx-vscode-visualforce
     sfodje.perltidy
-    Shan.code-settings-sync
     shardulm94.trailing-spaces
     spadin.memento-inputs
     standard.vscode-standard

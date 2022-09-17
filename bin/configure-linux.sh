@@ -29,10 +29,20 @@ _PRIV=${1-}
     symlink_private_common "$_PRIV"
     symlink \
         "$_PRIV/.face" ~/.face \
+        "$_PRIV/composer/auth.json" ~/.config/composer/auth.json \
+        "$_PRIV/composer/auth.json" ~/.config/composer-dev/auth.json \
         "$_PRIV/espanso/" ~/.config/espanso \
         "$_PRIV/offlineimap/.offlineimaprc" ~/.offlineimaprc \
         "$_PRIV/remmina/data/" ~/.local/share/remmina \
         "$_PRIV/robo3t/3T/" ~/.config/3T
+
+    [[ -d ~/.cache/hexchat/logs ]] || install -vd ~/.cache/hexchat/logs
+    [[ -d ~/.cache/hexchat/scrollback ]] || install -vd ~/.cache/hexchat/scrollback
+    symlink_if_not_running \
+        ~/.cache/hexchat/logs "$_PRIV/hexchat/logs" \
+        ~/.cache/hexchat/scrollback "$_PRIV/hexchat/scrollback" \
+        "$_PRIV/hexchat/" ~/.config/hexchat \
+        HexChat "pgrep -x hexchat"
 
     symlink_if_not_running \
         "$_PRIV/DBeaverData/" ~/.local/share/DBeaverData \

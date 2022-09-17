@@ -56,10 +56,10 @@ OPEN=($(
     { IFS= && lk_arr LIST &&
         { [ ! -e "$HIST_FILE" ] ||
             grep -Fxf <(lk_arr LIST) "$HIST_FILE" | tail -n24 ||
-            [[ ${PIPESTATUS[*]} == 10 ]]; } &&
+            [ "${PIPESTATUS[*]}" = 10 ]; } &&
         { [ ! -e "$HIST_FILE2" ] ||
             grep -Eof <(sed 's/^/^/' "$LIST_FILE") "$HIST_FILE2" | tail -n24 ||
-            [[ ${PIPESTATUS[*]} == 10 ]]; }; } |
+            [ "${PIPESTATUS[*]}" = 10 ]; }; } |
         #sort | uniq -c | sort -k1,1nr -k2,2 |
         #awk '{ printf("%s\0%s\0", $2, $2); }' |
         tac | lk_uniq | awk '{ printf("%s\0%s\0", $1, $1); }' |

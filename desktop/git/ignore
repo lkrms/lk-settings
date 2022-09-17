@@ -22,3 +22,5 @@ php_errors.log
 
 /test.php
 /bin/test.php
+
+/.venv

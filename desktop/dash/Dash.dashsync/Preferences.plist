@@ -701,30 +701,10 @@
 				<key>date</key>
 				<date>2022-07-11T16:34:39Z</date>
 			</dict>
-			<key>http://kapeli.com/feeds/Symfony.xml</key>
-			<dict>
-				<key>date</key>
-				<date>2022-07-11T16:35:01Z</date>
-			</dict>
 			<key>http://kapeli.com/feeds/TypeScript.xml</key>
 			<dict>
 				<key>date</key>
 				<date>2022-07-11T16:34:52Z</date>
-			</dict>
-			<key>http://kapeli.com/feeds/Vagrant.xml</key>
-			<dict>
-				<key>date</key>
-				<date>2022-07-11T16:34:12Z</date>
-			</dict>
-			<key>http://kapeli.com/feeds/Vim.xml</key>
-			<dict>
-				<key>date</key>
-				<date>2022-07-11T16:34:40Z</date>
-			</dict>
-			<key>http://kapeli.com/feeds/VueJS.xml</key>
-			<dict>
-				<key>date</key>
-				<date>2022-07-11T16:35:08Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/WordPress.xml</key>
 			<dict>
@@ -744,6 +724,26 @@
 				<key>date</key>
 				<date>2022-03-27T22:32:28Z</date>
 			</dict>
+			<key>http://kapeli.com/feeds/Symfony.xml</key>
+			<dict>
+				<key>date</key>
+				<date>2022-09-17T03:27:43Z</date>
+			</dict>
+			<key>http://kapeli.com/feeds/Vagrant.xml</key>
+			<dict>
+				<key>date</key>
+				<date>2022-09-17T03:27:32Z</date>
+			</dict>
+			<key>http://kapeli.com/feeds/Vim.xml</key>
+			<dict>
+				<key>date</key>
+				<date>2022-09-17T03:27:27Z</date>
+			</dict>
+			<key>http://kapeli.com/feeds/VueJS.xml</key>
+			<dict>
+				<key>date</key>
+				<date>2022-09-17T03:27:22Z</date>
+			</dict>
 			<key>http://kapeli.com/feeds/Xamarin.xml</key>
 			<dict>
 				<key>date</key>
@@ -752,7 +752,7 @@
 		</dict>
 	</dict>
 	<key>isPinned</key>
-	<true/>
+	<false/>
 	<key>menuIconBehavior</key>
 	<integer>1</integer>
 	<key>placeholderDelimiter</key>
@@ -788,7 +788,7 @@
 	<key>shouldRestoreTabs</key>
 	<true/>
 	<key>shouldShowStatusIcon</key>
-	<false/>
+	<true/>
 	<key>shouldStartAtLogin</key>
 	<true/>
 	<key>shouldSyncBookmarks</key>

@@ -155,6 +155,7 @@
         "**/{ssh,.ssh}/config*": "properties",
         "*-lua": "lua",
         "*.desktop": "properties",
+        "*.log": "log",
         "*.neon.dist": "neon",
         "*.php.stub": "php",
         "*.service": "properties",
@@ -180,6 +181,7 @@
     "git.countBadge": "off",
     "git.enableStatusBarSync": false,
     "git.ignoreLimitWarning": true,
+    "git.mergeEditor": false,
     "gitlens.advanced.fileHistoryFollowsRenames": true,
     "gitlens.blame.format": "${message|40?} ${date|14-}",
     "gitlens.codeLens.enabled": false,
@@ -227,7 +229,6 @@
     "gitlens.statusBar.format": "${author}, ${date} • ${message}",
     "gitlens.statusBar.reduceFlicker": true,
     "html.autoClosingTags": false,
-    "intelephense.environment.phpVersion": "7.4.0",
     "intelephense.phpdoc.classTemplate": {
         "summary": "$1",
         "tags": [
@@ -242,6 +243,7 @@
         ]
     },
     "intelephense.phpdoc.returnVoid": false,
+    "intelephense.references.exclude": [],
     "intelephense.rename.exclude": [],
     "intelephense.stubs": [
         "apache",
@@ -397,6 +399,7 @@
         "SC2154",
         "SC2164",
         "SC2178",
+        "SC2180",
         "SC2206",
         "SC2207"
     ],
@@ -479,5 +482,6 @@
     "workbench.tips.enabled": false,
     "xml.format.emptyElements": "collapse",
     "xml.format.enforceQuoteStyle": "preferred",
-    "xml.format.preservedNewlines": 0
+    "xml.format.preservedNewlines": 0,
+    "xml.format.splitAttributes": true
 }

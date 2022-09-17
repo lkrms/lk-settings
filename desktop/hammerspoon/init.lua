@@ -466,6 +466,20 @@ end
 initScreens()
 initWindowFilter()
 
+_screenwatcher = hs.screen.watcher.new(function()
+    _filter:unsubscribeAll()
+    initScreens()
+    initWindowFilter()
+    hs.notify.new(
+        {
+            title = "Hammerspoon",
+            informativeText = "Screen layout change detected",
+            withdrawAfter = 5,
+        }
+    ):send()
+end)
+_screenwatcher:start()
+
 hs.hotkey.bind(
     {"cmd", "shift"},
     "9",
