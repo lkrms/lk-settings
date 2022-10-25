@@ -23,6 +23,7 @@
     "indentSize": 2,
     "isDarkMode": false,
     "line_ending_crlf": false,
+    "listSortType": 0,
     "match_pari_markdown": true,
     "noHintForOpenLink": true,
     "noWarnigForDeleteFile": true,

@@ -23,8 +23,3 @@ MAS_APPS+=(
     585829637  # Todoist
     1303222628 # Paprika
 )
-
-LOGIN_ITEMS+=(
-    /Applications/Nextcloud.app
-    /Applications/Todoist.app
-)

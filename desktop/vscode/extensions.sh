@@ -2,7 +2,6 @@
 
 VSCODE_EXTENSIONS=(
     ahmadalli.vscode-nginx-conf
-    alefragnani.Bookmarks
     alexcvzz.vscode-sqlite
     beaglefoot.awk-ide-vscode
     bmewburn.vscode-intelephense-client
@@ -10,28 +9,27 @@ VSCODE_EXTENSIONS=(
     dbaeumer.vscode-eslint
     deerawan.vscode-dash
     DotJoshJohnson.xml
-    dracula-theme.theme-dracula
     eamodio.gitlens
     fabiospampinato.vscode-open-in-github
     foxundermoon.shell-format
-    gharveymn.nightswitch-lite
     giovdk21.vscode-sublime-merge
-    GitHub.github-vscode-theme
     hbenl.vscode-test-explorer
     henriiik.vscode-sort
     HookyQR.beautify
     humao.rest-client
     idleberg.applescript
+    inferrinizzard.prettier-sql-vscode
     jkjustjoshing.vscode-text-pastry
     jq-syntax-highlighting.jq-syntax-highlighting
     jrebocho.vscode-random
     Kasik96.latte
+    lextudio.restructuredtext
     lkrms.inifmt
     mads-hartmann.bash-ide-vscode
     maelvalais.autoconf
     mgmcdermott.vscode-language-babel
-    Mikael.Angular-BeastCode
     mitchdenny.ecdc
+    monokai.theme-monokai-pro-vscode
     mrmlnc.vscode-apache
     ms-azuretools.vscode-azurefunctions
     ms-azuretools.vscode-azureresourcegroups
@@ -45,6 +43,7 @@ VSCODE_EXTENSIONS=(
     ms-vscode.powershell
     ms-vscode.test-adapter-converter
     mtxr.sqltools
+    pdconsec.vscode-print
     piotrpalarz.vscode-gitignore-generator
     PKief.material-icon-theme
     pthorsson.vscode-jsp
@@ -56,16 +55,6 @@ VSCODE_EXTENSIONS=(
     redhat.vscode-xml
     redhat.vscode-yaml
     ryu1kn.partial-diff
-    salesforce.salesforce-vscode-slds
-    salesforce.salesforcedx-vscode
-    salesforce.salesforcedx-vscode-apex
-    salesforce.salesforcedx-vscode-apex-debugger
-    salesforce.salesforcedx-vscode-apex-replay-debugger
-    salesforce.salesforcedx-vscode-core
-    salesforce.salesforcedx-vscode-lightning
-    salesforce.salesforcedx-vscode-lwc
-    salesforce.salesforcedx-vscode-soql
-    salesforce.salesforcedx-vscode-visualforce
     sfodje.perltidy
     shardulm94.trailing-spaces
     spadin.memento-inputs
@@ -76,6 +65,7 @@ VSCODE_EXTENSIONS=(
     TaoKlerks.poor-mans-t-sql-formatter-vscode
     timonwong.shellcheck
     trixnz.vscode-lua
+    trond-snekvik.simple-rst
     twxs.cmake
     Tyriar.lorem-ipsum
     Tyriar.sort-lines

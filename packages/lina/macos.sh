@@ -39,8 +39,3 @@ MAS_APPS+=(
     1055273043 # PDF Expert
     585829637  # Todoist
 )
-
-LOGIN_ITEMS+=(
-    /Applications/Nextcloud.app
-    /Applications/Todoist.app
-)

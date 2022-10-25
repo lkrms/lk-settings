@@ -233,7 +233,7 @@ function rename-tv-episodes() {
             MV[${#MV[@]}]=$(printf '%q %q' "$FILE" "$NEW_FILE")
         done < <(find "${@:-.}" -type f -regextype posix-egrep \
             -regex ".*/[^/.][^/]*\.($EXT_RE)" -print0 |
-            xargs -0 realpath -z | sort -zV)
+            xargs -0r realpath -z | sort -zV)
     done
     _do-rename-media
 }
@@ -259,7 +259,7 @@ function rename-movies() {
         MV[${#MV[@]}]=$(printf '%q %q' "$FILE" "$NEW_FILE")
     done < <(find "${@:-.}" -type f -regextype posix-egrep \
         -regex '.*/[^/.][^/]*\.(m4v|mkv|mp4)' -print0 |
-        xargs -0 realpath -z | sort -zV)
+        xargs -0r realpath -z | sort -zV)
     _do-rename-media
 }
 

@@ -1,15 +1,25 @@
 {
-    "repositories": [
-        {
-            "type": "path",
-            "url": "~/Code/plc/lib/php-sync"
-        },
-        {
-            "type": "path",
-            "url": "~/Code/lk/php-util"
+  "repositories": [
+    {
+      "type": "path",
+      "url": "~/Code/plc/lib/php-sync",
+      "options": {
+        "versions": {
+          "pymblelc/sync": "dev-main"
         }
-    ],
-    "config": {
-        "use-parent-dir": true
+      }
+    },
+    {
+      "type": "path",
+      "url": "~/Code/lk/php-util",
+      "options": {
+        "versions": {
+          "lkrms/util": "v0.17.8"
+        }
+      }
     }
+  ],
+  "config": {
+    "use-parent-dir": true
+  }
 }

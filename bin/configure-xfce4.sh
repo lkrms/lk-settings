@@ -88,7 +88,14 @@ done
 ! lk_command_exists autorandr ||
     lk_env_clean autorandr --change --force
 
-DPI=$(lk_x_dpi) || DPI=
+case "$(hostname -s)" in
+roxy)
+    DPI=120
+    ;;
+*)
+    DPI=$(lk_x_dpi) || DPI=
+    ;;
+esac
 
 CONF=$(grep -Ev \
     "^(xft-dpi$S*=|\$)" \
@@ -135,12 +142,10 @@ lk_symlink "$_ROOT/xfce4/thunar/" ~/.config/Thunar
 lk_symlink "$_ROOT/xfce4/xfce4-panel-profiles/" \
     ~/.local/share/xfce4-panel-profiles
 
-lk_symlink "$_ROOT/xfce4/share/themes/Adapta/plank/" \
-    ~/.local/share/plank/themes/Adapta
-lk_symlink /usr/share/themes/Adapta/gtk-3.24/gtk.gresource \
-    "$_ROOT/xfce4/share/themes/Adapta/gtk-3.24/gtk.gresource" &&
-    lk_symlink "$_ROOT/xfce4/share/themes/" \
-        ~/.local/share/themes
+lk_symlink "$_ROOT/xfce4/share/plank/themes/" \
+    ~/.local/share/plank/themes
+lk_symlink "$_ROOT/xfce4/share/themes/" \
+    ~/.local/share/themes
 
 rm -Rfv ~/.cache/sessions
 

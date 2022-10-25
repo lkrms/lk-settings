@@ -14,8 +14,15 @@
     "Lua.workspace.library": [
         "/usr/share/lua/5.4"
     ],
+    "Prettier-SQL.SQLFlavourOverride": "sqlite",
+    "Prettier-SQL.ignoreTabSettings": true,
+    "Prettier-SQL.keywordCase": "upper",
+    "Prettier-SQL.linesBetweenQueries": 0,
     "[css]": {
         "editor.defaultFormatter": "HookyQR.beautify"
+    },
+    "[dockerfile]": {
+        "editor.defaultFormatter": "foxundermoon.shell-format"
     },
     "[hosts]": {
         "editor.defaultFormatter": "lkrms.inifmt"
@@ -73,7 +80,10 @@
         "editor.defaultFormatter": "ms-python.python"
     },
     "[sql]": {
-        "editor.defaultFormatter": "mtxr.sqltools"
+        "editor.defaultFormatter": "inferrinizzard.prettier-sql-vscode",
+        "editor.detectIndentation": false,
+        "editor.insertSpaces": true,
+        "editor.tabSize": 2
     },
     "[xml]": {
         "editor.defaultFormatter": "redhat.vscode-xml"
@@ -97,7 +107,6 @@
         "space_before_conditional": true,
         "wrap_line_length": 80
     },
-    "bookmarks.saveBookmarksInProject": true,
     "css.format.newlineBetweenRules": false,
     "css.format.newlineBetweenSelectors": false,
     "dash.languageIdToDocsetMap": {
@@ -114,6 +123,7 @@
     "editor.bracketPairColorization.independentColorPoolPerBracketType": true,
     "editor.comments.ignoreEmptyLines": false,
     "editor.comments.insertSpace": false,
+    "editor.cursorBlinking": "solid",
     "editor.cursorSurroundingLines": 2,
     "editor.dragAndDrop": false,
     "editor.fontFamily": "'JetBrains Mono', 'Source Code Pro', Menlo, Monaco, 'Courier New', monospace",
@@ -131,7 +141,48 @@
         120,
         0
     ],
-    "editor.suggest.localityBonus": true,
+    "editor.tokenColorCustomizations": {
+        "[Monokai Pro (Filter Octagon)]": {
+            "textMateRules": [
+                {
+                    "scope": [
+                        "comment keyword.other.phpdoc.php"
+                    ],
+                    "settings": {
+                        "foreground": "#c39ac9"
+                    }
+                },
+                {
+                    "scope": [
+                        "comment keyword.other.type.php"
+                    ],
+                    "settings": {
+                        "foreground": "#888d94"
+                    }
+                }
+            ]
+        },
+        "[Monokai Pro (Filter Spectrum)]": {
+            "textMateRules": [
+                {
+                    "scope": [
+                        "comment keyword.other.phpdoc.php"
+                    ],
+                    "settings": {
+                        "foreground": "#948ae3"
+                    }
+                },
+                {
+                    "scope": [
+                        "comment keyword.other.type.php"
+                    ],
+                    "settings": {
+                        "foreground": "#8b888f"
+                    }
+                }
+            ]
+        }
+    },
     "editor.wordBasedSuggestions": false,
     "emmet.excludeLanguages": [
         "markdown",
@@ -177,6 +228,11 @@
     "files.watcherExclude": {
         "**/wp-content/uploads/**": true
     },
+    "files.watcherInclude": [
+        "vendor/lkrms/dice",
+        "vendor/lkrms/util",
+        "vendor/pymblelc/sync"
+    ],
     "git.confirmSync": true,
     "git.countBadge": "off",
     "git.enableStatusBarSync": false,
@@ -325,16 +381,18 @@
     "javascript.autoClosingTags": false,
     "javascript.format.insertSpaceBeforeFunctionParenthesis": true,
     "javascript.validate.enable": false,
+    "json.schemas": [
+        {
+            "fileMatch": [
+                "composer.json"
+            ],
+            "url": "https://raw.githubusercontent.com/composer/composer/master/res/composer-schema.json"
+        }
+    ],
     "keyboard.dispatch": "keyCode",
     "lua.format.lineWidth": 1000,
     "lua.targetVersion": "5.3",
-    "material-icon-theme.languages.associations": {
-        "php": "php_elephant"
-    },
     "nginx-conf-hint.syntax": "sublime",
-    "nightswitch.autoSwitch": false,
-    "nightswitch.themeDay": "Quiet Light",
-    "nightswitch.themeNight": "GitHub Dark Dimmed",
     "partialDiff.enableTelemetry": false,
     "perltidy.additionalArguments": [
         "--indent-columns=2"
@@ -343,7 +401,7 @@
     "phpunit.logpanel": true,
     "phpunit.php": "/usr/bin/env php -dxdebug.start_with_request=yes -dxdebug.mode=debug,develop",
     "phpunit.shell": "/bin/bash",
-    "poor-mans-t-sql-formatter.std.indent": "    ",
+    "poor-mans-t-sql-formatter.std.indent": "  ",
     "poor-mans-t-sql-formatter.std.trailingCommas": false,
     "powershell.codeFormatting.newLineAfterCloseBrace": false,
     "powershell.codeFormatting.pipelineIndentationStyle": "IncreaseIndentationForFirstPipeline",
@@ -353,6 +411,7 @@
     "python.formatting.autopep8Args": [
         "--aggressive"
     ],
+    "python.formatting.provider": "black",
     "python.showStartPage": false,
     "redhat.telemetry.enabled": false,
     "ruby.format": "rubocop",
@@ -390,6 +449,7 @@
         "SC2034",
         "SC2046",
         "SC2054",
+        "SC2064",
         "SC2086",
         "SC2119",
         "SC2120",
@@ -459,7 +519,6 @@
     "terminal.integrated.sendKeybindingsToShell": true,
     "terminal.integrated.shellIntegration.enabled": false,
     "terminal.integrated.showExitAlert": false,
-    "testExplorer.useNativeTesting": true,
     "trailing-spaces.highlightCurrentLine": false,
     "typescript.autoClosingTags": false,
     "update.showReleaseNotes": false,
@@ -470,12 +529,11 @@
     "workbench.editor.highlightModifiedTabs": true,
     "workbench.editor.revealIfOpen": true,
     "workbench.editor.untitled.hint": "hidden",
-    "workbench.editor.wrapTabs": true,
+    "workbench.editor.wrapTabs": false,
     "workbench.enableExperiments": false,
-    "workbench.iconTheme": "material-icon-theme",
-    "workbench.preferredDarkColorTheme": "GitHub Dark Dimmed",
+    "workbench.iconTheme": "Monokai Pro (Filter Octagon) Icons",
+    "workbench.preferredDarkColorTheme": "Monokai Pro (Filter Octagon)",
     "workbench.preferredLightColorTheme": "Quiet Light",
-    "workbench.quickOpen.preserveInput": true,
     "workbench.settings.editor": "json",
     "workbench.settings.enableNaturalLanguageSearch": false,
     "workbench.startupEditor": "newUntitledFile",

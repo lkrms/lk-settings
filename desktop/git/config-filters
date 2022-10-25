@@ -76,7 +76,7 @@
 	smudge = cat
 
 [filter "sublimemerge"]
-	clean = jsonlint -Sf --sort preserve | jq -S '.+={hide_menu:true,side_bar_layout:\"locations_as_column\",theme:\"Merge Dark.sublime-theme\"}'
+	clean = jsonlint -Sf --sort preserve | jq -S '.+={hide_menu:true,side_bar_layout:\"locations_as_column\",theme:\"Merge Dark.sublime-theme\",hardware_acceleration:\"none\"}'
 	smudge = cat
 
 [filter "typora-plist"]
@@ -88,8 +88,8 @@
 	smudge = cat
 
 [filter "vscodesettings"]
-	clean = jsonlint -Sf --sort preserve | jq -S --indent 4 'del(.\"breadcrumbs.enabled\",.\"diffEditor.renderSideBySide\",.\"editor.fontSize\",.\"editor.minimap.enabled\",.\"salesforcedx-vscode-apex.java.home\",.\"shellformat.path\",.\"window.zoomLevel\",.\"workbench.colorTheme\",.\"workbench.editorAssociations\",.\"sync.gist\")|walk(if type==\"array\" then sort_by(try ascii_upcase catch \"\") else . end)'
-	smudge = jsonlint -Sf --sort preserve | jq -S --indent 4 --arg shfmt \"$(type -P shfmt)\" '.+={\"shellformat.path\":$shfmt,\"workbench.colorTheme\":\"GitHub Dark Dimmed\",\"sync.gist\":\"37270e994d5e9d05e27d5040b904b380\"}'
+	clean = jsonlint -Sf --sort preserve | jq -S --indent 4 'del(.\"breadcrumbs.enabled\",.\"diffEditor.renderSideBySide\",.\"editor.fontSize\",.\"editor.minimap.enabled\",.\"salesforcedx-vscode-apex.java.home\",.\"shellformat.path\",.\"window.zoomLevel\",.\"workbench.colorTheme\",.\"workbench.editorAssociations\")|walk(if type==\"array\" then sort_by(try ascii_upcase catch \"\") else . end)'
+	smudge = jsonlint -Sf --sort preserve | jq -S --indent 4 --arg shfmt \"$(type -P shfmt)\" '.+={\"shellformat.path\":$shfmt,\"workbench.colorTheme\":\"Monokai Pro (Filter Octagon)\"}'
 
 [filter "whiskermenu"]
 	clean = sed -E '/^(recent|menu-(width|height)|[a-z]+-icon-size)=/d'

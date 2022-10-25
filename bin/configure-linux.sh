@@ -361,8 +361,7 @@ symlink_if_not_running \
 FILE=/opt/vscodium-bin/resources/app/product.json
 if [ -f "$FILE" ]; then
     VSCODE_PRODUCT_JSON=$(jq '
-.nameShort = "Visual Studio Code" |
-  .nameLong = "Visual Studio Code" |
+.urlProtocol = "vscode" |
   .extensionsGallery = {
     "serviceUrl": "https://marketplace.visualstudio.com/_apis/public/gallery",
     "cacheUrl": "https://vscode.blob.core.windows.net/gallery/index",

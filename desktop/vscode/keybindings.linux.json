@@ -99,6 +99,36 @@
         "when": "editorTextFocus"
     },
     {
+        "key": "alt+f8",
+        "command": "-editor.action.marker.next",
+        "when": "editorFocus"
+    },
+    {
+        "key": "f8",
+        "command": "editor.action.marker.next",
+        "when": "editorFocus"
+    },
+    {
+        "key": "f8",
+        "command": "-editor.action.marker.nextInFiles",
+        "when": "editorFocus"
+    },
+    {
+        "key": "shift+alt+f8",
+        "command": "-editor.action.marker.prev",
+        "when": "editorFocus"
+    },
+    {
+        "key": "shift+f8",
+        "command": "editor.action.marker.prev",
+        "when": "editorFocus"
+    },
+    {
+        "key": "shift+f8",
+        "command": "-editor.action.marker.prevInFiles",
+        "when": "editorFocus"
+    },
+    {
         "command": "-editor.action.removeCommentLine",
         "key": "ctrl+k ctrl+u",
         "when": "editorTextFocus && !editorReadonly"
@@ -133,10 +163,6 @@
     {
         "key": "ctrl+shift+f9",
         "command": "editor.debug.action.runToCursor"
-    },
-    {
-        "command": "extension.toggleTheme",
-        "key": "ctrl+alt+d"
     },
     {
         "key": "ctrl+shift+g",
@@ -188,7 +214,8 @@
     },
     {
         "key": "ctrl+shift+o",
-        "command": "outline.focus"
+        "command": "outline.focus",
+        "when": "focusedView != 'outline'"
     },
     {
         "key": "ctrl+k shift+f",
@@ -218,6 +245,10 @@
         "command": "sortLines.sortLinesNatural",
         "key": "f9",
         "when": "editorTextFocus && editorHasSelection && !inDebugMode"
+    },
+    {
+        "key": "ctrl+u",
+        "command": "-thunder-client.import-curl"
     },
     {
         "key": "ctrl+shift+space",
@@ -592,6 +623,15 @@
         "command": "workbench.action.terminal.toggleFindWholeWordTerminalFocus",
         "key": "ctrl+alt+w",
         "when": "terminalFocus"
+    },
+    {
+        "key": "ctrl+shift+o",
+        "command": "workbench.action.toggleAuxiliaryBar",
+        "when": "focusedView == 'outline'"
+    },
+    {
+        "key": "ctrl+alt+d",
+        "command": "workbench.action.toggleLightDarkThemes"
     },
     {
         "command": "-workbench.action.toggleSidebarVisibility",

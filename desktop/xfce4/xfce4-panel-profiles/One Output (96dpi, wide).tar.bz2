@@ -35,7 +35,7 @@
 /plugins/plugin-18 'separator'
 /plugins/plugin-18/style uint32 0
 /plugins/plugin-2 'tasklist'
-/plugins/plugin-2/grouping uint32 1
+/plugins/plugin-2/grouping uint32 0
 /plugins/plugin-2/include-all-monitors true
 /plugins/plugin-2/middle-click uint32 0
 /plugins/plugin-2/show-handle false

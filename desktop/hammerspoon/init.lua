@@ -234,7 +234,8 @@ _rule = {
     {
         criteria = {
             isMain = true,
-            event = {wf.windowCreated, wf.windowFocused},
+            --event = {wf.windowCreated, wf.windowFocused},
+            event = {wf.windowCreated},
             function(ev)
                 ev.place = getPlace(ev)
                 return ev.place ~= nil
@@ -331,6 +332,7 @@ function processEvent(window, appName, event)
         role = window:role(),
         subrole = window:subrole(),
         screenGeometry = screen and screen:fullFrame() or nil,
+        desktopGeometry = screen and screen:frame() or nil,
         display = screen and (screen:getUUID() == _screen1:getUUID()) and 1 or 2,
     }
     for i, rule in ipairs(_rule) do

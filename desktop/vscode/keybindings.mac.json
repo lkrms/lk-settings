@@ -85,6 +85,35 @@
         "when": "editorTextFocus"
     },
     {
+        "key": "alt+f8",
+        "command": "-editor.action.marker.next",
+        "when": "editorFocus"
+    },
+    {
+        "key": "f8",
+        "command": "editor.action.marker.next",
+        "when": "editorFocus"
+    },
+    {
+        "key": "f8",
+        "command": "-editor.action.marker.nextInFiles",
+        "when": "editorFocus"
+    },
+    {
+        "key": "shift+alt+f8",
+        "command": "-editor.action.marker.prev",
+        "when": "editorFocus"
+    },
+    {
+        "key": "shift+f8",
+        "command": "editor.action.marker.prev"
+    },
+    {
+        "key": "shift+f8",
+        "command": "-editor.action.marker.prevInFiles",
+        "when": "editorFocus"
+    },
+    {
         "command": "-editor.action.removeCommentLine",
         "key": "cmd+k cmd+u",
         "when": "editorTextFocus && !editorReadonly"
@@ -131,10 +160,6 @@
         "when": "editorTextFocus"
     },
     {
-        "command": "extension.toggleTheme",
-        "key": "ctrl+alt+d"
-    },
-    {
         "key": "ctrl+shift+g",
         "command": "git.openChange",
         "when": "editorTextFocus && !isInDiffEditor"
@@ -169,7 +194,8 @@
     },
     {
         "key": "shift+cmd+o",
-        "command": "outline.focus"
+        "command": "outline.focus",
+        "when": "focusedView != 'outline'"
     },
     {
         "key": "ctrl+k shift+f",
@@ -195,6 +221,10 @@
         "command": "sortLines.sortLinesNatural",
         "key": "f9",
         "when": "editorTextFocus && editorHasSelection && !inDebugMode"
+    },
+    {
+        "key": "cmd+u",
+        "command": "-thunder-client.import-curl"
     },
     {
         "key": "ctrl+shift+space",
@@ -494,6 +524,15 @@
         "key": "ctrl+alt+w",
         "command": "workbench.action.terminal.toggleFindWholeWord",
         "when": "terminalFindFocused && terminalHasBeenCreated || terminalFindFocused && terminalProcessSupported || terminalFocus && terminalHasBeenCreated || terminalFocus && terminalProcessSupported"
+    },
+    {
+        "key": "shift+cmd+o",
+        "command": "workbench.action.toggleAuxiliaryBar",
+        "when": "focusedView == 'outline'"
+    },
+    {
+        "key": "ctrl+alt+d",
+        "command": "workbench.action.toggleLightDarkThemes"
     },
     {
         "command": "-workbench.action.toggleSidebarVisibility",

@@ -3,7 +3,7 @@
   "editor_argument_format": "-g ${file}:${line}:${col}",
   "editor_path": "code",
   "expand_merge_commits_by_default": true,
-  "hardware_acceleration": "opengl",
+  "hardware_acceleration": "none",
   "hide_menu": true,
   "render_commit_dialog_message_at_top": true,
   "side_bar_layout": "locations_as_column",

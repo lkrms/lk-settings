@@ -13,7 +13,7 @@
             ],
             "options": {
                 "env": {
-                    "PRETTY_ALIGN_RANGE": "12"
+                    "PRETTY_ALIGN_RANGE": "8"
                 }
             },
             "problemMatcher": [],

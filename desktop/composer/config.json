@@ -1,11 +1,11 @@
 {
-    "repositories": [
-        {
-            "type": "path",
-            "url": "~/Code/plc/lib/php-sync"
-        }
-    ],
-    "config": {
-        "use-parent-dir": true
+  "repositories": [
+    {
+      "type": "path",
+      "url": "~/Code/plc/lib/php-sync"
     }
+  ],
+  "config": {
+    "use-parent-dir": true
+  }
 }
