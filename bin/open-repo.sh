@@ -30,11 +30,12 @@ function generate_list() {
         sed -E 's/^\.\///; /^vendor\//d' | sort >"$LIST_FILE"
 }
 
-COMMAND=(zenity)
+COMMAND=(yad)
 ! lk_is_macos || COMMAND=(bash -c "$(
     function run() {
-        zenity "$@" &
-        "$LK_BASE/lib/macos/process-focus.js" $! >>"/tmp/open-repo.log" 2>&1
+        yad "$@" &
+        #sleep 0.2
+        #"$LK_BASE/lib/macos/process-focus.js" $! >>"/tmp/open-repo.log" 2>&1
         wait
     }
     declare -f run
@@ -49,7 +50,7 @@ else
     lk_mapfile LIST <"$LIST_FILE"
 fi
 
-(($#)) || set -- smerge
+(($#)) || set -- smerge '{}'
 
 IFS=$'\n'
 OPEN=($(
@@ -60,16 +61,20 @@ OPEN=($(
         { [ ! -e "$HIST_FILE2" ] ||
             grep -Eof <(sed 's/^/^/' "$LIST_FILE") "$HIST_FILE2" | tail -n24 ||
             [ "${PIPESTATUS[*]}" = 10 ]; }; } |
-        #sort | uniq -c | sort -k1,1nr -k2,2 |
-        #awk '{ printf("%s\0%s\0", $2, $2); }' |
         tac | lk_uniq | awk '{ printf("%s\0%s\0", $1, $1); }' |
-        { IFS=' ' && xargs -0r "${COMMAND[@]}" --list \
+        { IFS=' ' && xargs -0r "${COMMAND[@]}" \
+            --list \
+            --separator='\n' \
+            --multiple \
+            --column=FILE \
+            --column=Repository \
+            --print-column=1 \
+            --hide-column=1 \
             --title "Open repository with $*" \
             --text "Select one or more repositories:" \
-            --hide-header --hide-column=1 \
-            --column=Key --column=Name \
-            --multiple --separator='\n' \
-            --width=450 --height=550; } |
+            --width=450 \
+            --height=550; } |
+        tr -s '\n' |
         tee -a "$HIST_FILE"
 )) || OPEN=()
 
@@ -78,9 +83,11 @@ wait
 [[ -n ${OPEN+1} ]] || exit 0
 
 unset IFS
+COUNT=0
 for ((i = 1; i <= $#; i++)); do
     if [[ ${!i} == "{}" ]]; then
         for FILE in "${OPEN[@]}"; do
+            ((!COUNT++)) || sleep 0.2
             nohup "${@:1:i-1}" "$FILE" "${@:i+1}" &>/dev/null &
             disown
         done

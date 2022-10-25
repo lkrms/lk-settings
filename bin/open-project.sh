@@ -27,12 +27,12 @@ function generate_list() {
     printf '%s\n' {,*/,*/*/,*/*/*/,*/*/*/*/}*.code-workspace >"$LIST_FILE"
 }
 
-COMMAND=(zenity)
+COMMAND=(yad)
 ! lk_is_macos || COMMAND=(bash -c "$(
     function run() {
-        zenity "$@" &
-        sleep 0.2
-        "$LK_BASE/lib/macos/process-focus.js" $! >>"/tmp/open-project.log" 2>&1
+        yad "$@" &
+        #sleep 0.2
+        #"$LK_BASE/lib/macos/process-focus.js" $! >>"/tmp/open-project.log" 2>&1
         wait
     }
     declare -f run
@@ -47,27 +47,49 @@ else
     lk_mapfile LIST <"$LIST_FILE"
 fi
 
+(($#)) || set -- code
+
 IFS=$'\n'
 OPEN=($(
     { IFS= && lk_arr LIST &&
         { [ ! -e "$HIST_FILE" ] ||
             grep -Fxf <(lk_arr LIST) "$HIST_FILE" | tail -n24 ||
-            [[ ${PIPESTATUS[*]} == 10 ]]; }; } |
+            [ "${PIPESTATUS[*]}" = 10 ]; }; } |
         #sort | uniq -c | sort -k1,1nr -k2,2 | awk '{print $2}' |
         tac | lk_uniq |
         gnu_sed -E 'p; s/\.code-workspace$//; s/([^/]+)\/\1$/\1/' |
         tr '\n' '\0' |
-        xargs -0r "${COMMAND[@]}" --list \
+        xargs -0r "${COMMAND[@]}" \
+            --list \
+            --separator='\n' \
+            --multiple \
+            --column=FILE \
+            --column=Workspace \
+            --print-column=1 \
+            --hide-column=1 \
             --title "Open workspace" \
             --text "Select one or more workspaces:" \
-            --hide-header --hide-column=1 \
-            --column=Key --column=Name \
-            --multiple --separator='\n' \
-            --width=450 --height=550 |
+            --width=450 \
+            --height=550 |
+        tr -s '\n' |
         tee -a "$HIST_FILE"
 )) || OPEN=()
 
 wait
 
-[[ -z ${OPEN+1} ]] ||
-    exec code "${OPEN[@]}"
+[[ -n ${OPEN+1} ]] || exit 0
+
+unset IFS
+COUNT=0
+for ((i = 1; i <= $#; i++)); do
+    if [[ ${!i} == "{}" ]]; then
+        for FILE in "${OPEN[@]}"; do
+            ((!COUNT++)) || sleep 0.2
+            nohup "${@:1:i-1}" "$FILE" "${@:i+1}" &>/dev/null &
+            disown
+        done
+        exit
+    fi
+done
+
+exec "$@" "${OPEN[@]}"
