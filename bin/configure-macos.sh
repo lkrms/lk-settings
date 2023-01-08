@@ -96,6 +96,7 @@ EOF
     unset LK_SUDO
 }
 
+symlink "$_ROOT/.inputrc" ~/.inputrc
 symlink "$_ROOT/.vimrc" ~/.vimrc
 symlink "$_ROOT/.tidyrc" ~/.tidyrc
 symlink "$_ROOT/.byoburc" ~/.byoburc

@@ -33,9 +33,9 @@ function generate_list() {
 COMMAND=(yad)
 ! lk_is_macos || COMMAND=(bash -c "$(
     function run() {
-        yad "$@" &
-        #sleep 0.2
-        #"$LK_BASE/lib/macos/process-focus.js" $! >>"/tmp/open-repo.log" 2>&1
+        zenity "$@" &
+        sleep 0.2
+        "$LK_BASE/lib/macos/process-focus.js" $! >>"/tmp/open-repo.log" 2>&1
         wait
     }
     declare -f run
@@ -61,7 +61,8 @@ OPEN=($(
         { [ ! -e "$HIST_FILE2" ] ||
             grep -Eof <(sed 's/^/^/' "$LIST_FILE") "$HIST_FILE2" | tail -n24 ||
             [ "${PIPESTATUS[*]}" = 10 ]; }; } |
-        tac | lk_uniq | awk '{ printf("%s\0%s\0", $1, $1); }' |
+        tac | lk_uniq | awk '{print $1;print $1}' |
+        tr '\n' '\0' |
         { IFS=' ' && xargs -0r "${COMMAND[@]}" \
             --list \
             --separator='\n' \

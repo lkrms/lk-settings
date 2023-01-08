@@ -53,6 +53,7 @@ _criteria.private = {
         "caprine",
         "skype",
         "keepassxc",
+        "crx_hnpfjngllnobngcgfapefoaidbinmjnm", -- WhatsApp
     },
 }
 
@@ -94,12 +95,14 @@ _groups = {
             },
         },
         ["microsoft teams - insiders"] = {},
+        ["crx_cifhbcnohmdccbgoicgdjpfamggdegmo"] = {}, -- Teams
     },
     messenger = {
         ["caprine"] = {},
     },
     skype = {
         ["skype"] = {},
+        ["crx_hnpfjngllnobngcgfapefoaidbinmjnm"] = {}, -- WhatsApp
     },
     time = {
         ["clockify"] = {

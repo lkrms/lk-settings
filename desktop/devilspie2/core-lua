@@ -241,8 +241,15 @@ xprop -root 32c '\n$0+\n' _NET_CURRENT_DESKTOP | sed '2!d'
     return workspace + 1
 end
 
+function _get_decoration_geometry(window_geometry, window_client_geometry)
+    local w = window_geometry[3] - window_client_geometry[3]
+    local h = window_geometry[4] - window_client_geometry[4]
+    return math.max(0, w), math.max(0, h)
+end
+
 function get_state(event)
-    local display, window_geometry = get_display(), {get_window_geometry()}
+    local display = get_display()
+    local window_geometry, window_client_geometry = {get_window_geometry()}, {get_window_client_geometry()}
     local display_geometry = display and get_display_geometry(display) or nil
     return {
         event = event,
@@ -253,7 +260,8 @@ function get_state(event)
         window_name = get_window_name(),
         application_name = event == "close" and "" or (get_application_name() or ""),
         window_geometry = window_geometry,
-        window_client_geometry = {get_window_client_geometry()},
+        window_client_geometry = window_client_geometry,
+        window_decoration_geometry = {_get_decoration_geometry(window_geometry, window_client_geometry)},
         window_is_maximized = get_window_is_maximized() or
             (window_geometry and display_geometry and
                 -- Use `>=` because decorations may be added
@@ -559,15 +567,21 @@ end
 
 function width_matches_grid(state, columns)
     local col_w = math.floor(state.display_geometry[3] / columns)
-    return state.window_geometry[3] % col_w == 0
+    return (state.window_geometry[3] % col_w == 0) or
+        ((state.window_geometry[3] - state.window_decoration_geometry[1]) % col_w == 0)
 end
 
 function position_matches_grid(state, columns, rows)
     local d_x, d_y, d_w, d_h = table.unpack(state.display_geometry)
     local col_w, row_h = math.floor(d_w / columns), math.floor(d_h / rows)
     local x, y, w, h = table.unpack(state.window_geometry)
-    return x >= d_x and x + w <= d_x + d_w and (x - d_x) % col_w == 0 and
-        y >= d_y and y + h <= d_y + d_h and (y - d_y) % row_h == 0
+    local dec_w, dec_h = table.unpack(state.window_decoration_geometry)
+    local _dec_w = dec_w / 2
+    return (x >= d_x and x + w <= d_x + d_w and (x - d_x) % col_w == 0 and
+        y >= d_y and y + h <= d_y + d_h and (y - d_y) % row_h == 0) or
+        -- Adjust for unmaximizing in Xfce with "hide frame when maximized" enabled
+        ((x + _dec_w) >= d_x and (x + _dec_w) + (w - dec_w) <= d_x + d_w and ((x + _dec_w) - d_x) % col_w == 0 and
+            y >= d_y and y + (h - dec_h) <= d_y + d_h and (y - d_y) % row_h == 0)
 end
 
 function log_window_full(event)

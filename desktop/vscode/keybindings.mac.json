@@ -1,5 +1,36 @@
 [
     {
+        "key": "alt+cmd+backspace",
+        "command": "bracketeer.removeBrackets"
+    },
+    {
+        "key": "shift+alt+cmd+i",
+        "command": "-bracketeer.removeBrackets"
+    },
+    {
+        "key": "shift+alt+cmd+'",
+        "command": "-bracketeer.removeQuotes"
+    },
+    {
+        "key": "shift+alt+cmd+backspace",
+        "command": "bracketeer.removeQuotes"
+    },
+    {
+        "key": "shift+alt+cmd+left",
+        "command": "-cursorColumnSelectLeft",
+        "when": "textInputFocus"
+    },
+    {
+        "key": "shift+alt+cmd+right",
+        "command": "-cursorColumnSelectRight",
+        "when": "textInputFocus"
+    },
+    {
+        "key": "alt+cmd+backspace",
+        "command": "-deleteFile",
+        "when": "explorerViewletVisible && filesExplorerFocus && !explorerResourceReadonly && !inputFocus"
+    },
+    {
         "command": "-editor.action.addCommentLine",
         "key": "cmd+k cmd+c",
         "when": "editorTextFocus && !editorReadonly"
@@ -160,6 +191,11 @@
         "when": "editorTextFocus"
     },
     {
+        "key": "f11",
+        "command": "-extension.node-debug.startWithStopOnEntry",
+        "when": "!inDebugMode && activeViewlet == 'workbench.view.debug' && debugConfigurationType == 'node' || !inDebugMode && activeViewlet == 'workbench.view.debug' && debugConfigurationType == 'pwa-extensionHost' || !inDebugMode && activeViewlet == 'workbench.view.debug' && debugConfigurationType == 'pwa-node'"
+    },
+    {
         "key": "ctrl+shift+g",
         "command": "git.openChange",
         "when": "editorTextFocus && !isInDiffEditor"
@@ -198,6 +234,11 @@
         "when": "focusedView != 'outline'"
     },
     {
+        "key": "f11",
+        "command": "-php.debug.startWithStopOnEntry",
+        "when": "!inDebugMode && debugConfigurationType == 'php'"
+    },
+    {
         "key": "ctrl+k shift+f",
         "command": "-poor-mans-t-sql-formatter.formatSql",
         "when": "editorTextFocus"
@@ -206,6 +247,10 @@
         "key": "shift+alt+cmd+f",
         "command": "poor-mans-t-sql-formatter.formatSql",
         "when": "editorTextFocus && !editorReadonly && editorLangId == 'sql'"
+    },
+    {
+        "key": "shift+alt+q",
+        "command": "prettier-sql-vscode.format-selection"
     },
     {
         "command": "-sortLines.sortLines",
@@ -409,12 +454,36 @@
         "key": "shift+alt+2"
     },
     {
+        "key": "shift+alt+cmd+p",
+        "command": "workbench.action.evenEditorWidths"
+    },
+    {
+        "key": "cmd+k cmd+left",
+        "command": "-workbench.action.focusLeftGroup"
+    },
+    {
+        "key": "shift+alt+cmd+left",
+        "command": "workbench.action.focusLeftGroup"
+    },
+    {
+        "key": "cmd+k cmd+right",
+        "command": "-workbench.action.focusRightGroup"
+    },
+    {
+        "key": "shift+alt+cmd+right",
+        "command": "workbench.action.focusRightGroup"
+    },
+    {
         "command": "workbench.action.gotoSymbol",
         "key": "cmd+r"
     },
     {
         "command": "-workbench.action.gotoSymbol",
         "key": "shift+cmd+o"
+    },
+    {
+        "key": "shift+alt+cmd+o",
+        "command": "workbench.action.maximizeEditor"
     },
     {
         "command": "-workbench.action.moveEditorToNextGroup",

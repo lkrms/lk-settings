@@ -4,12 +4,11 @@ Frame=0
 Border=0
 Bars=0
 TrackedCore=0
-Command=xfce4-taskmanager
 InTerminal=0
 StartupNotification=1
 ColorMode=1
-Background=rgb(0,0,0)
+Background=rgba(0,0,0,0)
 PerCore=0
 Mode=1
-Foreground3=rgb(0,0,0)
+Foreground3=rgba(0,0,0,0)
 

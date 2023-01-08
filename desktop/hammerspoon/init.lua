@@ -86,6 +86,7 @@ _groups = {
     },
     skype = {
         ["Skype"] = {},
+        ["WhatsApp"] = {},
     },
     time = {
         ["Clockify Desktop"] = {},
@@ -173,9 +174,37 @@ function toPlace(place, ev)
         w > 0 and (w / p.grid[1]) or nil,
         h > 0 and (h / p.grid[2]) or nil
     )
-    local unitRect, windowFrame = _screen[p.display or ev.display]:fromUnitRect(rect), ev.window:frame()
+    local unitRect, windowFrame, desktop = _screen[p.display or ev.display]:fromUnitRect(rect),
+        ev.windowGeometry, ev.desktopGeometry
     logger.v("unitRect = " .. hs.inspect.inspect(unitRect))
     logger.v("windowFrame = " .. hs.inspect.inspect(windowFrame))
+    if not _initialising and windowFrame["w"] > 0 and windowFrame["h"] > 0 then
+        local gridWidth, gridHeight = desktop["w"] / p.grid[1], desktop["h"] / p.grid[2]
+        local _x, _y, _gx, _gy, _w, _h, _w3, _gw, _gh
+        -- _x, _y = window position, relative to desktop
+        _x = windowFrame["x"] - desktop["x"]
+        _y = windowFrame["y"] - desktop["y"]
+        -- _gx, _gy = modulus of <window position> / <grid size>
+        _gx = _x % gridWidth
+        _gy = _y % gridHeight
+        -- _x, _y = modulus of <desktop size> / <window position>
+        _x = _x > 0 and (desktop["w"] % _x) or 0
+        _y = _y > 0 and (desktop["h"] % _y) or 0
+        -- _w, _h = modulus of <desktop size> / <window size>
+        _w = (desktop["w"] + 1) % windowFrame["w"]
+        _h = (desktop["h"] + 1) % windowFrame["h"]
+        -- _w3 = same for windows that cover two-thirds of the desktop
+        _w3 = (desktop["h"] + 1) % (windowFrame["h"] / 2)
+        -- _gw, _gh = modulus of <window size> / <grid size>
+        _gw = (windowFrame["w"] + 1) % gridWidth
+        _gh = (windowFrame["h"] + 1) % gridHeight
+        -- If the window falls within 1 pixel of alignment with the grid or a
+        -- split display boundary, it has probably been placed here deliberately
+        if ((_x < 2 and _y < 2) and (_w < 2 and _h < 2)) or ((_gx < 2 and _gy < 2) and (_gw < 2 and _gh < 2)) then
+            logger.i("Already aligned: " .. ev.appName)
+            do return end
+        end
+    end
     for i, f in ipairs({"x", "y", "w", "h"}) do
         if math.floor(unitRect[f]) ~= math.floor(windowFrame[f]) then
             goto move
@@ -183,7 +212,7 @@ function toPlace(place, ev)
     end
     do return end
     ::move::
-    logger.d("Moving " .. ev.appName .. " to " .. hs.inspect.inspect(rect))
+    logger.i("Moving " .. ev.appName .. " to " .. hs.inspect.inspect(rect))
     ev.window:moveToUnit(rect)
 end
 
@@ -234,8 +263,7 @@ _rule = {
     {
         criteria = {
             isMain = true,
-            --event = {wf.windowCreated, wf.windowFocused},
-            event = {wf.windowCreated},
+            event = {wf.windowCreated, wf.windowFocused},
             function(ev)
                 ev.place = getPlace(ev)
                 return ev.place ~= nil
@@ -331,6 +359,7 @@ function processEvent(window, appName, event)
         isMain = (app and app:mainWindow() == window) or nil,
         role = window:role(),
         subrole = window:subrole(),
+        windowGeometry = window:frame(),
         screenGeometry = screen and screen:fullFrame() or nil,
         desktopGeometry = screen and screen:frame() or nil,
         display = screen and (screen:getUUID() == _screen1:getUUID()) and 1 or 2,

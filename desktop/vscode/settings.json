@@ -11,6 +11,7 @@
         "keep_one_space_between_table_and_bracket": "false"
     },
     "Lua.telemetry.enable": false,
+    "Lua.workspace.checkThirdParty": false,
     "Lua.workspace.library": [
         "/usr/share/lua/5.4"
     ],
@@ -43,7 +44,12 @@
         "editor.defaultFormatter": "vscode.json-language-features"
     },
     "[lua]": {
-        "editor.defaultFormatter": "sumneko.lua"
+        "editor.defaultFormatter": "sumneko.lua",
+        "editor.quickSuggestions": {
+            "comments": "off",
+            "other": "on",
+            "strings": "off"
+        }
     },
     "[markdown]": {
         "editor.quickSuggestions": {
@@ -93,6 +99,7 @@
     },
     "azureFunctions.showCoreToolsWarning": false,
     "bashIde.highlightParsingErrors": false,
+    "bashIde.shellcheckPath": "",
     "beautify.config": {
         "break_chained_methods": true,
         "end_with_newline": true,
@@ -142,6 +149,26 @@
         0
     ],
     "editor.tokenColorCustomizations": {
+        "[Monokai Pro (Filter Machine)]": {
+            "textMateRules": [
+                {
+                    "scope": [
+                        "comment keyword.other.phpdoc.php"
+                    ],
+                    "settings": {
+                        "foreground": "#baa0f8"
+                    }
+                },
+                {
+                    "scope": [
+                        "comment keyword.other.type.php"
+                    ],
+                    "settings": {
+                        "foreground": "#8b9798"
+                    }
+                }
+            ]
+        },
         "[Monokai Pro (Filter Octagon)]": {
             "textMateRules": [
                 {
@@ -223,9 +250,12 @@
     "files.exclude": {
         "**/*.compiled.*": true,
         "**/*.min.*": true,
+        "**/build/phar/**": true,
         "**/extjs/build/**": true
     },
     "files.watcherExclude": {
+        "**/build/**": true,
+        "**/tests.*/**": true,
         "**/wp-content/uploads/**": true
     },
     "files.watcherInclude": [
@@ -285,6 +315,19 @@
     "gitlens.statusBar.format": "${author}, ${date} • ${message}",
     "gitlens.statusBar.reduceFlicker": true,
     "html.autoClosingTags": false,
+    "intelephense.files.exclude": [
+        "${workspaceFolder}/vendor/**/vendor/**",
+        "**/.DS_Store/**",
+        "**/.git/**",
+        "**/.hg/**",
+        "**/.history/**",
+        "**/.svn/**",
+        "**/bower_components/**",
+        "**/CVS/**",
+        "**/node_modules/**",
+        "**/var/**",
+        "**/vendor/**/{Tests,tests}/**"
+    ],
     "intelephense.phpdoc.classTemplate": {
         "summary": "$1",
         "tags": [
@@ -295,12 +338,11 @@
         "summary": "$1",
         "tags": [
             "@param ${1:$SYMBOL_TYPE} $SYMBOL_NAME $2",
-            "@return ${1:$SYMBOL_TYPE} $2"
+            "@return ${1:$SYMBOL_TYPE} $2",
+            "@throws ${1:$SYMBOL_TYPE} $2"
         ]
     },
     "intelephense.phpdoc.returnVoid": false,
-    "intelephense.references.exclude": [],
-    "intelephense.rename.exclude": [],
     "intelephense.stubs": [
         "apache",
         "bcmath",
@@ -351,6 +393,7 @@
         "Phar",
         "posix",
         "pspell",
+        "random",
         "readline",
         "Reflection",
         "session",
@@ -397,10 +440,7 @@
     "perltidy.additionalArguments": [
         "--indent-columns=2"
     ],
-    "phpunit.files": "{test,tests}/**/*Test.php",
-    "phpunit.logpanel": true,
-    "phpunit.php": "/usr/bin/env php -dxdebug.start_with_request=yes -dxdebug.mode=debug,develop",
-    "phpunit.shell": "/bin/bash",
+    "phpunit.php": "/opt/lk-settings/desktop/vscode/php",
     "poor-mans-t-sql-formatter.std.indent": "  ",
     "poor-mans-t-sql-formatter.std.trailingCommas": false,
     "powershell.codeFormatting.newLineAfterCloseBrace": false,
@@ -420,8 +460,11 @@
     },
     "ruby.useLanguageServer": true,
     "salesforcedx-vscode-core.telemetry.enabled": false,
+    "scm.diffDecorationsIgnoreTrimWhitespace": "true",
     "search.exclude": {
         "**/*.log": true,
+        "**/*.phar": true,
+        "**/build/**": true,
         "**/log": true,
         "**/vendor": true
     },
@@ -464,6 +507,8 @@
         "SC2207"
     ],
     "shellcheck.executablePath": "shellcheck",
+    "shellcheck.logLevel": "trace",
+    "shellcheck.run": "onSave",
     "shellformat.flag": "-s",
     "sqltools.format": {
         "linesBetweenQueries": "preserve",
@@ -522,17 +567,19 @@
     "trailing-spaces.highlightCurrentLine": false,
     "typescript.autoClosingTags": false,
     "update.showReleaseNotes": false,
+    "vim.disableExtension": true,
     "window.newWindowDimensions": "inherit",
     "window.restoreFullscreen": true,
     "window.title": "${dirty}${rootName}${separator}${activeEditorShort}${separator}${appName}",
     "window.titleBarStyle": "custom",
+    "workbench.editor.closeEmptyGroups": false,
     "workbench.editor.highlightModifiedTabs": true,
     "workbench.editor.revealIfOpen": true,
     "workbench.editor.untitled.hint": "hidden",
     "workbench.editor.wrapTabs": false,
     "workbench.enableExperiments": false,
-    "workbench.iconTheme": "Monokai Pro (Filter Octagon) Icons",
-    "workbench.preferredDarkColorTheme": "Monokai Pro (Filter Octagon)",
+    "workbench.iconTheme": "Monokai Pro (Filter Machine) Icons",
+    "workbench.preferredDarkColorTheme": "Monokai Pro (Filter Machine)",
     "workbench.preferredLightColorTheme": "Quiet Light",
     "workbench.settings.editor": "json",
     "workbench.settings.enableNaturalLanguageSearch": false,
@@ -540,6 +587,7 @@
     "workbench.tips.enabled": false,
     "xml.format.emptyElements": "collapse",
     "xml.format.enforceQuoteStyle": "preferred",
+    "xml.format.maxLineWidth": 0,
     "xml.format.preservedNewlines": 0,
     "xml.format.splitAttributes": true
 }

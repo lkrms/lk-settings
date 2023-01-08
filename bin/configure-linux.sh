@@ -79,6 +79,7 @@ _PRIV=${1-}
 
 LK_SUDO=1
 
+symlink "$_ROOT/.inputrc" /root/.inputrc
 symlink "$_ROOT/.vimrc" /root/.vimrc
 
 FILE=~lightdm/.config/autorandr
@@ -265,6 +266,7 @@ DIR=~/.thunderbird
 EOF
 }
 
+symlink "$_ROOT/.inputrc" ~/.inputrc
 symlink "$_ROOT/.vimrc" ~/.vimrc
 symlink "$_ROOT/.tidyrc" ~/.tidyrc
 symlink "$_ROOT/autorandr/" ~/.config/autorandr
@@ -274,6 +276,7 @@ symlink "$_ROOT/composer/config.json" ~/.config/composer/config.json
 symlink "$_ROOT/composer/config-dev.json" ~/.config/composer-dev/config.json
 symlink "$_ROOT/devilspie2/" ~/.config/devilspie2
 symlink "$_ROOT/git" ~/.config/git
+symlink "$_ROOT/openssl.cnf" ~/.config/openssl.cnf
 symlink "$_ROOT/plank/" ~/.config/plank
 symlink "$_ROOT/quicktile/quicktile.cfg" ~/.config/quicktile.cfg
 symlink "$_ROOT/remmina/" ~/.config/remmina
@@ -455,7 +458,7 @@ show-warning=false
 
 [net/launchpad/plank/docks/dock1]
 current-workspace-only=true
-dock-items=['thunderbird.dockitem', 'todoist.dockitem', 'clockify.dockitem', 'teams.dockitem', 'skypeforlinux.dockitem', 'caprine.dockitem', 'org.keepassxc.KeePassXC.dockitem']
+dock-items=['thunderbird.dockitem', 'todoist.dockitem', 'clockify.dockitem', 'chrome-cifhbcnohmdccbgoicgdjpfamggdegmo-Default.dockitem', 'skypeforlinux.dockitem', 'chrome-hnpfjngllnobngcgfapefoaidbinmjnm-Default.dockitem', 'caprine.dockitem', 'org.keepassxc.KeePassXC.dockitem']
 lock-items=true
 theme='Transparent'
 
@@ -533,7 +536,7 @@ EOF
         xfconf-query -c xsettings -p /Gtk/CursorThemeName -n -t string -s "Qogir-dark"
         xfconf-query -c xsettings -p /Gtk/FontName -n -t string -s "$DEFAULT_FONT 9"
         xfconf-query -c xsettings -p /Gtk/ButtonImages -n -t bool -s false
-        xfconf-query -c xsettings -p /Gtk/MenuImages -n -t bool -s false
+        xfconf-query -c xsettings -p /Gtk/MenuImages -n -t bool -s true
         xfconf-query -c xsettings -p /Gtk/MonospaceFontName -n -t string -s "$DEFAULT_MONOSPACE_FONT 9"
         xfconf-query -c xsettings -p /Net/IconThemeName -n -t string -s "Tela-dark"
         xfconf-query -c xsettings -p /Net/ThemeName -n -t string -s "Qogir-Dark"

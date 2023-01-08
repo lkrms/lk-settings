@@ -30,9 +30,9 @@ function generate_list() {
 COMMAND=(yad)
 ! lk_is_macos || COMMAND=(bash -c "$(
     function run() {
-        yad "$@" &
-        #sleep 0.2
-        #"$LK_BASE/lib/macos/process-focus.js" $! >>"/tmp/open-project.log" 2>&1
+        zenity "$@" &
+        sleep 0.2
+        "$LK_BASE/lib/macos/process-focus.js" $! >>"/tmp/open-project.log" 2>&1
         wait
     }
     declare -f run

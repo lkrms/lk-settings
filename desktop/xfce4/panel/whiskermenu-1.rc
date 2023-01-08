@@ -1,5 +1,5 @@
 favorites=
-button-icon=xfce4-whiskermenu
+button-icon=org.xfce.panel.whiskermenu
 button-single-row=false
 show-button-title=false
 show-button-icon=true
@@ -8,28 +8,30 @@ launcher-show-description=false
 launcher-show-tooltip=true
 hover-switch-category=false
 category-show-name=true
-load-hierarchy=false
-view-as-icons=false
+sort-categories=false
+view-mode=2
 default-category=1
 recent-items-max=20
-favorites-in-recent=false
+favorites-in-recent=true
 position-search-alternate=true
 position-commands-alternate=false
-position-categories-alternate=true
+position-categories-alternate=false
+position-categories-horizontal=false
 stay-on-focus-out=false
+profile-shape=0
 confirm-session-command=true
 menu-opacity=100
 command-settings=xfce4-settings-manager
-show-command-settings=false
+show-command-settings=true
 command-lockscreen=xflock4
 show-command-lockscreen=true
 command-switchuser=dm-tool switch-to-greeter
 show-command-switchuser=true
-command-logoutuser=sh -c 'loginctl terminate-session $XDG_SESSION_ID'
+command-logoutuser=loginctl terminate-session ''
 show-command-logoutuser=true
-command-restart=sudo shutdown -r now
+command-restart=systemctl reboot
 show-command-restart=true
-command-shutdown=sudo shutdown -h now
+command-shutdown=systemctl poweroff
 show-command-shutdown=true
 command-suspend=xfce4-session-logout --suspend
 show-command-suspend=false
@@ -45,25 +47,25 @@ search-actions=4
 
 [action0]
 name=Open man page
-pattern=^(# ?|m(an)? )(.*)
-command=exo-open --launch TerminalEmulator man \\3
+pattern=^(?:# *|m +)(.+)
+command=exo-open --launch TerminalEmulator man \\1
 regex=true
 
 [action1]
 name=Run in terminal
-pattern=^(! ?|t )(.*)
-command=exo-open --launch TerminalEmulator \\2
+pattern=^(?:! *|t +)(.+)
+command=exo-open --launch TerminalEmulator \\1
 regex=true
 
 [action2]
 name=Search
-pattern=^\\?( (.*)|([^? ].*)?)$
-command=recoll -a -q \\2\\3
+pattern=^\\?(?: +|(?=[^?]))(.+)
+command=recoll -a -q \\1
 regex=true
 
 [action3]
 name=Search file names
-pattern=^(\\?\\? ?|f )(.*)
-command=recoll -f -q \\2
+pattern=^(?:\\?\\? ?|f )(.+)
+command=recoll -f -q \\1
 regex=true
 

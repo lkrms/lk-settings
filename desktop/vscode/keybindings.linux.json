@@ -1,5 +1,21 @@
 [
     {
+        "key": "alt+meta+backspace",
+        "command": "bracketeer.removeBrackets"
+    },
+    {
+        "key": "ctrl+shift+alt+i",
+        "command": "-bracketeer.removeBrackets"
+    },
+    {
+        "key": "ctrl+shift+alt+'",
+        "command": "-bracketeer.removeQuotes"
+    },
+    {
+        "key": "shift+alt+meta+backspace",
+        "command": "bracketeer.removeQuotes"
+    },
+    {
         "command": "breadcrumbs.toggle",
         "key": "ctrl+alt+b"
     },
@@ -165,6 +181,11 @@
         "command": "editor.debug.action.runToCursor"
     },
     {
+        "key": "f11",
+        "command": "-extension.node-debug.startWithStopOnEntry",
+        "when": "!inDebugMode && activeViewlet == 'workbench.view.debug' && debugConfigurationType == 'node' || !inDebugMode && activeViewlet == 'workbench.view.debug' && debugConfigurationType == 'pwa-extensionHost' || !inDebugMode && activeViewlet == 'workbench.view.debug' && debugConfigurationType == 'pwa-node'"
+    },
+    {
         "key": "ctrl+shift+g",
         "command": "git.openChange",
         "when": "editorTextFocus && !isInDiffEditor"
@@ -218,6 +239,11 @@
         "when": "focusedView != 'outline'"
     },
     {
+        "key": "f11",
+        "command": "-php.debug.startWithStopOnEntry",
+        "when": "!inDebugMode && debugConfigurationType == 'php'"
+    },
+    {
         "key": "ctrl+k shift+f",
         "command": "-poor-mans-t-sql-formatter.formatSql",
         "when": "editorTextFocus"
@@ -226,6 +252,10 @@
         "key": "shift+alt+meta+f",
         "command": "poor-mans-t-sql-formatter.formatSql",
         "when": "editorTextFocus && !editorReadonly && editorLangId == 'sql'"
+    },
+    {
+        "key": "shift+alt+q",
+        "command": "prettier-sql-vscode.format-selection"
     },
     {
         "key": "ctrl+alt+h",
@@ -458,12 +488,36 @@
         "key": "shift+alt+2"
     },
     {
+        "key": "shift+alt+meta+p",
+        "command": "workbench.action.evenEditorWidths"
+    },
+    {
+        "key": "ctrl+k ctrl+left",
+        "command": "-workbench.action.focusLeftGroup"
+    },
+    {
+        "key": "shift+alt+meta+left",
+        "command": "workbench.action.focusLeftGroup"
+    },
+    {
+        "key": "ctrl+k ctrl+right",
+        "command": "-workbench.action.focusRightGroup"
+    },
+    {
+        "key": "shift+alt+meta+right",
+        "command": "workbench.action.focusRightGroup"
+    },
+    {
         "command": "workbench.action.gotoSymbol",
         "key": "ctrl+r"
     },
     {
         "command": "-workbench.action.gotoSymbol",
         "key": "ctrl+shift+o"
+    },
+    {
+        "key": "shift+alt+meta+o",
+        "command": "workbench.action.maximizeEditor"
     },
     {
         "command": "-workbench.action.moveEditorToFirstGroup",

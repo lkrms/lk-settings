@@ -472,6 +472,22 @@
 	<array>
 		<dict>
 			<key>path</key>
+			<string>file://~/Library/Application%20Support/Dash/DocSets/PHP/PHP.docset/Contents/Resources/Documents/www.php.net/manual/en/regexp.reference.escape.html</string>
+			<key>platformImagePath</key>
+			<string>php</string>
+			<key>title</key>
+			<string>Escape sequences</string>
+		</dict>
+		<dict>
+			<key>path</key>
+			<string>file://~/Library/Application%20Support/Dash/DocSets/PHP/PHP.docset/Contents/Resources/Documents/www.php.net/manual/en/features.commandline.io-streams.html</string>
+			<key>platformImagePath</key>
+			<string>php</string>
+			<key>title</key>
+			<string>I/O streams</string>
+		</dict>
+		<dict>
+			<key>path</key>
 			<string>file://~/Library/Application%20Support/Dash/DocSets/PHP/PHP.docset/Contents/Resources/Documents/www.php.net/manual/en/language.oop5.magic.html</string>
 			<key>platformImagePath</key>
 			<string>php</string>
@@ -786,7 +802,7 @@
 		<integer>4352</integer>
 	</dict>
 	<key>shouldRestoreTabs</key>
-	<true/>
+	<false/>
 	<key>shouldShowStatusIcon</key>
 	<false/>
 	<key>shouldStartAtLogin</key>

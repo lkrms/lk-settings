@@ -17,6 +17,7 @@
             "program": "${file}",
             "cwd": "${fileDirname}",
             "port": 0,
+            "runtimeExecutable": "php",
             "runtimeArgs": [
                 "-dxdebug.start_with_request=yes"
             ],

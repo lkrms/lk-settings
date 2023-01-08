@@ -42,5 +42,11 @@
     "args": {
       "text": "$commit"
     }
+  },
+  {
+    "keys": [
+      "ctrl+alt+w"
+    ],
+    "command": "toggle_ignore_diff_whitespace"
   }
 ]

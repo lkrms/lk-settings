@@ -34,6 +34,7 @@ VSCODE_EXTENSIONS=(
     ms-azuretools.vscode-azurefunctions
     ms-azuretools.vscode-azureresourcegroups
     ms-azuretools.vscode-docker
+    ms-python.isort
     ms-python.python
     ms-python.vscode-pylance
     ms-vscode-remote.remote-containers
@@ -47,6 +48,7 @@ VSCODE_EXTENSIONS=(
     piotrpalarz.vscode-gitignore-generator
     PKief.material-icon-theme
     pthorsson.vscode-jsp
+    pustelto.bracketeer
     rangav.vscode-thunder-client
     rebornix.ruby
     recca0120.vscode-phpunit
@@ -69,6 +71,7 @@ VSCODE_EXTENSIONS=(
     twxs.cmake
     Tyriar.lorem-ipsum
     Tyriar.sort-lines
+    vscodevim.vim
     wingrunr21.vscode-ruby
     wmaurer.change-case
     xdebug.php-debug

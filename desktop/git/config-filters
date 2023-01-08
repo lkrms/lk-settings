@@ -89,7 +89,7 @@
 
 [filter "vscodesettings"]
 	clean = jsonlint -Sf --sort preserve | jq -S --indent 4 'del(.\"breadcrumbs.enabled\",.\"diffEditor.renderSideBySide\",.\"editor.fontSize\",.\"editor.minimap.enabled\",.\"salesforcedx-vscode-apex.java.home\",.\"shellformat.path\",.\"window.zoomLevel\",.\"workbench.colorTheme\",.\"workbench.editorAssociations\")|walk(if type==\"array\" then sort_by(try ascii_upcase catch \"\") else . end)'
-	smudge = jsonlint -Sf --sort preserve | jq -S --indent 4 --arg shfmt \"$(type -P shfmt)\" '.+={\"shellformat.path\":$shfmt,\"workbench.colorTheme\":\"Monokai Pro (Filter Octagon)\"}'
+	smudge = jsonlint -Sf --sort preserve | jq -S --indent 4 --arg shfmt \"$(type -P shfmt)\" '.+={\"shellformat.path\":$shfmt,\"workbench.colorTheme\":\"Monokai Pro (Filter Machine)\",\"workbench.iconTheme\":\"Monokai Pro (Filter Machine) Icons\"}'
 
 [filter "whiskermenu"]
 	clean = sed -E '/^(recent|menu-(width|height)|[a-z]+-icon-size)=/d'
@@ -101,4 +101,8 @@
 
 [filter "zeal"]
 	clean = sed -E '/^(external_link_policy|path|install_id|(splitter|window)_geometry|toc_splitter_state)=/d'
+	smudge = cat
+
+[filter "php"]
+	clean = "awk 'function p(){if(s)print\"\";s=0}/^$/{p();s=1;next}/^\\/\\/ PRETTY_/{s=0;next}{p();print}'"
 	smudge = cat

@@ -20,7 +20,7 @@
 	"microbreakPostponableDurationPercent": 30,
 	"breakPostponesLimit": 1,
 	"breakPostponableDurationPercent": 40,
-	"mainColor": "#1D1F21",
+	"mainColor": "#567890",
 	"transparentMode": true,
 	"opacity": 0.9,
 	"audio": "silence",
@@ -445,9 +445,15 @@
 	"appExclusions": [],
 	"appExclusionsCheckInterval": 1000,
 	"pauseForSuspendOrLock": true,
-	"pauseBreaksShortcut": "",
-	"resumeBreaksShortcut": "",
+	"pauseBreaksToggleShortcut": "",
 	"screen": "primary",
 	"timeToBreakInTray": false,
-	"currentTimeInBreaks": false
+	"currentTimeInBreaks": false,
+	"pauseBreaksShortcut": "",
+	"resumeBreaksShortcut": "",
+	"__internal__": {
+		"migrations": {
+			"version": "1.13.1"
+		}
+	}
 }

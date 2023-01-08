@@ -6,16 +6,12 @@
         {
             "label": "Pretty PHP",
             "type": "process",
-            "command": "php",
+            "command": "pretty-php.phar",
             "args": [
-                "${env:HOME}/Code/dev-tools/pretty-php/pretty.php",
+                //"--skip",
+                //"indent-heredocs",
                 "${file}"
             ],
-            "options": {
-                "env": {
-                    "PRETTY_ALIGN_RANGE": "8"
-                }
-            },
             "problemMatcher": [],
             "presentation": {
                 "reveal": "never",
@@ -26,6 +22,23 @@
         {
             "label": "Pretty PHP (remove empty lines)",
             "type": "process",
+            "command": "pretty-php.phar",
+            "args": [
+                //"--skip",
+                //"indent-heredocs",
+                "-N",
+                "${file}"
+            ],
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "never",
+                "panel": "new",
+                "close": true
+            }
+        },
+        {
+            "label": "Pretty PHP (old)",
+            "type": "process",
             "command": "php",
             "args": [
                 "${env:HOME}/Code/dev-tools/pretty-php/pretty.php",
@@ -33,9 +46,7 @@
             ],
             "options": {
                 "env": {
-                    "PRETTY_NESTED_ARRAYS": "0",
-                    "PRETTY_REMOVE_EMPTY_LINES": "1",
-                    "PRETTY_IGNORE_LINE_BREAKS": "1"
+                    "PRETTY_ALIGN_RANGE": "12"
                 }
             },
             "problemMatcher": [],
@@ -44,6 +55,15 @@
                 "panel": "new",
                 "close": true
             }
+        },
+        {
+            "label": "Print runtime config",
+            "type": "shell",
+            "command": "echo",
+            "args": [
+                "${config:editor.cursorBlinking}"
+            ],
+            "problemMatcher": []
         }
     ]
 }
