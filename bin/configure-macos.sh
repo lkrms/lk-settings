@@ -49,7 +49,7 @@ fi
 
 cleanup ~/.config/iCanHazShortcut
 
-rm -Rfv ~/.config/composer{,-dev}
+rm -Rfv ~/.config/composer{,-dev} ~/.composer-dev
 
 [ ! -d "$_PRIV" ] || {
 
@@ -58,7 +58,9 @@ rm -Rfv ~/.config/composer{,-dev}
     symlink_private_common "$_PRIV"
     symlink \
         "$_PRIV/composer/auth.json" ~/.composer/auth.json \
-        "$_PRIV/composer/auth.json" ~/.composer-dev/auth.json \
+        "$_PRIV/composer/composer.json" ~/.composer/composer.json \
+        "$_PRIV/composer/composer.lock" ~/.composer/composer.lock \
+        "$_PRIV/composer/config.json" ~/.composer/config.json \
         "$_PRIV/espanso/" "$_PREFS/espanso"
 
     symlink_if_not_running \
@@ -101,8 +103,6 @@ symlink "$_ROOT/.vimrc" ~/.vimrc
 symlink "$_ROOT/.tidyrc" ~/.tidyrc
 symlink "$_ROOT/.byoburc" ~/.byoburc
 symlink "$_ROOT/byobu/" ~/.byobu
-symlink -d "$_ROOT/composer/config.json" ~/.composer/config.json
-symlink -d "$_ROOT/composer/config-dev.json" ~/.composer-dev/config.json
 symlink -d "$_ROOT/git" ~/.config/git
 symlink -d "$_ROOT/rubocop/.rubocop.yml" ~/.rubocop.yml
 symlink -d "$_ROOT/displays/ColorSync/Profiles/" ~/Library/ColorSync/Profiles

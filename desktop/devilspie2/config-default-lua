@@ -34,6 +34,7 @@ _criteria.on_secondary_display = {
 }
 
 _criteria.can_fill_target = {
+    event = {"focus", "blur"},
     function(state)
         local columns = (state.target_grid or default_grid or {3})[1]
         if width_matches_grid(state, columns) and
@@ -53,7 +54,7 @@ _criteria.private = {
         "caprine",
         "skype",
         "keepassxc",
-        "crx_hnpfjngllnobngcgfapefoaidbinmjnm", -- WhatsApp
+        "crx__hnpfjngllnobngcgfapefoaidbinmjnm", -- WhatsApp
     },
 }
 
@@ -95,14 +96,14 @@ _groups = {
             },
         },
         ["microsoft teams - insiders"] = {},
-        ["crx_cifhbcnohmdccbgoicgdjpfamggdegmo"] = {}, -- Teams
+        ["crx__cifhbcnohmdccbgoicgdjpfamggdegmo"] = {}, -- Teams
     },
     messenger = {
         ["caprine"] = {},
     },
     skype = {
         ["skype"] = {},
-        ["crx_hnpfjngllnobngcgfapefoaidbinmjnm"] = {}, -- WhatsApp
+        ["crx__hnpfjngllnobngcgfapefoaidbinmjnm"] = {}, -- WhatsApp
     },
     time = {
         ["clockify"] = {
@@ -125,9 +126,21 @@ _groups = {
         ["spotify"] = {},
     },
     dev = {
-        ["vscodium"] = {},
-        ["sublime_merge"] = {},
-        ["DBeaver"] = {},
+        ["vscodium"] = {
+            criteria = {
+                event = "open",
+            },
+        },
+        ["sublime_merge"] = {
+            criteria = {
+                event = "open",
+            },
+        },
+        ["DBeaver"] = {
+            criteria = {
+                event = "open",
+            },
+        },
     },
 }
 
@@ -206,6 +219,7 @@ _layouts = {
         },
         place = {display = 1, wh = {1, 1}},
         group_places = {
+            dev = {xy = {2, 1}, wh = {2, 2}},
             mail = {workspace = 1, xy = {2, 1}, wh = {2, 2}},
             teams = {workspace = 0, xy = {1, 1}},
             irc = {workspace = 0, xy = {1, 1}},
@@ -278,7 +292,7 @@ _layouts = {
 }
 
 function get_place(state)
-    local app = _apps[state.class_instance_name] or _apps[get_process_name()]
+    local app, app_has_place = _apps[state.class_instance_name] or _apps[get_process_name()], false
     if app ~= nil then
         log.trace("app = " .. pretty.write(app))
     end
@@ -315,10 +329,12 @@ function get_place(state)
                     break
                 end
                 place = nil
+                app_has_place = true
             end
         end
     end
-    if (not place or (not place.xy and not place.wh)) and
+    if not app_has_place and
+        (not place or (not place.xy and not place.wh)) and
         targets and
         check_criteria(targets.criteria, state) and
         state.window_is_maximized_vertically and
@@ -383,6 +399,36 @@ rules = {
         },
         actions = {
             decorate_off,
+        },
+    },
+    {
+        criteria = {
+            operator.AND,
+            event = "open",
+            function(state)
+                local x, y, w, h = table.unpack(state.window_geometry)
+                -- return true if the centre of the window isn't on a display
+                return not get_raw_display_at(get_displays(), x + (w / 2), y + (h / 2), get_screen_geometry())
+            end,
+        },
+        actions = {
+            function(state)
+                local x, y, w, h = table.unpack(state.window_geometry)
+                local d_x, d_y, d_w, d_h = table.unpack(state.display_geometry)
+                if x + w > d_x + d_w then
+                    x = d_x + d_w - w
+                elseif x < d_x then
+                    x = d_x
+                end
+                if y + h > d_y + d_h then
+                    y = d_y + d_h - h
+                elseif y < d_y then
+                    y = d_y
+                end
+                local set_position = state.set_position or state.rule.set_position or set_window_position2
+                log.info("Calling <set_position>(" .. table.concat({x, y}, ", ") .. ") on " .. state.class_instance_name)
+                set_position(x, y)
+            end
         },
     },
     {

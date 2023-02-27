@@ -483,6 +483,7 @@ function dumpWindows()
             local window = {
                 appTitle = w:application():title(),
                 appBundleId = w:application():bundleID(),
+                appName = w:application():name(),
                 windowTitle = w:title(),
                 isStandard = w:isStandard(),
                 isMain = w:application():mainWindow() == w,
@@ -592,6 +593,14 @@ hs.hotkey.bind(
 )
 
 hs.hotkey.bind(
+    {"ctrl", "cmd", "shift"},
+    "e",
+    function()
+        open("com.microsoft.VSCode", homePath("/Library/Preferences/espanso"))
+    end
+)
+
+hs.hotkey.bind(
     {"ctrl", "cmd"},
     "g",
     function()
@@ -603,7 +612,7 @@ hs.hotkey.bind(
     {"ctrl", "cmd", "shift"},
     "g",
     function()
-        run("/opt/lk-settings/bin/open-repo.sh git -C {} cola", true)
+        run("/opt/lk-settings/bin/open-repo.sh smerge --new-window {}", true)
     end
 )
 
@@ -612,6 +621,30 @@ hs.hotkey.bind(
     "h",
     function()
         open("com.microsoft.VSCode", "/etc/hosts")
+    end
+)
+
+hs.hotkey.bind(
+    {"ctrl", "cmd"},
+    "k",
+    function()
+        local app, command = hs.application.get("org.keepassxc.keepassxc"), {"launchctl", "kickstart"}
+        if app then
+            if app:activate() then
+                return
+            else
+                table.insert(command, "-k")
+            end
+        end
+        run(getCommand(command) .. " \"gui/$EUID/com.linacreative.platform.keepassxc\"")
+    end
+)
+
+hs.hotkey.bind(
+    {"ctrl", "cmd", "shift"},
+    "k",
+    function()
+        run("launchctl kickstart -k \"gui/$EUID/com.linacreative.platform.keepassxc\"")
     end
 )
 
@@ -667,7 +700,7 @@ hs.hotkey.bind(
     {"ctrl", "cmd", "shift"},
     "t",
     function()
-        open("com.apple.Terminal")
+        run("/opt/lk-settings/bin/open-repo.sh git -C {} cola", true)
     end
 )
 

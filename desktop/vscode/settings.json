@@ -1,14 +1,15 @@
 {
     "Lua.format.defaultConfig": {
-        "keep_line_after_do_statement": "maxLine:1",
-        "keep_line_after_expression_statement": "maxLine:1",
-        "keep_line_after_for_statement": "maxLine:1",
-        "keep_line_after_function_define_statement": "keepLine:1",
-        "keep_line_after_if_statement": "maxLine:1",
-        "keep_line_after_local_or_assign_statement": "maxLine:1",
-        "keep_line_after_repeat_statement": "maxLine:1",
-        "keep_line_after_while_statement": "maxLine:1",
-        "keep_one_space_between_table_and_bracket": "false"
+        "line_space_after_comment": "max(2)",
+        "line_space_after_do_statement": "max(2)",
+        "line_space_after_expression_statement": "max(2)",
+        "line_space_after_for_statement": "max(2)",
+        "line_space_after_function_statement": "max(2)",
+        "line_space_after_if_statement": "max(2)",
+        "line_space_after_local_or_assign_statement": "max(2)",
+        "line_space_after_repeat_statement": "max(2)",
+        "line_space_after_while_statement": "max(2)",
+        "space_around_table_field_list": "false"
     },
     "Lua.telemetry.enable": false,
     "Lua.workspace.checkThirdParty": false,
@@ -77,7 +78,11 @@
         "editor.defaultFormatter": "ahmadalli.vscode-nginx-conf"
     },
     "[php]": {
-        "editor.autoClosingBrackets": "languageDefined"
+        "editor.autoClosingBrackets": "languageDefined",
+        "editor.defaultFormatter": "lkrms.pretty-php",
+        "editor.detectIndentation": false,
+        "editor.insertSpaces": true,
+        "editor.tabSize": 4
     },
     "[properties]": {
         "editor.defaultFormatter": "lkrms.inifmt"
@@ -99,7 +104,7 @@
     },
     "azureFunctions.showCoreToolsWarning": false,
     "bashIde.highlightParsingErrors": false,
-    "bashIde.shellcheckPath": "",
+    "bashIde.shellcheckArguments": "--exclude=1003,1007,1090,1091,2012,2013,2015,2016,2024,2029,2030,2031,2032,2033,2034,2046,2054,2064,2086,2119,2120,2128,2148,2153,2154,2164,2178,2180,2206,2207,2317",
     "beautify.config": {
         "break_chained_methods": true,
         "end_with_newline": true,
@@ -250,7 +255,7 @@
     "files.exclude": {
         "**/*.compiled.*": true,
         "**/*.min.*": true,
-        "**/build/phar/**": true,
+        "**/build/**": true,
         "**/extjs/build/**": true
     },
     "files.watcherExclude": {
@@ -268,6 +273,7 @@
     "git.enableStatusBarSync": false,
     "git.ignoreLimitWarning": true,
     "git.mergeEditor": false,
+    "git.openRepositoryInParentFolders": "never",
     "gitlens.advanced.fileHistoryFollowsRenames": true,
     "gitlens.blame.format": "${message|40?} ${date|14-}",
     "gitlens.codeLens.enabled": false,
@@ -324,6 +330,7 @@
         "**/.svn/**",
         "**/bower_components/**",
         "**/CVS/**",
+        "**/desktop/http/**",
         "**/node_modules/**",
         "**/var/**",
         "**/vendor/**/{Tests,tests}/**"
@@ -447,6 +454,8 @@
     "powershell.codeFormatting.pipelineIndentationStyle": "IncreaseIndentationForFirstPipeline",
     "powershell.codeFormatting.trimWhitespaceAroundPipe": true,
     "powershell.startAutomatically": false,
+    "pretty-php.formatting.alignment.alignAssignments": true,
+    "pretty-php.formatting.preserveOneLineStatements": true,
     "python.experiments.enabled": false,
     "python.formatting.autopep8Args": [
         "--aggressive"
@@ -470,57 +479,22 @@
     },
     "search.followSymlinks": false,
     "security.workspace.trust.enabled": false,
-    "shellcheck.customArgs": [
-        "-x"
-    ],
-    "shellcheck.disableVersionCheck": true,
-    "shellcheck.exclude": [
-        "SC1003",
-        "SC1007",
-        "SC1090",
-        "SC1091",
-        "SC2012",
-        "SC2013",
-        "SC2015",
-        "SC2016",
-        "SC2024",
-        "SC2029",
-        "SC2030",
-        "SC2031",
-        "SC2032",
-        "SC2033",
-        "SC2034",
-        "SC2046",
-        "SC2054",
-        "SC2064",
-        "SC2086",
-        "SC2119",
-        "SC2120",
-        "SC2128",
-        "SC2148",
-        "SC2153",
-        "SC2154",
-        "SC2164",
-        "SC2178",
-        "SC2180",
-        "SC2206",
-        "SC2207"
-    ],
-    "shellcheck.executablePath": "shellcheck",
-    "shellcheck.logLevel": "trace",
-    "shellcheck.run": "onSave",
     "shellformat.flag": "-s",
     "sqltools.format": {
         "linesBetweenQueries": "preserve",
         "reservedWordCase": "upper"
     },
     "sqltools.highlightQuery": false,
+    "standard.enable": false,
+    "tableformatter.common.centerAlignedHeader": false,
     "telemetry.telemetryLevel": "off",
     "terminal.external.osxExec": "iTerm.app",
     "terminal.integrated.copyOnSelection": true,
     "terminal.integrated.cwd": "${fileDirname}",
+    "terminal.integrated.defaultLocation": "editor",
     "terminal.integrated.detectLocale": "off",
-    "terminal.integrated.enableFileLinks": false,
+    "terminal.integrated.enableFileLinks": "off",
+    "terminal.integrated.enablePersistentSessions": false,
     "terminal.integrated.env.linux": {
         "LC_BYOBU": "0"
     },
@@ -529,6 +503,7 @@
     },
     "terminal.integrated.fontSize": 12,
     "terminal.integrated.lineHeight": 1.2,
+    "terminal.integrated.minimumContrastRatio": 1,
     "terminal.integrated.profiles.linux": {
         "bash": {
             "icon": "terminal-bash",
@@ -566,6 +541,7 @@
     "terminal.integrated.showExitAlert": false,
     "trailing-spaces.highlightCurrentLine": false,
     "typescript.autoClosingTags": false,
+    "typescript.format.semicolons": "insert",
     "update.showReleaseNotes": false,
     "vim.disableExtension": true,
     "window.newWindowDimensions": "inherit",

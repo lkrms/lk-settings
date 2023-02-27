@@ -28,8 +28,8 @@
 	smudge = cat
 
 [filter "flameshot"]
-	clean = sed -E '/^(drawFontSize|drawThickness|save(AfterCopy)?Path|disabledTrayIcon)=/d'
-	smudge = cat
+	clean = "sed -E '/^(drawFontSize|drawThickness|disabledTrayIcon)=/d;s/^(save(AfterCopy)?Path=).*/\\1/'"
+	smudge = awk -v d=\"$LK_SCREENSHOT_DIR\" \"/^save(AfterCopy)?Path=.*/{sub(/=.*/,\\\"=\\\"d)}{print}\"
 
 [filter "geeqie"]
 	clean = sed -E '/^[[:blank:]]+((file_ops\\.safe_delete|home|last)_path|(main|folder|float|properties|log|search|dupe)_window\\.(x|y|w|h|maximized|[a-z]+_pos)) ?=/d'

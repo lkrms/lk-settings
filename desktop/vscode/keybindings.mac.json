@@ -66,6 +66,11 @@
         "when": "editorTextFocus"
     },
     {
+        "key": "shift+cmd+,",
+        "command": "-editor.action.inPlaceReplace.up",
+        "when": "editorTextFocus && !editorReadonly"
+    },
+    {
         "command": "-editor.action.insertCursorAbove",
         "key": "alt+cmd+up",
         "when": "editorTextFocus"
@@ -502,6 +507,10 @@
         "key": "shift+alt+["
     },
     {
+        "key": "shift+cmd+,",
+        "command": "workbench.action.openSettings2"
+    },
+    {
         "command": "-workbench.action.reloadWindow",
         "key": "cmd+r",
         "when": "isDevelopment"
@@ -523,15 +532,9 @@
         "key": "shift+cmd+b"
     },
     {
-        "args": "Pretty PHP (remove empty lines)",
-        "command": "workbench.action.tasks.runTask",
-        "key": "shift+alt+cmd+f",
-        "when": "editorTextFocus && !editorReadonly && editorLangId == 'php'"
-    },
-    {
         "args": "Pretty PHP",
         "command": "workbench.action.tasks.runTask",
-        "key": "shift+alt+f",
+        "key": "shift+alt+cmd+f",
         "when": "editorTextFocus && !editorReadonly && editorLangId == 'php'"
     },
     {

@@ -3,6 +3,7 @@ Thumbs.db
 
 *.code-workspace
 .vscode/
+vsc-extension-quickstart.md
 
 *.sublime-project
 *.sublime-workspace
@@ -22,5 +23,6 @@ php_errors.log
 
 /test.php
 /bin/test.php
+/tests/temp.php
 
 /.venv

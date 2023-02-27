@@ -4,39 +4,6 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Pretty PHP",
-            "type": "process",
-            "command": "pretty-php.phar",
-            "args": [
-                //"--skip",
-                //"indent-heredocs",
-                "${file}"
-            ],
-            "problemMatcher": [],
-            "presentation": {
-                "reveal": "never",
-                "panel": "new",
-                "close": true
-            }
-        },
-        {
-            "label": "Pretty PHP (remove empty lines)",
-            "type": "process",
-            "command": "pretty-php.phar",
-            "args": [
-                //"--skip",
-                //"indent-heredocs",
-                "-N",
-                "${file}"
-            ],
-            "problemMatcher": [],
-            "presentation": {
-                "reveal": "never",
-                "panel": "new",
-                "close": true
-            }
-        },
-        {
             "label": "Pretty PHP (old)",
             "type": "process",
             "command": "php",

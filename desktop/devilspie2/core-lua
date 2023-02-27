@@ -192,6 +192,15 @@ function get_display_at(displays, x, y, screen_w, screen_h)
     end
 end
 
+function get_raw_display_at(displays, x, y)
+    for display, display_geometry in ipairs(displays) do
+        local dx, dy, dw, dh = table.unpack(display_geometry)
+        if x >= dx and y >= dy and x < dx + dw and y < dy + dh then
+            return display
+        end
+    end
+end
+
 function get_display()
     local x, y = get_window_geometry()
     return get_display_at(get_displays(), x, y, get_screen_geometry())
@@ -263,13 +272,13 @@ function get_state(event)
         window_client_geometry = window_client_geometry,
         window_decoration_geometry = {_get_decoration_geometry(window_geometry, window_client_geometry)},
         window_is_maximized = get_window_is_maximized() or
-            (window_geometry and display_geometry and
-                -- Use `>=` because decorations may be added
-                window_geometry[3] >= display_geometry[3] and
-                window_geometry[4] >= display_geometry[4]),
+        (window_geometry and display_geometry and
+        -- Use `>=` because decorations may be added
+        window_geometry[3] >= display_geometry[3] and
+        window_geometry[4] >= display_geometry[4]),
         window_is_maximized_vertically = get_window_is_maximized_vertically() or
-            (window_geometry and display_geometry and
-                window_geometry[4] >= display_geometry[4]),
+        (window_geometry and display_geometry and
+        window_geometry[4] >= display_geometry[4]),
         window_type = get_window_type(),
         class_instance_name = get_class_instance_name() or get_process_name() or "",
         window_role = get_window_role(),
@@ -581,7 +590,7 @@ function position_matches_grid(state, columns, rows)
         y >= d_y and y + h <= d_y + d_h and (y - d_y) % row_h == 0) or
         -- Adjust for unmaximizing in Xfce with "hide frame when maximized" enabled
         ((x + _dec_w) >= d_x and (x + _dec_w) + (w - dec_w) <= d_x + d_w and ((x + _dec_w) - d_x) % col_w == 0 and
-            y >= d_y and y + (h - dec_h) <= d_y + d_h and (y - d_y) % row_h == 0)
+        y >= d_y and y + (h - dec_h) <= d_y + d_h and (y - d_y) % row_h == 0)
 end
 
 function log_window_full(event)

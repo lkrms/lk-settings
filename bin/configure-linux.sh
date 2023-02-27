@@ -20,6 +20,8 @@ done
 
 cleanup
 
+rm -Rfv ~/.config/composer-dev
+
 _PRIV=${1-}
 
 [ ! -d "$_PRIV" ] || {
@@ -30,7 +32,9 @@ _PRIV=${1-}
     symlink \
         "$_PRIV/.face" ~/.face \
         "$_PRIV/composer/auth.json" ~/.config/composer/auth.json \
-        "$_PRIV/composer/auth.json" ~/.config/composer-dev/auth.json \
+        "$_PRIV/composer/composer.json" ~/.config/composer/composer.json \
+        "$_PRIV/composer/composer.lock" ~/.config/composer/composer.lock \
+        "$_PRIV/composer/config.json" ~/.config/composer/config.json \
         "$_PRIV/espanso/" ~/.config/espanso \
         "$_PRIV/offlineimap/.offlineimaprc" ~/.offlineimaprc \
         "$_PRIV/remmina/data/" ~/.local/share/remmina \
@@ -272,8 +276,6 @@ symlink "$_ROOT/.tidyrc" ~/.tidyrc
 symlink "$_ROOT/autorandr/" ~/.config/autorandr
 symlink "$_ROOT/.byoburc" ~/.byoburc
 symlink "$_ROOT/byobu/" ~/.byobu
-symlink "$_ROOT/composer/config.json" ~/.config/composer/config.json
-symlink "$_ROOT/composer/config-dev.json" ~/.config/composer-dev/config.json
 symlink "$_ROOT/devilspie2/" ~/.config/devilspie2
 symlink "$_ROOT/git" ~/.config/git
 symlink "$_ROOT/openssl.cnf" ~/.config/openssl.cnf
@@ -458,7 +460,7 @@ show-warning=false
 
 [net/launchpad/plank/docks/dock1]
 current-workspace-only=true
-dock-items=['thunderbird.dockitem', 'todoist.dockitem', 'clockify.dockitem', 'chrome-cifhbcnohmdccbgoicgdjpfamggdegmo-Default.dockitem', 'skypeforlinux.dockitem', 'chrome-hnpfjngllnobngcgfapefoaidbinmjnm-Default.dockitem', 'caprine.dockitem', 'org.keepassxc.KeePassXC.dockitem']
+dock-items=['thunderbird.dockitem', 'todoist.dockitem', 'clockify.dockitem', 'msedge-cifhbcnohmdccbgoicgdjpfamggdegmo-Default.dockitem', 'msedge-hnpfjngllnobngcgfapefoaidbinmjnm-Default.dockitem', 'skypeforlinux.dockitem', 'caprine.dockitem', 'org.keepassxc.KeePassXC.dockitem']
 lock-items=true
 theme='Transparent'
 

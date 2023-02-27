@@ -90,6 +90,11 @@
         "when": "!editorHasDocumentFormattingProvider && editorTextFocus && !editorReadonly"
     },
     {
+        "key": "ctrl+shift+,",
+        "command": "-editor.action.inPlaceReplace.up",
+        "when": "editorTextFocus && !editorReadonly"
+    },
+    {
         "command": "editor.action.insertCursorAtEndOfEachLineSelected",
         "key": "ctrl+shift+l",
         "when": "editorTextFocus"
@@ -556,6 +561,10 @@
         "key": "ctrl+r"
     },
     {
+        "key": "ctrl+shift+,",
+        "command": "workbench.action.openSettings2"
+    },
+    {
         "command": "workbench.action.reloadWindow",
         "key": "ctrl+meta+f5"
     },
@@ -578,12 +587,6 @@
     },
     {
         "args": "Pretty PHP",
-        "command": "workbench.action.tasks.runTask",
-        "key": "shift+alt+f",
-        "when": "editorTextFocus && !editorReadonly && editorLangId == 'php'"
-    },
-    {
-        "args": "Pretty PHP (remove empty lines)",
         "command": "workbench.action.tasks.runTask",
         "key": "shift+alt+meta+f",
         "when": "editorTextFocus && !editorReadonly && editorLangId == 'php'"

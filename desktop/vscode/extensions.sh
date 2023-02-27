@@ -3,6 +3,7 @@
 VSCODE_EXTENSIONS=(
     ahmadalli.vscode-nginx-conf
     alexcvzz.vscode-sqlite
+    aprilandjan.ascii-tree-generator
     beaglefoot.awk-ide-vscode
     bmewburn.vscode-intelephense-client
     dakara.transformer
@@ -10,6 +11,7 @@ VSCODE_EXTENSIONS=(
     deerawan.vscode-dash
     DotJoshJohnson.xml
     eamodio.gitlens
+    EditorConfig.EditorConfig
     fabiospampinato.vscode-open-in-github
     foxundermoon.shell-format
     giovdk21.vscode-sublime-merge
@@ -25,6 +27,7 @@ VSCODE_EXTENSIONS=(
     Kasik96.latte
     lextudio.restructuredtext
     lkrms.inifmt
+    lkrms.pretty-php
     mads-hartmann.bash-ide-vscode
     maelvalais.autoconf
     mgmcdermott.vscode-language-babel
@@ -45,7 +48,6 @@ VSCODE_EXTENSIONS=(
     ms-vscode.test-adapter-converter
     mtxr.sqltools
     pdconsec.vscode-print
-    piotrpalarz.vscode-gitignore-generator
     PKief.material-icon-theme
     pthorsson.vscode-jsp
     pustelto.bracketeer
@@ -59,13 +61,13 @@ VSCODE_EXTENSIONS=(
     ryu1kn.partial-diff
     sfodje.perltidy
     shardulm94.trailing-spaces
+    shuworks.vscode-table-formatter
     spadin.memento-inputs
     standard.vscode-standard
     stansw.vscode-odata
     stkb.rewrap
     sumneko.lua
     TaoKlerks.poor-mans-t-sql-formatter-vscode
-    timonwong.shellcheck
     trixnz.vscode-lua
     trond-snekvik.simple-rst
     twxs.cmake
