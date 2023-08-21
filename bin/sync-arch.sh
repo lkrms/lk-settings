@@ -66,7 +66,7 @@ EOF
         curl -fsSL "$URL" | sed -E 's/^[^#[:blank:]]/.&/' >"$TEMP" &&
             lk_file_replace -f "$TEMP" "$FILE" || return
     }
-    ! lk_is_false LK_FILE_REPLACE_NO_CHANGE || {
+    ! lk_false LK_FILE_REPLACE_NO_CHANGE || {
         ! lk_systemctl_running dnsmasq || lk_systemctl_restart dnsmasq
         ! lk_systemctl_running squid || lk_systemctl_restart squid
     }

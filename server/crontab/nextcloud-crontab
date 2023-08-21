@@ -1,0 +1,2 @@
+*/5 * * * * /usr/bin/php8.1 /srv/www/nextcloud/public_html/cron.php
+10 4 * * * /srv/www/nextcloud/nextcloud-update.sh

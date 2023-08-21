@@ -90,13 +90,13 @@ lk_tty_print "Metadata for domain '$1':"
         "$(lk_echo_array GUEST_IPS)" \
         "Forwarding" \
         "${FORWARDING:-<none>}"
-    if ! lk_is_true ISOLATE; then
+    if ! lk_true ISOLATE; then
         printf '%s\t%s\0' "Isolation" "Disabled"
     else
         printf '%s\t%s\0' "Isolation" "Enabled"
         ALLOWED=()
-        ! lk_is_true ALLOW_HOST || ALLOWED+=("<host>")
-        ! lk_is_true ALLOW_HOST_NET || ALLOWED+=("<host network>")
+        ! lk_true ALLOW_HOST || ALLOWED+=("<host>")
+        ! lk_true ALLOW_HOST_NET || ALLOWED+=("<host network>")
         _ALLOWED=$(lk_echo_array ALLOWED ALLOW_HOSTS ALLOWED_URLS)
         [ -z "${_ALLOWED:+1}" ] ||
             printf '%s\t%s\0' "Allowed" "$_ALLOWED"
@@ -169,9 +169,9 @@ s/^.*(.{$((28 - (${#P} + 4)))})\$/\\1/" <<<"$1")
     case "$2" in
 
     start)
-        if lk_is_true ISOLATE; then
-            ! lk_is_true ALLOW_HOST || _ALLOW_HOSTS+=("$GUEST_BRIDGE_IP")
-            ! lk_is_true ALLOW_HOST_NET || _ALLOW_HOSTS+=("$HOST_NET")
+        if lk_true ISOLATE; then
+            ! lk_true ALLOW_HOST || _ALLOW_HOSTS+=("$GUEST_BRIDGE_IP")
+            ! lk_true ALLOW_HOST_NET || _ALLOW_HOSTS+=("$HOST_NET")
             _ALLOW_HOSTS+=(${ALLOW_HOSTS[@]+"${ALLOW_HOSTS[@]}"})
             [ ${#ALLOW_URLS[@]} -eq 0 ] ||
                 lk_tty_print "Downloading host lists"
@@ -199,7 +199,7 @@ s/^.*(.{$((28 - (${#P} + 4)))})\$/\\1/" <<<"$1")
                     unset LK_FILE_REPLACE_NO_CHANGE
                     LK_VERBOSE= \
                         lk_hosts_file_add -r -b "qemu-$GUEST_NAME" <<<"$HOSTS"
-                    ! lk_is_false LK_FILE_REPLACE_NO_CHANGE ||
+                    ! lk_false LK_FILE_REPLACE_NO_CHANGE ||
                         lk_tty_run killall -HUP dnsmasq
                 fi
             fi
@@ -212,10 +212,10 @@ s/^.*(.{$((28 - (${#P} + 4)))})\$/\\1/" <<<"$1")
                 lk_iptables_append "$ISOLATE_CHAIN" \
                     -d "$IP" -j ACCEPT
             done
-            lk_is_true NO_LOG ||
+            lk_true NO_LOG ||
                 lk_iptables_append "$ISOLATE_CHAIN" \
                     -j LOG --log-prefix "blocked: "
-            lk_is_true NO_REJECT ||
+            lk_true NO_REJECT ||
                 lk_iptables_append "$ISOLATE_CHAIN" \
                     -j "$REJECT"
             lk_iptables_insert "$FORWARD" \
@@ -253,7 +253,7 @@ s/^.*(.{$((28 - (${#P} + 4)))})\$/\\1/" <<<"$1")
     release)
         set +e
         trap - ERR
-        if lk_is_true ISOLATE; then
+        if lk_true ISOLATE; then
             lk_iptables_delete_all "$FORWARD" \
                 -i "$GUEST_BRIDGE" -s "$GUEST_IP" -j "$ISOLATE_CHAIN"
             ! lk_iptables_has_chain "$ISOLATE_CHAIN" || {

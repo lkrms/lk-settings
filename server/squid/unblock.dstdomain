@@ -9,8 +9,14 @@ tags.news.com.au
 # https://amazon.com.au
 .amazon-adsystem.com
 
+# MyGov
+adobeedge.my.gov.au
+
 # SBS emails
 sbs.demdex.net
+
+# Guardian emails
+cdn.braze.eu
 
 # Sporcle emails
 tbs8v877.r.us-east-1.awstrack.me
@@ -28,3 +34,10 @@ tbs8v877.r.us-east-1.awstrack.me
 
 # Messenger links
 m.me
+
+# Etsy email links
+.etsy.com
+
+# Telemetry we don't hate
+.telemetry.mozilla.org
+metrics.icloud.com

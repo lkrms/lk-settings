@@ -21,9 +21,11 @@
 	"breakPostponesLimit": 1,
 	"breakPostponableDurationPercent": 40,
 	"mainColor": "#567890",
+	"miniBreakColor": "#478484",
 	"transparentMode": true,
 	"opacity": 0.9,
 	"audio": "silence",
+	"miniBreakAudio": "crystal-glass",
 	"volume": 1,
 	"fullscreen": false,
 	"ideas": true,
@@ -449,11 +451,12 @@
 	"screen": "primary",
 	"timeToBreakInTray": false,
 	"currentTimeInBreaks": false,
+	"showTrayIcon": true,
 	"pauseBreaksShortcut": "",
 	"resumeBreaksShortcut": "",
 	"__internal__": {
 		"migrations": {
-			"version": "1.13.1"
+			"version": "1.14.1"
 		}
 	}
 }

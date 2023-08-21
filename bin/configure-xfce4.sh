@@ -134,7 +134,7 @@ if [ -n "$DPI" ] && [ -f /etc/default/grub ]; then
 fi
 
 mkdir -pv ~/.config/xfce4/panel
-cp -nv "$_ROOT/xfce4/panel"/*.rc ~/.config/xfce4/panel/
+cp -nv "$_ROOT/xfce4/panel"/*.rc ~/.config/xfce4/panel/ || true
 lk_symlink "$_ROOT/xfce4/.hidden" ~/.hidden
 lk_symlink "$_ROOT/xfce4/terminal/config" ~/.config/xfce4/terminal
 lk_symlink "$_ROOT/xfce4/terminal/data" ~/.local/share/xfce4/terminal
@@ -148,11 +148,6 @@ lk_symlink "$_ROOT/xfce4/share/themes/" \
     ~/.local/share/themes
 
 rm -Rfv ~/.cache/sessions
-
-[ -e ~/.config/pulse/default.pa ] || {
-    mkdir -p ~/.config/pulse &&
-        cp -v "$_ROOT/xfce4/pulse/default.pa" ~/.config/pulse/default.pa
-}
 
 # Make hddtemp work with xfce4-sensors-plugin
 [ ! -f /etc/hddtemp.db ] ||

@@ -1,3 +1,0 @@
-#!/bin/sh
-
-/usr/bin/env php -dzend_extension=xdebug.so -dxdebug.start_with_request=yes -dxdebug.mode=debug,develop "$@"

@@ -85,21 +85,19 @@ is_basic || [ ! -d "$DIR" ] || {
     FILE=$DIR/defaults/pref/autoconfig.js
     lk_install -m 00644 "$FILE"
     lk_file_replace "$FILE" <<"EOF"
-// the first line is ignored
 pref("general.config.filename", "firefox.cfg");
 pref("general.config.obscure_value", 0);
 EOF
     FILE=$DIR/firefox.cfg
     lk_install -m 00644 "$FILE"
     lk_file_replace "$FILE" <<"EOF"
-// the first line is ignored
+// IMPORTANT: Start your code on the 2nd line
 defaultPref("services.sync.prefs.dangerously_allow_arbitrary", true);
+defaultPref("services.sync.addons.ignoreUserEnabledChanges", true);
 EOF
     unset LK_SUDO
 }
 
-symlink "$_ROOT/.inputrc" ~/.inputrc
-symlink "$_ROOT/.vimrc" ~/.vimrc
 symlink "$_ROOT/.tidyrc" ~/.tidyrc
 symlink "$_ROOT/.byoburc" ~/.byoburc
 symlink "$_ROOT/byobu/" ~/.byobu
@@ -181,10 +179,6 @@ is_basic || defaults write com.lwouis.alt-tab-macos startAtLogin -string true
     [ -e ~/Library/LaunchAgents/com.federicoterzi.espanso.plist ] ||
         espanso service register
 }
-
-is_basic || symlink_if_not_running \
-    "$_ROOT/flameshot/flameshot.ini" ~/.config/flameshot/flameshot.ini \
-    Flameshot "pgrep -x flameshot"
 
 FILE=com.generalarcade.flycut
 FILE=~/Library/Containers/$FILE/Data/Library/Preferences/$FILE.plist
@@ -419,12 +413,6 @@ del(.global_shortcuts.quick_add) |
 is_basic || symlink_if_not_running \
     "$_ROOT/typora/themes" "$_APP_SUPPORT/abnerworks.Typora/themes" \
     Typora "pgrep -x Typora"
-
-is_basic || symlink_if_not_running \
-    "$_ROOT/vscode/settings.json" "$_APP_SUPPORT/Code/User/settings.json" \
-    "$_ROOT/vscode/keybindings.mac.json" "$_APP_SUPPORT/Code/User/keybindings.json" \
-    "$_ROOT/vscode/snippets" "$_APP_SUPPORT/Code/User/snippets" \
-    "VS Code" "pgrep -f '^/Applications/Visual Studio Code.app/Contents/MacOS/Electron'"
 
 FILE=/Applications/VSCodium.app/Contents/Resources/app/product.json
 if [ -f "$FILE" ]; then
@@ -707,5 +695,3 @@ killall -u "$USER" cfprefsd
 killall Finder
 
 is_basic || [ -z "${START_DASH-}" ] || open -b com.kapeli.dashdoc
-
-is_basic || vscode_sync_extensions "$_ROOT/vscode/extensions.sh"

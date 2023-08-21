@@ -22,6 +22,25 @@ cleanup
 
 rm -Rfv ~/.config/composer-dev
 
+for FILE in "$_ROOT/bin"/*; do
+    [[ -x $FILE ]] || continue
+    symlink "$FILE" ~/.local/bin/"${FILE##*/}"
+done
+
+unset LK_FILE_REPLACE_NO_CHANGE
+APPS=(org.flameshot.Flameshot.desktop)
+for FILE in "${APPS[@]}"; do
+    FILE=/usr/share/applications/$FILE
+    [[ -e $FILE ]] || continue
+    lk_file_replace ~/.local/share/applications/${FILE##*/} < <(
+        sed -E 's/\/usr\/bin\/([^/]+)\b/\1/g' "$FILE"
+    )
+done
+
+UPDATE_DESKTOP_DATABASE=0
+! lk_false LK_FILE_REPLACE_NO_CHANGE ||
+    UPDATE_DESKTOP_DATABASE=1
+
 _PRIV=${1-}
 
 [ ! -d "$_PRIV" ] || {
@@ -76,15 +95,15 @@ _PRIV=${1-}
             ;;
         esac
     done
-    ! lk_is_false LK_SYMLINK_NO_CHANGE ||
-        lk_tty_run_detail update-desktop-database ~/.local/share/applications
+    ! lk_false LK_SYMLINK_NO_CHANGE ||
+        UPDATE_DESKTOP_DATABASE=1
 
 }
 
-LK_SUDO=1
+((!UPDATE_DESKTOP_DATABASE)) ||
+    lk_tty_run_detail update-desktop-database ~/.local/share/applications
 
-symlink "$_ROOT/.inputrc" /root/.inputrc
-symlink "$_ROOT/.vimrc" /root/.vimrc
+LK_SUDO=1
 
 FILE=~lightdm/.config/autorandr
 sudo test -d "$FILE" || {
@@ -143,8 +162,8 @@ lk_file_replace ~/.config/fontconfig/conf.d/99-default-fonts.conf < <(
     lk_expand_template "$_ROOT/fonts/default-fonts.conf.template"
 )
 
-! lk_is_false LK_SYMLINK_NO_CHANGE &&
-    ! lk_is_false LK_FILE_REPLACE_NO_CHANGE ||
+! lk_false LK_SYMLINK_NO_CHANGE &&
+    ! lk_false LK_FILE_REPLACE_NO_CHANGE ||
     { sudo -H fc-cache --really-force --verbose &&
         fc-cache --really-force --verbose; }
 
@@ -247,6 +266,7 @@ EOF
 // the first line is ignored
 defaultPref("mousewheel.system_scroll_override.enabled", false);
 defaultPref("services.sync.prefs.dangerously_allow_arbitrary", true);
+defaultPref("services.sync.addons.ignoreUserEnabledChanges", true);
 EOF
     unset LK_SUDO
 }
@@ -270,15 +290,12 @@ DIR=~/.thunderbird
 EOF
 }
 
-symlink "$_ROOT/.inputrc" ~/.inputrc
-symlink "$_ROOT/.vimrc" ~/.vimrc
 symlink "$_ROOT/.tidyrc" ~/.tidyrc
 symlink "$_ROOT/autorandr/" ~/.config/autorandr
 symlink "$_ROOT/.byoburc" ~/.byoburc
 symlink "$_ROOT/byobu/" ~/.byobu
 symlink "$_ROOT/devilspie2/" ~/.config/devilspie2
 symlink "$_ROOT/git" ~/.config/git
-symlink "$_ROOT/openssl.cnf" ~/.config/openssl.cnf
 symlink "$_ROOT/plank/" ~/.config/plank
 symlink "$_ROOT/quicktile/quicktile.cfg" ~/.config/quicktile.cfg
 symlink "$_ROOT/remmina/" ~/.config/remmina
@@ -287,7 +304,7 @@ symlink "$_ROOT/zeal/Zeal.conf" ~/.config/Zeal/Zeal.conf
 
 unset LK_SYMLINK_NO_CHANGE
 symlink "$_ROOT/systemd/user.control" ~/.config/systemd/user.control
-! lk_is_false LK_SYMLINK_NO_CHANGE ||
+! lk_false LK_SYMLINK_NO_CHANGE ||
     systemctl --user daemon-reload
 [ "$(lk_system_memory)" -lt 7 ] || {
     lk_systemctl_enable_now -u libvirtd.service
@@ -317,10 +334,6 @@ symlink_if_not_running \
     "$_ROOT/copyq/copyq.conf" ~/.config/copyq/copyq.conf \
     "$_ROOT/copyq/copyq-commands.ini" ~/.config/copyq/copyq-commands.ini \
     CopyQ "pgrep -x copyq"
-
-symlink_if_not_running \
-    "$_ROOT/flameshot/flameshot.ini" ~/.config/flameshot/flameshot.ini \
-    Flameshot "pgrep -x flameshot"
 
 symlink_if_not_running \
     "$_ROOT/geeqie/" ~/.config/geeqie \
@@ -357,17 +370,11 @@ symlink_if_not_running \
     "$_ROOT/typora/themes" ~/.config/Typora/themes \
     Typora "pgrep -x Typora"
 
-symlink_if_not_running \
-    "$_ROOT/vscode/settings.json" ~/.config/VSCodium/User/settings.json \
-    "$_ROOT/vscode/keybindings.linux.json" ~/.config/VSCodium/User/keybindings.json \
-    "$_ROOT/vscode/snippets" ~/.config/VSCodium/User/snippets \
-    "VS Code" "pgrep -x codium"
-
 FILE=/opt/vscodium-bin/resources/app/product.json
 if [ -f "$FILE" ]; then
     VSCODE_PRODUCT_JSON=$(jq '
-.urlProtocol = "vscode" |
-  .extensionsGallery = {
+.nameLong = "Visual Studio Code" |
+.extensionsGallery = {
     "serviceUrl": "https://marketplace.visualstudio.com/_apis/public/gallery",
     "cacheUrl": "https://vscode.blob.core.windows.net/gallery/index",
     "itemUrl": "https://marketplace.visualstudio.com/items",
@@ -460,7 +467,7 @@ show-warning=false
 
 [net/launchpad/plank/docks/dock1]
 current-workspace-only=true
-dock-items=['thunderbird.dockitem', 'todoist.dockitem', 'clockify.dockitem', 'msedge-cifhbcnohmdccbgoicgdjpfamggdegmo-Default.dockitem', 'msedge-hnpfjngllnobngcgfapefoaidbinmjnm-Default.dockitem', 'skypeforlinux.dockitem', 'caprine.dockitem', 'org.keepassxc.KeePassXC.dockitem']
+dock-items=['thunderbird.dockitem', 'todoist.dockitem', 'clockify.dockitem', 'teams-for-linux.dockitem', 'msedge-hnpfjngllnobngcgfapefoaidbinmjnm-Default.dockitem', 'skypeforlinux.dockitem', 'caprine.dockitem', 'org.keepassxc.KeePassXC.dockitem']
 lock-items=true
 theme='Transparent'
 
@@ -523,8 +530,7 @@ EOF
     LK_SCREENSHOT_DIR=${LK_SCREENSHOT_DIR:-~/Desktop}
     dconf write /org/virt-manager/virt-manager/paths/screenshot-default \
         "'$LK_SCREENSHOT_DIR'"
-    lk_is_false START_PLANK || (
-        eval exec "$(_lk_log_close_fd)"
+    lk_false START_PLANK || (
         nohup plank &>/dev/null &
         disown
     )
@@ -544,5 +550,3 @@ EOF
         xfconf-query -c xsettings -p /Net/ThemeName -n -t string -s "Qogir-Dark"
     }
 fi
-
-vscode_sync_extensions "$_ROOT/vscode/extensions.sh"

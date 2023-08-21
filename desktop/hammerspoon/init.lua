@@ -89,7 +89,11 @@ _groups = {
         ["WhatsApp"] = {},
     },
     time = {
-        ["Clockify Desktop"] = {},
+        ["Clockify Desktop"] = {
+            criteria = {
+                windowTitle = "Clockify"
+            },
+        },
     },
     todo = {
         ["Todoist"] = {},
@@ -512,13 +516,13 @@ _screenwatcher = hs.screen.watcher.new(function()
 end)
 _screenwatcher:start()
 
-hs.hotkey.bind(
-    {"cmd", "shift"},
-    "9",
-    function()
-        run("/Applications/flameshot.app/Contents/MacOS/flameshot gui")
-    end
-)
+--hs.hotkey.bind(
+--    {"cmd", "shift"},
+--    "9",
+--    function()
+--        run("/Applications/flameshot.app/Contents/MacOS/flameshot gui")
+--    end
+--)
 
 hs.hotkey.bind(
     {"ctrl", "cmd", "shift"},
@@ -685,6 +689,14 @@ hs.hotkey.bind(
     "s",
     function()
         runInTerminal(scriptPath("sync-files.sh"))
+    end
+)
+
+hs.hotkey.bind(
+    {"ctrl", "cmd", "shift"},
+    "s",
+    function()
+        open("com.microsoft.VSCode", homePath("/Code/lk-settings.code-workspace"))
     end
 )
 

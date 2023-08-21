@@ -4,9 +4,22 @@
 [includeIf "gitdir:/Users/"]
 	path = config-macos
 
+[core]
+	autocrlf = input
+
+[init]
+	defaultBranch = main
+
 [user]
 	name = Luke Arms
 	useConfigOnly = true
+	signingKey = 2F0ADF7F222F13C8
+
+[commit]
+	gpgSign = true
+
+[tag]
+	gpgSign = true
 
 [push]
 	default = nothing
@@ -14,9 +27,6 @@
 
 [pull]
 	ff = only
-
-[merge]
-	tool = meld
 
 [alias]
 	hide = update-index --assume-unchanged
@@ -28,11 +38,32 @@
 	history = reflog --date=iso
 	history-all = reflog --date=iso --all
 	cleanup-aggressive = gc --aggressive --prune=now
-	cleanup-aggressive-keep = gc --aggressive --prune=now --keep-largest-pack
+	cleanup-aggressive-keep-largest = gc --aggressive --prune=now --keep-largest-pack
 	clear-history-test = reflog expire --expire=all --verbose --dry-run
 	clear-history-apply = reflog expire --expire=all --verbose
-	clear-history-all-test = reflog expire --expire=all --verbose --dry-run --all
+	clear-history-all-test = reflog expire --expire=all --verbose --all --dry-run
 	clear-history-all-apply = reflog expire --expire=all --verbose --all
+
+[diff]
+	renames = copies
+	guitool = smerge
+
+[icdiff]
+	options = -NU3
+
+[cola]
+	spellcheck = false
+	tabwidth = 4
+	expandtab = true
+	safemode = true
+	statusshowtotals = true
+	startupmode = list
+
+[gui]
+	editor = code
+
+[merge]
+	tool = meld
 
 [url "github.com:"]
 	pushInsteadOf = https://github.com/
@@ -43,35 +74,3 @@
 [url "aur:"]
 	pushInsteadOf = https://aur.archlinux.org/
 	pushInsteadOf = aur:
-
-[cola]
-	spellcheck = false
-	tabwidth = 4
-	expandtab = true
-	safemode = true
-	statusshowtotals = true
-	startupmode = list
-
-[icdiff]
-	options = -HNU2
-
-[gui]
-	editor = code
-
-[difftool "sourcetree"]
-	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
-	path =
-
-[mergetool "sourcetree"]
-	cmd = /Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
-	trustExitCode = true
-
-[init]
-	defaultBranch = main
-
-[core]
-	autocrlf = input
-
-[diff]
-	renames = copies
-	guitool = smerge

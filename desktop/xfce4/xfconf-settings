@@ -9,7 +9,7 @@ xfwm4,/general/activate_action,string,switch
 xfwm4,/general/borderless_maximize,bool,true
 xfwm4,/general/button_layout,string,OT|HMC
 xfwm4,/general/cycle_draw_frame,bool,true
-xfwm4,/general/cycle_hidden,bool,true
+xfwm4,/general/cycle_hidden,bool,false
 xfwm4,/general/cycle_minimum,bool,false
 xfwm4,/general/cycle_preview,reset
 xfwm4,/general/cycle_raise,bool,false
@@ -42,9 +42,11 @@ displays,/Notify,int,0
 reset:thunar,/,reset
 reset:thunar-volman,/,reset
 thunar,/misc-date-style,string,THUNAR_DATE_STYLE_SHORT
+thunar,/misc-directory-specific-settings,bool,true
 thunar,/misc-file-size-binary,bool,false
 thunar,/misc-folders-first,bool,true
 thunar,/misc-recursive-permissions,string,THUNAR_RECURSIVE_PERMISSIONS_ASK
+thunar,/misc-show-delete-action,bool,true
 thunar,/misc-single-click,bool,false
 thunar,/misc-text-beside-icons,bool,false
 thunar,/misc-thumbnail-mode,string,THUNAR_THUMBNAIL_MODE_ONLY_LOCAL
@@ -52,7 +54,8 @@ thunar,/misc-volume-management,bool,true
 thunar,/shortcuts-icon-emblems,bool,true
 thunar,/tree-icon-emblems,bool,true
 thunar-volman,/autobrowse/enabled,bool,false
-thunar-volman,/autokeyboard/enabled,bool,false
+thunar-volman,/autokeyboard/command,string,autorandr --change --force
+thunar-volman,/autokeyboard/enabled,bool,true
 thunar-volman,/automount-drives/enabled,bool,false
 thunar-volman,/automount-drives/enabled,bool,false
 thunar-volman,/automount-media/enabled,bool,false
@@ -122,24 +125,24 @@ xfce4-keyboard-shortcuts,/commands/custom/XF86WWW,string,exo-open --launch WebBr
 # [Control-]Shift-Super-7 (selection, 5-second delay)
 # [Control-]Shift-Super-8 (top window, 5-second delay)
 # [Control-]Shift-Super-9 (selection)
-xfce4-keyboard-shortcuts,/commands/custom/<Shift><Super>numbersign,string,flameshot screen
-xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>numbersign,string,flameshot screen -p \"${LK_SCREENSHOT_DIR:-$HOME/Desktop}\"
-xfce4-keyboard-shortcuts,/commands/custom/<Shift><Super>dollar,string,flameshot gui
-xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>dollar,string,flameshot gui -p \"${LK_SCREENSHOT_DIR:-$HOME/Desktop}\"
-xfce4-keyboard-shortcuts,/commands/custom/<Shift><Super>percent,string,xfce4-screenshooter -w -c
-xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>percent,string,xfce4-screenshooter -w -s \"${LK_SCREENSHOT_DIR:-$HOME/Desktop}\"
-xfce4-keyboard-shortcuts,/commands/custom/<Shift><Super>asciicircum,string,flameshot screen -d 5000
-xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>asciicircum,string,flameshot screen -p \"${LK_SCREENSHOT_DIR:-$HOME/Desktop}\" -d 5000
-xfce4-keyboard-shortcuts,/commands/custom/<Shift><Super>ampersand,string,flameshot gui -d 5000
-xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>ampersand,string,flameshot gui -p \"${LK_SCREENSHOT_DIR:-$HOME/Desktop}\" -d 5000
-xfce4-keyboard-shortcuts,/commands/custom/<Shift><Super>asterisk,string,xfce4-screenshooter -w -c -d 5
-xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>asterisk,string,xfce4-screenshooter -w -s \"${LK_SCREENSHOT_DIR:-$HOME/Desktop}\" -d 5
-xfce4-keyboard-shortcuts,/commands/custom/<Shift><Super>parenleft,string,flameshot gui
-xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>parenleft,string,flameshot gui -p \"${LK_SCREENSHOT_DIR:-$HOME/Desktop}\"
+xfce4-keyboard-shortcuts,/commands/custom/<Shift><Super>numbersign,string,flameshot screen -c
+xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>numbersign,string,flameshot screen -p \"${LK_SCREENSHOT_DIR:-$HOME/Desktop}\" -c
+xfce4-keyboard-shortcuts,/commands/custom/<Shift><Super>dollar,string,flameshot gui -c
+xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>dollar,string,flameshot gui -p \"${LK_SCREENSHOT_DIR:-$HOME/Desktop}\" -c
+xfce4-keyboard-shortcuts,/commands/custom/<Shift><Super>percent,string,sh -c 'flameshot gui -c --region \"\$(activewindowgeometry)\"'
+xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>percent,string,sh -c 'flameshot gui -p \"${LK_SCREENSHOT_DIR:-$HOME/Desktop}\" -c --region \"\$(activewindowgeometry)\"'
+xfce4-keyboard-shortcuts,/commands/custom/<Shift><Super>asciicircum,string,flameshot screen -c -d 5000
+xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>asciicircum,string,flameshot screen -p \"${LK_SCREENSHOT_DIR:-$HOME/Desktop}\" -c -d 5000
+xfce4-keyboard-shortcuts,/commands/custom/<Shift><Super>ampersand,string,flameshot gui -c -d 5000
+xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>ampersand,string,flameshot gui -p \"${LK_SCREENSHOT_DIR:-$HOME/Desktop}\" -c -d 5000
+xfce4-keyboard-shortcuts,/commands/custom/<Shift><Super>asterisk,string,sh -c 'flameshot gui -c --region \"\$(activewindowgeometry)\" -d 5000'
+xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>asterisk,string,sh -c 'flameshot gui -p \"${LK_SCREENSHOT_DIR:-$HOME/Desktop}\" -c --region \"\$(activewindowgeometry)\" -d 5000'
+xfce4-keyboard-shortcuts,/commands/custom/<Shift><Super>parenleft,string,flameshot gui -c
+xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>parenleft,string,flameshot gui -p \"${LK_SCREENSHOT_DIR:-$HOME/Desktop}\" -c
 
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>apostrophe,string,libreoffice --writer
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>b,string,galculator
-xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>b,string,exo-open --launch TerminalEmulator bash -ic '~/Code/lk/lk-platform/src/build-all.sh || lk_tty_pause',
+xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>b,string,speedcrunch
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>c,string,code
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>c,string,/opt/lk-settings/bin/open-project.sh
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>d,string,dbeaver
@@ -157,6 +160,7 @@ xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>o,string,todoist
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>p,string,clockify
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>r,string,code \"$(realpath "$HOME/.bashrc")\"
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>s,string,exo-open --launch TerminalEmulator bash -ic 'lk-unison.sh || lk_tty_pause'
+xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>s,string,code \"$(realpath "$HOME/Code/lk-settings.code-workspace")\"
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>semicolon,string,libreoffice --calc
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>t,string,/opt/lk-settings/bin/open-repo.sh git -C '{}' cola
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>v,string,virt-manager
@@ -207,17 +211,33 @@ xfce4-keyboard-shortcuts,/xfwm4/custom/<Super>grave,string,switch_window_key
 xfce4-keyboard-shortcuts,/xfwm4/custom/<Super>m,string,hide_window_key
 xfce4-keyboard-shortcuts,/xfwm4/custom/<Super>Tab,string,cycle_windows_key
 
+#### <reviewed date="2023-04-14">
+
 reset:xfce4-notifyd,/,reset
+
+# Relative times
+xfce4-notifyd,/date-time-format,int,1
 xfce4-notifyd,/do-fadeout,bool,true
-xfce4-notifyd,/do-slideout,bool,false
+xfce4-notifyd,/do-slideout,bool,true
 xfce4-notifyd,/expire-timeout,int,5
-xfce4-notifyd,/initial-opacity,double,0.80
-xfce4-notifyd,/log-level-apps,uint,0
-xfce4-notifyd,/log-level,uint,1
-xfce4-notifyd,/notification-log,bool,true
+xfce4-notifyd,/expire-timeout-allow-override,bool,true
+xfce4-notifyd,/initial-opacity,double,0.95
+xfce4-notifyd,/mute-sounds,bool,true
+# Top right
 xfce4-notifyd,/notify-location,uint,2
+# On primary display
 xfce4-notifyd,/primary-monitor,uint,1
-xfce4-notifyd,/theme,string,Bright
+xfce4-notifyd,/theme,string,Qogir-Dark
+
+# Always log notifications from all apps, without limiting log size
+xfce4-notifyd,/notification-log,bool,true
+xfce4-notifyd,/log-level,uint,1
+xfce4-notifyd,/log-level-apps,uint,0
+xfce4-notifyd,/log-max-size-enabled,bool,false
+# But don't prompt when clearing entries
+xfce4-notifyd,/plugin/hide-clear-prompt,bool,true
+
+#### </reviewed>
 
 reset:xfce4-power-manager,/,reset
 

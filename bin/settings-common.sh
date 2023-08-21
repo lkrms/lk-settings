@@ -83,34 +83,4 @@ function symlink_if_not_running() {
     done
 }
 
-function vscode_sync_extensions() {
-    local VSCODE_EXTENSIONS INSTALL REMOVE EXT
-    lk_command_exists code || return 0
-    lk_tty_print "Checking VS Code extensions"
-    . "$1" || exit
-    ! lk_in_array bmewburn.vscode-intelephense-client VSCODE_EXTENSIONS ||
-        lk_vscode_extension_disable vscode.php-language-features ||
-        lk_warn "error disabling: vscode.php-language-features" || true
-    INSTALL=($(comm -13 \
-        <(code --list-extensions | sort -u) \
-        <(lk_echo_array VSCODE_EXTENSIONS | sort -u)))
-    [ ${#INSTALL[@]} -eq 0 ] ||
-        ! { lk_tty_list_detail INSTALL "Installing:" extension extensions &&
-            lk_confirm "Proceed?" Y; } ||
-        for EXT in "${INSTALL[@]}"; do
-            code --install-extension "$EXT"
-        done
-    REMOVE=($(comm -23 \
-        <(code --list-extensions | sort -u) \
-        <(lk_echo_array VSCODE_EXTENSIONS | sort -u)))
-    [ ${#REMOVE[@]} -eq 0 ] || {
-        [ ${#INSTALL[@]} -eq 0 ] || lk_tty_print
-        lk_tty_list_detail REMOVE "Orphaned:" extension extensions
-        ! lk_confirm "Remove the above?" N ||
-            for EXT in "${REMOVE[@]}"; do
-                code --uninstall-extension "$EXT" || true
-            done
-    }
-}
-
 LK_VERBOSE=1

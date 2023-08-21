@@ -40,10 +40,28 @@
 					<string>Bash_Shortcuts</string>
 				</dict>
 			</dict>
+			<key>Bash_Test_Operators</key>
+			<dict>
+				<key>date</key>
+				<date>2023-03-30T10:30:41Z</date>
+				<key>entry</key>
+				<dict>
+					<key>aliases</key>
+					<array>
+						<string>terminal shell bash</string>
+					</array>
+					<key>name</key>
+					<string>Bash Test Operators</string>
+					<key>platform</key>
+					<string>cheatsheet</string>
+					<key>uniqueIdentifier</key>
+					<string>Bash_Test_Operators</string>
+				</dict>
+			</dict>
 			<key>Conventional_Commits</key>
 			<dict>
 				<key>date</key>
-				<date>2022-07-11T16:31:37Z</date>
+				<date>2023-04-02T09:49:42Z</date>
 				<key>entry</key>
 				<dict>
 					<key>aliases</key>
@@ -104,6 +122,22 @@
 					<string>Dockerfile</string>
 				</dict>
 			</dict>
+			<key>Emoji</key>
+			<dict>
+				<key>date</key>
+				<date>2023-03-30T10:30:26Z</date>
+				<key>entry</key>
+				<dict>
+					<key>aliases</key>
+					<array/>
+					<key>name</key>
+					<string>Emoji</string>
+					<key>platform</key>
+					<string>cheatsheet</string>
+					<key>uniqueIdentifier</key>
+					<string>Emoji</string>
+				</dict>
+			</dict>
 			<key>Font_Awesome</key>
 			<dict>
 				<key>date</key>
@@ -157,6 +191,22 @@
 					<string>HTML_Entities</string>
 				</dict>
 			</dict>
+			<key>HTML_Head_Elements</key>
+			<dict>
+				<key>date</key>
+				<date>2023-03-30T10:28:26Z</date>
+				<key>entry</key>
+				<dict>
+					<key>aliases</key>
+					<array/>
+					<key>name</key>
+					<string>HTML Head Elements</string>
+					<key>platform</key>
+					<string>cheatsheet</string>
+					<key>uniqueIdentifier</key>
+					<string>HTML_Head_Elements</string>
+				</dict>
+			</dict>
 			<key>HTTP_Header_Fields</key>
 			<dict>
 				<key>date</key>
@@ -187,6 +237,22 @@
 					<string>cheatsheet</string>
 					<key>uniqueIdentifier</key>
 					<string>HTTP_Status_Codes</string>
+				</dict>
+			</dict>
+			<key>Kubernetes</key>
+			<dict>
+				<key>date</key>
+				<date>2023-03-30T10:28:43Z</date>
+				<key>entry</key>
+				<dict>
+					<key>aliases</key>
+					<array/>
+					<key>name</key>
+					<string>Kubernetes</string>
+					<key>platform</key>
+					<string>cheatsheet</string>
+					<key>uniqueIdentifier</key>
+					<string>Kubernetes</string>
 				</dict>
 			</dict>
 			<key>Licenses</key>
@@ -240,6 +306,22 @@
 					<string>Regular_Expressions</string>
 				</dict>
 			</dict>
+			<key>SMTP_Status_Codes</key>
+			<dict>
+				<key>date</key>
+				<date>2023-03-30T10:29:34Z</date>
+				<key>entry</key>
+				<dict>
+					<key>aliases</key>
+					<array/>
+					<key>name</key>
+					<string>SMTP Status Codes</string>
+					<key>platform</key>
+					<string>cheatsheet</string>
+					<key>uniqueIdentifier</key>
+					<string>SMTP_Status_Codes</string>
+				</dict>
+			</dict>
 			<key>SQLite</key>
 			<dict>
 				<key>date</key>
@@ -270,6 +352,22 @@
 					<string>cheatsheet</string>
 					<key>uniqueIdentifier</key>
 					<string>Vim</string>
+				</dict>
+			</dict>
+			<key>Vimdiff</key>
+			<dict>
+				<key>date</key>
+				<date>2023-03-30T10:29:07Z</date>
+				<key>entry</key>
+				<dict>
+					<key>aliases</key>
+					<array/>
+					<key>name</key>
+					<string>Vimdiff</string>
+					<key>platform</key>
+					<string>cheatsheet</string>
+					<key>uniqueIdentifier</key>
+					<string>Vimdiff</string>
 				</dict>
 			</dict>
 			<key>Visual_Studio_Code</key>
@@ -318,6 +416,42 @@
 					<string>cheatsheet</string>
 					<key>uniqueIdentifier</key>
 					<string>You_Might_Not_Need_jQuery</string>
+				</dict>
+			</dict>
+			<key>npm</key>
+			<dict>
+				<key>date</key>
+				<date>2023-03-30T10:30:00Z</date>
+				<key>entry</key>
+				<dict>
+					<key>aliases</key>
+					<array>
+						<string>node package manager</string>
+						<string>nodejs package manager</string>
+						<string>node.js package manager</string>
+					</array>
+					<key>name</key>
+					<string>npm</string>
+					<key>platform</key>
+					<string>cheatsheet</string>
+					<key>uniqueIdentifier</key>
+					<string>npm</string>
+				</dict>
+			</dict>
+			<key>openssl</key>
+			<dict>
+				<key>date</key>
+				<date>2023-03-16T22:04:31Z</date>
+				<key>entry</key>
+				<dict>
+					<key>aliases</key>
+					<array/>
+					<key>name</key>
+					<string>openssl</string>
+					<key>platform</key>
+					<string>cheatsheet</string>
+					<key>uniqueIdentifier</key>
+					<string>openssl</string>
 				</dict>
 			</dict>
 			<key>strftime_Format_Codes</key>
@@ -445,7 +579,7 @@
 			<key>Hammerspoon</key>
 			<dict>
 				<key>date</key>
-				<date>2022-07-11T16:31:39Z</date>
+				<date>2023-03-15T08:01:12Z</date>
 				<key>entry</key>
 				<dict>
 					<key>aliases</key>
@@ -467,9 +601,27 @@
 		<dict/>
 	</dict>
 	<key>actuallyDarkWebView</key>
-	<true/>
+	<false/>
+	<key>annotationsAreShown</key>
+	<false/>
 	<key>bookmarks</key>
 	<array>
+		<dict>
+			<key>path</key>
+			<string>file://~/Library/Application%20Support/Dash/DocSets/PHP/PHP.docset/Contents/Resources/Documents/www.php.net/manual/en/language.types.string.html#language.types.string.syntax.double</string>
+			<key>platformImagePath</key>
+			<string>php</string>
+			<key>title</key>
+			<string>Strings</string>
+		</dict>
+		<dict>
+			<key>path</key>
+			<string>file://~/Library/Application%20Support/Dash/DocSets/PHP/PHP.docset/Contents/Resources/Documents/www.php.net/manual/en/reference.pcre.pattern.syntax.html</string>
+			<key>platformImagePath</key>
+			<string>php</string>
+			<key>title</key>
+			<string>PCRE regex syntax</string>
+		</dict>
 		<dict>
 			<key>path</key>
 			<string>file://~/Library/Application%20Support/Dash/DocSets/PHP/PHP.docset/Contents/Resources/Documents/www.php.net/manual/en/regexp.reference.escape.html</string>
@@ -477,14 +629,6 @@
 			<string>php</string>
 			<key>title</key>
 			<string>Escape sequences</string>
-		</dict>
-		<dict>
-			<key>path</key>
-			<string>file://~/Library/Application%20Support/Dash/DocSets/PHP/PHP.docset/Contents/Resources/Documents/www.php.net/manual/en/features.commandline.io-streams.html</string>
-			<key>platformImagePath</key>
-			<string>php</string>
-			<key>title</key>
-			<string>I/O streams</string>
 		</dict>
 		<dict>
 			<key>path</key>
@@ -496,11 +640,27 @@
 		</dict>
 		<dict>
 			<key>path</key>
+			<string>file://~/Library/Application%20Support/Dash/DocSets/PHP/PHP.docset/Contents/Resources/Documents/www.php.net/manual/en/features.commandline.io-streams.html</string>
+			<key>platformImagePath</key>
+			<string>php</string>
+			<key>title</key>
+			<string>I/O streams</string>
+		</dict>
+		<dict>
+			<key>path</key>
 			<string>file://~/Library/Application%20Support/Dash/DocSets/Python_3/Python%203.docset/Contents/Resources/Documents/doc/library/stdtypes.html</string>
 			<key>platformImagePath</key>
 			<string>python</string>
 			<key>title</key>
 			<string>Built-in Types</string>
+		</dict>
+		<dict>
+			<key>path</key>
+			<string>file://~/Library/Application%20Support/Dash/Cheat%20Sheets/ASCII%20Tables/ASCII_Tables.docset/Contents/Resources/Documents/index.html</string>
+			<key>platformImagePath</key>
+			<string>cheatsheet</string>
+			<key>title</key>
+			<string>ASCII Tables</string>
 		</dict>
 	</array>
 	<key>docsets</key>
@@ -537,80 +697,25 @@
 				<key>date</key>
 				<date>2022-07-11T16:31:48Z</date>
 			</dict>
-			<key>http://kapeli.com/feeds/C++.xml</key>
-			<dict>
-				<key>date</key>
-				<date>2022-07-11T16:33:31Z</date>
-			</dict>
-			<key>http://kapeli.com/feeds/C.xml</key>
-			<dict>
-				<key>date</key>
-				<date>2022-07-11T16:33:16Z</date>
-			</dict>
 			<key>http://kapeli.com/feeds/CSS.xml</key>
 			<dict>
 				<key>date</key>
 				<date>2022-07-11T16:32:10Z</date>
-			</dict>
-			<key>http://kapeli.com/feeds/CoffeeScript.xml</key>
-			<dict>
-				<key>date</key>
-				<date>2022-07-11T16:31:43Z</date>
-			</dict>
-			<key>http://kapeli.com/feeds/Cordova.xml</key>
-			<dict>
-				<key>date</key>
-				<date>2022-07-11T16:32:17Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/Docker.xml</key>
 			<dict>
 				<key>date</key>
 				<date>2022-07-11T16:32:55Z</date>
 			</dict>
-			<key>http://kapeli.com/feeds/Emmet.xml</key>
-			<dict>
-				<key>date</key>
-				<date>2022-07-11T16:32:47Z</date>
-			</dict>
-			<key>http://kapeli.com/feeds/Font_Awesome.xml</key>
-			<dict>
-				<key>date</key>
-				<date>2022-07-11T16:31:47Z</date>
-			</dict>
-			<key>http://kapeli.com/feeds/GLib.xml</key>
-			<dict>
-				<key>date</key>
-				<date>2022-07-11T16:32:20Z</date>
-			</dict>
-			<key>http://kapeli.com/feeds/Go.xml</key>
-			<dict>
-				<key>date</key>
-				<date>2022-07-11T16:32:15Z</date>
-			</dict>
 			<key>http://kapeli.com/feeds/HTML.xml</key>
 			<dict>
 				<key>date</key>
 				<date>2022-07-11T16:33:44Z</date>
 			</dict>
-			<key>http://kapeli.com/feeds/Handlebars.xml</key>
-			<dict>
-				<key>date</key>
-				<date>2022-07-11T16:32:57Z</date>
-			</dict>
-			<key>http://kapeli.com/feeds/Ionic.xml</key>
-			<dict>
-				<key>date</key>
-				<date>2022-07-11T16:32:34Z</date>
-			</dict>
 			<key>http://kapeli.com/feeds/JavaScript.xml</key>
 			<dict>
 				<key>date</key>
 				<date>2022-07-11T16:34:02Z</date>
-			</dict>
-			<key>http://kapeli.com/feeds/Laravel.xml</key>
-			<dict>
-				<key>date</key>
-				<date>2022-07-11T16:33:44Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/Lua_5.3.xml</key>
 			<dict>
@@ -626,11 +731,6 @@
 			<dict>
 				<key>date</key>
 				<date>2022-07-11T16:33:17Z</date>
-			</dict>
-			<key>http://kapeli.com/feeds/MomentJS.xml</key>
-			<dict>
-				<key>date</key>
-				<date>2022-07-11T16:32:28Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/MongoDB.xml</key>
 			<dict>
@@ -657,75 +757,25 @@
 				<key>date</key>
 				<date>2022-07-11T16:35:12Z</date>
 			</dict>
-			<key>http://kapeli.com/feeds/PHPUnit.xml</key>
-			<dict>
-				<key>date</key>
-				<date>2022-07-11T16:34:53Z</date>
-			</dict>
 			<key>http://kapeli.com/feeds/Perl.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2022-07-11T16:32:33Z</date>
-			</dict>
-			<key>http://kapeli.com/feeds/PhoneGap.xml</key>
-			<dict>
-				<key>date</key>
-				<date>2022-07-11T16:34:36Z</date>
-			</dict>
-			<key>http://kapeli.com/feeds/PostgreSQL.xml</key>
-			<dict>
-				<key>date</key>
-				<date>2022-07-11T16:33:34Z</date>
-			</dict>
-			<key>http://kapeli.com/feeds/Python_2.xml</key>
-			<dict>
-				<key>date</key>
-				<date>2022-07-11T16:32:39Z</date>
+				<date>2023-05-28T10:51:44Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/Python_3.xml</key>
 			<dict>
 				<key>date</key>
 				<date>2022-07-11T16:34:37Z</date>
 			</dict>
-			<key>http://kapeli.com/feeds/React.xml</key>
-			<dict>
-				<key>date</key>
-				<date>2022-07-11T16:34:57Z</date>
-			</dict>
-			<key>http://kapeli.com/feeds/RequireJS.xml</key>
-			<dict>
-				<key>date</key>
-				<date>2022-07-11T16:34:54Z</date>
-			</dict>
-			<key>http://kapeli.com/feeds/Ruby_2.xml</key>
-			<dict>
-				<key>date</key>
-				<date>2022-07-11T16:34:09Z</date>
-			</dict>
-			<key>http://kapeli.com/feeds/Rust.xml</key>
-			<dict>
-				<key>date</key>
-				<date>2022-07-11T16:34:30Z</date>
-			</dict>
 			<key>http://kapeli.com/feeds/SQLite.xml</key>
 			<dict>
 				<key>date</key>
 				<date>2022-07-11T16:35:04Z</date>
 			</dict>
-			<key>http://kapeli.com/feeds/Sass.xml</key>
-			<dict>
-				<key>date</key>
-				<date>2022-07-11T16:34:39Z</date>
-			</dict>
 			<key>http://kapeli.com/feeds/TypeScript.xml</key>
 			<dict>
 				<key>date</key>
 				<date>2022-07-11T16:34:52Z</date>
-			</dict>
-			<key>http://kapeli.com/feeds/WordPress.xml</key>
-			<dict>
-				<key>date</key>
-				<date>2022-07-11T16:36:09Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/jQuery.xml</key>
 			<dict>
@@ -734,38 +784,7 @@
 			</dict>
 		</dict>
 		<key>uninstalled</key>
-		<dict>
-			<key>http://kapeli.com/feeds/NET_Framework.xml</key>
-			<dict>
-				<key>date</key>
-				<date>2022-03-27T22:32:28Z</date>
-			</dict>
-			<key>http://kapeli.com/feeds/Symfony.xml</key>
-			<dict>
-				<key>date</key>
-				<date>2022-09-17T03:27:43Z</date>
-			</dict>
-			<key>http://kapeli.com/feeds/Vagrant.xml</key>
-			<dict>
-				<key>date</key>
-				<date>2022-09-17T03:27:32Z</date>
-			</dict>
-			<key>http://kapeli.com/feeds/Vim.xml</key>
-			<dict>
-				<key>date</key>
-				<date>2022-09-17T03:27:27Z</date>
-			</dict>
-			<key>http://kapeli.com/feeds/VueJS.xml</key>
-			<dict>
-				<key>date</key>
-				<date>2022-09-17T03:27:22Z</date>
-			</dict>
-			<key>http://kapeli.com/feeds/Xamarin.xml</key>
-			<dict>
-				<key>date</key>
-				<date>2022-03-27T22:32:28Z</date>
-			</dict>
-		</dict>
+		<dict/>
 	</dict>
 	<key>isPinned</key>
 	<true/>
@@ -913,7 +932,21 @@
 	<key>versionedFeeds</key>
 	<dict>
 		<key>installed</key>
-		<dict/>
+		<dict>
+			<key>http://kapeli.com/feeds/PHPUnit.xml</key>
+			<dict>
+				<key>10.0</key>
+				<dict>
+					<key>date</key>
+					<date>2023-04-11T01:01:44Z</date>
+				</dict>
+				<key>9.5</key>
+				<dict>
+					<key>date</key>
+					<date>2023-04-11T01:01:38Z</date>
+				</dict>
+			</dict>
+		</dict>
 		<key>uninstalled</key>
 		<dict/>
 	</dict>

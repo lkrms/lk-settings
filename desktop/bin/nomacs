@@ -1,0 +1,3 @@
+#!/bin/sh
+
+env -u QT_FONT_DPI -u QT_SCALE_FACTOR -u QT_AUTO_SCREEN_SCALE_FACTOR /usr/bin/nomacs "$@"

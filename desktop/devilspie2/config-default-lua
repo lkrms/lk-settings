@@ -1,5 +1,5 @@
-event_log = log_state
---event_log = log_window
+--event_log = log_state
+event_log = log_window
 --event_log = log_window_full
 --event_log = function(event)
 --    log_state(event)
@@ -33,10 +33,17 @@ _criteria.on_secondary_display = {
     end,
 }
 
-_criteria.can_fill_target = {
-    event = {"focus", "blur"},
+_criteria.not_maximized = {
     function(state)
-        local columns = (state.target_grid or default_grid or {3})[1]
+        return not state.window_is_maximized
+    end,
+}
+
+_criteria.can_fill_target = {
+    function(state)
+        --local columns = table.unpack(state.target_grid or default_grid or {3, 1})
+        -- Match QuickTile's configuration
+        local columns = 6
         if width_matches_grid(state, columns) and
             position_matches_grid(state, columns, 1) then
             log.trace("Geometry matches " .. columns .. "-column grid: "
@@ -63,11 +70,11 @@ _criteria.pinnable = {
     _criteria.has_multiple_displays,
     {
         operator.OR,
-        event = "open",
+        {event = "open"},
         {
             operator.AND,
-            event = {"focus", "blur"},
-            display = 2,
+            {event = {"focus", "blur"}},
+            {display = 2},
         },
     },
 }
@@ -75,8 +82,11 @@ _criteria.pinnable = {
 _groups = {
     mail = {
         ["Mail"] = {
-            criteria = {
+            match_criteria = {
                 window_role = "3pane",
+            },
+            criteria = {
+                event = "open",
             },
         },
     },
@@ -85,17 +95,9 @@ _groups = {
     },
     teams = {
         ["microsoft teams"] = {},
-        ["microsoft teams - preview"] = {
-            criteria = {
-                -- 28/6/22: main window has min_width = 720@96dpi, 1080@144dpi
-                function(state)
-                    state.hints = state.hints or get_size_hints()
-                    return state.hints and
-                        state.hints.min_width >= (state.displays[1][3] >= 3840 and 1080 or 720)
-                end,
-            },
-        },
+        ["microsoft teams - preview"] = {},
         ["microsoft teams - insiders"] = {},
+        ["teams-for-linux"] = {},
         ["crx__cifhbcnohmdccbgoicgdjpfamggdegmo"] = {}, -- Teams
     },
     messenger = {
@@ -160,8 +162,8 @@ _layouts = {
         grid = {16, 2},
         targets = {
             criteria = _criteria.can_fill_target,
-            {display = 1, xy = {1, 1}, wh = {5, 2}},
-            {display = 1, xy = {6, 1}, wh = {8, 2}},
+            {display = 1, xy = {1, 1},  wh = {5, 2}},
+            {display = 1, xy = {6, 1},  wh = {8, 2}},
             {display = 1, xy = {14, 1}, wh = {3, 2}},
         },
         place = {display = 1, wh = {1, 1}},
@@ -176,7 +178,6 @@ _layouts = {
             util = {workspace = 0, xy = {1, 2}, wh = {5, 1}},
         },
     },
-
     -- 2x4K
     ["7680.0x2160.0"] = {
         -- <-- 25% --> <-- ** 50% ** --> <-- 25% -->
@@ -206,7 +207,6 @@ _layouts = {
             util = {xy = {5, 2}},
         },
     },
-
     -- Ultrawide
     -- 1. <-- 25% --> <-- ** 50% ** --> <-- 25% -->
     ["3440.0x1440.0"] = {
@@ -220,34 +220,35 @@ _layouts = {
         place = {display = 1, wh = {1, 1}},
         group_places = {
             dev = {xy = {2, 1}, wh = {2, 2}},
-            mail = {workspace = 1, xy = {2, 1}, wh = {2, 2}},
-            teams = {workspace = 0, xy = {1, 1}},
-            irc = {workspace = 0, xy = {1, 1}},
-            messenger = {workspace = 0, xy = {1, 2}},
-            skype = {workspace = 0, xy = {1, 2}},
-            time = {workspace = 0, xy = {4, 1}},
-            todo = {workspace = 0, xy = {4, 2}},
-            util = {workspace = 0, xy = {4, 2}},
+            mail = {xy = {2, 1}, wh = {2, 2}},
+            teams = {xy = {1, 1}},
+            irc = {xy = {1, 1}},
+            messenger = {xy = {1, 2}},
+            skype = {xy = {1, 2}},
+            time = {xy = {4, 1}},
+            todo = {xy = {4, 2}},
+            util = {xy = {4, 2}},
         },
     },
     -- 2. <-- 25% --> <-- ** 37.5% ** --> <-- ** 37.5% ** -->
     ["2@3440.0x1440.0"] = {
-        grid = {8, 2},
+        grid = {8, 2, 3},
         targets = {
             criteria = _criteria.can_fill_target,
-            {display = 1, xy = {1, 1}, wh = {2, 2}},
             {display = 1, xy = {3, 1}, wh = {3, 2}},
             {display = 1, xy = {6, 1}, wh = {3, 2}},
         },
         place = {display = 1, wh = {2, 1}},
         group_places = {
-            teams = {workspace = 0, xy = {1, 1}},
-            irc = {workspace = 0, xy = {1, 1}},
-            messenger = {workspace = 0, xy = {1, 1}},
-            skype = {workspace = 0, xy = {1, 1}},
-            time = {workspace = 0, xy = {1, 2}},
-            todo = {workspace = 0, xy = {1, 2}},
-            util = {workspace = 0, xy = {1, 2}},
+            dev = {xy = {3, 1}, wh = {3, 2}},
+            mail = {xy = {3, 1}, wh = {3, 2}},
+            teams = {xy = {1, 1}},
+            irc = {xy = {1, 1}},
+            messenger = {xy = {1, 2}},
+            skype = {xy = {1, 2}},
+            time = {xy = {1, 1}},
+            todo = {xy = {1, 2}},
+            util = {xy = {1, 2}},
         },
     },
     -- 3. <-- 33.33% --> <-- ** 33.33% ** --> <-- ** 33.33% ** -->
@@ -261,40 +262,46 @@ _layouts = {
         },
         place = {display = 1, wh = {1, 1}},
         group_places = {
-            teams = {workspace = 0, xy = {1, 1}},
-            irc = {workspace = 0, xy = {1, 1}},
-            messenger = {workspace = 0, xy = {1, 2}},
-            skype = {workspace = 0, xy = {1, 2}},
-            time = {workspace = 0, xy = {3, 1}},
-            todo = {workspace = 0, xy = {3, 2}},
-            util = {workspace = 0, xy = {3, 2}},
+            dev = {xy = {2, 1}, wh = {1, 2}},
+            mail = {xy = {2, 1}, wh = {1, 2}},
+            teams = {xy = {1, 1}},
+            irc = {xy = {1, 1}},
+            messenger = {xy = {1, 2}},
+            skype = {xy = {1, 2}},
+            time = {xy = {3, 1}},
+            todo = {xy = {3, 2}},
+            util = {xy = {3, 2}},
         },
     },
     -- 4. <-- 25% --> <-- ** 75% ** -->
     ["4@3440.0x1440.0"] = {
-        grid = {4, 2},
+        grid = {4, 2, 3},
         targets = {
             criteria = _criteria.can_fill_target,
-            {display = 1, xy = {1, 1}, wh = {1, 2}},
             {display = 1, xy = {2, 1}, wh = {3, 2}},
         },
         place = {display = 1, wh = {1, 1}},
         group_places = {
-            teams = {workspace = 0, xy = {1, 1}},
-            irc = {workspace = 0, xy = {1, 1}},
-            messenger = {workspace = 0, xy = {1, 1}},
-            skype = {workspace = 0, xy = {1, 1}},
-            time = {workspace = 0, xy = {1, 2}},
-            todo = {workspace = 0, xy = {1, 2}},
-            util = {workspace = 0, xy = {1, 2}},
+            dev = {xy = {2, 1}, wh = {3, 2}},
+            mail = {xy = {2, 1}, wh = {3, 2}},
+            teams = {xy = {1, 1}},
+            irc = {xy = {1, 1}},
+            messenger = {xy = {1, 2}},
+            skype = {xy = {1, 2}},
+            time = {xy = {1, 1}},
+            todo = {xy = {1, 2}},
+            util = {xy = {1, 2}},
         },
     },
 }
 
 function get_place(state)
     local app, app_has_place = _apps[state.class_instance_name] or _apps[get_process_name()], false
+    if app and not check_criteria(app.match_criteria, state) then
+        app = nil
+    end
     if app ~= nil then
-        log.trace("app = " .. pretty.write(app))
+        log.trace("App matched: " .. pretty.write(app, ""))
     end
     local geometry, layout, targets, place = table.concat(state.screen_geometry, "x")
     for i, layout_id in ipairs({
@@ -312,17 +319,18 @@ function get_place(state)
     }) do
         layout = _layouts[layout_id]
         if layout and check_criteria(layout.criteria, state) then
-            log.trace("layout_id = " .. layout_id)
+            log.trace("Layout matched: " .. layout_id)
             -- Use the first `targets` list found
             if not targets and layout.targets then
                 targets = layout.targets
-                log.trace("targets = " .. pretty.write(targets))
+                log.trace("Targets acquired: " .. pretty.write(targets, ""))
                 state.target_grid = targets.grid or layout.grid
             end
             if app then
                 place = layout.group_places and layout.group_places[app.group]
                 if place and check_criteria(layout.group_places.criteria, state) and
                     check_criteria(app.criteria, state) then
+                    log.trace("Place assigned to app by group: " .. pretty.write(place, ""))
                     if layout.place then
                         place = extend(layout.place, place)
                     end
@@ -334,16 +342,20 @@ function get_place(state)
         end
     end
     if not app_has_place and
-        (not place or (not place.xy and not place.wh)) and
+        (not place -- or (not place.xy and not place.wh)
+        ) and
         targets and
         check_criteria(targets.criteria, state) and
-        state.window_is_maximized_vertically and
-        not state.window_is_maximized then
-        place = get_snap_target(targets, state)
+        --state.window_is_maximized_vertically and
+        not state.window_is_maximized and
+        (state.event == "open" or not get_window_is_decorated()) then
+        place = get_snap_target(targets, state, 98)
+        if place then
+            log.trace("Place returned by get_snap_target: " .. pretty.write(place, ""))
+        end
     end
     if place then
         place.grid = place.grid or layout.grid
-        log.trace("place = " .. pretty.write(place))
         if app and app.add_to_state then
             for setting, value in pairs(app.add_to_state) do
                 state[setting] = value
@@ -371,11 +383,11 @@ rules = {
     {
         criteria = {
             operator.AND,
-            event = {"open", "blur"},
+            {event = {"open", "blur"}},
+            _criteria.private,
             function(state)
                 return #state.displays == 1 and state.displays[1][3] > 1920
             end,
-            _criteria.private,
         },
         actions = {
             --shade_on,
@@ -384,17 +396,17 @@ rules = {
     {
         criteria = {
             operator.AND,
-            event = "focus",
+            {event = "focus"},
             _criteria.private,
         },
         actions = {
-            shade_off,
+            --shade_off,
         },
     },
     {
         criteria = {
             operator.AND,
-            event = "open",
+            {event = "open"},
             _criteria.undecorated,
         },
         actions = {
@@ -404,7 +416,7 @@ rules = {
     {
         criteria = {
             operator.AND,
-            event = "open",
+            {event = "open"},
             function(state)
                 local x, y, w, h = table.unpack(state.window_geometry)
                 -- return true if the centre of the window isn't on a display
@@ -434,15 +446,19 @@ rules = {
     {
         criteria = {
             operator.AND,
-            event = {"open", "focus"},
+            {event = {"open", "focus"}},
             {
                 operator.OR,
-                just_opened = false,
+                {just_opened = false},
                 -- Because some apps maximise themselves after launching
                 -- (e.g. Todoist, Caprine)
-                window_is_maximized = true,
+                {window_is_maximized = true},
             },
-            window_type = "WINDOW_TYPE_NORMAL",
+            {window_type = "WINDOW_TYPE_NORMAL"},
+            function(state)
+                return not state.window_state["_NET_WM_STATE_MODAL"] and
+                    not state.window_state["_NET_WM_STATE_SKIP_TASKBAR"]
+            end,
             function(state)
                 state.place = get_place(state)
                 return state.place ~= nil
@@ -451,6 +467,21 @@ rules = {
         actions = {
             function(state)
                 to_place(state.place, state)
+            end,
+        },
+    },
+    {
+        criteria = {
+            operator.AND,
+            {event = "open"},
+            {window_type = "WINDOW_TYPE_NORMAL"},
+            function(state)
+                return table.concat(state.screen_geometry, "x") == "3440.0x1440.0"
+            end,
+        },
+        actions = {
+            function(state)
+                to_workspace(0, state)
             end,
         },
     },

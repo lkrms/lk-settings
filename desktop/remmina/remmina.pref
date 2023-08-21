@@ -83,6 +83,8 @@ audit=false
 rdp_disable_smooth_scrolling=0
 rdp_reconnect_attempts=
 rdp_kbd_remap=
+always_show_notes=false
+lock_view_passwords=false
 
 [ssh_colors]
 background=rgb(213,204,186)

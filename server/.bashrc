@@ -88,11 +88,13 @@ function pacman-sign() { (
 ); }
 
 function pacman-clean() {
+    local OPERATION
     lk_tty_print "Cleaning up old packages"
-    lk_tty_run_detail sudo paccache -v \
-        --cachedir=/var/cache/pacman/pkg/ --keep 1 --remove &&
+    for OPERATION in --dryrun --remove; do
         lk_tty_run_detail sudo paccache -v \
-            --cachedir=/srv/repo/{aur,lk,quarry}/ --keep 2 --remove
+            --cachedir={/var/cache/pacman/pkg/,/srv/repo/{aur,lk,quarry}/} --keep 2 "$OPERATION"
+        [[ $OPERATION == --remove ]] || lk_tty_yn "Proceed?" || return
+    done
 }
 
 function pacman-build-all() {
@@ -113,7 +115,7 @@ Use rsync to copy files from hub to doo after completing a dry run." || return
         lk_tty_run rsync ${ARG:+"$ARG"} -vrlpt --delete "${@:3}" \
             --password-file="$HOME/.rsync-hub" \
             "doo@hub::root${1%/}/" "${DEST%/}/"
-        [ -z "$ARG" ] || lk_confirm "Dry run OK?" Y || break
+        [ -z "$ARG" ] || lk_tty_yn "Dry run OK?" Y || break
     done
 }
 
@@ -172,7 +174,7 @@ function mkvmerge-mkv-ac3-aac() {
 
 function _do-rename-media() {
     [[ -n ${MV+1} ]] || return 0
-    lk_confirm "Proceed?" Y || lk_warn "cancelled by user" || return 0
+    lk_tty_yn "Proceed?" Y || lk_warn "cancelled by user" || return 0
     local FILE
     for FILE in "${MV[@]}"; do
         eval "mv -vn $FILE"
@@ -281,7 +283,7 @@ function system-update() { (
     shopt -s nullglob
     LAST_FAILED=0
     for DIR in /opt/lk-*/.git ""; do
-        ! ((LAST_FAILED)) || lk_confirm "Check failed. Continue?" Y || return
+        ! ((LAST_FAILED)) || lk_tty_yn "Check failed. Continue?" Y || return
         [ -n "$DIR" ] || break
         LAST_FAILED=1
         DIR=${DIR%/.git}

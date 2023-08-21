@@ -102,7 +102,3 @@
 [filter "zeal"]
 	clean = sed -E '/^(external_link_policy|path|install_id|(splitter|window)_geometry|toc_splitter_state)=/d'
 	smudge = cat
-
-[filter "php"]
-	clean = "awk 'function p(){if(s)print\"\";s=0}/^$/{p();s=1;next}/^\\/\\/ PRETTY_/{s=0;next}{p();print}'"
-	smudge = cat

@@ -1,8 +1,8 @@
 .DS_Store
 Thumbs.db
 
+.vscode
 *.code-workspace
-.vscode/
 vsc-extension-quickstart.md
 
 *.sublime-project
@@ -23,6 +23,6 @@ php_errors.log
 
 /test.php
 /bin/test.php
-/tests/temp.php
 
 /.venv
+__pycache__

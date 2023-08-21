@@ -1,5 +1,8 @@
 pretty = require("pl.pretty")
+stringx = require("pl.stringx")
 tablex = require("pl.tablex")
+
+stringx.import()
 
 log = {
     CRITICAL = 2,
@@ -44,6 +47,7 @@ log = {
 operator = {
     AND = 1,
     OR = 2,
+    NOT = 3,
 }
 
 function extend(copy_table, update_table)
@@ -54,6 +58,14 @@ function append(copy_table, insert_table)
     local copy = tablex.copy(copy_table)
     tablex.insertvalues(copy, insert_table)
     return copy
+end
+
+function bool(v)
+    return v ~= nil and v ~= false
+end
+
+function xor(a, b)
+    return bool(a) ~= bool(b)
 end
 
 -- Return the geometry of all connected displays.
@@ -181,6 +193,10 @@ xprop -id ]] .. window_xid .. [[ \
     return hints
 end
 
+function get_window_state()
+    return tablex.makeset(get_window_property("_NET_WM_STATE"):replace(" ", ""):split(","))
+end
+
 function get_display_at(displays, x, y, screen_w, screen_h)
     x, y = math.max(0, x), math.max(0, y)
     x, y = math.min((screen_w or x + 1) - 1, x), math.min((screen_h or y + 1) - 1, y)
@@ -206,7 +222,7 @@ function get_display()
     return get_display_at(get_displays(), x, y, get_screen_geometry())
 end
 
-function get_snap_target(targets, state)
+function get_snap_target(targets, state, min_area_percent)
     local x, y, w, h = table.unpack(state.window_geometry)
     x, y = math.max(0, math.floor(x + w / 2)), math.max(0, math.floor(y + h / 2))
     x, y = math.min(state.screen_geometry[1] - 1, x), math.min(state.screen_geometry[2] - 1, y)
@@ -220,7 +236,14 @@ function get_snap_target(targets, state)
         local tx, ty, tw, th = table.unpack(xywh)
         if tx > -1 and ty > -1 and tw > 0 and th > 0 and
             x >= tx and y >= ty and x < tx + tw and y < ty + th then
-            return target
+            if state.display_percent > 20 then
+                return target
+            end
+            local target_percent = math.floor(100 * w * h / (tw * th))
+            log.trace("Window area relative to target: " .. target_percent .. "%")
+            if target_percent >= (min_area_percent or 100) then
+                return target
+            end
         end
     end
 end
@@ -272,18 +295,21 @@ function get_state(event)
         window_client_geometry = window_client_geometry,
         window_decoration_geometry = {_get_decoration_geometry(window_geometry, window_client_geometry)},
         window_is_maximized = get_window_is_maximized() or
-        (window_geometry and display_geometry and
-        -- Use `>=` because decorations may be added
-        window_geometry[3] >= display_geometry[3] and
-        window_geometry[4] >= display_geometry[4]),
+            (window_geometry and display_geometry and
+                -- Use `>=` because decorations may be added
+                window_geometry[3] >= display_geometry[3] and
+                window_geometry[4] >= display_geometry[4]),
         window_is_maximized_vertically = get_window_is_maximized_vertically() or
-        (window_geometry and display_geometry and
-        window_geometry[4] >= display_geometry[4]),
+            (window_geometry and display_geometry and
+                window_geometry[4] >= display_geometry[4]),
         window_type = get_window_type(),
+        window_state = get_window_state(),
         class_instance_name = get_class_instance_name() or get_process_name() or "",
         window_role = get_window_role(),
         window_xid = get_window_xid(),
         screen_geometry = {get_screen_geometry()},
+        display_percent = window_geometry and display_geometry and
+            math.floor(100 * window_geometry[3] * window_geometry[4] / (display_geometry[3] * display_geometry[4])),
         just_opened = event == "focus" and opened_window_xid and opened_window_xid == get_window_xid() or false,
     }
 end
@@ -478,20 +504,22 @@ function check_criteria(criteria, state)
     if criteria == nil then
         return true
     end
-    local and_result, or_result, op = true, false
+    local and_result, or_result, negate, op = true, false, false
     for k, v in pairs(criteria) do
         local result
         if type(k) == "number" then
             if v == "AND" or v == operator.AND then
                 if and_result == false then
-                    return false
+                    return xor(false, negate)
                 end
                 op = operator.AND
             elseif v == "OR" or v == operator.OR then
                 if or_result == true then
-                    return true
+                    return xor(true, negate)
                 end
                 op = operator.OR
+            elseif v == "NOT" or v == operator.NOT then
+                negate = true
             elseif type(v) == "function" then
                 result = v(state)
             elseif type(v) == "table" then
@@ -506,9 +534,9 @@ function check_criteria(criteria, state)
             and_result = and_result and result
             or_result = or_result or result
             if op == operator.AND and and_result == false then
-                return false
+                return xor(false, negate)
             elseif op == operator.OR and or_result == true then
-                return true
+                return xor(true, negate)
             end
         end
     end
@@ -576,21 +604,49 @@ end
 
 function width_matches_grid(state, columns)
     local col_w = math.floor(state.display_geometry[3] / columns)
-    return (state.window_geometry[3] % col_w == 0) or
-        ((state.window_geometry[3] - state.window_decoration_geometry[1]) % col_w == 0)
+    local delta_x, delta_y, delta_w = table.unpack(get_grid_delta(state, columns, 1))
+    return (((state.window_geometry[3] + 1) % col_w <= 1 + delta_w) or
+            ((state.window_geometry[3] - state.window_decoration_geometry[1] + 1) % col_w <= 1 + delta_w)) and
+        (log.trace("Window width matches grid with width " .. col_w .. "±" .. delta_w) or true)
 end
 
 function position_matches_grid(state, columns, rows)
     local d_x, d_y, d_w, d_h = table.unpack(state.display_geometry)
-    local col_w, row_h = math.floor(d_w / columns), math.floor(d_h / rows)
     local x, y, w, h = table.unpack(state.window_geometry)
     local dec_w, dec_h = table.unpack(state.window_decoration_geometry)
+    local delta_x, delta_y = table.unpack(get_grid_delta(state, columns, rows))
+    local col_w, row_h =
+        math.floor(d_w / columns),
+        math.floor(d_h / rows)
     local _dec_w = dec_w / 2
-    return (x >= d_x and x + w <= d_x + d_w and (x - d_x) % col_w == 0 and
-        y >= d_y and y + h <= d_y + d_h and (y - d_y) % row_h == 0) or
-        -- Adjust for unmaximizing in Xfce with "hide frame when maximized" enabled
-        ((x + _dec_w) >= d_x and (x + _dec_w) + (w - dec_w) <= d_x + d_w and ((x + _dec_w) - d_x) % col_w == 0 and
-        y >= d_y and y + (h - dec_h) <= d_y + d_h and (y - d_y) % row_h == 0)
+
+    return ((x >= d_x and x + w <= d_x + d_w and (x - d_x + 1) % col_w <= 1 + delta_x and
+                y >= d_y and y + h <= d_y + d_h and (y - d_y + 1) % row_h <= 1 + delta_y) or
+            -- Adjust for unmaximizing in Xfce with "hide frame when maximized" enabled
+            ((x + _dec_w) >= d_x and (x + _dec_w) + (w - dec_w) <= d_x + d_w and ((x + _dec_w) - d_x + 1) % col_w <= 1 + delta_x and
+                y >= d_y and y + (h - dec_h) <= d_y + d_h and (y - d_y + 1) % row_h <= 1 + delta_y)) and
+        (log.trace("Window position matches grid with width " .. col_w .. "±" .. delta_x) or true)
+end
+
+function get_grid_delta(state, columns, rows)
+    local d_x, d_y, d_w, d_h = table.unpack(state.display_geometry)
+    local x, y, w, h = table.unpack(state.window_geometry)
+    local min_col_w, min_row_h, max_col_w, max_row_h =
+        math.floor(d_w / columns),
+        math.floor(d_h / rows),
+        math.ceil(d_w / columns),
+        math.ceil(d_h / rows)
+    local x_cols, y_rows, w_cols, h_rows =
+        math.floor((x - d_x) / min_col_w),
+        math.floor((y - d_y) / min_row_h),
+        math.floor(w / min_col_w),
+        math.floor(h / min_row_h)
+    return {
+        (max_col_w - min_col_w) * x_cols,
+        (max_row_h - min_row_h) * y_rows,
+        (max_col_w - min_col_w) * w_cols,
+        (max_row_h - min_row_h) * h_rows,
+    }
 end
 
 function log_window_full(event)
@@ -617,6 +673,7 @@ function log_window_full(event)
         xywh = table.concat({xywh()}, ","),
         --
         get_size_hints = pretty.write(get_size_hints() or {}, ""),
+        get_window_state = pretty.write(get_window_state() or {}, ""),
         get_current_workspace = get_current_workspace(),
     }
     debug_print("On " .. event .. ":")
