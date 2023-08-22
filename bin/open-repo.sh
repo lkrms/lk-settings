@@ -1,6 +1,7 @@
 #!/bin/bash
 
-. /opt/lk-platform/bin/lk-bash-load.sh || exit
+. "${LK_BASE:-/opt/lk-platform}"/bin/lk-bash-load.sh 2>/dev/null ||
+    . ~/Code/lk/lk-platform/bin/lk-bash-load.sh || exit
 
 shopt -s extglob nullglob
 

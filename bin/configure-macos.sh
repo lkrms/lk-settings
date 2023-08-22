@@ -60,8 +60,7 @@ rm -Rfv ~/.config/composer{,-dev} ~/.composer-dev
         "$_PRIV/composer/auth.json" ~/.composer/auth.json \
         "$_PRIV/composer/composer.json" ~/.composer/composer.json \
         "$_PRIV/composer/composer.lock" ~/.composer/composer.lock \
-        "$_PRIV/composer/config.json" ~/.composer/config.json \
-        "$_PRIV/espanso/" "$_PREFS/espanso"
+        "$_PRIV/composer/config.json" ~/.composer/config.json
 
     symlink_if_not_running \
         "$_PRIV/DBeaverData/" ~/Library/DBeaverData \
@@ -101,19 +100,12 @@ EOF
 symlink "$_ROOT/.tidyrc" ~/.tidyrc
 symlink "$_ROOT/.byoburc" ~/.byoburc
 symlink "$_ROOT/byobu/" ~/.byobu
-symlink -d "$_ROOT/git" ~/.config/git
 symlink -d "$_ROOT/rubocop/.rubocop.yml" ~/.rubocop.yml
 symlink -d "$_ROOT/displays/ColorSync/Profiles/" ~/Library/ColorSync/Profiles
-symlink -d "$_ROOT/hammerspoon" ~/.hammerspoon
 
 is_basic || symlink_if_not_running \
     "$_ROOT/subl/User/" "$_APP_SUPPORT/Sublime Text 3/Packages/User" \
     "Sublime Text 3" "pgrep -x 'Sublime Text'"
-
-is_basic || symlink_if_not_running \
-    "$_ROOT/smerge/User/" "$_APP_SUPPORT/Sublime Merge/Packages/User" \
-    "$_ROOT/smerge/Default/" "$_APP_SUPPORT/Sublime Merge/Packages/Default" \
-    "Sublime Merge" "pgrep -x sublime_merge"
 
 if lk_macos_bundle_is_installed io.github.hluk.CopyQ; then
     lk_tty_print "Checking CopyQ"
@@ -168,12 +160,6 @@ defaults write com.lwouis.alt-tab-macos spacesToShow -string 1
 defaults write com.lwouis.alt-tab-macos spacesToShow2 -string 1
 is_basic || defaults write com.lwouis.alt-tab-macos startAtLogin -string true
 
-! lk_command_exists espanso || {
-    lk_tty_print "Checking espanso"
-    [ -e ~/Library/LaunchAgents/com.federicoterzi.espanso.plist ] ||
-        espanso service register
-}
-
 FILE=com.generalarcade.flycut
 FILE=~/Library/Containers/$FILE/Data/Library/Preferences/$FILE.plist
 if [[ -d ${FILE%/*} ]]; then
@@ -198,119 +184,6 @@ if [[ -d ${FILE%/*} ]]; then
     fi
 fi
 
-is_basic || {
-    lk_tty_print "Checking Hammerspoon"
-    if ! launchctl list | awk '$3 == "org.hammerspoon.Hammerspoon"' |
-        grep . >/dev/null; then
-        lk_tty_detail "Creating launchd agent"
-        lk_macos_launch_agent_install org.hammerspoon.Hammerspoon \
-            open -b org.hammerspoon.Hammerspoon
-    fi
-}
-
-lk_tty_print "Checking iTerm2"
-symlink "$_ROOT/iterm2/Scripts/" "$_APP_SUPPORT/iTerm2/Scripts"
-defaults write com.googlecode.iterm2 AddNewTabAtEndOfTabs -bool false
-defaults write com.googlecode.iterm2 AlternateMouseScroll -bool true
-defaults write com.googlecode.iterm2 CopyWithStylesByDefault -bool true
-defaults write com.googlecode.iterm2 DisallowCopyEmptyString -bool true
-defaults write com.googlecode.iterm2 DoubleClickPerformsSmartSelection -bool true
-defaults write com.googlecode.iterm2 EnableAPIServer -bool true
-defaults write com.googlecode.iterm2 NoSyncTipsDisabled -bool true
-defaults write com.googlecode.iterm2 OpenFileInNewWindows -bool true
-defaults write com.googlecode.iterm2 OptionClickMovesCursor -bool false
-defaults write com.googlecode.iterm2 QuitWhenAllWindowsClosed -bool true
-defaults write com.googlecode.iterm2 SensitiveScrollWheel -bool true
-defaults write com.googlecode.iterm2 SmartPlacement -bool true
-defaults write com.googlecode.iterm2 SoundForEsc -bool false
-defaults write com.googlecode.iterm2 SpacelessApplicationSupport -string ""
-defaults write com.googlecode.iterm2 StatusBarPosition -int 1
-defaults write com.googlecode.iterm2 StretchTabsToFillBar -bool false
-defaults write com.googlecode.iterm2 SUEnableAutomaticChecks -bool true
-defaults write com.googlecode.iterm2 SwitchTabModifier -int 5
-defaults write com.googlecode.iterm2 UseBorder -bool true
-defaults write com.googlecode.iterm2 VisualIndicatorForEsc -bool false
-defaults delete com.googlecode.iterm2 TypingClearsSelection &>/dev/null || true
-
-if pgrep -xq iTerm2; then
-    lk_warn "cannot apply settings: iTerm2 is running"
-else
-    lk_plist_set_file "$_PREFS/com.googlecode.iterm2.plist"
-    lk_plist_replace ":NoSyncConfirmRunOpenFile" bool true
-    lk_plist_replace ":NoSyncConfirmRunOpenFile_selection" integer 0
-    lk_plist_replace ":AllowClipboardAccess" bool true
-    #lk_plist_maybe_add ":Window Arrangements" dict
-    #lk_plist_replace ":Window Arrangements:No windows" array
-    #lk_plist_replace ":Default Arrangement Name" string "No windows"
-    #lk_plist_replace ":OpenArrangementAtStartup" bool true
-    #lk_plist_replace ":OpenNoWindowsAtStartup" bool false
-
-    lk_plist_replace_from_file ":Custom Color Presets" dict \
-        "$_ROOT/iterm2/Custom Color Presets.plist"
-
-    PLIST=$(lk_mktemp_file)
-    lk_delete_on_exit "$PLIST"
-    i=0
-    while lk_plist_exists ":New Bookmarks:$i"; do
-        GUID=$(lk_plist_get ":New Bookmarks:$i:Guid")
-        lk_plist_replace ":NeverWarnAboutShortLivedSessions_${GUID}" bool true
-        lk_plist_replace ":NeverWarnAboutShortLivedSessions_${GUID}_selection" integer 0
-        lk_plist_replace ":New Bookmarks:$i:AWDS Pane Option" string "Recycle"
-        lk_plist_replace ":New Bookmarks:$i:AWDS Tab Option" string "Recycle"
-        lk_plist_replace ":New Bookmarks:$i:AWDS Window Option" string "Recycle"
-        lk_plist_replace ":New Bookmarks:$i:BM Growl" bool false
-        lk_plist_replace ":New Bookmarks:$i:Columns" integer 120
-        lk_plist_replace ":New Bookmarks:$i:Custom Directory" string "Advanced"
-        lk_plist_replace ":New Bookmarks:$i:Flashing Bell" bool true
-        lk_plist_replace ":New Bookmarks:$i:Left Option Key Changeable" bool false
-        lk_plist_replace ":New Bookmarks:$i:Mouse Reporting allow clicks and drags" bool true
-        lk_plist_replace ":New Bookmarks:$i:Normal Font" string "Menlo-Regular 12"
-        lk_plist_replace ":New Bookmarks:$i:Option Key Sends" integer 2
-        lk_plist_replace ":New Bookmarks:$i:Place Prompt at First Column" bool false
-        lk_plist_replace ":New Bookmarks:$i:Right Option Key Sends" integer 2
-        lk_plist_replace ":New Bookmarks:$i:Rows" integer 35
-        lk_plist_replace ":New Bookmarks:$i:Screen" integer -2
-        lk_plist_replace ":New Bookmarks:$i:Scrollback Lines" integer 0
-        lk_plist_replace ":New Bookmarks:$i:Show Mark Indicators" bool false
-        lk_plist_replace ":New Bookmarks:$i:Silence Bell" bool true
-        lk_plist_replace ":New Bookmarks:$i:Unlimited Scrollback" bool true
-        lk_plist_maybe_delete ":New Bookmarks:$i:Prevent Opening in a Tab"
-        lk_plist_maybe_delete ":New Bookmarks:$i:Title Components"
-        lk_plist_maybe_delete ":New Bookmarks:$i:Use libtickit protocol"
-        lk_plist_replace_from_file ":New Bookmarks:$i:Keyboard Map" dict \
-            "$_ROOT/iterm2/Keyboard Map.plist"
-        case "$i" in
-        0)
-            NAME=Default
-            CUSTOM_COMMAND="Custom Shell"
-            COMMAND=$(type -P bash)
-            COLOR_PRESET=Elio
-            ;;
-        1)
-            NAME="Bash 3.2"
-            CUSTOM_COMMAND="Custom Shell"
-            COMMAND=/bin/bash
-            COLOR_PRESET=Broadcast
-            ;;
-        *)
-            continue
-            ;;
-        esac
-        lk_plist_replace ":New Bookmarks:$i:Name" string "$NAME"
-        lk_plist_replace ":New Bookmarks:$i:Custom Command" string "$CUSTOM_COMMAND"
-        lk_plist_replace ":New Bookmarks:$i:Command" string "$COMMAND"
-        lk_plist_replace ":New Bookmarks:$i:Description" string "Default"
-        plutil -extract "$COLOR_PRESET" xml1 -o "$PLIST" \
-            "$_ROOT/iterm2/Custom Color Presets.plist" ||
-            lk_warn "unable to extract color preset: $COLOR_PRESET" || continue
-        for k in {"Ansi "{0..15},Background,Foreground}" Color"; do
-            lk_plist_maybe_delete ":New Bookmarks:$i:$k"
-        done
-        lk_plist_merge_from_file ":New Bookmarks:$i" "$PLIST"
-        ((++i))
-    done
-fi
-
 is_basic || symlink_if_not_running \
     "$_ROOT/keepassxc/keepassxc.ini" "$_APP_SUPPORT/keepassxc/keepassxc.ini" \
     KeePassXC "pgrep -x KeePassXC"
@@ -327,56 +200,6 @@ else
         lk_plist_merge_from_file "" "$FILE" >/dev/null
     cp "$TEMP" "$FILE"
 fi
-
-: <<"EOF"
-lk_tty_print "Checking Magnet"
-lk_plist_set_file "$_PREFS/com.crowdcafe.windowmagnet.plist"
-lk_plist_replace ":appAlreadyLaunchedKey" bool true
-lk_plist_replace ":launchAtLogin" bool true
-lk_plist_replace ":expandWindowNorthWestComboKey" dict
-lk_plist_replace ":expandWindowNorthWestComboKey:keyCode" integer 114
-lk_plist_replace ":expandWindowNorthWestComboKey:modifierFlags" integer 786432
-lk_plist_replace ":expandWindowNorthEastComboKey" dict
-lk_plist_replace ":expandWindowNorthEastComboKey:keyCode" integer 116
-lk_plist_replace ":expandWindowNorthEastComboKey:modifierFlags" integer 786432
-lk_plist_replace ":expandWindowSouthWestComboKey" dict
-lk_plist_replace ":expandWindowSouthWestComboKey:keyCode" integer 117
-lk_plist_replace ":expandWindowSouthWestComboKey:modifierFlags" integer 786432
-lk_plist_replace ":expandWindowSouthEastComboKey" dict
-lk_plist_replace ":expandWindowSouthEastComboKey:keyCode" integer 121
-lk_plist_replace ":expandWindowSouthEastComboKey:modifierFlags" integer 786432
-lk_plist_replace ":expandWindowLeftThirdComboKey" dict
-lk_plist_replace ":expandWindowLeftThirdComboKey:keyCode" integer 105
-lk_plist_replace ":expandWindowLeftThirdComboKey:modifierFlags" integer 786432
-lk_plist_replace ":expandWindowLeftTwoThirdsComboKey" dict
-lk_plist_replace ":expandWindowLeftTwoThirdsComboKey:keyCode" integer 103
-lk_plist_replace ":expandWindowLeftTwoThirdsComboKey:modifierFlags" integer 786432
-lk_plist_replace ":expandWindowCenterThirdComboKey" dict
-lk_plist_replace ":expandWindowCenterThirdComboKey:keyCode" integer 107
-lk_plist_replace ":expandWindowCenterThirdComboKey:modifierFlags" integer 786432
-lk_plist_replace ":expandWindowRightTwoThirdsComboKey" dict
-lk_plist_replace ":expandWindowRightTwoThirdsComboKey:keyCode" integer 111
-lk_plist_replace ":expandWindowRightTwoThirdsComboKey:modifierFlags" integer 786432
-lk_plist_replace ":expandWindowRightThirdComboKey" dict
-lk_plist_replace ":expandWindowRightThirdComboKey:keyCode" integer 113
-lk_plist_replace ":expandWindowRightThirdComboKey:modifierFlags" integer 786432
-lk_plist_replace ":moveWindowToNextDisplay" dict
-lk_plist_replace ":moveWindowToNextDisplay:keyCode" integer 30
-lk_plist_replace ":moveWindowToNextDisplay:modifierFlags" integer 786432
-lk_plist_replace ":moveWindowToPreviousDisplay" dict
-lk_plist_replace ":moveWindowToPreviousDisplay:keyCode" integer 33
-lk_plist_replace ":moveWindowToPreviousDisplay:modifierFlags" integer 786432
-lk_plist_replace ":centerWindowComboKey" dict
-lk_plist_replace ":centerWindowComboKey:keyCode" integer 49
-lk_plist_replace ":centerWindowComboKey:modifierFlags" integer 786432
-lk_plist_replace ":restoreWindowComboKey" dict
-lk_plist_replace ":restoreWindowComboKey:keyCode" integer 101
-lk_plist_replace ":restoreWindowComboKey:modifierFlags" integer 786432
-EOF
-
-lk_tty_print "Checking KeepingYouAwake"
-defaults write info.marcel-dierkes.KeepingYouAwake \
-    "info.marcel-dierkes.KeepingYouAwake.LaunchAtLogin" -bool true
 
 is_basic || symlink_if_not_running \
     "$_ROOT/stretchly/config.json" "$_APP_SUPPORT/stretchly/config.json" \
