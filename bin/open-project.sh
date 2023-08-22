@@ -4,7 +4,7 @@
 
 shopt -s nullglob
 
-cd ~/Code
+cd ~
 
 OLD_DIR=~/.lk-platform/cache
 DIR=~/.cache/lk-platform
@@ -24,7 +24,7 @@ LIST_FILE=$DIR/code-workspace.list
 HIST_FILE=$DIR/code-workspace.history
 
 function generate_list() {
-    printf '%s\n' {,*/,*/*/,*/*/*/,*/*/*/*/}*.code-workspace >"$LIST_FILE"
+    printf '%s\n' {Code,.dotfiles}/{,*/,*/*/,*/*/*/,*/*/*/*/}*.code-workspace >"$LIST_FILE"
 }
 
 COMMAND=(yad)
@@ -57,7 +57,7 @@ OPEN=($(
             [ "${PIPESTATUS[*]}" = 10 ]; }; } |
         #sort | uniq -c | sort -k1,1nr -k2,2 | awk '{print $2}' |
         tac | lk_uniq |
-        gnu_sed -E 'p; s/\.code-workspace$//; s/([^/]+)\/\1$/\1/' |
+        gnu_sed -E 'p; s/(^Code\/|\.code-workspace$)//g; s/([^/]+)\/\1$/\1/' |
         tr '\n' '\0' |
         xargs -0r "${COMMAND[@]}" \
             --list \

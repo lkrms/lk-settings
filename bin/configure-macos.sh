@@ -107,12 +107,6 @@ symlink -d "$_ROOT/displays/ColorSync/Profiles/" ~/Library/ColorSync/Profiles
 symlink -d "$_ROOT/hammerspoon" ~/.hammerspoon
 
 is_basic || symlink_if_not_running \
-    "$_ROOT/nextcloud/sync-exclude.lst" "$_PREFS/Nextcloud/sync-exclude.lst" \
-    Nextcloud "pgrep -x nextcloud"
-[ -e "$_PREFS/Nextcloud/nextcloud.cfg" ] || [ ! -d "$_PREFS/Nextcloud" ] ||
-    cp -v "$_ROOT/nextcloud/nextcloud.cfg" "$_PREFS/Nextcloud/nextcloud.cfg"
-
-is_basic || symlink_if_not_running \
     "$_ROOT/subl/User/" "$_APP_SUPPORT/Sublime Text 3/Packages/User" \
     "Sublime Text 3" "pgrep -x 'Sublime Text'"
 

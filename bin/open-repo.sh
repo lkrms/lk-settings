@@ -2,9 +2,9 @@
 
 . /opt/lk-platform/bin/lk-bash-load.sh || exit
 
-shopt -s nullglob
+shopt -s extglob nullglob
 
-cd ~/Code
+cd ~
 
 OLD_DIR=~/.lk-platform/cache
 DIR=~/.cache/lk-platform
@@ -25,7 +25,7 @@ HIST_FILE=$DIR/git-repo.history
 HIST_FILE2=$DIR/code-workspace.history
 
 function generate_list() {
-    find -H ./* -maxdepth 3 \
+    find -H ./Code/* ./.dotfiles!(?) -maxdepth 3 \
         -type d -exec test -d "{}/.git" \; -print -prune |
         sed -E 's/^\.\///; /^vendor\//d' | sort >"$LIST_FILE"
 }
@@ -61,7 +61,7 @@ OPEN=($(
         { [ ! -e "$HIST_FILE2" ] ||
             grep -Eof <(sed 's/^/^/' "$LIST_FILE") "$HIST_FILE2" | tail -n24 ||
             [ "${PIPESTATUS[*]}" = 10 ]; }; } |
-        tac | lk_uniq | awk '{print $1;print $1}' |
+        tac | lk_uniq | awk '{print $1; sub(/^Code\//, "", $1); print $1}' |
         tr '\n' '\0' |
         { IFS=' ' && xargs -0r "${COMMAND[@]}" \
             --list \

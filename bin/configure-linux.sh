@@ -312,12 +312,6 @@ symlink "$_ROOT/systemd/user.control" ~/.config/systemd/user.control
 }
 
 symlink_if_not_running \
-    "$_ROOT/nextcloud/sync-exclude.lst" ~/.config/Nextcloud/sync-exclude.lst \
-    Nextcloud "pgrep -x nextcloud"
-[ -e ~/.config/Nextcloud/nextcloud.cfg ] || [ ! -d ~/.config/Nextcloud ] ||
-    cp -v "$_ROOT/nextcloud/nextcloud.cfg" ~/.config/Nextcloud/nextcloud.cfg
-
-symlink_if_not_running \
     "$_ROOT/subl/User/" ~/.config/sublime-text-3/Packages/User \
     "Sublime Text 3" "pgrep -x sublime_text"
 
