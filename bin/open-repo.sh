@@ -84,11 +84,16 @@ wait
 
 [[ -n ${OPEN+1} ]] || exit 0
 
+FILES=()
+for FILE in "${OPEN[@]}"; do
+    FILES[${#FILES[@]}]=$(lk_realpath "$FILE")
+done
+
 unset IFS
 COUNT=0
 for ((i = 1; i <= $#; i++)); do
     if [[ ${!i} == "{}" ]]; then
-        for FILE in "${OPEN[@]}"; do
+        for FILE in "${FILES[@]}"; do
             ((!COUNT++)) || sleep 0.2
             nohup "${@:1:i-1}" "$FILE" "${@:i+1}" &>/dev/null &
             disown
@@ -97,4 +102,4 @@ for ((i = 1; i <= $#; i++)); do
     fi
 done
 
-exec "$@" "${OPEN[@]}"
+exec "$@" "${FILES[@]}"
