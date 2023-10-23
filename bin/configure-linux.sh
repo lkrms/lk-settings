@@ -20,8 +20,6 @@ done
 
 cleanup
 
-rm -Rfv ~/.config/composer-dev
-
 for FILE in "$_ROOT/bin"/*; do
     [[ -x $FILE ]] || continue
     symlink "$FILE" ~/.local/bin/"${FILE##*/}"
@@ -50,10 +48,6 @@ _PRIV=${1-}
     symlink_private_common "$_PRIV"
     symlink \
         "$_PRIV/.face" ~/.face \
-        "$_PRIV/composer/auth.json" ~/.config/composer/auth.json \
-        "$_PRIV/composer/composer.json" ~/.config/composer/composer.json \
-        "$_PRIV/composer/composer.lock" ~/.config/composer/composer.lock \
-        "$_PRIV/composer/config.json" ~/.config/composer/config.json \
         "$_PRIV/espanso/" ~/.config/espanso \
         "$_PRIV/offlineimap/.offlineimaprc" ~/.offlineimaprc \
         "$_PRIV/remmina/data/" ~/.local/share/remmina \
@@ -249,28 +243,6 @@ MIMEAPPS_FILE=~/.config/mimeapps.list
         sudo mv "/tmp/db2_db2driver_for_jdbc_sqlj" /opt/)
 }
 
-DIR=/usr/lib/firefox
-[ ! -d "$DIR" ] || {
-    LK_SUDO=1
-    lk_install -d -m 00755 "$DIR/defaults/pref"
-    FILE=$DIR/defaults/pref/autoconfig.js
-    lk_install -m 00644 "$FILE"
-    lk_file_replace "$FILE" <<"EOF"
-// the first line is ignored
-pref("general.config.filename", "firefox.cfg");
-pref("general.config.obscure_value", 0);
-EOF
-    FILE=$DIR/firefox.cfg
-    lk_install -m 00644 "$FILE"
-    lk_file_replace "$FILE" <<"EOF"
-// the first line is ignored
-defaultPref("mousewheel.system_scroll_override.enabled", false);
-defaultPref("services.sync.prefs.dangerously_allow_arbitrary", true);
-defaultPref("services.sync.addons.ignoreUserEnabledChanges", true);
-EOF
-    unset LK_SUDO
-}
-
 DIR=~/.thunderbird
 [[ ! -f $DIR/installs.ini ]] ||
     ! PROFILE=$DIR/$(awk \
@@ -323,11 +295,6 @@ symlink_if_not_running \
 symlink_if_not_running \
     "$_ROOT/clementine/Clementine.conf" ~/.config/Clementine/Clementine.conf \
     Clementine "pgrep -x clementine"
-
-symlink_if_not_running \
-    "$_ROOT/copyq/copyq.conf" ~/.config/copyq/copyq.conf \
-    "$_ROOT/copyq/copyq-commands.ini" ~/.config/copyq/copyq-commands.ini \
-    CopyQ "pgrep -x copyq"
 
 symlink_if_not_running \
     "$_ROOT/geeqie/" ~/.config/geeqie \

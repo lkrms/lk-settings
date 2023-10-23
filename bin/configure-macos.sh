@@ -49,18 +49,11 @@ fi
 
 cleanup ~/.config/iCanHazShortcut
 
-rm -Rfv ~/.config/composer{,-dev} ~/.composer-dev
-
 [ ! -d "$_PRIV" ] || {
 
     _PRIV=$(lk_realpath "$_PRIV")
 
     symlink_private_common "$_PRIV"
-    symlink \
-        "$_PRIV/composer/auth.json" ~/.composer/auth.json \
-        "$_PRIV/composer/composer.json" ~/.composer/composer.json \
-        "$_PRIV/composer/composer.lock" ~/.composer/composer.lock \
-        "$_PRIV/composer/config.json" ~/.composer/config.json
 
     symlink_if_not_running \
         "$_PRIV/DBeaverData/" ~/Library/DBeaverData \
@@ -70,31 +63,10 @@ rm -Rfv ~/.config/composer{,-dev} ~/.composer-dev
 
 is_basic || [ -d /opt/db2_db2driver_for_jdbc_sqlj ] || {
     DB2_DRIVER=(~/Downloads/*/Db2/db2_db2driver_for_jdbc_sqlj.zip)
-    [ ${#DB2_DRIVER[@]} -ne 1 ] || (umask 0022 &&
-        cd /tmp &&
+    [ ${#DB2_DRIVER[@]} -ne 1 ] || (cd /tmp &&
         rm -Rf "/tmp/db2_db2driver_for_jdbc_sqlj" &&
         unzip "${DB2_DRIVER[0]}" &&
         sudo mv "/tmp/db2_db2driver_for_jdbc_sqlj" /opt/)
-}
-
-DIR=/Applications/Firefox.app/Contents/Resources
-is_basic || [ ! -d "$DIR" ] || {
-    LK_SUDO=1
-    lk_install -d -m 00755 "$DIR/defaults/pref"
-    FILE=$DIR/defaults/pref/autoconfig.js
-    lk_install -m 00644 "$FILE"
-    lk_file_replace "$FILE" <<"EOF"
-pref("general.config.filename", "firefox.cfg");
-pref("general.config.obscure_value", 0);
-EOF
-    FILE=$DIR/firefox.cfg
-    lk_install -m 00644 "$FILE"
-    lk_file_replace "$FILE" <<"EOF"
-// IMPORTANT: Start your code on the 2nd line
-defaultPref("services.sync.prefs.dangerously_allow_arbitrary", true);
-defaultPref("services.sync.addons.ignoreUserEnabledChanges", true);
-EOF
-    unset LK_SUDO
 }
 
 symlink "$_ROOT/.tidyrc" ~/.tidyrc
@@ -107,25 +79,6 @@ is_basic || symlink_if_not_running \
     "$_ROOT/subl/User/" "$_APP_SUPPORT/Sublime Text 3/Packages/User" \
     "Sublime Text 3" "pgrep -x 'Sublime Text'"
 
-if lk_macos_bundle_is_installed io.github.hluk.CopyQ; then
-    lk_tty_print "Checking CopyQ"
-    if pgrep -xq CopyQ; then
-        lk_warn "cannot apply settings: CopyQ is running"
-    else
-        symlink -d "$_ROOT/copyq/copyq-commands.ini" \
-            ~/.config/copyq/copyq-commands.ini
-        defaults write com.copyq.copyq Options.confirm_exit -bool false
-        defaults write com.copyq.copyq Options.native_tray_menu -bool true
-        defaults write com.copyq.copyq Options.tray_item_paste -bool false
-        defaults write com.copyq.copyq Options.tray_items -int 20
-        is_basic || {
-            defaults write com.copyq.copyq Options.activate_pastes -bool false
-            defaults write com.copyq.copyq \
-                Options.show_advanced_command_settings -bool true
-        }
-    fi
-fi
-
 FILE=~/Library/Containers/fr.handbrake.HandBrake/Data
 FILE="$FILE/Library/Application Support/HandBrake/UserPresets.json"
 is_basic || [ ! -d "${FILE%/*}" ] || {
@@ -135,71 +88,9 @@ is_basic || [ ! -d "${FILE%/*}" ] || {
         lk_file_replace -b -f "$_ROOT/handbrake/presets.json" "$FILE"
 }
 
-lk_tty_print "Checking AltTab"
-#defaults write com.lwouis.alt-tab-macos cursorFollowFocusEnabled -string true
-defaults delete com.lwouis.alt-tab-macos cursorFollowFocusEnabled &>/dev/null || true
-defaults write com.lwouis.alt-tab-macos hideWindowlessApps -string true
-#defaults delete com.lwouis.alt-tab-macos hideWindowlessApps &>/dev/null || true
-# Command (⌘)
-defaults write com.lwouis.alt-tab-macos holdShortcut -string $'\xe2\x8c\x98'
-# Option (⌥)
-defaults write com.lwouis.alt-tab-macos holdShortcut2 -string $'\xe2\x8c\xa5'
-# Tab (⇥)
-defaults write com.lwouis.alt-tab-macos nextWindowShortcut2 -string $'\xe2\x87\xa5'
-# Shift-Tab (⇧⇥)
-defaults write com.lwouis.alt-tab-macos previousWindowShortcut -string $'\xe2\x87\xa7\xe2\x87\xa5'
-#defaults write com.lwouis.alt-tab-macos menubarIcon -string 3
-defaults delete com.lwouis.alt-tab-macos menubarIcon &>/dev/null || true
-defaults write com.lwouis.alt-tab-macos mouseHoverEnabled -string false
-# "Active screen"
-defaults write com.lwouis.alt-tab-macos showOnScreen -string 0
-# "Screen including mouse"
-#defaults write com.lwouis.alt-tab-macos showOnScreen -string 1
-# "Visible Spaces"
-defaults write com.lwouis.alt-tab-macos spacesToShow -string 1
-defaults write com.lwouis.alt-tab-macos spacesToShow2 -string 1
-is_basic || defaults write com.lwouis.alt-tab-macos startAtLogin -string true
-
-FILE=com.generalarcade.flycut
-FILE=~/Library/Containers/$FILE/Data/Library/Preferences/$FILE.plist
-if [[ -d ${FILE%/*} ]]; then
-    lk_tty_print "Checking Flycut"
-    if pgrep -xq Flycut; then
-        lk_warn "cannot apply settings: Flycut is running"
-    else
-        lk_plist_set_file "$FILE"
-        lk_plist_replace ":menuSelectionPastes" bool false
-        lk_plist_replace ":savePreference" integer 2
-        lk_plist_replace ":rememberNum" real 99
-        lk_plist_maybe_add ":displayNum" real 20
-        lk_plist_replace ":removeDuplicates" bool true
-        lk_plist_replace ":pasteMovesToTop" bool true
-        # Control-Shift-Command-V
-        is_basic || {
-            lk_plist_replace ":ShortcutRecorder mainHotkey" dict
-            lk_plist_replace ":ShortcutRecorder mainHotkey:keyCode" integer 9
-            lk_plist_replace ":ShortcutRecorder mainHotkey:modifierFlags" integer 1441792
-        }
-        lk_plist_replace ":menuIcon" integer 2
-    fi
-fi
-
 is_basic || symlink_if_not_running \
     "$_ROOT/keepassxc/keepassxc.ini" "$_APP_SUPPORT/keepassxc/keepassxc.ini" \
     KeePassXC "pgrep -x KeePassXC"
-
-lk_tty_print "Checking BetterSnapTool"
-if pgrep -xq BetterSnapTool; then
-    lk_warn "cannot apply settings: BetterSnapTool is running"
-else
-    lk_mktemp_with TEMP
-    cp "$_ROOT/bettersnaptool/com.hegenberg.BetterSnapTool.plist" "$TEMP"
-    lk_plist_set_file "$TEMP"
-    FILE=$_PREFS/com.hegenberg.BetterSnapTool.plist
-    [[ ! -e $FILE ]] ||
-        lk_plist_merge_from_file "" "$FILE" >/dev/null
-    cp "$TEMP" "$FILE"
-fi
 
 is_basic || symlink_if_not_running \
     "$_ROOT/stretchly/config.json" "$_APP_SUPPORT/stretchly/config.json" \
@@ -488,21 +379,6 @@ if ! is_basic; then
 
     lk_tty_print "Checking Dock"
     "$_ROOT/../bin/configure-macos-dock.sh"
-
-    FILE=~/Library/Preferences/com.kapeli.dashdoc.plist
-    START_DASH=
-    if [ -e "$FILE" ]; then
-        lk_tty_print "Checking Dash"
-        if lk_has_arg "--reset"; then
-            ! pkill -xu "$USER" Dash &>/dev/null || START_DASH=1
-        fi
-        defaults write com.kapeli.dashdoc didShowStatusIconHello -bool true
-        defaults write com.kapeli.dashdoc statusIconHelloSuppressCheckboxState -bool false
-        defaults write com.kapeli.dashdoc syncFolderPath -string "$_ROOT/dash"
-        if defaults read com.kapeli.dashdoc docsets &>/dev/null; then
-            "$LK_BASE/lib/python/plist_sort.py" "$FILE" "$FILE" docsets docsetName
-        fi
-    fi
 
     lk_macos_setenv GOOGLE_API_KEY ""
 fi
