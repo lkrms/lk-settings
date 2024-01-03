@@ -13,6 +13,8 @@ _DIR=/opt/lk-settings/server
         /etc/NetworkManager/conf.d/lk-server.conf
     lk_file_replace -f "$_DIR/dnsmasq/logrotate.d/dnsmasq" \
         /etc/logrotate.d/dnsmasq
+    lk_file_replace -f "$_DIR/sqm/ppp0.iface.conf" \
+        /etc/sqm/ppp0.iface.conf
 )
 
 function update-notracking() {

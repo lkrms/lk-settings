@@ -1,7 +1,7 @@
 #!/bin/bash
 
 LAN_IFACE=br0  # For IPv6 prefix delegation
-WAN_IFACE=ppp0 # For routing
+WAN_IFACE=ppp0 # For routing and traffic control
 LAN_ATTACH=()  # For `ip link set <DEVICE> master <LAN_IFACE>`
 
 LK_TTY_NO_COLOUR=1 \
@@ -38,6 +38,7 @@ function maybe_restart_wan_service() {
 }
 
 WAN_SERVICE=NetworkManager-connect@$WAN_IFACE.service
+TC_SERVICE=sqm@$WAN_IFACE.service
 DHCP6_PD_SERVICE=dhcp6c@$WAN_IFACE.service
 IP6_RA_SERVICE=radvd.service
 PPPOE_IFACE=$(nmcli -g pppoe.parent conn show "$WAN_IFACE")
@@ -62,6 +63,7 @@ case "$1,$2" in
     esac
     ;;
 "$WAN_IFACE",up)
+    lk_systemctl_reload_or_restart "$TC_SERVICE" || true
     lk_systemctl_reload_or_restart "$DHCP6_PD_SERVICE" &&
         if service_is_active "$IP6_RA_SERVICE"; then
             lk_tty_run systemctl kill --signal=HUP "$IP6_RA_SERVICE"
