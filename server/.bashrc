@@ -352,6 +352,15 @@ function _rebuild-ub() {
         "$4"
 }
 
+function git-cleanable-size() {
+    git clean -nxd |
+        sed -En 's/^Would remove //p' |
+        xargs -r du -sc |
+        tail -n1 |
+        awk -v d="${PWD##*/}" \
+            '{ printf("%s: %.3f GiB\n", d, $1/(1024*1024)) }'
+}
+
 function rebuild-ub22() { _rebuild-ub ubuntu-22.04 52:54:00:1b:ea:89 10.10.122.22/16 ub22 "$@"; }
 function rebuild-ub20() { _rebuild-ub ubuntu-20.04 52:54:00:76:c6:3e 10.10.122.20/16 ub20 "$@"; }
 function rebuild-ub18() { _rebuild-ub ubuntu-18.04 52:54:00:5e:ca:ba 10.10.122.18/16 ub18 "$@"; }
@@ -366,6 +375,7 @@ alias squid-active-requests='squidclient mgr:active_requests'
 alias squid-follow-access-log='sudo tail -f /var/log/squid/access.log'
 alias squid-follow-store-log='sudo tail -f /var/log/squid/store.log'
 alias squid-list-reports='squidclient mgr:menu'
+alias aur-rebuild-php='lk_aur_rebuild php74 php74-imagick php74-memcache php74-memcached php74-xdebug php80 php80-imagick php80-memcached php80-xdebug php81 php81-imagick php81-xdebug php82 php82-imagick php82-xdebug php-humbug-box-bin php-ibm_db2 php-memprof php-pcov php-sqlsrv'
 
 export PACKAGER="Luke Arms <luke@arms.to>"
 export GPGKEY=B7304A7EB769E24D

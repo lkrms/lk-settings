@@ -48,8 +48,6 @@ _PRIV=${1-}
     symlink_private_common "$_PRIV"
     symlink \
         "$_PRIV/.face" ~/.face \
-        "$_PRIV/espanso/" ~/.config/espanso \
-        "$_PRIV/offlineimap/.offlineimaprc" ~/.offlineimaprc \
         "$_PRIV/remmina/data/" ~/.local/share/remmina \
         "$_PRIV/robo3t/3T/" ~/.config/3T
 
@@ -60,10 +58,6 @@ _PRIV=${1-}
         ~/.cache/hexchat/scrollback "$_PRIV/hexchat/scrollback" \
         "$_PRIV/hexchat/" ~/.config/hexchat \
         HexChat "pgrep -x hexchat"
-
-    symlink_if_not_running \
-        "$_PRIV/DBeaverData/" ~/.local/share/DBeaverData \
-        DBeaver "pgrep -x dbeaver"
 
     [ ! -e "$_PRIV/.face" ] ||
         lk_dir_parents -u ~ "$_PRIV/.face" |
@@ -99,11 +93,6 @@ _PRIV=${1-}
 
 LK_SUDO=1
 
-FILE=~lightdm/.config/autorandr
-sudo test -d "$FILE" || {
-    sudo -u lightdm install -d -m 00700 "${FILE%/*}" &&
-        sudo -u lightdm ln -sfTv "$_ROOT/autorandr/" "$FILE"
-}
 if ! lk_is_portable; then
     FILE=/etc/modules-load.d/i2c_dev.conf
     lk_install -m 00644 "$FILE"
@@ -131,8 +120,6 @@ else
     fi
 fi
 
-symlink "$_ROOT/autorandr/postadd" /etc/xdg/autorandr/postadd
-symlink "$_ROOT/autorandr/postremove" /etc/xdg/autorandr/postremove
 symlink "$_ROOT/iptables/iptables.rules" /etc/iptables/iptables.rules
 symlink "$_ROOT/iptables/ip6tables.rules" /etc/iptables/ip6tables.rules
 symlink "$_ROOT/libvirt/hooks/qemu" /etc/libvirt/hooks/qemu
@@ -263,12 +250,9 @@ EOF
 }
 
 symlink "$_ROOT/.tidyrc" ~/.tidyrc
-symlink "$_ROOT/autorandr/" ~/.config/autorandr
 symlink "$_ROOT/.byoburc" ~/.byoburc
 symlink "$_ROOT/byobu/" ~/.byobu
 symlink "$_ROOT/devilspie2/" ~/.config/devilspie2
-symlink "$_ROOT/git" ~/.config/git
-symlink "$_ROOT/plank/" ~/.config/plank
 symlink "$_ROOT/quicktile/quicktile.cfg" ~/.config/quicktile.cfg
 symlink "$_ROOT/remmina/" ~/.config/remmina
 symlink "$_ROOT/rubocop/.rubocop.yml" ~/.rubocop.yml
@@ -286,11 +270,6 @@ symlink "$_ROOT/systemd/user.control" ~/.config/systemd/user.control
 symlink_if_not_running \
     "$_ROOT/subl/User/" ~/.config/sublime-text-3/Packages/User \
     "Sublime Text 3" "pgrep -x sublime_text"
-
-symlink_if_not_running \
-    "$_ROOT/smerge/User/" ~/.config/sublime-merge/Packages/User \
-    "$_ROOT/smerge/Default/" ~/.config/sublime-merge/Packages/Default \
-    "Sublime Merge" "pgrep -x sublime_merge"
 
 symlink_if_not_running \
     "$_ROOT/clementine/Clementine.conf" ~/.config/Clementine/Clementine.conf \
@@ -331,21 +310,6 @@ symlink_if_not_running \
     "$_ROOT/typora/themes" ~/.config/Typora/themes \
     Typora "pgrep -x Typora"
 
-FILE=/opt/vscodium-bin/resources/app/product.json
-if [ -f "$FILE" ]; then
-    VSCODE_PRODUCT_JSON=$(jq '
-.nameLong = "Visual Studio Code" |
-.extensionsGallery = {
-    "serviceUrl": "https://marketplace.visualstudio.com/_apis/public/gallery",
-    "cacheUrl": "https://vscode.blob.core.windows.net/gallery/index",
-    "itemUrl": "https://marketplace.visualstudio.com/items",
-    "controlUrl": "",
-    "recommendationsUrl": ""
-  }' <"$FILE")
-    diff <(jq <"$FILE") <(echo "$VSCODE_PRODUCT_JSON") >/dev/null ||
-        LK_SUDO=1 lk_file_replace "$FILE" "$VSCODE_PRODUCT_JSON"
-fi
-
 # use `lpinfo -m` for driver names
 lk_tty_print "Checking printers"
 (
@@ -379,11 +343,8 @@ LK_SUDO=1 lk_file_replace /etc/papersize a4
 
 if [ -n "${DISPLAY-}" ]; then
     lk_tty_print "Setting dconf values"
-    START_PLANK=1
-    killall plank 2>/dev/null || START_PLANK=0
     if lk_has_arg --reset; then
         dconf reset -f /apps/guake/
-        dconf reset -f /net/launchpad/plank/
         dconf reset -f /org/gnome/meld/
         dconf reset -f /org/gtk/settings/file-chooser/
     fi
@@ -425,12 +386,6 @@ palette-name='Elio'
 
 [ca/desrt/dconf-editor]
 show-warning=false
-
-[net/launchpad/plank/docks/dock1]
-current-workspace-only=true
-dock-items=['thunderbird.dockitem', 'todoist.dockitem', 'clockify.dockitem', 'teams-for-linux.dockitem', 'msedge-hnpfjngllnobngcgfapefoaidbinmjnm-Default.dockitem', 'skypeforlinux.dockitem', 'caprine.dockitem', 'org.keepassxc.KeePassXC.dockitem']
-lock-items=true
-theme='Transparent'
 
 [org/gnome/desktop/interface]
 document-font-name='Source Sans Pro 9'
@@ -491,10 +446,6 @@ EOF
     LK_SCREENSHOT_DIR=${LK_SCREENSHOT_DIR:-~/Desktop}
     dconf write /org/virt-manager/virt-manager/paths/screenshot-default \
         "'$LK_SCREENSHOT_DIR'"
-    lk_false START_PLANK || (
-        nohup plank &>/dev/null &
-        disown
-    )
 
     lk_tty_print "Checking Xfce4"
     ! lk_has_arg --reset ||

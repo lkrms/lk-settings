@@ -47,5 +47,9 @@
         "unpin_window",
         "unshade",
         "xywh"
+    ],
+    "Lua.workspace.ignoreDir": [
+        ".vscode",
+        "**/desktop/http/**"
     ]
 }

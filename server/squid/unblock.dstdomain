@@ -41,3 +41,7 @@ m.me
 # Telemetry we don't hate
 .telemetry.mozilla.org
 metrics.icloud.com
+
+# Serves ethical regex101 ads
+.buysellads.com
+.buysellads.net

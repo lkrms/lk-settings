@@ -28,7 +28,7 @@ trap 'kill 0' EXIT
 
     WAN_IP=$(awk -v "ipv6_regex=$IPV6_REGEX" '
 ! /(^Deleted | tentative( |$))/ &&
-    / inet6 .+ scope global( .*)? noprefixroute( |$)/ {
+    / inet6 .+ scope global( |$)/ {
     if (match($0, ipv6_regex)) {
         print substr($0, RSTART, RLENGTH)
         exit

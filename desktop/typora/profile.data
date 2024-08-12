@@ -41,6 +41,7 @@
     "smartQuote": true,
     "strict_mode": true,
     "theme": "github.css",
+    "treeSortType": 0,
     "twoHyphensToEm": true,
     "useCustomFontSize": false,
     "useTreeStyle": true,

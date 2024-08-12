@@ -129,14 +129,14 @@ xfce4-keyboard-shortcuts,/commands/custom/<Shift><Super>numbersign,string,flames
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>numbersign,string,flameshot screen -p \"${LK_SCREENSHOT_DIR:-$HOME/Desktop}\" -c
 xfce4-keyboard-shortcuts,/commands/custom/<Shift><Super>dollar,string,flameshot gui -c
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>dollar,string,flameshot gui -p \"${LK_SCREENSHOT_DIR:-$HOME/Desktop}\" -c
-xfce4-keyboard-shortcuts,/commands/custom/<Shift><Super>percent,string,sh -c 'flameshot gui -c --region \"\$(activewindowgeometry)\"'
-xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>percent,string,sh -c 'flameshot gui -p \"${LK_SCREENSHOT_DIR:-$HOME/Desktop}\" -c --region \"\$(activewindowgeometry)\"'
+xfce4-keyboard-shortcuts,/commands/custom/<Shift><Super>percent,string,sh -c 'flameshot gui -c --region \"\$(active-window-geometry)\"'
+xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>percent,string,sh -c 'flameshot gui -p \"${LK_SCREENSHOT_DIR:-$HOME/Desktop}\" -c --region \"\$(active-window-geometry)\"'
 xfce4-keyboard-shortcuts,/commands/custom/<Shift><Super>asciicircum,string,flameshot screen -c -d 5000
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>asciicircum,string,flameshot screen -p \"${LK_SCREENSHOT_DIR:-$HOME/Desktop}\" -c -d 5000
 xfce4-keyboard-shortcuts,/commands/custom/<Shift><Super>ampersand,string,flameshot gui -c -d 5000
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>ampersand,string,flameshot gui -p \"${LK_SCREENSHOT_DIR:-$HOME/Desktop}\" -c -d 5000
-xfce4-keyboard-shortcuts,/commands/custom/<Shift><Super>asterisk,string,sh -c 'flameshot gui -c --region \"\$(activewindowgeometry)\" -d 5000'
-xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>asterisk,string,sh -c 'flameshot gui -p \"${LK_SCREENSHOT_DIR:-$HOME/Desktop}\" -c --region \"\$(activewindowgeometry)\" -d 5000'
+xfce4-keyboard-shortcuts,/commands/custom/<Shift><Super>asterisk,string,sh -c 'flameshot gui -c --region \"\$(active-window-geometry)\" -d 5000'
+xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>asterisk,string,sh -c 'flameshot gui -p \"${LK_SCREENSHOT_DIR:-$HOME/Desktop}\" -c --region \"\$(active-window-geometry)\" -d 5000'
 xfce4-keyboard-shortcuts,/commands/custom/<Shift><Super>parenleft,string,flameshot gui -c
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>parenleft,string,flameshot gui -p \"${LK_SCREENSHOT_DIR:-$HOME/Desktop}\" -c
 
@@ -147,6 +147,7 @@ xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>c,string,code
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>c,string,/opt/lk-settings/bin/open-project.sh
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>d,string,dbeaver
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>d,string,code /opt/lk-settings/server/.bashrc
+xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>greater,string,code \"$HOME/Nextcloud/dotfiles/dotfiles.code-workspace\"
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>e,string,code \"$HOME/.config/espanso/\"
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>g,string,/opt/lk-settings/bin/open-repo.sh
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>g,string,/opt/lk-settings/bin/open-repo.sh smerge --new-window '{}'
@@ -159,8 +160,8 @@ xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>n,string,code \
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>o,string,todoist
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>p,string,clockify
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>r,string,code \"$(realpath "$HOME/.bashrc")\"
-xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>s,string,exo-open --launch TerminalEmulator bash -ic 'lk-unison.sh || lk_tty_pause'
-xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>s,string,code \"$(realpath "$HOME/Code/lk-settings.code-workspace")\"
+xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>s,string,exo-open --launch TerminalEmulator bash -ic '~/.local/bin/audit-repos.sh --offline; lk_tty_pause'
+xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>s,string,exo-open --launch TerminalEmulator bash -ic '~/.local/bin/audit-repos.sh; lk_tty_pause'
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>semicolon,string,libreoffice --calc
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Shift><Super>t,string,/opt/lk-settings/bin/open-repo.sh git -C '{}' cola
 xfce4-keyboard-shortcuts,/commands/custom/<Primary><Super>v,string,virt-manager
