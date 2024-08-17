@@ -1,6 +1,4 @@
 *.gresource
-/byobu/.metadata_available
-/byobu/.ssh-agent
 /geeqie/history
 /http/localhost/code.local
 /subl/User/*.*-ca-bundle

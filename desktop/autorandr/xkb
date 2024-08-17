@@ -1,7 +1,0 @@
-xkb_keymap {
-	xkb_keycodes  { include "evdev+aliases(qwerty)"	};
-	xkb_types     { include "complete+cmdopt"	};
-	xkb_compat    { include "complete"	};
-	xkb_symbols   { include "pc+us+inet(evdev)+macos+tkless+xfcekeys"	};
-	xkb_geometry  { include "pc(pc105)"	};
-};

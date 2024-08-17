@@ -70,8 +70,6 @@ is_basic || [ -d /opt/db2_db2driver_for_jdbc_sqlj ] || {
 }
 
 symlink "$_ROOT/.tidyrc" ~/.tidyrc
-symlink "$_ROOT/.byoburc" ~/.byoburc
-symlink "$_ROOT/byobu/" ~/.byobu
 symlink -d "$_ROOT/rubocop/.rubocop.yml" ~/.rubocop.yml
 symlink -d "$_ROOT/displays/ColorSync/Profiles/" ~/Library/ColorSync/Profiles
 
@@ -87,10 +85,6 @@ is_basic || [ ! -d "${FILE%/*}" ] || {
         lk_warn "cannot apply settings: HandBrake is running" ||
         lk_file_replace -b -f "$_ROOT/handbrake/presets.json" "$FILE"
 }
-
-is_basic || symlink_if_not_running \
-    "$_ROOT/keepassxc/keepassxc.ini" "$_APP_SUPPORT/keepassxc/keepassxc.ini" \
-    KeePassXC "pgrep -x KeePassXC"
 
 is_basic || symlink_if_not_running \
     "$_ROOT/stretchly/config.json" "$_APP_SUPPORT/stretchly/config.json" \

@@ -47,7 +47,6 @@ _PRIV=${1-}
 
     symlink_private_common "$_PRIV"
     symlink \
-        "$_PRIV/.face" ~/.face \
         "$_PRIV/remmina/data/" ~/.local/share/remmina \
         "$_PRIV/robo3t/3T/" ~/.config/3T
 
@@ -58,10 +57,6 @@ _PRIV=${1-}
         ~/.cache/hexchat/scrollback "$_PRIV/hexchat/scrollback" \
         "$_PRIV/hexchat/" ~/.config/hexchat \
         HexChat "pgrep -x hexchat"
-
-    [ ! -e "$_PRIV/.face" ] ||
-        lk_dir_parents -u ~ "$_PRIV/.face" |
-        xargs -r chmod -c a+x
 
     for FILE in "$_PRIV/applications"/*.png; do
         lk_icon_install "$FILE"
@@ -250,8 +245,6 @@ EOF
 }
 
 symlink "$_ROOT/.tidyrc" ~/.tidyrc
-symlink "$_ROOT/.byoburc" ~/.byoburc
-symlink "$_ROOT/byobu/" ~/.byobu
 symlink "$_ROOT/devilspie2/" ~/.config/devilspie2
 symlink "$_ROOT/quicktile/quicktile.cfg" ~/.config/quicktile.cfg
 symlink "$_ROOT/remmina/" ~/.config/remmina
@@ -282,10 +275,6 @@ symlink_if_not_running \
 symlink_if_not_running \
     "$_ROOT/handbrake/presets.json" ~/.config/ghb/presets.json \
     HandBrake "pgrep -x ghb"
-
-symlink_if_not_running \
-    "$_ROOT/keepassxc/keepassxc.ini" ~/.config/keepassxc/keepassxc.ini \
-    KeePassXC "pgrep -x keepassxc"
 
 symlink_if_not_running \
     "$_ROOT/nomacs/" ~/.config/nomacs \
