@@ -376,11 +376,6 @@ palette-name='Elio'
 [ca/desrt/dconf-editor]
 show-warning=false
 
-[org/gnome/desktop/interface]
-document-font-name='Source Sans Pro 9'
-font-name='Source Sans Pro 9'
-monospace-font-name='JetBrains Mono NL 9'
-
 [org/gnome/meld]
 custom-editor-command='code -g {file}:{line}'
 folder-columns=[('size', true), ('modification time', true), ('permissions', true)]
@@ -439,15 +434,5 @@ EOF
     lk_tty_print "Checking Xfce4"
     ! lk_has_arg --reset ||
         set -- --reset
-    "$_ROOT/../bin/configure-xfce4.sh" "$@" && {
-        xfconf-query -c xfwm4 -p /general/theme -n -t string -s "Qogir-Dark"
-        xfconf-query -c xfwm4 -p /general/title_font -n -t string -s "Source Sans Pro Semi-Bold 8"
-        xfconf-query -c xsettings -p /Gtk/CursorThemeName -n -t string -s "Qogir-dark"
-        xfconf-query -c xsettings -p /Gtk/FontName -n -t string -s "$DEFAULT_FONT 9"
-        xfconf-query -c xsettings -p /Gtk/ButtonImages -n -t bool -s false
-        xfconf-query -c xsettings -p /Gtk/MenuImages -n -t bool -s true
-        xfconf-query -c xsettings -p /Gtk/MonospaceFontName -n -t string -s "$DEFAULT_MONOSPACE_FONT 9"
-        xfconf-query -c xsettings -p /Net/IconThemeName -n -t string -s "Tela-dark"
-        xfconf-query -c xsettings -p /Net/ThemeName -n -t string -s "Qogir-Dark"
-    }
+    "$_ROOT/../bin/configure-xfce4.sh" "$@"
 fi
