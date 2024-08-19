@@ -245,8 +245,6 @@ EOF
 }
 
 symlink "$_ROOT/.tidyrc" ~/.tidyrc
-symlink "$_ROOT/devilspie2/" ~/.config/devilspie2
-symlink "$_ROOT/quicktile/quicktile.cfg" ~/.config/quicktile.cfg
 symlink "$_ROOT/remmina/" ~/.config/remmina
 symlink "$_ROOT/rubocop/.rubocop.yml" ~/.rubocop.yml
 symlink "$_ROOT/zeal/Zeal.conf" ~/.config/Zeal/Zeal.conf
