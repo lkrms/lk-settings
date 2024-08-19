@@ -20,29 +20,32 @@ _DIR=/opt/lk-settings/server
 function update-notracking() {
     local TEMP TEMP2 LK_FILE_REPLACE_NO_CHANGE LK_VERBOSE=1 LK_FILE_NO_DIFF=1 \
         FILE=$_DIR/dnsmasq/dnsmasq.d/notracking.conf \
-        URL=https://github.com/notracking/hosts-blocklists/raw/master/dnsmasq/dnsmasq.blacklist.txt \
+        URL=https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts \
         UNBLOCKED=$_DIR/squid/unblock.dstdomain
     lk_tty_print "Checking notracking blocklists"
     [[ ! /etc/dnsmasq.d -ef $_DIR/dnsmasq/dnsmasq.d ]] || {
         lk_tty_detail "$FILE"
         lk_mktemp_with TEMP &&
             lk_mktemp_with TEMP2 &&
-            curl -fsSL "$URL" | tee "$TEMP2" |
-            sed -E "$(
-                cat <<"EOF"
+            curl -fsSL "$URL" |
+            awk '$1 == "0.0.0.0" && $2 != "0.0.0.0" { print "address=/" $2 "/" }' |
+                sort -u |
+                tee "$TEMP2" |
+                sed -E "$(
+                    cat <<"EOF"
 # Copy to hold space
 h
 # Reduce to domain
 s/^[^/]*\/([^/]+)\/.*/\1/
 # Delete unblocked
 EOF
-                # Convert unblocked domain list to something like:
-                #
-                #     /^(tags\.|^)(news\.|^)(com\.|^)au$/d
-                #     /^(.+\.)?(amazon-adsystem\.|^)com$/d
-                #     /^(tbs8v877\.|^)(r\.|^)(us-east-1\.|^)(awstrack\.|^)me$/d
-                sed -E "$(
-                    cat <<"EOF"
+                    # Convert unblocked domain list to something like:
+                    #
+                    #     /^(tags\.|^)(news\.|^)(com\.|^)au$/d
+                    #     /^(.+\.)?(amazon-adsystem\.|^)com$/d
+                    #     /^(tbs8v877\.|^)(r\.|^)(us-east-1\.|^)(awstrack\.|^)me$/d
+                    sed -E "$(
+                        cat <<"EOF"
 # Delete comments and empty lines
 /^(#|[ \t]*$)/d
 # Replace each domain part '<part>.' with '(<part>\.|^)'
@@ -52,20 +55,21 @@ s/^\./(.+\\.)?/
 # Enclose each line between '/^' and '$/d'
 s/.*/\/^&$\/d/
 EOF
-                )" "$UNBLOCKED"
-                cat <<"EOF"
+                    )" "$UNBLOCKED"
+                    cat <<"EOF"
 # Restore from hold space
 g
 EOF
-            )" >"$TEMP" &&
+                )" >"$TEMP" &&
             lk_file_replace -f "$TEMP" "$FILE" || return
         lk_tty_diff "$TEMP2" "$TEMP"
     }
     [[ ! /etc/squid/squid.conf -ef $_DIR/squid/squid.conf ]] || {
         FILE=$_DIR/squid/notracking.dstdomain
-        URL=https://github.com/notracking/hosts-blocklists/raw/master/dnscrypt-proxy/dnscrypt-proxy.blacklist.txt
         lk_tty_detail "$FILE"
-        curl -fsSL "$URL" | sed -E 's/^[^#[:blank:]]/.&/' >"$TEMP" &&
+        curl -fsSL "$URL" |
+            awk '$1 == "0.0.0.0" && $2 != "0.0.0.0" { print $2 }' |
+            sort -u >"$TEMP" &&
             lk_file_replace -f "$TEMP" "$FILE" || return
     }
     ! lk_false LK_FILE_REPLACE_NO_CHANGE || {
