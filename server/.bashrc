@@ -75,7 +75,7 @@ END {
 function pacman-sign() { (
     shopt -s nullglob
     lk_tty_print "Checking package signatures"
-    for FILE in /srv/repo/{aur,lk,quarry}/*.pkg.tar.zst; do
+    for FILE in /srv/repo/{aur,lk}/*.pkg.tar.zst; do
         [ ! -e "$FILE.sig" ] || continue
         lk_tty_detail "Signing" "$FILE"
         DIR=${FILE%/*}
@@ -92,17 +92,9 @@ function pacman-clean() {
     lk_tty_print "Cleaning up old packages"
     for OPERATION in --dryrun --remove; do
         lk_tty_run_detail sudo paccache -v \
-            --cachedir={/var/cache/pacman/pkg/,/srv/repo/{aur,lk,quarry}/} --keep 2 "$OPERATION"
+            --cachedir={/var/cache/pacman/pkg/,/srv/repo/{aur,lk}/} --keep 2 "$OPERATION"
         [[ $OPERATION == --remove ]] || lk_tty_yn "Proceed?" || return
     done
-}
-
-function pacman-build-all() {
-    lk_aur_sync &&
-        /opt/lk-pkgbuilds/build.sh --all &&
-        /opt/quarry/lib/update.rb &&
-        pacman-sign &&
-        pacman-clean
 }
 
 function hub-rsync() {

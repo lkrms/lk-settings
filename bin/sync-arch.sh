@@ -96,11 +96,6 @@ lk_aur_sync || STATUS=$?
 
 lk_log_tty_off
 
-if [ -x /opt/quarry/lib/update.rb ]; then
-    /opt/quarry/lib/update.rb || STATUS=$?
-fi
-
 paccache -c /srv/repo/aur -rv || STATUS=$?
-paccache -c /srv/repo/quarry -rv || STATUS=$?
 
 (exit "$STATUS") || lk_die "sync failed, please check logs"
