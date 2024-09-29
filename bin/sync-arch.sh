@@ -84,6 +84,10 @@ lk_log_start
 
 STATUS=0
 
+sudo chmod -c a-x \
+    /etc/ppp/ip-down.d/00-dns.sh \
+    /etc/ppp/ip-up.d/00-dns.sh || STATUS=$?
+
 time update-notracking || STATUS=$?
 
 export PACKAGER="Luke Arms <luke@arms.to>"
