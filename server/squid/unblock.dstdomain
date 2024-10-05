@@ -45,3 +45,6 @@ metrics.icloud.com
 # Serves ethical regex101 ads
 .buysellads.com
 .buysellads.net
+
+# YouTube watch history (in-app)
+s.youtube.com
