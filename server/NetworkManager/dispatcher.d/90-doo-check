@@ -64,12 +64,12 @@ case "$1,$2" in
     ;;
 "$WAN_IFACE",up)
     lk_systemctl_reload_or_restart "$TC_SERVICE" || true
-    #lk_systemctl_reload_or_restart "$DHCP6_PD_SERVICE" &&
-    #    if service_is_active "$IP6_RA_SERVICE"; then
-    #        lk_tty_run systemctl kill --signal=HUP "$IP6_RA_SERVICE"
-    #    else
-    #        lk_tty_run systemctl start "$IP6_RA_SERVICE"
-    #    fi
+    lk_systemctl_reload_or_restart "$DHCP6_PD_SERVICE" &&
+        if service_is_active "$IP6_RA_SERVICE"; then
+            lk_tty_run systemctl kill --signal=HUP "$IP6_RA_SERVICE"
+        else
+            lk_tty_run systemctl start "$IP6_RA_SERVICE"
+        fi
     #LAN_METHOD=shared
     ;;
 "$WAN_IFACE",down)
