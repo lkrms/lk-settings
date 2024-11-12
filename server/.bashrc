@@ -23,6 +23,10 @@ function squid-report() {
     squidclient "mgr:$1"
 }
 
+function squidclient() {
+    curl --connect-to ::127.0.0.1: "http://doo:3128/squid-internal-mgr/${1#mgr:}"
+}
+
 function squid-analyse-store-log() {
     (($#)) || set -- /var/log/squid/store.log*
     lk_cat_log "$@" | awk '
