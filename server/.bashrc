@@ -371,7 +371,7 @@ alias squid-active-requests='squidclient mgr:active_requests'
 alias squid-follow-access-log='sudo tail -f /var/log/squid/access.log'
 alias squid-follow-store-log='sudo tail -f /var/log/squid/store.log'
 alias squid-list-reports='squidclient mgr:menu'
-alias aur-rebuild-php='lk_aur_rebuild php74 php74-imagick php74-memcache php74-memcached php74-xdebug php80 php80-imagick php80-memcached php80-xdebug php81 php81-imagick php81-xdebug php82 php82-imagick php82-xdebug php-humbug-box-bin php-ibm_db2 php-memprof php-pcov php-sqlsrv'
+alias aur-rebuild-php='lk_aur_rebuild php74 php74-imagick php74-memcache php74-memcached php74-xdebug php80 php80-imagick php80-memcached php80-xdebug php81 php81-imagick php81-xdebug php82 php82-imagick php82-xdebug php83 php83-imagick php83-xdebug php-ibm_db2 php-memprof php-pcov php-sqlsrv'
 
 export PACKAGER="Luke Arms <luke@arms.to>"
 export GPGKEY=B7304A7EB769E24D
