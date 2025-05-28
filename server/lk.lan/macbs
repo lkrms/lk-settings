@@ -2,8 +2,7 @@
 
 set -euo pipefail
 
-export LK_PLATFORM_BRANCH=${LK_PLATFORM_BRANCH:-develop} \
-    HOMEBREW_ARTIFACT_DOMAIN=http://brew.mirror
+export LK_PLATFORM_BRANCH=${LK_PLATFORM_BRANCH:-develop}
 
 FILE=~/lk-provision-macos.sh
 URL=https://raw.githubusercontent.com/lkrms/lk-platform/$LK_PLATFORM_BRANCH/bin/lk-provision-macos.sh
@@ -17,5 +16,3 @@ URL=https://raw.githubusercontent.com/lkrms/lk-platform/$LK_PLATFORM_BRANCH/bin/
 
 . /opt/lk-platform/lib/bash/common.sh
 lk_require macos
-
-lk_macos_setenv HOMEBREW_ARTIFACT_DOMAIN http://brew.mirror
