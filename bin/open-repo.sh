@@ -1,34 +1,34 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-. "${LK_BASE:-/opt/lk-platform}"/bin/lk-bash-load.sh 2>/dev/null ||
+# Usage: open-repo.sh [COMMAND [ARG...]]
+#
+# If one of the arguments to COMMAND is "{}", the command is executed once per
+# selected repo after "{}" is replaced with its path.
+#
+# Otherwise, paths to the selected repos are added after the last ARG, and the
+# command is only executed once.
+#
+# Default command:
+#
+#     smerge "{}"
+
+. "${LK_BASE-/opt/lk-platform}"/bin/lk-bash-load.sh 2>/dev/null ||
     . ~/Code/lk/lk-platform/bin/lk-bash-load.sh || exit
 
 shopt -s extglob nullglob
 
 cd ~
 
-OLD_DIR=~/.lk-platform/cache
 DIR=~/.cache/lk-platform
-[[ ! -d $OLD_DIR ]] ||
-    if [[ -d $DIR ]]; then
-        MOVE=("$OLD_DIR"/git-repo.*)
-        if [[ -n ${MOVE+1} ]]; then
-            mv -nv "${MOVE[@]}" "$DIR/"
-            rm -f "${MOVE[@]}"
-        fi
-    else
-        install -d "${DIR%/*}"
-        gnu_mv -T "$OLD_DIR" "$DIR"
-    fi
-[ -d "$DIR" ] || install -d "$DIR"
+[[ -d $DIR ]] || install -d "$DIR"
 LIST_FILE=$DIR/git-repo.list
 HIST_FILE=$DIR/git-repo.history
 HIST_FILE2=$DIR/code-workspace.history
 
 function generate_list() {
-    find -H ./Code/* ./.dotfiles!(?) -maxdepth 3 \
-        -type d -exec test -d "{}/.git" \; -print -prune |
-        sed -E 's/^\.\///; /^vendor\//d' | sort >"$LIST_FILE"
+    find -H ./Code/* ./.dotfiles!(?) -maxdepth 4 -type d -name .git -prune -print0 |
+        xargs -0r dirname |
+        sort >"$LIST_FILE"
 }
 
 COMMAND=(yad)
@@ -36,14 +36,14 @@ COMMAND=(yad)
     function run() {
         zenity "$@" &
         sleep 0.2
-        "$LK_BASE/lib/macos/process-focus.js" $! >>"/tmp/open-repo.log" 2>&1
+        "$LK_BASE/lib/macos/process-focus.js" $! >>"/tmp/${0##*/}.log" 2>&1
         wait
     }
     declare -f run
     echo 'run "$@"'
 )" bash)
 
-if [ -e "$LIST_FILE" ]; then
+if [[ -e $LIST_FILE ]]; then
     lk_mapfile LIST <"$LIST_FILE"
     generate_list &
 else
@@ -56,15 +56,15 @@ fi
 IFS=$'\n'
 OPEN=($(
     { IFS= && lk_arr LIST &&
-        { [ ! -e "$HIST_FILE" ] ||
+        { [[ ! -e $HIST_FILE ]] ||
             grep -Fxf <(lk_arr LIST) "$HIST_FILE" | tail -n24 ||
-            [ "${PIPESTATUS[*]}" = 10 ]; } &&
-        { [ ! -e "$HIST_FILE2" ] ||
-            grep -Eof <(sed 's/^/^/' "$LIST_FILE") "$HIST_FILE2" | tail -n24 ||
-            [ "${PIPESTATUS[*]}" = 10 ]; }; } |
-        tac | lk_uniq | awk '{print $1; sub(/^Code\//, "", $1); print $1}' |
-        tr '\n' '\0' |
-        { IFS=' ' && xargs -0r "${COMMAND[@]}" \
+            test "${PIPESTATUS[*]}" = 10; } &&
+        { [[ ! -e $HIST_FILE2 ]] ||
+            grep -Fof <(lk_arr LIST) "$HIST_FILE2" | tail -n24 ||
+            test "${PIPESTATUS[*]}" = 10; }; } |
+        tac | lk_uniq |
+        awk -v ORS='\0' '{ print; sub(/^Code\//, ""); print }' |
+        xargs -0r "${COMMAND[@]}" \
             --list \
             --separator='\n' \
             --multiple \
@@ -72,10 +72,10 @@ OPEN=($(
             --column=Repository \
             --print-column=1 \
             --hide-column=1 \
-            --title "Open repository with $*" \
+            --title "Open repo" \
             --text "Select one or more repositories:" \
             --width=450 \
-            --height=550; } |
+            --height=550 |
         tr -s '\n' |
         tee -a "$HIST_FILE"
 )) || OPEN=()
