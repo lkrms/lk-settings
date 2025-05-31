@@ -362,6 +362,7 @@ function rebuild-ub22() { _rebuild-ub ubuntu-22.04 52:54:00:1b:ea:89 10.10.122.2
 function rebuild-ub20() { _rebuild-ub ubuntu-20.04 52:54:00:76:c6:3e 10.10.122.20/16 ub20 "$@"; }
 function rebuild-ub18() { _rebuild-ub ubuntu-18.04 52:54:00:5e:ca:ba 10.10.122.18/16 ub18 "$@"; }
 
+alias enable-proxy='export http{,s}_proxy=http://localhost:3127'
 alias disable-proxy='unset http{,s}_proxy'
 alias gpg-cache-check='gpg-connect-agent "keyinfo --list" /bye'
 alias gpg-cache-passphrase='gpg-preset-passphrase --preset "$GPGKEYGRIP" <~/.gpg-"$GPGKEY"'
@@ -380,5 +381,4 @@ GPGKEYGRIP=056A5FE1D4AE65E25C0E8037DD3B221BD1C7F3B1
 gpg-cache-passphrase
 export CCACHE_DIR=~/.cache/ccache
 
-eval export http{,s}_proxy=http://localhost:3127
 #export BYOBU_NO_TITLE=1
