@@ -165,57 +165,6 @@ EOF
     lk_symlink "$FILE" ~/.local/share/applications/"${FILE##*/}"
 fi
 
-MIMEINFO_FILE=/usr/share/applications/mimeinfo.cache
-MIMEAPPS_FILE=~/.config/mimeapps.list
-[ ! -f "$MIMEINFO_FILE" ] || {
-    REPLACE=(geany vim)
-    REPLACE_WITH=(VSCodium VSCodium)
-    PREFER=(
-        codium
-
-        # Prefer Firefox over vscode for text/html
-        firefox
-
-        # Prefer Thunar for inode/directory
-        thunar
-
-        #
-        org.nomacs.ImageLounge
-        org.xfce.ristretto
-
-        #
-        typora
-
-        # Prefer Evince and VLC for everything they can open
-        org.gnome.Evince
-        vlc
-    )
-    SED_COMMAND=(sed -E)
-    for i in "${!REPLACE[@]}"; do
-        [ -f "/usr/share/applications/${REPLACE_WITH[$i]}.desktop" ] || continue
-        SED_COMMAND+=(
-            -e "s/\
-([=;])(${REPLACE[$i]}.desktop(;|$))/\
-\1${REPLACE_WITH[$i]}.desktop;\2/"
-            -e "s/\
-=((.+;)*)(${REPLACE_WITH[$i]}.desktop;((.+;)*))${REPLACE_WITH[$i]}.desktop;?((.+;)*)$/\
-=\1\3\6/"
-        )
-    done
-    for APP in "${PREFER[@]}"; do
-        [ -f "/usr/share/applications/$APP.desktop" ] || continue
-        SED_COMMAND+=(-e "s/=((.+;)*)($APP.desktop;?)((.+;)*)$/=\3\1\4/")
-    done
-    [ ${#SED_COMMAND[@]} -gt 2 ] &&
-        lk_install -d -m 00755 "${MIMEAPPS_FILE%/*}" &&
-        lk_install -m 00644 "$MIMEAPPS_FILE" && {
-        echo "[Default Applications]"
-        comm -23 \
-            <(grep -E '.+=.+' "$MIMEINFO_FILE" | "${SED_COMMAND[@]}" | sort) \
-            <(sort "$MIMEINFO_FILE")
-    } >"$MIMEAPPS_FILE"
-}
-
 [ -d /opt/db2_db2driver_for_jdbc_sqlj ] || {
     DB2_DRIVER=(~/Downloads/*/Db2/db2_db2driver_for_jdbc_sqlj.zip)
     [ ${#DB2_DRIVER[@]} -ne 1 ] || (umask 0022 &&
