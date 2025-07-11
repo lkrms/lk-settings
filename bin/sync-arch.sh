@@ -100,6 +100,8 @@ lk_aur_sync || STATUS=$?
 
 lk_log_tty_off
 
-paccache -c /srv/repo/aur -rv || STATUS=$?
+paccache -c /srv/repo/aur -rvk1 &&
+    rsync -rltpiv --delete --exclude '/.lk-settings-*' \
+        /srv/repo/aur/ repo-aur:public_html/ || STATUS=$?
 
 (exit "$STATUS") || lk_die "sync failed, please check logs"
