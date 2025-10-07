@@ -120,15 +120,9 @@ symlink "$_ROOT/iptables/ip6tables.rules" /etc/iptables/ip6tables.rules
 symlink "$_ROOT/libvirt/hooks/qemu" /etc/libvirt/hooks/qemu
 
 unset LK_SYMLINK_NO_CHANGE LK_FILE_REPLACE_NO_CHANGE
-# Fix weird Calibri rendering in Thunderbird
-symlink \
-    "$_ROOT/fonts/ms-no-bitmaps.conf" /etc/fonts/conf.d/99-ms-no-bitmaps.conf
 # Fix weird Nimbus Mono PS ligatures
-symlink \
-    "$_ROOT/fonts/no-nimbus-mono-ps.conf" /etc/fonts/conf.d/99-no-nimbus-mono-ps.conf
-# Remove emoji from all fonts other than Twemoji
-symlink \
-    "$_ROOT/fonts/emoji-fix.conf" /etc/fonts/conf.d/99-emoji-fix.conf
+#symlink \
+#    "$_ROOT/fonts/no-nimbus-mono-ps.conf" /etc/fonts/conf.d/99-no-nimbus-mono-ps.conf
 
 unset LK_SUDO
 
