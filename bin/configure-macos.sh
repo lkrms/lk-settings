@@ -265,22 +265,6 @@ defaults write com.apple.dock show-recents -bool false
 is_basic || defaults write com.apple.dock size-immutable -bool true
 is_basic || defaults write com.apple.dock tilesize -int 60
 
-# Finder
-defaults write com.apple.finder FXDefaultSearchScope -string SCcf
-is_basic || defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false
-defaults write com.apple.finder FXPreferredViewStyle -string clmv
-defaults write com.apple.finder _FXSortFoldersFirst -bool true
-defaults write com.apple.finder NewWindowTarget -string PfHm
-defaults write com.apple.finder NewWindowTargetPath -string "file://$HOME/"
-is_basic || defaults write com.apple.finder ShowPathbar -bool true
-defaults write com.apple.finder ShowRecentTags -bool false
-is_basic || defaults write com.apple.finder ShowStatusBar -bool true
-is_basic || defaults write com.apple.finder WarnOnEmptyTrash -bool false
-is_basic || defaults write com.apple.finder DisableAllAnimations -bool true
-
-defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
-defaults write com.apple.desktopservices DSDontWriteUSBStores -bool true
-
 # Messages
 defaults write com.apple.MobileSMS PlaySoundsKey -bool false
 
