@@ -330,8 +330,8 @@ function _prepare_cloudimg() {
 function rebuild-cpanel() {
     _prepare_cloudimg
     lk_tty_run lk-cloud-image-boot.sh \
-        -i ubuntu-20.04-minimal \
-        -c 2 -m 4096 -s 40G \
+        -i ubuntu-22.04 \
+        -c 4 -m 4096 -s 40G \
         -n bridge=br0 -M 52:54:00:f2:c0:63 -I 10.10.122.87/16 \
         -H \
         "$@" \
