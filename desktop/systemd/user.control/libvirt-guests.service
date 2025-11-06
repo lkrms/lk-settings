@@ -5,7 +5,7 @@ After=libvirtd.service
 After=dbus.service
 
 [Service]
-Environment=LK_TTY_NO_COLOUR=1
+Environment=LK_NO_COLOUR=1
 ExecStop=/opt/lk-platform/bin/lk-virsh-shutdown-all-domains.sh
 Type=oneshot
 RemainAfterExit=yes

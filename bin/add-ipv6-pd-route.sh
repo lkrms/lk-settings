@@ -1,6 +1,6 @@
 #!/bin/bash
 
-LK_TTY_NO_COLOUR=1 \
+LK_NO_COLOUR=1 \
     . /opt/lk-platform/bin/lk-bash-load.sh || exit
 lk_require linux
 

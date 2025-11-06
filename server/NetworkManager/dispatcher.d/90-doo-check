@@ -4,7 +4,7 @@ LAN_IFACE=br0  # For IPv6 prefix delegation
 WAN_IFACE=ppp0 # For routing and traffic control
 LAN_ATTACH=()  # For `ip link set <DEVICE> master <LAN_IFACE>`
 
-LK_TTY_NO_COLOUR=1 \
+LK_NO_COLOUR=1 \
     . /opt/lk-platform/bin/lk-bash-load.sh || exit
 lk_require linux
 
