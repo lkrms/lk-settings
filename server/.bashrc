@@ -76,22 +76,21 @@ END {
 }'
 }
 
-function pacman-sign() { (
+function pkg-sign() { (
     shopt -s nullglob
+    (($#)) || set -- *.pkg.tar.zst
+    (($#)) || set -- /srv/repo/{aur,lk}/*.pkg.tar.zst
+    (($#)) || lk_bad_args || return
     lk_tty_print "Checking package signatures"
-    for FILE in /srv/repo/{aur,lk}/*.pkg.tar.zst; do
-        [ ! -e "$FILE.sig" ] || continue
+    for FILE in "$@"; do
+        [[ $FILE != *.sig ]] && [[ ! -e $FILE.sig ]] || continue
         lk_tty_detail "Signing" "$FILE"
-        DIR=${FILE%/*}
-        REPO=$DIR/${DIR##*/}.db.tar.xz
         gpg --batch --passphrase-file ~/.gpg-"$GPGKEY" \
-            --detach-sign "$FILE" &&
-            #touch -r "$FILE" "$FILE.sig" &&
-            repo-add -s "$REPO" "$FILE" || break
+            --detach-sign "$FILE" || exit
     done
 ); }
 
-function pacman-clean() {
+function pkg-clean() {
     local OPERATION
     lk_tty_print "Cleaning up old packages"
     for OPERATION in --dryrun --remove; do
