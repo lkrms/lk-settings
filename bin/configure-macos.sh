@@ -192,21 +192,11 @@ defaults write com.apple.AppleMultitouchTrackpad ForceSuppressed -bool true
 defaults write NSGlobalDomain AppleKeyboardUIMode -int 3
 is_basic || defaults write NSGlobalDomain com.apple.keyboard.fnState -bool true
 
-defaults write NSGlobalDomain NSAutomaticCapitalizationEnabled -bool false
-defaults write NSGlobalDomain NSAutomaticPeriodSubstitutionEnabled -bool false
-is_basic || defaults write NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool false
-defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false
-defaults write NSGlobalDomain WebAutomaticSpellingCorrectionEnabled -bool false
-
 # Touch Bar typing suggestions
 is_basic || defaults write NSGlobalDomain NSAutomaticTextCompletionEnabled -bool false
 is_basic || defaults write com.apple.touchbar.agent PresentationModeGlobal -string functionKeys
 is_basic || defaults write com.apple.touchbar.agent PresentationModeFnModes -dict functionKeys fullControlStrip
 
-# Press Fn to: Do Nothing
-is_basic || defaults write com.apple.HIToolbox AppleFnUsageType -int 0
-
-defaults write com.apple.HIToolbox AppleDictationAutoEnable -int 0
 # Disable Dictation > Shortcut
 #defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add \
 #    164 "<dict><key>enabled</key><false/></dict>"
