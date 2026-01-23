@@ -129,7 +129,7 @@ fi
 
 lk_macos_maybe_install_pkg_url \
     "com.Brother.Brotherdriver.Brother_PrinterDrivers_MonochromeLaser" \
-    "https://download.brother.com/welcome/dlf104416/Brother_PrinterDrivers_MonochromeLaser_1_3_0.dmg" \
+    "https://download.brother.com/welcome/dlf104743/Brother_PrinterDrivers_MonochromeLaser_1_5_0.dmg" \
     "Brother Printer Drivers (Monochrome Laser)"
 
 lk_macos_maybe_install_pkg_url \
@@ -173,36 +173,9 @@ if ! nvram StartupMute 2>/dev/null | grep -E "$S%01\$" >/dev/null; then
     sudo nvram StartupMute=%01
 fi
 
-# Trackpad
-defaults write com.apple.AppleMultitouchTrackpad Clicking -bool true
-defaults write com.apple.AppleMultitouchTrackpad TrackpadCornerSecondaryClick -int 2
-defaults write com.apple.AppleMultitouchTrackpad TrackpadRightClick -bool false
-defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
-defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadCornerSecondaryClick -int 2
-defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadRightClick -bool false
-defaults write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
-defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
-defaults -currentHost write NSGlobalDomain com.apple.trackpad.trackpadCornerClickBehavior -int 1
-defaults -currentHost write NSGlobalDomain com.apple.trackpad.enableSecondaryClick -bool false
-
-defaults write com.apple.AppleMultitouchTrackpad ActuateDetents -bool false
-defaults write com.apple.AppleMultitouchTrackpad ForceSuppressed -bool true
-
-# Keyboard
-defaults write NSGlobalDomain AppleKeyboardUIMode -int 3
-is_basic || defaults write NSGlobalDomain com.apple.keyboard.fnState -bool true
-
-# Touch Bar typing suggestions
-is_basic || defaults write NSGlobalDomain NSAutomaticTextCompletionEnabled -bool false
-is_basic || defaults write com.apple.touchbar.agent PresentationModeGlobal -string functionKeys
-is_basic || defaults write com.apple.touchbar.agent PresentationModeFnModes -dict functionKeys fullControlStrip
-
 # Disable Dictation > Shortcut
 #defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add \
 #    164 "<dict><key>enabled</key><false/></dict>"
-
-# Sound
-defaults write NSGlobalDomain com.apple.sound.beep.feedback -bool true
 
 # General
 is_basic || defaults write com.apple.loginwindow TALLogoutSavesState -bool false
@@ -210,16 +183,6 @@ is_basic || defaults write com.apple.loginwindow TALLogoutSavesState -bool false
 defaults write NSGlobalDomain AppleAccentColor -int 0
 defaults write NSGlobalDomain AppleHighlightColor -string "1.000000 0.733333 0.721569 Red"
 defaults write NSGlobalDomain AppleShowScrollBars -string Always
-defaults write NSGlobalDomain NSDocumentSaveNewDocumentsToCloud -bool false
-is_basic || defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode -bool true
-is_basic || defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode2 -bool true
-is_basic || defaults write NSGlobalDomain NSTableViewDefaultSizeMode -int 1
-is_basic || defaults write NSGlobalDomain PMPrintingExpandedStateForPrint -bool true
-is_basic || defaults write NSGlobalDomain PMPrintingExpandedStateForPrint2 -bool true
-
-defaults write NSGlobalDomain NSCloseAlwaysConfirmsChanges -bool true
-defaults write NSGlobalDomain NSDisableAutomaticTermination -bool true
-defaults write com.apple.systempreferences NSQuitAlwaysKeepsWindows -bool false
 
 is_basic || defaults write NSGlobalDomain NSAutomaticWindowAnimationsEnabled -bool false
 is_basic || defaults write NSGlobalDomain NSWindowResizeTime -float 0.001
@@ -230,33 +193,12 @@ is_basic || defaults write NSGlobalDomain QLPanelAnimationDuration -float 0
 is_basic || defaults write com.apple.universalaccess reduceMotion -bool true
 is_basic || defaults write com.apple.universalaccess reduceTransparency -bool true
 
-is_basic || defaults write com.apple.menuextra.clock DateFormat -string "EEE d MMM  h:mm:ss a"
 is_basic || defaults write com.apple.screencapture location -string "${LK_SCREENSHOT_DIR:-$HOME/Desktop}"
 defaults -currentHost write com.apple.ImageCapture disableHotPlug -bool true
 
 # Screen Saver
 defaults -currentHost write com.apple.screensaver idleTime -int 300
 defaults -currentHost write com.apple.screensaver showClock -bool true
-
-# Hot Corners (5 = Start Screen Saver)
-defaults write com.apple.dock wvous-tr-corner -int 5
-defaults write com.apple.dock wvous-tr-modifier -int 0
-
-# Dock
-defaults write com.apple.dock appswitcher-all-displays -bool true
-defaults write com.apple.dock autohide -bool true
-defaults write com.apple.dock autohide-delay -float 0
-defaults write com.apple.dock launchanim -bool false
-defaults write com.apple.dock magnification -bool false
-defaults write com.apple.dock mineffect -string scale
-defaults write com.apple.dock minimize-to-application -bool true
-defaults write com.apple.dock show-process-indicators -bool true
-defaults write com.apple.dock show-recents -bool false
-is_basic || defaults write com.apple.dock size-immutable -bool true
-is_basic || defaults write com.apple.dock tilesize -int 60
-
-# Messages
-defaults write com.apple.MobileSMS PlaySoundsKey -bool false
 
 # Safari
 is_basic || defaults write com.apple.Safari AlwaysRestoreSessionAtLaunch -bool true
@@ -278,8 +220,6 @@ is_basic || defaults write com.apple.Safari.SandboxBroker ShowDevelopMenu -bool 
 # Mail
 defaults write com.apple.mail ConversationViewSpansMailboxes -bool false
 defaults write com.apple.mail DeleteAttachmentsAfterHours -int 0
-defaults write com.apple.mail NewMessagesSoundName -string ""
-defaults write com.apple.mail PlayMailSounds -bool false
 defaults write com.apple.mail ShouldShowUnreadMessagesInBold -bool true
 if ! is_basic && lk_has_arg "--reset"; then
     defaults write com.apple.mail InboxViewerAttributes -dict-add \
