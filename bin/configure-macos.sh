@@ -169,8 +169,8 @@ lk_tty_print "Checking printers"
         -o PageSize=A4 \
         -o Duplex=None \
         -o BRResolution=600x2400dpi \
-        -o BRColorMatching=Normal \
-        -o BRGray=ON \
+        -o BRColorMatching=None \
+        -o BRGray=OFF \
         -o BREnhanceBlkPrt=OFF \
         -o BRImproveOutput=OFF \
         -o printer-error-policy=abort-job
