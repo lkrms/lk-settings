@@ -140,6 +140,16 @@ lk_macos_maybe_install_pkg_url \
 # use `lpinfo -m` for driver names
 lk_tty_print "Checking printers"
 (
+    lk_tty_detail "Brother HL-L2375DW"
+    sudo lpadmin -p HLL2375DW -E \
+        -D "Brother HL-L2375DW" \
+        -L "black and white" \
+        -m "Library/Printers/PPDs/Contents/Resources/Brother HL-L2375DW series CUPS.gz" \
+        -v "socket://10.10.10.17" \
+        -o PageSize=A4 \
+        -o Duplex=DuplexNoTumble \
+        -o printer-error-policy=abort-job
+
     lk_tty_detail "Brother HL-5450DN"
     sudo lpadmin -p HL5450DN -E \
         -D "Brother HL-5450DN" \

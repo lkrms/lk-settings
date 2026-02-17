@@ -243,6 +243,16 @@ symlink_if_not_running \
 # use `lpinfo -m` for driver names
 lk_tty_print "Checking printers"
 (
+    lk_tty_detail "Brother HL-L2375DW"
+    sudo lpadmin -p L2375DW -E \
+        -D "Brother HL-L2375DW" \
+        -L "black and white" \
+        -m "brother-HLL2375DW-cups-en.ppd" \
+        -v "socket://10.10.10.17" \
+        -o PageSize=A4 \
+        -o Duplex=None \
+        -o printer-error-policy=abort-job || exit
+
     lk_tty_detail "Brother HL-5450DN"
     sudo lpadmin -p HL5450DN -E \
         -D "Brother HL-5450DN" \
