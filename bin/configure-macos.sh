@@ -77,15 +77,6 @@ is_basic || symlink_if_not_running \
     "$_ROOT/subl/User/" "$_APP_SUPPORT/Sublime Text 3/Packages/User" \
     "Sublime Text 3" "pgrep -x 'Sublime Text'"
 
-FILE=~/Library/Containers/fr.handbrake.HandBrake/Data
-FILE="$FILE/Library/Application Support/HandBrake/UserPresets.json"
-is_basic || [ ! -d "${FILE%/*}" ] || {
-    lk_tty_print "Checking HandBrake"
-    pgrep -xq HandBrake &&
-        lk_warn "cannot apply settings: HandBrake is running" ||
-        lk_file_replace -b -f "$_ROOT/handbrake/presets.json" "$FILE"
-}
-
 is_basic || symlink_if_not_running \
     "$_ROOT/stretchly/config.json" "$_APP_SUPPORT/stretchly/config.json" \
     Stretchly "pgrep -x stretchly"

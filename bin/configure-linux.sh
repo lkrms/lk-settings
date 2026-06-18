@@ -214,10 +214,6 @@ symlink_if_not_running \
     Geeqie "pgrep -x geeqie"
 
 symlink_if_not_running \
-    "$_ROOT/handbrake/presets.json" ~/.config/ghb/presets.json \
-    HandBrake "pgrep -x ghb"
-
-symlink_if_not_running \
     "$_ROOT/nomacs/" ~/.config/nomacs \
     nomacs "pgrep -x nomacs"
 
