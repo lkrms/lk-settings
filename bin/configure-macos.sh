@@ -139,17 +139,10 @@ lk_tty_print "Checking printers"
         -v "socket://10.10.10.17" \
         -o PageSize=A4 \
         -o Duplex=DuplexNoTumble \
-        -o printer-error-policy=abort-job
+        -o printer-error-policy=abort-job || exit
 
     lk_tty_detail "Brother HL-5450DN"
-    sudo lpadmin -p HL5450DN -E \
-        -D "Brother HL-5450DN" \
-        -L "black and white" \
-        -m "Library/Printers/PPDs/Contents/Resources/Brother HL-5450DN series CUPS.gz" \
-        -v "socket://10.10.10.10" \
-        -o PageSize=A4 \
-        -o Duplex=DuplexNoTumble \
-        -o printer-error-policy=abort-job
+    sudo lpadmin -x HL5450DN -E || true
 
     lk_tty_detail "Brother HL-L3230CDW"
     sudo lpadmin -p HLL3230CDW -E \
